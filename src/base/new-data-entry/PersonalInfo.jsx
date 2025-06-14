@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
+import drop from '../../assets/drop-icon.svg'
 
 const PersonalInfo = () => {
+
+  const [showOthers, setShowOthers] = useState(false);
 
   const [formData, setFormData] = useState({
     fname: '',
@@ -11,6 +14,8 @@ const PersonalInfo = () => {
     country: '',
     state: '',
     city: '',
+    title: '',
+    link: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -36,6 +41,11 @@ const PersonalInfo = () => {
     }
 
     if (!formData.linkedIn.trim()) newErrors.linkedIn = "LinkedIn is required";
+
+    if (showOthers) {
+      if (!formData.title.trim()) newErrors.title = "Title is required";
+      if (!formData.link.trim()) newErrors.link = "Link is required";
+    }
 
     return newErrors;
   };
@@ -126,6 +136,39 @@ const PersonalInfo = () => {
           />
           {errors.linkedIn && <span className="text-red-500 text-sm">{errors.linkedIn}</span>}
         </div>   
+
+        <div onClick={() => setShowOthers(!showOthers)} className="flex items-center gap-3 cursor-pointer w-fit">
+          <p className='text-[#2c6472] font-semibold'>Others</p>
+          <img width="15px" src={drop} alt="" className={`transform transition-transform duration-300 ${showOthers ? 'rotate-180' : 'rotate-0'}`}/>
+        </div>
+
+        {/* Portfolio */}
+        {showOthers && (
+          <div className="flex justify-start gap-10 text-lg w-full">
+            <div className="flex flex-col gap-2 w-[50%]">
+              <label className='font-medium' htmlFor="title">Title <span className='text-red-500'>*</span></label>
+              <input 
+                className={`px-5 py-3 rounded-lg border ${ errors.fname ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]' } outline-none focus:border-[#2c6472]`}
+                value={formData.title} 
+                onChange={handleChange} 
+                type="text" 
+                id='title'
+              />
+              {errors.title && <span className="text-red-500 text-sm">{errors.title}</span>}
+            </div>
+            <div className="flex flex-col gap-2 w-[50%]">
+              <label className='font-medium' htmlFor="link">Link <span className='text-red-500'>*</span></label>
+              <input
+                className={`px-5 py-3 rounded-lg border ${ errors.lname ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]' } outline-none focus:border-[#2c6472]` }
+                value={formData.link}
+                onChange={handleChange} 
+                type="text" 
+                id='link'
+              />
+              {errors.link && <span className="text-red-500 text-sm">{errors.link}</span>}
+            </div>
+          </div>
+        )}
 
         {/* Country */}
         <div className="flex flex-col gap-2 text-lg">

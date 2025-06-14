@@ -4,6 +4,9 @@ import DataEntrySidebar from '../../base/DataEntrySIdebar/DataEntrySidebar';
 import Languages from '../../base/new-data-entry/Languages';
 import warning from '../../assets/carbon_warning.png';
 import PersonalInfo from '../../base/new-data-entry/PersonalInfo';
+import WorkExperience from '../../base/new-data-entry/WorkExperience';
+import Education from '../../base/new-data-entry/Education';
+import Projects from '../../base/new-data-entry/Projects';
 
 const DataEntryPages = () => {
   return (
@@ -13,6 +16,9 @@ const DataEntryPages = () => {
         <Routes>
           <Route path="/languages" element={<Languages />} />
           <Route path="/personal-information" element={<PersonalInfo />} />
+          <Route path="/work-experience" element={<WorkExperience />} />
+          <Route path="/education" element={<Education />} />
+          <Route path="/projects" element={<Projects />} />
         </Routes>
 
       </div>
