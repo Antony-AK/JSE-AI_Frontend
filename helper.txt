@@ -1,0 +1,6 @@
+Create a utility for calling this function.
+
+export const getAuthToken = () => {
+  return sessionStorage.getItem('authToken');
+};
+

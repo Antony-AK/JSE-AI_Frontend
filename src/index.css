@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.teal-button:hover{
+    @apply bg-teal-800 transition-transform ease-linear  duration-200;
+}
+
+html {
+    scroll-behavior: smooth;
+  }
+
+
+
+
+
+/* Scrollbar customization */
+.scrollbar-custom::-webkit-scrollbar {
+    width: 20px;
+}
+  
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: white;
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: #2C6472;
+    border-radius: 10px;
+    min-height: 20px;
+  }
+  
+  /* Firefox */
+  .scrollbar-custom {
+    scrollbar-width: thin;
+    scrollbar-color: #2C6472 #fff;
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* For Firefox */
+  .hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none; /* For IE and Edge */
+  }
+
+
+  input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none !important;
+}

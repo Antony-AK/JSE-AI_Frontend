@@ -1,0 +1,255 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+}
+
+/* Auth Container */
+.auth-container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Left Panel - Updated for left alignment */
+.auth-left-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; /* Changed from center to flex-start */
+  width: 50%;
+  height: 100vh;
+  padding: 0 80px; /* Matches your original spacing */
+  background-color: #ffffff;
+}
+
+.auth-form-container {
+  width: 100%; /* Takes full width of parent */
+}
+
+/* Right Panel */
+.auth-right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 50%;
+  height: 100vh;
+  background-color: #2c6472;
+  background-image: url('./assets/auth-bg.jpg');
+    background-position: center;
+  background-repeat: no-repeat;
+  background-size:contain;
+  object-fit: contain;
+  position: relative;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+
+}
+
+.logo-text {
+  color: #1d365b;
+}
+
+.auth-title {
+  font-size: 2rem;
+  color: #111;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.auth-tagline {
+  font-size: 1.1rem;
+  color: #ffffff;
+  line-height: 1.6;
+  max-width: 500px;
+  position: absolute;
+  bottom: 100px;
+  text-align: center;
+}
+
+.auth-form-container .google-auth-btn:hover, .auth-form-container .google-auth-btn span:hover {
+  background-color: #000000;
+  color: white;
+}
+
+/* Form Elements */
+.auth-input-group {
+  margin-bottom: 1.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+
+.auth-input {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+  color: #555;
+}
+
+.auth-input:focus {
+  outline: none;
+}
+
+/* Name fields for signup */
+.auth-name-fields {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* Add to your existing CSS */
+.logo-container {
+  margin: 1rem 0;
+  text-align: center;
+}
+.logo-container img {
+  width: 30px;
+  height: 30px;
+}
+.logo-container h1 {
+  font-size: 2rem;
+  color: #2c6472;
+  margin-top: 0.5rem;
+}
+
+/* Buttons */
+.google-auth-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #ffffff;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s;
+}
+
+.google-auth-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.google-icon {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.auth-submit-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #2c6472;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background-color 0.3s;
+}
+
+.auth-submit-btn:hover {
+  background-color: #1d365b;
+}
+
+/* Divider */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #ddd;
+}
+
+.auth-divider::before {
+  margin-right: 1rem;
+}
+
+.auth-divider::after {
+  margin-left: 1rem;
+}
+
+/* Links */
+.auth-forgot-password {
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.auth-forgot-password a {
+  color: #2c6472;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.auth-forgot-password a:hover {
+  text-decoration: none;
+}
+
+.auth-switch-text {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.auth-switch-text a {
+  color: #2c6472;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-switch-text a:hover {
+  text-decoration: underline;
+}
+
+input[type="radio"] {
+  margin-right: 10px;
+  accent-color: #2c6472; /* Modern browsers */
+}
+
+/* Custom radio button styling */
+input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  outline: none;
+  margin-right: 10px;
+  position: relative;
+  top: 3px;
+}
+
+input[type="radio"]:checked {
+  border-color: #2c6472;
+  background: radial-gradient(#1a73e8 0%, #1a73e8 40%, transparent 50%);
+}
