@@ -6,6 +6,10 @@ import warning from '../../assets/carbon_warning.png';
 import Certificates from '../../base/new-data-entry/Certificates';
 import JobTitles from '../../base/new-data-entry/JobTitles';
 import Skills from '../../base/new-data-entry/Skills';
+import PersonalInfo from '../../base/new-data-entry/PersonalInfo';
+import WorkExperience from '../../base/new-data-entry/WorkExperience';
+import Education from '../../base/new-data-entry/Education';
+import Projects from '../../base/new-data-entry/Projects';
 
 const DataEntryPages = () => {
   return (
@@ -17,6 +21,10 @@ const DataEntryPages = () => {
           <Route path="/certificates" element={<Certificates />} />
           <Route path="/jobtitles" element={<JobTitles />} />
           <Route path='/skills' element={<Skills/>} />
+          <Route path="/personal-information" element={<PersonalInfo />} />
+          <Route path="/work-experience" element={<WorkExperience />} />
+          <Route path="/education" element={<Education />} />
+          <Route path="/projects" element={<Projects />} />
         </Routes>
 
       </div>
