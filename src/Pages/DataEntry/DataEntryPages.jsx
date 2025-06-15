@@ -3,6 +3,9 @@ import { Routes, Route, Link } from 'react-router-dom';
 import DataEntrySidebar from '../../base/DataEntrySIdebar/DataEntrySidebar';
 import Languages from '../../base/new-data-entry/Languages';
 import warning from '../../assets/carbon_warning.png';
+import Certificates from '../../base/new-data-entry/Certificates';
+import JobTitles from '../../base/new-data-entry/JobTitles';
+import Skills from '../../base/new-data-entry/Skills';
 
 const DataEntryPages = () => {
   return (
@@ -11,6 +14,9 @@ const DataEntryPages = () => {
       <div style={{ width: "calc(100% - 27%)" }} className='ms-[27%] fixed top-5 flex h-full text-black'>
         <Routes>
           <Route path="/languages" element={<Languages />} />
+          <Route path="/certificates" element={<Certificates />} />
+          <Route path="/jobtitles" element={<JobTitles />} />
+          <Route path='/skills' element={<Skills/>} />
         </Routes>
 
       </div>

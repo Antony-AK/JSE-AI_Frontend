@@ -107,7 +107,7 @@ const Languages = () => {
       <div className="flex flex-col">
         <div className="flex items-center mb-5 cursor-pointer">
           <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
-          <p className='ml-2 text-lg font-medium'>Back</p>
+          <p className='ml-2 text-lg font-medium'  onClick={() => navigate(-1)}>Back</p>
         </div>
 
         <div>
@@ -132,7 +132,7 @@ const Languages = () => {
               value={formData.LanguageName}
               onChange={handleChange}
               required
-              className={`w-[70%] h-[64px] flex mb-1 px-4 py-6 border text-base shadow-sm rounded-lg focus:outline-none focus:ring-1 
+              className={`w-[70%] h-[64px] flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
               ${errors.LanguageName ? 'border-red-500 animate-shake' : 'border-gray-300 focus:ring-[#2c6472]'}`}
             />
             {errors.LanguageName && (
