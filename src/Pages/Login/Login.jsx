@@ -61,7 +61,7 @@ const Login = () => {
           navigate('/user/dashboard');
         } else {
           const stepToPath = {
-            personal_infos: '/user/onboarding/personal-info',
+            personal_infos: '/user/onboarding/personal-information',
             professional_summaries: '/user/onboarding/professional-summary',
             preferred_job_titles: '/user/onboarding/jobtitles',
             work_experiences: '/user/onboarding/work-experience',
