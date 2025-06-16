@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import DataEntrySidebar from '../../base/DataEntrySIdebar/DataEntrySidebar';
 import Languages from '../../base/new-data-entry/Languages';
 import warning from '../../assets/carbon_warning.png';
@@ -13,26 +13,34 @@ import Projects from '../../base/new-data-entry/Projects';
 
 const DataEntryPages = () => {
   return (
-    <div className='relative p-5 min-h-screen bg-white text-white'>
-      <DataEntrySidebar />
-      <div style={{ width: "calc(100% - 27%)" }} className='ms-[27%] fixed top-5 flex h-full text-black'>
-        <Routes>
-          <Route path="/languages" element={<Languages />} />
-          <Route path="/certificates" element={<Certificates />} />
-          <Route path="/jobtitles" element={<JobTitles />} />
-          <Route path='/skills' element={<Skills/>} />
-          <Route path="/personal-information" element={<PersonalInfo />} />
-          <Route path="/work-experience" element={<WorkExperience />} />
-          <Route path="/education" element={<Education />} />
-          <Route path="/projects" element={<Projects />} />
-        </Routes>
-
+    <div className="flex min-h-screen bg-white text-white">
+      {/* Sidebar on the left */}
+      <div className="w-[100%] fixed top-0 left-0 bottom-0 p-5">
+        <DataEntrySidebar />
       </div>
-      <div className='flex absolute text-gray-500 text-sm ms-[32%] bottom-5'> <img src={warning} className='w-5 me-2 h-5 object-cover' alt="" />AI helps, but it’s not perfect. Make sure your data is accurate before saving.</div>
 
+      {/* Main content on the right */}
+      <div className="ml-[27%] flex flex-col w-full p-5 text-black">
+        <div className="flex-grow">
+          <Routes>
+            <Route path="/languages" element={<Languages />} />
+            <Route path="/certificates" element={<Certificates />} />
+            <Route path="/jobtitles" element={<JobTitles />} />
+            <Route path="/skills" element={<Skills />} />
+            <Route path="/personal-information" element={<PersonalInfo />} />
+            <Route path="/work-experience" element={<WorkExperience />} />
+            <Route path="/education" element={<Education />} />
+            <Route path="/projects" element={<Projects />} />
+          </Routes>
+        </div>
+
+        {/* Footer appears after scrolling all content */}
+        <div className="flex text-gray-500 text-sm mt-15 mb-5">
+          <img src={warning} className="w-5 ms-16 h-5 object-cover" alt="" />
+          AI helps, but it’s not perfect. Make sure your data is accurate before saving.
+        </div>
+      </div>
     </div>
-
-
   );
 };
 

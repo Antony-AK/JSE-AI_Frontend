@@ -177,7 +177,7 @@ const JobTitles = () => {
                             onFocus={() => setShowDropdowns((prev) => ({ ...prev, primary_title: true }))}
                         />
                         {showDropdowns.primary_title && (
-                            <ul className="absolute z-10 w-[70%] max-h-48 overflow-y-auto mt-14 bg-white border border-gray-300 rounded shadow-md">
+                            <ul className="absolute z-10 w-[60%] max-h-48 overflow-y-auto mt-14 bg-white border border-gray-300 rounded shadow-md">
                                 {getFilteredTitles(searchTerms.primary_title).map((title, index) => (
                                     <li
                                         key={index}

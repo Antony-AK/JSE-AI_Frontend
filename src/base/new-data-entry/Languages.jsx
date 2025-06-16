@@ -5,11 +5,10 @@ import right_arrow from '../../assets/left-arrow.png'
 const Languages = () => {
 
   const navigate = useNavigate();
-  const hasFetched = useRef(false);
 
   const [formData, setFormData] = useState({
-    LanguageName: '',
-    ProficiencyLevel: ''
+    language: '',
+    proficiency: ''
   });
 
   const [loading, setLoading] = useState(false);
@@ -31,11 +30,11 @@ const Languages = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.LanguageName.trim()) {
-      newErrors.LanguageName = 'Language name is required';
+    if (!formData.language.trim()) {
+      newErrors.language = 'Language name is required';
     }
-    if (!formData.ProficiencyLevel) {
-      newErrors.ProficiencyLevel = 'Proficiency level is required';
+    if (!formData.proficiency) {
+      newErrors.proficiency = 'Proficiency level is required';
     }
 
     setErrors(newErrors);
@@ -54,15 +53,15 @@ const Languages = () => {
 
     const token = sessionStorage.getItem('authToken');
     if (!token) {
-      alert('You are not authenticated. Please log in.');
+      alert('You are not authenticated. Please login.');
       return;
     }
 
     setLoading(true);
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append('LanguageName', formData.LanguageName);
-      formDataToSend.append('ProficiencyLevel', formData.ProficiencyLevel);
+      formDataToSend.append('language', formData.language);
+      formDataToSend.append('proficiency', formData.proficiency);
 
 
       const response = await fetch('https://jse.arshan.digital/b1/languages', {
@@ -81,8 +80,8 @@ const Languages = () => {
       alert(`✅ Languages uploaded successfully`);
 
       setFormData({
-        LanguageName: '',
-        ProficiencyLevel: ''
+        language: '',
+        proficiency: ''
       });
 
     } catch (err) {
@@ -125,18 +124,18 @@ const Languages = () => {
               Language <span className='text-red-500 ms-1'>*</span>
             </label>
             <input
-              id='LanguageName'
+              id='language'
               type="text"
-              name="LanguageName" // Fixed name attribute
+              name="language" // Fixed name attribute
               placeholder=" "
-              value={formData.LanguageName}
+              value={formData.language}
               onChange={handleChange}
               required
               className={`w-[70%] h-[64px] flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
-              ${errors.LanguageName ? 'border-red-500 animate-shake' : 'border-gray-300 focus:ring-[#2c6472]'}`}
+              ${errors.language ? 'border-red-500 animate-shake' : 'border-gray-300 focus:ring-[#2c6472]'}`}
             />
-            {errors.LanguageName && (
-              <span className="text-red-500 text-sm mt-1">{errors.LanguageName}</span>
+            {errors.language && (
+              <span className="text-red-500 text-sm mt-1">{errors.language}</span>
             )}
           </div><br />
 
@@ -148,9 +147,9 @@ const Languages = () => {
                 <label key={level} className="flex items-center cursor-pointer ">
                   <input
                     type="radio"
-                    name="ProficiencyLevel" // Fixed name attribute
+                    name="proficiency" // Fixed name attribute
                     value={level}
-                    checked={formData.ProficiencyLevel === level} // Fix checked condition
+                    checked={formData.proficiency === level} // Fix checked condition
                     onChange={handleChange}
                     className="mr-2 mb-1 text-gray-500"
                   />

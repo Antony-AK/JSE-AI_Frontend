@@ -6,25 +6,42 @@ import { jobskills } from '../../assets/data';
 
 const Skills = () => {
     const navigate = useNavigate();
-    const [searchTerm, setSearchTerm] = useState('');
-    const [jobTitle, setJobTitle] = useState('');
+    const [jobTitle, setJobTitle] = useState({});
     const [showDropdown, setShowDropdown] = useState(false);
     const [hasExistingData, setHasExistingData] = useState(false);
     const [selectedTitle, setSelectedTitle] = useState('');
     const [loading, setLoading] = useState(false);
     const hasDataRef = useRef(false);
+    const [dropdownType, setDropdownType] = useState(null); // "general" or "job"
+    const [generalSearchTerm, setGeneralSearchTerm] = useState('');
+    const [jobSearchTerm, setJobSearchTerm] = useState('');
+
+
 
     const allSkills = Object.values(jobskills).flatMap(job => job.skills);
     const [dynamicSkills, setDynamicSkills] = useState(allSkills);
 
     const dropdownRef = useRef(null);
 
+    const [formData, setFormData] = useState({
+        generalSkills: [],
+        jobSpecificSkills: [],
+    });
+
+
     const apiUrl = "https://jse.arshan.digital/b1/professional-summary";
     const jobtitleapiurl = "https://jse.arshan.digital/b1/jobtitles"
     const token = sessionStorage.getItem("authToken");
 
+    const jobTitlesArray = jobTitle?.primary_title ? [jobTitle.primary_title] : [];
+
 
     const fetchjobtitle = async () => {
+        if (!token) {
+            console.warn("🚫 Not logged in, skipping job title fetch");
+            setJobTitle({}); // fallback
+            return;
+        }
         try {
             const res = await axios.get(jobtitleapiurl, {
                 headers: {
@@ -39,54 +56,20 @@ const Skills = () => {
         }
     };
 
-    const jobTitlesArray = [
-        jobTitle.primary_title,
-    ].filter(Boolean);
-
-
-
-    const fetchProfessionalsummaryInfo = async () => {
-        try {
-            const res = await axios.get(apiUrl, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-
-
-            let info = {};
-
-            if (Array.isArray(res.data)) {
-                info = res.data[0] || {};
-            } else if (Array.isArray(res.data?.professional_summary)) {
-                info = res.data.professional_summary[0] || {};
-            } else if (typeof res.data?.professional_summary === 'object') {
-                info = res.data.professional_summary;
-            } else if (typeof res.data === 'object') {
-                info = res.data;
-            }
-
-            const hasData = Object.keys(info).length > 0;
-            hasDataRef.current = hasData;  // <== keep immediate ref update
-            setHasExistingData(hasData);
-
-            console.log("existingdata", hasDataRef);
-
-
-            setFormData({
-                skills: Array.isArray(info.skills) ? info.skills : [], // populate skills
-                newSkill: '', // keep this to avoid undefined issues
-            });
-
-
-        } catch (err) {
-            console.error("Failed to fetch personal info", err);
+    useEffect(() => {
+        const matchedJob = jobskills[selectedTitle]; // <-- I think you meant `selectedTitle`
+        if (matchedJob && Array.isArray(matchedJob.skills)) {
+            setDynamicSkills(matchedJob.skills);
+        } else {
+            setDynamicSkills([]);
         }
-    };
+    }, [selectedTitle, jobskills]);
+
+
+
+
 
     useEffect(() => {
-        fetchProfessionalsummaryInfo();
         fetchjobtitle();
     }, []);
 
@@ -94,22 +77,23 @@ const Skills = () => {
         console.log("Updated hasExistingData:", hasExistingData);
     }, [hasExistingData]);
 
+    const filteredSkills =
+        dropdownType === "job"
+            ? (dynamicSkills || []).filter(skill =>
+                skill.toLowerCase().includes((jobSearchTerm || '').toLowerCase())
+            )
+            : (allSkills || []).filter(skill =>
+                skill.toLowerCase().includes((generalSearchTerm || '').toLowerCase())
+            );
 
 
-    const filteredSkills = dynamicSkills.filter(skill =>
-        skill.toLowerCase().includes(searchTerm.toLowerCase())
-    );
 
-    const handleSelect = (skill) => {
-        setFormData({ ...formData, newSkill: skill });
-        setSearchTerm(skill);
-        setShowDropdown(false);
-    };
+    useEffect(() => {
+        console.log("jobTitle", jobTitle);
+    }, [jobTitle]);
 
-    const [formData, setFormData] = useState({
-        skills: [],
-        newSkill: '',
-    });
+
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -119,79 +103,84 @@ const Skills = () => {
         }));
     };
 
+    // ✅ Handles selection from dropdown, ONLY fills input — no adding
+    const handleSelect = (skill) => {
+        if (dropdownType === "general") {
+            setGeneralSearchTerm(skill);
+        } else {
+            setJobSearchTerm(skill);
+        }
+        setShowDropdown(false);
+    };
+
+    // ✅ Adds selected/typed skill to proper formData field
     const addSkill = () => {
-        const trimmedSkill = formData.newSkill.trim();
+        const term = dropdownType === "general" ? generalSearchTerm.trim() : jobSearchTerm.trim();
+        if (!term) return;
 
-        if (!trimmedSkill) return;
+        const alreadyExists =
+            dropdownType === "general"
+                ? formData.generalSkills.includes(term)
+                : formData.jobSpecificSkills.includes(term);
 
-        const isDuplicate = formData.skills.some(
-            (skill) => skill.toLowerCase() === trimmedSkill.toLowerCase()
-        );
-
-        if (isDuplicate) {
-            alert("This skill is already added!");
+        if (alreadyExists) {
+            alert("⚠️ This skill is already added.");
             return;
         }
 
         setFormData((prev) => ({
             ...prev,
-            skills: [...prev.skills, trimmedSkill],
-            newSkill: '',
+            generalSkills: dropdownType === "general"
+                ? [...prev.generalSkills, term]
+                : prev.generalSkills,
+            jobSpecificSkills: dropdownType === "job"
+                ? [...prev.jobSpecificSkills, term]
+                : prev.jobSpecificSkills,
         }));
 
-        setSearchTerm('');
+        // ✅ Clear input and close dropdown
+        dropdownType === "general" ? setGeneralSearchTerm('') : setJobSearchTerm('');
+        setShowDropdown(false);
     };
 
-
-    const removeSkill = (index) => {
+    // ✅ Removes a skill by index from the right category
+    const removeSkill = (index, type) => {
         setFormData((prev) => ({
             ...prev,
-            skills: prev.skills.filter((_, i) => i !== index),
+            [type]: prev[type].filter((_, i) => i !== index),
         }));
     };
 
+    // ✅ Validates that both lists have at least one skill
     const validateForm = () => {
-        console.log("🔍 Validating form:", formData);
-
-    
-
-        if (formData.skills.length === 0) {
-            console.error("❌ No skills selected");
+        if (formData.generalSkills.length === 0 || formData.jobSpecificSkills.length === 0) {
+            alert("Please add at least one skill in both General and Job Specific sections.");
             return false;
         }
-
-     
-
-        console.log("✅ Form validation passed!");
         return true;
     };
 
-
-
+    // ✅ Final submit logic (unchanged, just clean)
     const handleNext = async (e) => {
         e.preventDefault();
-        console.log("handleNext clicked!");
-        console.log("Is form valid?", validateForm());
-
-
         if (!validateForm()) return;
 
-        const token = sessionStorage.getItem('authToken'); // Assuming token is stored as 'token'
+        const token = sessionStorage.getItem('authToken');
         if (!token) {
             console.error("❌ No token found in sessionStorage");
             return;
         }
 
+        const mergedSkills = Array.from(new Set([...formData.generalSkills, ...formData.jobSpecificSkills]));
+
         const payload = {
-            skills: formData.skills,
+            skills: mergedSkills,
         };
 
-        const method = hasDataRef.current ? 'PUT' : 'POST'; // <-- immediate & accurate
-
-        console.log("method", method);
+        const method = hasDataRef.current ? 'PUT' : 'POST';
 
         try {
-            const response = await fetch('https://jse.arshan.digital/b1/professional-summary', {
+            const response = await fetch(apiUrl, {
                 method,
                 headers: {
                     'Content-Type': 'application/json',
@@ -212,6 +201,7 @@ const Skills = () => {
         }
     };
 
+
     // 🔁 Hook to handle click outside
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -223,9 +213,8 @@ const Skills = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-
     return (
-        <div className='w-full h-screen p-5 ml-5 overflow-y-auto text-black'>
+        <div className='w-full min-h-screen p-5 ml-5 text-black'>
             <div className="flex flex-col">
                 <div className="flex items-center mb-5 cursor-pointer">
                     <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
@@ -254,15 +243,20 @@ const Skills = () => {
                                 <input
                                     type="text"
                                     className="peer w-[60%] h-[64px] rounded-lg text-lg scrollbar-custom px-4 py-2 border border-gray-300  text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]"
-                                    value={searchTerm}
+                                    value={generalSearchTerm}
                                     onChange={(e) => {
-                                        setSearchTerm(e.target.value);
+                                        setGeneralSearchTerm(e.target.value);
                                         setShowDropdown(true);
+                                        setDropdownType("general");
                                     }}
-                                    onFocus={() => setShowDropdown(true)}
+                                    onFocus={() => {
+                                        setShowDropdown(true);
+                                        setDropdownType("general");
+                                    }}
+
                                 />
-                                {showDropdown && (
-                                    <ul className="absolute top-16 z-10 w-[50%] max-h-48 overflow-y-auto text-gray-600 bg-white border border-gray-300 shadow-md">
+                                {showDropdown && dropdownType === "general" && (
+                                    <ul className="absolute top-16 z-10 w-[60%] max-h-48 overflow-y-auto text-gray-600 bg-white border border-gray-300 shadow-md">
                                         {filteredSkills.length > 0 ? (
                                             filteredSkills.map((skill, index) => (
                                                 <li
@@ -289,7 +283,7 @@ const Skills = () => {
                         </div>
 
                         <div className="flex flex-wrap gap-2 h-[80px] w-[60%] scrollbar-custom overflow-y-auto p-2 rounded ">
-                            {formData.skills.map((skill, index) => (
+                            {formData.generalSkills.map((skill, index) => (
                                 <div
                                     key={index}
                                     className="bg-gray-100 h-8 px-3 py-1 text-gray-500 rounded-full flex items-center"
@@ -297,7 +291,7 @@ const Skills = () => {
                                     <span className="mr-2">{skill}</span>
                                     <button
                                         type="button"
-                                        onClick={() => removeSkill(index)}
+                                        onClick={() => removeSkill(index, 'generalSkills')}
                                         className="text-gray-500 hover:text-red-500 focus:outline-none"
                                     >
                                         &times;
@@ -313,46 +307,50 @@ const Skills = () => {
                         <label className="mb-3 block font-medium text-lg ">
                             Job Specific Skills <span className='text-red-500 ms-1'>*</span>
                         </label>
-                    <div className="expereince-title flex gap-4  mb-5 overflow-x-auto hide-scrollbar snap-x snap-mandatory">
+                        <div className="expereince-title flex gap-4  mb-5 overflow-x-auto hide-scrollbar snap-x snap-mandatory">
 
-                        {jobTitlesArray.map((title, index) => (
-                            <div
-                                key={index}
-                                onClick={() => {
-                                    setSelectedTitle(title);
+                            {jobTitlesArray.map((title, index) => (
+                                <div
+                                    key={index}
+                                    onClick={() => {
+                                        setSelectedTitle(title);
 
-                                    // 🔍 Find the selected job title from jobskills and update the dropdown skills
-                                    const matchedJob = jobskills[title];
-                                    if (matchedJob && Array.isArray(matchedJob.skills)) {
-                                        setDynamicSkills(matchedJob.skills);
-                                    } else {
-                                        setDynamicSkills([]); // fallback
-                                    };
-                                    setSearchTerm('');           // optional: clear search bar
-                                    setShowDropdown(true);
-                                }}
-                                className={`flex-shrink-0 h-8 px-3 py-1.5 text-sm rounded snap-start cursor-pointer 
+                                        // 🔍 Find the selected job title from jobskills and update the dropdown skills
+                                        const matchedJob = jobskills[title];
+                                        if (matchedJob && Array.isArray(matchedJob.skills)) {
+                                            setDynamicSkills(matchedJob.skills);
+                                        } else {
+                                            setDynamicSkills([]); // fallback
+                                        };
+                                        setJobSearchTerm('');           // optional: clear search bar
+                                        setShowDropdown(true);
+                                    }}
+                                    className={`flex-shrink-0 h-8 px-3 py-1.5 text-sm rounded snap-start cursor-pointer 
                                             ${selectedTitle === title ? 'bg-[#2c6472] text-white' : 'text-white bg-gray-500/40'}
                                             hover:bg-[#2c6472] hover:text-white transition-all duration-200`}
-                            >
-                                {title}
-                            </div>
-                        ))}
+                                >
+                                    {title}
+                                </div>
+                            ))}
                         </div>
 
-                        <div className='flex'>
+                        <div className='flex relative'>
                             <input
                                 type="text"
                                 className="peer w-[60%] h-[64px] rounded-lg text-lg scrollbar-custom px-4 py-2 border border-gray-300  text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]"
-                                value={searchTerm}
+                                value={jobSearchTerm}
                                 onChange={(e) => {
-                                    setSearchTerm(e.target.value);
+                                    setJobSearchTerm(e.target.value);
                                     setShowDropdown(true);
+                                    setDropdownType("job");
                                 }}
-                                onFocus={() => setShowDropdown(true)}
+                                onFocus={() => {
+                                    setShowDropdown(true);
+                                    setDropdownType("job");
+                                }}
                             />
-                            {showDropdown && (
-                                <ul className="absolute top-16 z-10 w-[50%] max-h-48 overflow-y-auto text-gray-600 bg-white border border-gray-300 shadow-md">
+                            {showDropdown && dropdownType === "job" && (
+                                <ul className="absolute top-16 z-10 w-[60%] max-h-48 overflow-y-auto text-gray-600 bg-white border border-gray-300 shadow-md">
                                     {filteredSkills.length > 0 ? (
                                         filteredSkills.map((skill, index) => (
                                             <li
@@ -379,7 +377,7 @@ const Skills = () => {
                     </div>
 
                     <div className="flex flex-wrap gap-2 h-[80px] w-[60%] mt-3 mb-12 scrollbar-custom overflow-y-auto p-2 rounded ">
-                        {formData.skills.map((skill, index) => (
+                        {formData.jobSpecificSkills.map((skill, index) => (
                             <div
                                 key={index}
                                 className="bg-gray-100 h-8 px-3 py-1 text-gray-500 rounded-full flex items-center"
@@ -387,7 +385,7 @@ const Skills = () => {
                                 <span className="mr-2">{skill}</span>
                                 <button
                                     type="button"
-                                    onClick={() => removeSkill(index)}
+                                    onClick={() => removeSkill(index, 'jobSpecificSkills')}
                                     className="text-gray-500 hover:text-red-500 focus:outline-none"
                                 >
                                     &times;
@@ -403,10 +401,10 @@ const Skills = () => {
                     </div>
                     <p className='text-sm  ms-7 text-gray-500'>Adding unrelated or inaccurate skills may affect the quality of your profile.</p>
 
-                    <div className="flex w-[70%] mb-16 justify-end items-center gap-4 mt-8">
+                    <div className="flex w-[70%]   justify-end items-center gap-4 mt-8">
                         <button
                             type="button"
-                            className=" teal-button px-6 py-2 bg-[#2c6472] text-white  h-[41px]  rounded-xl focus:outline-none transition-transform duration-200 ease-in-out"
+                            className=" teal-button mb-16 px-6 py-2 bg-[#2c6472] text-white  h-[41px]  rounded-xl focus:outline-none transition-transform duration-200 ease-in-out"
                             onClick={handleNext}
                         >
                             {loading ? 'Saving...' : 'Go to Dashboard'}

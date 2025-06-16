@@ -64,7 +64,7 @@ const PersonalInfo = () => {
 
 
   return (
-    <div className='p-10 pt-14 flex flex-col gap-5 w-[100%] h-screen overflow-y-auto'>
+    <div className='p-10 pt-14 flex flex-col gap-5 w-[100%] min-h-screen overflow-y-auto'>
 
       <p className='text-[#2c6472] font-semibold'>STEP 1 OF 8</p>
 

@@ -14,10 +14,13 @@ const Certificates = () => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
+ const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
 
     const validateForm = () => {
         const newErrors = {};
@@ -53,7 +56,6 @@ const Certificates = () => {
         }
 
         setLoading(true);
-
         try {
             const formDataToSend = new FormData();
             formDataToSend.append("certificate_name", formData.certificate_name);
@@ -130,7 +132,7 @@ const Certificates = () => {
                             value={formData.certificate_name}
                             onChange={handleChange}
                             required
-                            className={`w-[70%] h-[64px] flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
+                            className={`w-[70%] h-14 flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
                           ${errors.certificate_name ? 'border-red-500 animate-shake' : 'border-gray-300 focus:ring-[#2c6472]'}`}
                         />
                         {errors.certificate_name && (
@@ -150,7 +152,7 @@ const Certificates = () => {
                             value={formData.platform}
                             onChange={handleChange}
                             required
-                            className="w-[70%] h-[64px] flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 border-gray-300 focus:ring-[#2c6472]"
+                            className="w-[70%] h-14 flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 border-gray-300 focus:ring-[#2c6472]"
                         />
 
                     </div><br />
@@ -169,7 +171,7 @@ const Certificates = () => {
                                   value={formData.start_date}
                                   onChange={handleChange}
                                 required
-                                className={`w-[70%] h-[64px] flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
+                                className={`w-[70%] h-14 flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
                              ${errors.start_date ? 'border-red-500 animate-shake' : 'border-gray-300 focus:ring-[#2c6472]'}`}
                             />
                             {errors.start_date && (
@@ -189,7 +191,7 @@ const Certificates = () => {
                                   value={formData.end_date}
                                   onChange={handleChange}
                                 required
-                                className={`w-[70%] h-[64px] flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
+                                className={`w-[70%] h-14 flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
                               ${errors.end_date ? 'border-red-500 animate-shake' : 'border-gray-300 focus:ring-[#2c6472]'}`}
                             />
                             {errors.end_date && (
@@ -199,7 +201,7 @@ const Certificates = () => {
                     </div>
 
                     {/* Buttons */}
-                    <div className="flex w-[70%] justify-between items-center gap-4 mt-4">
+                    <div className="flex w-[70%]  justify-between items-center gap-4 mt-4">
                         <button
                             type="submit"
                             onClick={handleAddCertificate}
