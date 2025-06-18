@@ -33,7 +33,7 @@ const DataOnboarding = () => {
                     </div>
                      <div className="flex w-[500px] h-20 gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
                         <img src={upload} className='w-6 h-6 -mt-1 object-cover' alt="" />
-                        <p className='text-lg font-medium'>Upload Resume</p>
+                       <Link to="/upload"><p className='text-lg font-medium'>Upload Resume</p></Link>
                     </div>
                      <div className="flex w-[500px] h-20 gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
                         <img src={linked} className='w-6 h-6 -mt-1 object-cover' alt="" />

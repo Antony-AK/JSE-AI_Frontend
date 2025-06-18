@@ -21,15 +21,14 @@ import Landing from './base/Landing.jsx';
 import DataEntryPages from './Pages/DataEntry/DataEntryPages.jsx'; // not used right now
 import Profile from './Pages/Profile/Profile.jsx';
 import DataOnboarding from './Pages/DataOnboarding/DataOnboarding.jsx';
+import Linkedin from './Pages/DataOnboarding/Linkedin.jsx';
+import Resume from './Pages/DataOnboarding/Resume.jsx';
 
 const AppRoutes = () => {
     const location = useLocation();
 
     // Define routes that are data-entry only
-    const isDataEntryPage = location.pathname.startsWith('/user/onboarding') || location.pathname.startsWith('/user/dataonboarding') ||
-        ['/', '/user/login', '/user/signup'].includes(location.pathname);
-
-     
+    const isDataEntryPage = location.pathname.startsWith('/user/onboarding') || location.pathname.startsWith('/user/dataonboarding') || location.pathname.startsWith('/user/linkedin') || location.pathname.startsWith('/user/resume') || ['/', '/user/login', '/user/signup'].includes(location.pathname);
 
     return (
         <div className='App'>
@@ -41,6 +40,8 @@ const AppRoutes = () => {
                         <Route path="/user/signup" element={<Signup />} />
                         <Route path="/user/dataonboarding" element={<DataOnboarding />} />
                         <Route path="/user/onboarding/*" element={<DataEntryPages />} />
+                        <Route path='/user/linkedin' element={<Linkedin/>} />
+                        <Route path='/user/resume' element={<Resume/>} />
                     </Routes>
                 </div>
             ) : (
