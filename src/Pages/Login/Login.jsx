@@ -7,6 +7,7 @@ import google from "./../../assets/Google.png";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import frame from "./../../assets/Frame.png";
 import logo from "../../assets/logo.png"
+import Skills from '../../base/new-data-entry/Skills';
 
 
 const Login = () => {
@@ -62,14 +63,16 @@ const Login = () => {
         } else {
           const stepToPath = {
             personal_infos: '/user/onboarding/personal-information',
-            professional_summaries: '/user/onboarding/professional-summary',
-            preferred_job_titles: '/user/onboarding/jobtitles',
             work_experiences: '/user/onboarding/work-experience',
             educations: '/user/onboarding/education',
-            certificates: '/user/onboarding/certificates',
+            projects: '/user/onboarding/projects',
             languages: '/user/onboarding/languages',
+            certificates: '/user/onboarding/certificates',
+            preferred_job_titles: '/user/onboarding/jobtitles',
+            Skills: '/user/onboarding/skills',
+
           };
-          const nextRoute = stepToPath[progress.next_step] || '/user/onboarding/personal-info'; // fallback
+          const nextRoute = stepToPath[progress.next_step] || '/user/onboarding/personal-information'; // fallback
           navigate(nextRoute);
         }
 

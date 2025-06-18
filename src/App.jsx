@@ -6,7 +6,7 @@ import Signup from './Pages/Signup/Signup.jsx';
 import Dashboard from './Pages/3_dashboard/Dashboard.jsx';
 import Joblisting from "./Pages/4_job listing/Joblistings.jsx";
 import Selectedapplication from "./Pages/5_selectedjobs/Selectedapplications.jsx";
-import Myapplication from "./Pages/6_myapplications/Myapplication.jsx";
+import Myapplication from "./Pages/6_my_jobs/Internal.jsx";
 import Applicationtracker from "./Pages/7_app_tracker/Applicationtracker.jsx";
 import Savedjob from "./Pages/8_savedjobs/Savedjob.jsx";
 import Setting from "./Pages/9_settings/Settings.jsx";
@@ -23,6 +23,7 @@ import Profile from './Pages/Profile/Profile.jsx';
 import DataOnboarding from './Pages/DataOnboarding/DataOnboarding.jsx';
 import Linkedin from './Pages/DataOnboarding/Linkedin.jsx';
 import Resume from './Pages/DataOnboarding/Resume.jsx';
+import External from './Pages/6_my_jobs/External.jsx';
 
 const AppRoutes = () => {
     const location = useLocation();
@@ -40,8 +41,8 @@ const AppRoutes = () => {
                         <Route path="/user/signup" element={<Signup />} />
                         <Route path="/user/dataonboarding" element={<DataOnboarding />} />
                         <Route path="/user/onboarding/*" element={<DataEntryPages />} />
-                        <Route path='/user/linkedin' element={<Linkedin/>} />
-                        <Route path='/user/resume' element={<Resume/>} />
+                        <Route path='/user/linkedin' element={<Linkedin />} />
+                        <Route path='/user/resume' element={<Resume />} />
                     </Routes>
                 </div>
             ) : (
@@ -52,9 +53,8 @@ const AppRoutes = () => {
                         <div style={{ width: "calc(100% - 264px)" }} className='ms-64 mt-16 h-full bg-[#f5f5f5]'>
                             <Routes>
                                 <Route path="/user/dashboard" element={<Dashboard />} />
-                                <Route path="/user/job-listings" element={<Joblisting />} />
-                                <Route path="/user/selected-applications" element={<Selectedapplication />} />
-                                <Route path="/user/my-applications" element={<Myapplication />} />
+                                <Route path="/user/my-jobs/internal" element={<Myapplication />} />
+                                <Route path="/user/my-jobs/external" element={<External />} />
                                 <Route path="/user/application-tracker" element={<Applicationtracker />} />
                                 <Route path="/user/saved-jobs" element={<Savedjob />} />
                                 <Route path="/user/settings" element={<Setting />} />

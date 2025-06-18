@@ -108,7 +108,7 @@ const Dashboard = () => {
 
       <div className="flex justify-between items-center w-full pl-5 pr-5">
 
-        <div className="relative flex bg-gradient-to-br from-[#FFC2B0] to-[#FF9AA2] h-[100px] w-[230px] text-black p-4 rounded-xl">
+        <div className="relative flex bg-gradient-to-br from-[#FFC2B0] to-[#FF9AA2] h-[120px] w-[250px] text-black p-4 rounded-xl">
           <div className="flex flex-col justify-start items-start gap-5">
             <p className="font-bold">Total Application</p>          
             <h3 className="font-bold">250</h3>
@@ -118,7 +118,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="relative flex bg-gradient-to-br from-[#FDA67B] to-[#FF9D6B] h-[100px] w-[230px] text-black p-4 rounded-xl">
+        <div className="relative flex bg-gradient-to-br from-[#FDA67B] to-[#FF9D6B] h-[120px] w-[250px] text-black p-4 rounded-xl">
           <div className="flex flex-col justify-start items-start gap-5">
             <p className="font-bold">Weekly Applied Jobs</p>          
             <h3 className="font-bold">250</h3>
@@ -128,7 +128,7 @@ const Dashboard = () => {
           </div>
         </div> 
 
-        <div className="relative flex bg-gradient-to-br from-[#BDE4FB] to-[#A3C7FD] h-[100px] w-[230px] text-black p-4 rounded-xl">
+        <div className="relative flex bg-gradient-to-br from-[#BDE4FB] to-[#A3C7FD] h-[120px] w-[250px] text-black p-4 rounded-xl">
           <div className="flex flex-col justify-start items-start gap-5">
             <p className="font-bold">Top Jobs For You</p>          
             <h3 className="font-bold">250</h3>
@@ -138,7 +138,7 @@ const Dashboard = () => {
           </div>
         </div> 
 
-        <div className="relative flex bg-gradient-to-br from-[#6FE297] to-[#48D77A] h-[100px] w-[230px] text-black p-4 rounded-xl">
+        <div className="relative flex bg-gradient-to-br from-[#6FE297] to-[#48D77A] h-[120px] w-[250px] text-black p-4 rounded-xl">
           <div className="flex flex-col justify-start items-start">
             <p className="font-bold">Remaining Application</p> 
             <p className='font-semibold'>18 / 20</p>         

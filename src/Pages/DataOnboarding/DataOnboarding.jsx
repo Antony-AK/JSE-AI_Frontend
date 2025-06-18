@@ -3,6 +3,7 @@ import logo from '../../assets/logo.png'
 import insert from '../../assets/insert-icon.svg'
 import upload from '../../assets/bx_upload.svg'
 import linked from '../../assets/logos_linkedin-icon.svg'
+import { Link } from 'react-router-dom'
 
 const DataOnboarding = () => {
     return (
@@ -27,18 +28,18 @@ const DataOnboarding = () => {
                 </div>
 
                 <div className="flex flex-col gap-7 mt-24  -ml-32">
-                    <div className="flex w-[500px] h-20 gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
+                    <Link to="/user/onboarding/personal-information"><div className="flex w-[500px] h-20 gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
                         <img src={insert} className='w-6 h-6 -mt-1 object-cover' alt="" />
                         <p className='text-lg font-medium'>Create a Profile from Scratch</p>
-                    </div>
-                     <div className="flex w-[500px] h-20 gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
+                    </div></Link>
+                    <Link to="/user/resume"> <div className="flex w-[500px] h-20 gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
                         <img src={upload} className='w-6 h-6 -mt-1 object-cover' alt="" />
-                       <Link to="/upload"><p className='text-lg font-medium'>Upload Resume</p></Link>
-                    </div>
-                     <div className="flex w-[500px] h-20 gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
+                        <p className='text-lg font-medium'>Upload Resume</p>
+                    </div></Link>
+                    <Link to="/user/linkedin"> <div className="flex w-[500px] h-20 gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
                         <img src={linked} className='w-6 h-6 -mt-1 object-cover' alt="" />
                         <p className='text-lg font-medium'>Import from Linkedin</p>
-                    </div>
+                    </div></Link>
                 </div>
 
             </div>
