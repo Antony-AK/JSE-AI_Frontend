@@ -128,7 +128,7 @@ const Sidebar = () => {
                       <Link
                         key={subIndex}
                         to={subItem.to}
-                        className={`block px-4 py-2 text-[13.5px] font-medium rounded-md ms-14 transition ${
+                        className={`block px-4 py-2 text-[14px] font-medium rounded-md ms-14 transition ${
                           pathname === subItem.to ? "text-[#2c6472]" : "text-gray-500 hover:text-[#2c6472]"
                         }`}
                       >

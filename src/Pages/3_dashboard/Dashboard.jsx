@@ -232,7 +232,7 @@ const Dashboard = () => {
           <div className="flex flex-col gap-2">
             <h2 className='font-bold text-[15px]'>Complete every section to make JSE AI work</h2>
 
-            <div className="flex flex-col gap-2 px-3 py-3 h-[98px] rounded-lg bg-[#F8F8F8] overflow-y-auto hide-scrollbar">
+            <div className="flex flex-col gap-2 px-3 py-3 h-[98px] rounded-lg bg-[#F8F8F8] overflow-y-auto scrollbar-custom">
               {statusList.map((item, index) => (
                 <div key={index} className="flex gap-3">
                   <img width="18px" src={item.isComplete ? complete : incomplete} alt="" />

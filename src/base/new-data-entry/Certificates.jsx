@@ -104,7 +104,7 @@ const Certificates = () => {
 
 
     return (
-        <div className='w-full min-h-screen p-5 ml-5  text-black'>
+        <div className='w-full  p-5 ml-5  text-black'>
             <div className="flex flex-col">
                 <div className="flex items-center mb-5 cursor-pointer">
                     <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />

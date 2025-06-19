@@ -34,7 +34,7 @@ const DataEntrySidebar = () => {
   const currentIndex = sidebarItems.findIndex(item => item.label === currentSlug);
 
   return (
-    <div className="w-[27%] min-h-[94vh] p-5 pl-10 bg-gradient-to-b from-[#2E8095] to-[#2C6472]">
+    <div className="w-[100%] min-h-[94vh] p-5 pl-10 bg-gradient-to-b from-[#2E8095] to-[#2C6472]">
       <div className="flex items-center mb-10">
         <img className='w-10 h-10 object-fill' src={logo} alt="JobFusion Logo" />
         <p className="text-white ml-2 text-lg font-semibold">JSE AI</p>

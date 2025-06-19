@@ -21,12 +21,12 @@ const [formData, setFormData] = useState({
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 px-4">
-      <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="max-w-lg mx-auto mt-10 px-4">
+      <form onSubmit={handleSubmit} className="space-y-6 ">
 
         {/* Company Name */}
         <div>
-          <label className="block  font-medium text-gray-700 mb-2">
+          <label className="block  font-semibold text-gray-700 mb-2">
             Company Name
           </label>
           <input
@@ -41,7 +41,7 @@ const [formData, setFormData] = useState({
 
         {/* Job Title */}
         <div>
-          <label className="block font-medium text-gray-700 mb-2">
+          <label className="block font-semibold text-gray-700 mb-2">
             Job Title
           </label>
           <input
@@ -56,7 +56,7 @@ const [formData, setFormData] = useState({
 
         {/* Job Link */}
         <div>
-          <label className="block  font-medium text-gray-700 mb-2">
+          <label className="block  font-semibold text-gray-700 mb-2">
             Job Link
           </label>
           <input
@@ -71,7 +71,7 @@ const [formData, setFormData] = useState({
 
         {/* Job Description */}
         <div>
-          <label className="block font-medium text-gray-700 mb-2">
+          <label className="block font-semibold text-gray-700 mb-2">
             Job Description
           </label>
           <textarea

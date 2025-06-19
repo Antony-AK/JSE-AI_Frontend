@@ -51,7 +51,7 @@ const Projects = () => {
   };  
 
   return (
-    <div className='p-10 pt-2 flex flex-col gap-5 w-[100%] h-screen '>
+    <div className='p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen '>
 
         <div className="flex justify-between items-center w-[95%]">
             <div className="flex items-center cursor-pointer">
@@ -68,7 +68,7 @@ const Projects = () => {
 
         <h2 className='font-bold text-xl'>Share your past project experience.</h2>
 
-        <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[90%]">
+        <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
 
             {/* Project Name */}
             <div className="flex flex-col gap-2 text-lg">

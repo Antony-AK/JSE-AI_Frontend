@@ -1,8 +1,10 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import logo from '../../assets/logo.png'
 import linkedinLogo from '../../assets/linkedin-full-logo.png'
 
 const Linkedin = () => {
+      const navigate = useNavigate();
     const loading = false; // Simulating loading state, replace with actual state management if 
     return (
         <div className="flex h-screen p-5 bg-white">
@@ -41,7 +43,7 @@ const Linkedin = () => {
                     <button
                         type="button"
                         className=" teal-button px-6 py-2 bg-[#2c6472] text-white w-[130px] h-[44px]  rounded-full focus:outline-none transition-transform duration-200 ease-in-out"
-                    //   onClick={handleNext}
+                  onClick={() => navigate(-1)}
                     >
                         Cancel
                     </button>

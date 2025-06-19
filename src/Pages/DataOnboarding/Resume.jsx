@@ -1,8 +1,11 @@
 import React, { useState, useRef } from 'react';import logo from '../../assets/logo.png'
 import resume_upload from '../../assets/resume_upload.png'
+import { useNavigate } from 'react-router-dom'
+
 
 
 const Resume = () => {
+    const navigate = useNavigate();
     const [certificateFile, setCertificateFile] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -98,7 +101,7 @@ const Resume = () => {
           <button
             type="button"
             className=" teal-button px-6 py-2 bg-[#2c6472] text-white w-[130px] h-[44px]  rounded-full focus:outline-none transition-transform duration-200 ease-in-out"
-          //   onClick={handleNext}
+                  onClick={() => navigate(-1)}
           >
             Cancel
           </button>

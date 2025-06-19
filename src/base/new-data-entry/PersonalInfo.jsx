@@ -70,7 +70,7 @@ const PersonalInfo = () => {
 
       <h2 className='font-bold text-xl'>Let's start with your personal information.</h2>
 
-      <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[90%]">
+      <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
 
         {/* Name */}
         <div className="flex justify-start gap-10 text-lg w-full">
@@ -102,7 +102,7 @@ const PersonalInfo = () => {
         <div className="flex flex-col gap-2 text-lg">
           <label className='font-medium' htmlFor="email">Email Address <span className='text-red-500'>*</span></label>
           <input 
-            className={`px-5 py-3 rounded-lg border ${ errors.email ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]' } outline-none focus:border-[#2c6472]`}
+            className={`px-5 py-3 rounded-lg border ${errors.email ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]' } outline-none focus:border-[#2c6472]`}
             value={formData.email}
             onChange={handleChange} 
             type="email" 

@@ -15,12 +15,12 @@ const DataEntryPages = () => {
   return (
     <div className="flex min-h-screen bg-white text-white">
       {/* Sidebar on the left */}
-      <div className="w-[100%] fixed top-0 left-0 bottom-0 p-5">
+      <div className="w-[27%] fixed top-0 left-0 bottom-0 p-5 z-10">
         <DataEntrySidebar />
       </div>
 
       {/* Main content on the right */}
-      <div className="ml-[27%] flex flex-col w-full p-5 text-black">
+      <div className="ml-[27%] flex flex-col p-5 w-[73%] text-black relative z-0">
         <div className="flex-grow">
           <Routes>
             <Route path="/languages" element={<Languages />} />

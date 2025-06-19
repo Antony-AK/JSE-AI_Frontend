@@ -24,6 +24,7 @@ import DataOnboarding from './Pages/DataOnboarding/DataOnboarding.jsx';
 import Linkedin from './Pages/DataOnboarding/Linkedin.jsx';
 import Resume from './Pages/DataOnboarding/Resume.jsx';
 import External from './Pages/6_my_jobs/External.jsx';
+import ApplicationsChart from './Pages/3_dashboard/graph/graph.jsx';
 
 const AppRoutes = () => {
     const location = useLocation();
@@ -61,6 +62,7 @@ const AppRoutes = () => {
                                 <Route path="/test1" element={<Test1 />} />
                                 <Route path="/verification" element={<VerificationPage />} />
                                 <Route path="/user/profile" element={<Profile />} />
+                                <Route path='/user/graph' element={<ApplicationsChart/>} />
                             </Routes>
                         </div>
                     </div>

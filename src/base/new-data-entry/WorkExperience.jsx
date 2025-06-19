@@ -65,7 +65,7 @@ const WorkExperience = () => {
 
         <h2 className='font-bold text-xl'>Highlight your Work Experience.</h2>
 
-        <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[90%]">
+        <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
 
             {/* Role */}
             <div className="flex flex-col gap-2 text-lg">

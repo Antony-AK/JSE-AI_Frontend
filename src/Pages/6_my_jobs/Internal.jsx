@@ -468,7 +468,7 @@ const MyApplication = () => {
                         </svg>
 
                         {/* Center text */}
-                        <div className="absolute inset-0 flex items-center justify-center text-lg font-semibold text-gray-800">
+                        <div className="absolute inset-0 flex items-center justify-center  font-semibold text-gray-800">
                           {selectedJob.matchValue}%
                         </div>
                       </div>
@@ -563,7 +563,7 @@ const MyApplication = () => {
                         </svg>
 
                         {/* Center text */}
-                        <div className="absolute inset-0 flex items-center justify-center text-lg font-semibold text-gray-800">
+                        <div className="absolute inset-0 flex items-center justify-center font-semibold text-gray-800">
                           {selectedJob.matchValue}%
                         </div>
                       </div>

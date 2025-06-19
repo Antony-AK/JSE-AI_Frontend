@@ -102,7 +102,7 @@ const Languages = () => {
 
 
   return (
-    <div className='w-full min-h-screen p-5 ml-5  text-black'>
+    <div className='w-full  p-5 ml-5  text-black'>
       <div className="flex flex-col">
         <div className="flex items-center mb-5 cursor-pointer">
           <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
@@ -117,7 +117,7 @@ const Languages = () => {
           <h1 className='text-2xl font-semibold mt-7'>Add the languages you know.</h1>
         </div>
 
-        <form className="flex flex-col mt-5 ms-6" onSubmit={handleAddCertificate}>
+        <form className="flex flex-col mt-5 ms-6 " onSubmit={handleAddCertificate}>
           {/* Language Input */}
           <div className="relative mb-2">
             <label className="mb-3 block font-medium text-lg ">
