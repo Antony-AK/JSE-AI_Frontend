@@ -1,35 +1,61 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { BASE_URL } from '../../utils/api'
 import right_arrow from '../../assets/left-arrow.png'
 
 const WorkExperience = () => {
 
+  const navigate = useNavigate();
+
+  const apiUrl = `${BASE_URL}/work-experience`;
+
+  const token = sessionStorage.getItem('authToken');  
+
   const [formData, setFormData] = useState({
-    role: '',
-    company: '',
+    job_title: '',
+    company_name: '',
     location: '',
-    startdate: '',
+    start_date: '',
     enddate: '',
     currentwork: false,
-    workdescription: ''
+    key_responsibilities: ''
   });
 
   const [errors, setErrors] = useState({});
   
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [id]: type === 'checkbox' ? checked : value,
+    const newValue = type === 'checkbox' ? checked : value;
+
+    setFormData((prev) => ({
+      ...prev,
+      [id]: newValue,
+    }));
+
+    // Clear the error for the specific field when the user starts typing
+    setErrors((prevErrors) => {
+      const updatedErrors = { ...prevErrors };
+      if (newValue && updatedErrors[id]) {
+        delete updatedErrors[id];
+      }
+
+      // Special case: If currentwork is checked, remove enddate error
+      if (id === 'currentwork' && checked) {
+        delete updatedErrors['enddate'];
+      }
+
+      return updatedErrors;
     });
   };
   
   const validate = () => {
     const newErrors = {};
 
-    if (!formData.role.trim()) newErrors.role = 'Role is required';
-    if (!formData.company.trim()) newErrors.company = 'Company is required';
+    if (!formData.job_title.trim()) newErrors.job_title = 'Role is required';
+    if (!formData.company_name.trim()) newErrors.company_name = 'Company is required';
     if (!formData.location.trim()) newErrors.location = 'Location is required';
-    if (!formData.startdate) newErrors.startdate = 'Start date is required';
+    if (!formData.start_date) newErrors.start_date = 'Start date is required';
     if (!formData.currentwork && !formData.enddate) {
       newErrors.enddate = 'End date is required if not currently working';
     }
@@ -37,26 +63,71 @@ const WorkExperience = () => {
     return newErrors;
   };
   
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (navigateNext = false) => {
     const newErrors = validate();
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      console.log('Form submitted successfully', formData);
-      // Proceed to next step or API call
+      try {
+        if (!token) {
+          alert("No token found. Please log in.");
+          return;
+        }
+
+        const toISOString = (date) => date ? new Date(date).toISOString() : null;
+
+        const payload = {
+          job_title: formData.job_title,
+          company_name: formData.company_name,
+          location: formData.location,
+          start_date: toISOString(formData.start_date),
+          end_date: formData.currentwork ? null : toISOString(formData.enddate),
+          currently_working: formData.currentwork,
+          key_responsibilities: formData.key_responsibilities,
+        };
+
+        const response = await axios.post(apiUrl, payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        console.log("✅ Submitted:", response.data);
+        alert("Work experience submitted successfully!");
+
+        if (navigateNext) {
+          navigate('/user/onboarding/education');
+        } else {
+          // Clear form after add
+          setFormData({
+            job_title: '',
+            company_name: '',
+            location: '',
+            start_date: '',
+            enddate: '',
+            currentwork: false,
+            key_responsibilities: ''
+          });
+          setErrors({});
+        }
+
+      } catch (error) {
+        console.error("❌ API Error:", error.response?.data || error.message);
+        alert("Submission failed. Please try again.");
+      }
     }
-  };  
+  };
 
   return (
     <div className='p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen overflow-y-auto'>
         <div className="flex justify-between items-center w-[95%]">
-            <div className="flex items-center cursor-pointer">
+            <div className="flex items-center cursor-pointer" onClick={() => navigate(-1)}>
                 <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
                 <p className='ml-2 text-lg font-medium'>Back</p>
             </div>
 
-            <div className="flex items-center cursor-pointer">
+            <div className="flex items-center cursor-pointer" onClick={() => navigate('/user/onboarding/education')}>
                 <p className='ml-2 text-lg font-medium text-[#00000057]'>Skip</p>
             </div>
         </div>
@@ -69,34 +140,34 @@ const WorkExperience = () => {
 
             {/* Role */}
             <div className="flex flex-col gap-2 text-lg">
-                <label className='font-medium' htmlFor="role">Role <span className='text-red-500'>*</span></label>
+                <label className='font-medium' htmlFor="job_title">Role <span className='text-red-500'>*</span></label>
                 <input 
-                    className={`px-5 py-3 rounded-lg border ${errors.role ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`} 
+                    className={`px-5 py-3 rounded-lg border ${errors.job_title ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`} 
                     type="text" 
-                    id='role'
-                    value={formData.role}
+                    id='job_title'
+                    value={formData.job_title}
                     onChange={handleChange}
                 />
-                {errors.role && <p className='text-red-500 text-sm'>{errors.role}</p>}
+                {errors.job_title && <p className='text-red-500 text-sm'>{errors.job_title}</p>}
             </div>
 
-            {/* Company & Location */}
+            {/* company_name & Location */}
             <div className="flex justify-start gap-10 text-lg w-full">
                 <div className="flex flex-col gap-2 w-[50%]">
-                    <label className='font-medium' htmlFor="company">Company <span className='text-red-500'>*</span></label>
+                    <label className='font-medium' htmlFor="company_name">Company <span className='text-red-500'>*</span></label>
                     <input 
-                    className={`px-5 py-3 rounded-lg border ${errors.company ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+                    className={`px-5 py-3 rounded-lg border ${errors.company_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
                     type="text" 
-                    id='company'
-                    value={formData.company}
+                    id='company_name'
+                    value={formData.company_name}
                     onChange={handleChange}
                     />
-                    {errors.company && <p className='text-red-500 text-sm'>{errors.company}</p>}
+                    {errors.company_name && <p className='text-red-500 text-sm'>{errors.company_name}</p>}
                 </div>
                 <div className="flex flex-col gap-2 w-[50%]">
                     <label className='font-medium' htmlFor="location">Location <span className='text-red-500'>*</span></label>
                     <input
-                    className={`px-5 py-3 rounded-lg border ${errors.location ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+                    className={`px-5 py-3 rounded-lg border ${errors.location ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
                     type="text" 
                     id='location'
                     value={formData.location}
@@ -109,20 +180,20 @@ const WorkExperience = () => {
             {/* Start & End Date */}
             <div className="flex justify-start gap-10 text-lg w-full">
                 <div className="flex flex-col gap-2 w-[50%]">
-                    <label className='font-medium' htmlFor="startdate">Start Date <span className='text-red-500'>*</span></label>
+                    <label className='font-medium' htmlFor="start_date">Start Date <span className='text-red-500'>*</span></label>
                     <input 
-                    className={`px-5 py-3 rounded-lg border ${errors.startdate ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+                    className={`px-5 py-3 rounded-lg border ${errors.start_date ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
                     type="date" 
-                    id='startdate'
-                    value={formData.startdate}
+                    id='start_date'
+                    value={formData.start_date}
                     onChange={handleChange}
                     />
-                    {errors.startdate && <p className='text-red-500 text-sm'>{errors.startdate}</p>}
+                    {errors.start_date && <p className='text-red-500 text-sm'>{errors.start_date}</p>}
                 </div>
                 <div className="flex flex-col gap-2 w-[50%]">
                     <label className='font-medium' htmlFor="enddate">End Date {!formData.currentwork && <span className='text-red-500'>*</span>}</label>
                     <input
-                    className={`px-5 py-3 rounded-lg border ${errors.enddate ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+                    className={`px-5 py-3 rounded-lg border ${errors.enddate ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
                     type="date" 
                     id='enddate'
                     value={formData.enddate}
@@ -147,21 +218,21 @@ const WorkExperience = () => {
 
             {/* Work Description */}
             <div className="flex flex-col gap-2 text-lg">
-                <label className="font-medium" htmlFor="workdescription">Work Description</label>
+                <label className="font-medium" htmlFor="key_responsibilities">Work Description</label>
                 <textarea
-                    id="workdescription"
+                    id="key_responsibilities"
                     className="px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472] resize-none"
                     rows={4}
-                    value={formData.workdescription}
+                    value={formData.key_responsibilities}
                     onChange={handleChange}
                 ></textarea>
             </div>
 
             <div className="flex justify-between mt-7">
-                <div className="cursor-pointer">
+                <div className="cursor-pointer" onClick={() => handleSubmit(false)}>
                     <p className='text-lg text-[#2C6472] font-semibold'>+ Add Work Experience</p>
                 </div>
-                <button type="submit" className='rounded-xl px-8 py-2 bg-[#2C6472] text-[#fff] mb-10'>Next</button>           
+                <button type="button" onClick={() => handleSubmit(true)} className='rounded-xl px-8 py-2 bg-[#2C6472] text-[#fff] mb-10'>Next</button>           
             </div>           
 
         </form>        
