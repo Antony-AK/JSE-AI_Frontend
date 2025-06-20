@@ -8,6 +8,7 @@ import complete from '../../assets/complete.svg'
 import incomplete from '../../assets/incomplete.svg'
 import announcements from '../../assets/announcements-icon.svg'
 import AOS from "aos";
+import lock from "../../assets/lock_icon.png"
 import "aos/dist/aos.css";
 
 const Dashboard = () => {
@@ -242,10 +243,15 @@ const Dashboard = () => {
             </div>
           </div>
 
-        </div>
+        </div>       
+        
+        
+           <img src={lock} className='absolute top-[95%] left-[33%] w-10 h-10 z-10' alt="" />
+
 
         {/* Box - 2 */}
-        <div className="border rounded-xl p-5 bg-white space-y-3">
+        <div className="border relative rounded-xl p-5 bg-white opacity-20 blur-0 space-y-3 ">
+
 
           <h2 className='font-bold text-[15px]'>Proficiency Test Details</h2>
 

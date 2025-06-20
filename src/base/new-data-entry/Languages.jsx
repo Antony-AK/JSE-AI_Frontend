@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png'
+import { BASE_URL } from '../../utils/api';
 
 const Languages = () => {
 
@@ -17,6 +18,8 @@ const Languages = () => {
   useEffect(() => {
     // Remove old session handling — not needed
   }, []);
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,6 +55,8 @@ const Languages = () => {
     if (!validateForm()) return;
 
     const token = sessionStorage.getItem('authToken');
+    
+
     if (!token) {
       alert('You are not authenticated. Please login.');
       return;
@@ -59,17 +64,65 @@ const Languages = () => {
 
     setLoading(true);
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append('language', formData.language);
-      formDataToSend.append('proficiency', formData.proficiency);
 
-
-      const response = await fetch('https://jse.arshan.digital/b1/languages', {
+      const response = await fetch(`${BASE_URL}/languages`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json', // Add this
         },
-        body: formDataToSend,
+        body: JSON.stringify({
+          language: formData.language,
+          proficiency: formData.proficiency,
+        }),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.message || 'Upload failed');
+
+      }
+
+      alert(`✅ Languages uploaded successfully`);
+
+      setFormData({
+        language: '',
+        proficiency: ''
+      });
+
+    } catch (err) {
+      console.error('Error uploading language:', err);
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNext = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      alert('You are not authenticated. Please login.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+
+
+      const response = await fetch(`${BASE_URL}/languages`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json', // Add this
+
+        },
+        body: JSON.stringify({
+          language: formData.language,
+          proficiency: formData.proficiency,
+        }),
       });
 
       if (!response.ok) {
@@ -83,6 +136,7 @@ const Languages = () => {
         language: '',
         proficiency: ''
       });
+      navigate('/user/onboarding/certificates')
 
     } catch (err) {
       console.error('Error uploading language:', err);
@@ -92,13 +146,7 @@ const Languages = () => {
     }
   };
 
-  const handleNext = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    navigate('/user/dashboard');
-    // navigate("/user/onboarding/jobtitles");  // Only navigate, no data posting here
-    setLoading(false);
-  };
+
 
 
   return (
@@ -106,7 +154,7 @@ const Languages = () => {
       <div className="flex flex-col">
         <div className="flex items-center mb-5 cursor-pointer">
           <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
-          <p className='ml-2 text-lg font-medium'  onClick={() => navigate(-1)}>Back</p>
+          <p className='ml-2 text-lg font-medium' onClick={() => navigate(-1)}>Back</p>
         </div>
 
         <div>
@@ -130,7 +178,6 @@ const Languages = () => {
               placeholder=" "
               value={formData.language}
               onChange={handleChange}
-              required
               className={`w-[70%] h-[64px] flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
               ${errors.language ? 'border-red-500 animate-shake' : 'border-gray-300 focus:ring-[#2c6472]'}`}
             />
@@ -143,19 +190,24 @@ const Languages = () => {
           <div className="mb-2 ms-1">
             <p className="  text-lg font-medium mb-3">Proficiency <span className='text-red-500 ms-1'>*</span></p>
             <div className="flex flex-col gap-5">
-              {['Beginner(A1,A2)', 'Intermediate(B1,B2)', 'Fluent/Native(C1,C2)'].map((level) => (
-                <label key={level} className="flex items-center cursor-pointer ">
+              {[
+                { label: 'Beginner (A1, A2)', value: 'beginner' },
+                { label: 'Intermediate (B1, B2)', value: 'intermediate' },
+                { label: 'Fluent / Native (C1, C2)', value: 'fluent' }, // or use 'native' if needed
+              ].map((level) => (
+                <label key={level.value} className="flex items-center cursor-pointer">
                   <input
                     type="radio"
-                    name="proficiency" // Fixed name attribute
-                    value={level}
-                    checked={formData.proficiency === level} // Fix checked condition
+                    name="proficiency"
+                    value={level.value}
+                    checked={formData.proficiency === level.value}
                     onChange={handleChange}
                     className="mr-2 mb-1 text-gray-500"
                   />
-                  {level}
+                  {level.label}
                 </label>
               ))}
+
             </div>
           </div><br />
 
@@ -163,7 +215,6 @@ const Languages = () => {
           <div className="flex w-[70%] justify-between items-center gap-4 mt-4">
             <button
               type="submit"
-              onClick={handleAddCertificate}
               className=" py-2 w-[180px] bg-white text-[#2c6472]  h-[43px]  font-semibold cursor-pointer mt-1 hover:scale-95 transition-transform duration-200 ease-in-out"
             >
               +Add languages

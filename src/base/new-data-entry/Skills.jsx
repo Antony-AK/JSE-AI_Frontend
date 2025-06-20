@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png'
 import axios from 'axios';
 import { jobskills } from '../../assets/data';
+import { BASE_URL } from '../../utils/api';
 
 const Skills = () => {
     const navigate = useNavigate();
@@ -13,8 +14,13 @@ const Skills = () => {
     const [loading, setLoading] = useState(false);
     const hasDataRef = useRef(false);
     const [dropdownType, setDropdownType] = useState(null); // "general" or "job"
+    const jobDropdownRef = useRef(null);
     const [generalSearchTerm, setGeneralSearchTerm] = useState('');
     const [jobSearchTerm, setJobSearchTerm] = useState('');
+    const [errors, setErrors] = useState({});
+    const [accepted, setAccepted] = useState(false);
+
+
 
 
 
@@ -29,11 +35,15 @@ const Skills = () => {
     });
 
 
-    const apiUrl = "https://jse.arshan.digital/b1/professional-summary";
-    const jobtitleapiurl = "https://jse.arshan.digital/b1/jobtitles"
+    const apiUrl = `${BASE_URL}/keyskills`;
+    const jobtitleapiurl = `${BASE_URL}/jobtitles`;
     const token = sessionStorage.getItem("authToken");
 
-    const jobTitlesArray = jobTitle?.primary_title ? [jobTitle.primary_title] : [];
+    const jobTitlesArray = [
+        jobTitle.primary_title,
+        jobTitle.secondary_title,
+        jobTitle.tertiary_title,
+    ].filter(Boolean);
 
 
     const fetchjobtitle = async () => {
@@ -55,15 +65,17 @@ const Skills = () => {
             console.error("Failed to fetch jobtitles info", err);
         }
     };
-
     useEffect(() => {
-        const matchedJob = jobskills[selectedTitle]; // <-- I think you meant `selectedTitle`
+        console.log("🎯 selectedTitle:", selectedTitle);
+        const matchedJob = jobskills[selectedTitle];
         if (matchedJob && Array.isArray(matchedJob.skills)) {
+            console.log("✅ Skills for selected title:", matchedJob.skills);
             setDynamicSkills(matchedJob.skills);
         } else {
+            console.warn("❌ No skills found for this title");
             setDynamicSkills([]);
         }
-    }, [selectedTitle, jobskills]);
+    }, [selectedTitle]);
 
 
 
@@ -74,17 +86,33 @@ const Skills = () => {
     }, []);
 
     useEffect(() => {
+        if (dropdownType === "job" && selectedTitle && dynamicSkills.length > 0) {
+            setShowDropdown(true);
+        }
+    }, [selectedTitle, dynamicSkills]);
+
+
+    useEffect(() => {
         console.log("Updated hasExistingData:", hasExistingData);
     }, [hasExistingData]);
 
-    const filteredSkills =
-        dropdownType === "job"
-            ? (dynamicSkills || []).filter(skill =>
+
+
+
+    const filteredSkills = (() => {
+        if (dropdownType === "job") {
+            return (dynamicSkills || []).filter(skill =>
                 skill.toLowerCase().includes((jobSearchTerm || '').toLowerCase())
-            )
-            : (allSkills || []).filter(skill =>
+            );
+        }
+        if (dropdownType === "general") {
+            return (allSkills || []).filter(skill =>
                 skill.toLowerCase().includes((generalSearchTerm || '').toLowerCase())
             );
+        }
+        return [];
+    })();
+
 
 
 
@@ -112,6 +140,7 @@ const Skills = () => {
         }
         setShowDropdown(false);
     };
+
 
     // ✅ Adds selected/typed skill to proper formData field
     const addSkill = () => {
@@ -153,17 +182,30 @@ const Skills = () => {
 
     // ✅ Validates that both lists have at least one skill
     const validateForm = () => {
-        if (formData.generalSkills.length === 0 || formData.jobSpecificSkills.length === 0) {
-            alert("Please add at least one skill in both General and Job Specific sections.");
-            return false;
+        const newErrors = {};
+
+        if (formData.generalSkills.length === 0) {
+            newErrors.generalSkills = "Please add at least one general skill.";
         }
-        return true;
+
+        if (formData.jobSpecificSkills.length === 0) {
+            newErrors.jobSpecificSkills = "Please add at least one job-specific skill.";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
+
 
     // ✅ Final submit logic (unchanged, just clean)
     const handleNext = async (e) => {
         e.preventDefault();
         if (!validateForm()) return;
+
+        if (!accepted) {
+            alert('Please accept the condition before continuing.');
+            return;
+        }
 
         const token = sessionStorage.getItem('authToken');
         if (!token) {
@@ -189,12 +231,18 @@ const Skills = () => {
                 body: JSON.stringify(payload),
             });
 
+            if (!response.ok) {
+                const errorText = await response.text(); // use text instead of .json()
+                console.error("❌ Error uploading data:", errorText);
+                return;
+            }
+
             const data = await response.json();
 
             if (!response.ok) {
                 console.error("❌ Error uploading data:", data);
             } else {
-                navigate('/user/onboarding/work-experience');
+                navigate('/user/dashboard');
             }
         } catch (error) {
             console.error("❌ Network or server error:", error);
@@ -205,13 +253,19 @@ const Skills = () => {
     // 🔁 Hook to handle click outside
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target) &&
+                jobDropdownRef.current &&
+                !jobDropdownRef.current.contains(event.target)
+            ) {
                 setShowDropdown(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
 
     return (
         <div className='w-full min-h-screen p-5 ml-5 text-black'>
@@ -248,6 +302,8 @@ const Skills = () => {
                                         setGeneralSearchTerm(e.target.value);
                                         setShowDropdown(true);
                                         setDropdownType("general");
+                                        setErrors((prev) => ({ ...prev, generalSkills: null }));
+
                                     }}
                                     onFocus={() => {
                                         setShowDropdown(true);
@@ -262,8 +318,10 @@ const Skills = () => {
                                                 <li
                                                     key={index}
                                                     className="px-4 py-2 cursor-pointer hover:bg-[#2c6472] hover:text-white"
-                                                    onClick={() => handleSelect(skill)}
-                                                >
+                                                    onMouseDown={(e) => {
+                                                        e.preventDefault(); // prevent input from losing focus
+                                                        handleSelect(skill);
+                                                    }}                                                >
                                                     {skill}
                                                 </li>
                                             ))
@@ -281,6 +339,10 @@ const Skills = () => {
                                 </button>
                             </div>
                         </div>
+
+                        {errors.generalSkills && (
+                            <div className="text-red-500 text-sm mt-1">{errors.generalSkills}</div>
+                        )}
 
                         <div className="flex flex-wrap gap-2 h-[80px] w-[60%] scrollbar-custom overflow-y-auto p-2 rounded ">
                             {formData.generalSkills.map((skill, index) => (
@@ -300,6 +362,8 @@ const Skills = () => {
                             ))}
                         </div>
 
+
+
                     </div>
 
 
@@ -313,18 +377,11 @@ const Skills = () => {
                                 <div
                                     key={index}
                                     onClick={() => {
-                                        setSelectedTitle(title);
-
-                                        // 🔍 Find the selected job title from jobskills and update the dropdown skills
-                                        const matchedJob = jobskills[title];
-                                        if (matchedJob && Array.isArray(matchedJob.skills)) {
-                                            setDynamicSkills(matchedJob.skills);
-                                        } else {
-                                            setDynamicSkills([]); // fallback
-                                        };
-                                        setJobSearchTerm('');           // optional: clear search bar
-                                        setShowDropdown(true);
+                                        setSelectedTitle(title); // ✅ only this
+                                        setJobSearchTerm('');     // ✅ optional: clear input
+                                        setDropdownType('job');   // ✅ ensure it's set properly
                                     }}
+
                                     className={`flex-shrink-0 h-8 px-3 py-1.5 text-sm rounded snap-start cursor-pointer 
                                             ${selectedTitle === title ? 'bg-[#2c6472] text-white' : 'text-white bg-gray-500/40'}
                                             hover:bg-[#2c6472] hover:text-white transition-all duration-200`}
@@ -334,7 +391,7 @@ const Skills = () => {
                             ))}
                         </div>
 
-                        <div className='flex relative'>
+                        <div className='flex relative ' ref={jobDropdownRef}>
                             <input
                                 type="text"
                                 className="peer w-[60%] h-[64px] rounded-lg text-lg scrollbar-custom px-4 py-2 border border-gray-300  text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]"
@@ -343,21 +400,25 @@ const Skills = () => {
                                     setJobSearchTerm(e.target.value);
                                     setShowDropdown(true);
                                     setDropdownType("job");
+                                    setErrors((prev) => ({ ...prev, jobSpecificSkills: null }));
+
                                 }}
                                 onFocus={() => {
                                     setShowDropdown(true);
                                     setDropdownType("job");
                                 }}
                             />
-                            {showDropdown && dropdownType === "job" && (
+                            {selectedTitle && showDropdown && dropdownType === "job" && (
                                 <ul className="absolute top-16 z-10 w-[60%] max-h-48 overflow-y-auto text-gray-600 bg-white border border-gray-300 shadow-md">
                                     {filteredSkills.length > 0 ? (
                                         filteredSkills.map((skill, index) => (
                                             <li
                                                 key={index}
                                                 className="px-4 py-2 cursor-pointer hover:bg-[#2c6472] hover:text-white"
-                                                onClick={() => handleSelect(skill)}
-                                            >
+                                                onMouseDown={(e) => {
+                                                    e.preventDefault(); // prevent input from losing focus
+                                                    handleSelect(skill);
+                                                }}                                            >
                                                 {skill}
                                             </li>
                                         ))
@@ -375,6 +436,11 @@ const Skills = () => {
                             </button>
                         </div>
                     </div>
+
+                    {errors.jobSpecificSkills && (
+                        <div className="text-red-500 text-sm mt-1">{errors.jobSpecificSkills}</div>
+                    )}
+
 
                     <div className="flex flex-wrap gap-2 h-[80px] w-[60%] mt-3 mb-12 scrollbar-custom overflow-y-auto p-2 rounded ">
                         {formData.jobSpecificSkills.map((skill, index) => (
@@ -395,8 +461,15 @@ const Skills = () => {
 
                     </div>
 
+
+
                     <div className="flex gap-3 mt-5">
-                        <input type="checkbox" className='w-4 mt-2 h-4 bg-[#2c6472] text-[#2c6472]' name="primary_title" id="primary_title" />
+                        <input
+                            type="checkbox"
+                            className='w-4 mt-2 h-4 bg-[#2c6472] text-[#2c6472]'
+                            name="primary_title" id="primary_title"
+                            checked={accepted}
+                            onChange={(e) => setAccepted(e.target.checked)} />
                         <p className='text-sm text-gray-500'>Please enter only relevant job-related skills.</p>
                     </div>
                     <p className='text-sm  ms-7 text-gray-500'>Adding unrelated or inaccurate skills may affect the quality of your profile.</p>

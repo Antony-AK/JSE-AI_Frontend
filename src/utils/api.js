@@ -1,4 +1,4 @@
 
 
 
-export const BASE_URL = "https://jse.arshan.digital/b1";
+export const BASE_URL = "https://dev.arshan.digital/b1";

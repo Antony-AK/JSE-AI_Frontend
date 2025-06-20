@@ -8,7 +8,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import google from "./../../assets/Google.png";
 import frame from "./../../assets/Frame.png";
 import logo from "../../assets/logo.png"
-
+import {BASE_URL} from "../../utils/api"
 
 const Signup = () => {
   const [loading, setLoading] = useState(false);
@@ -56,7 +56,7 @@ const Signup = () => {
       setLoading(true);
 
       const response = await axios.post(
-        'https://jse.arshan.digital/b1/auth/signup',
+        `${BASE_URL}/auth/signup`,
         signupData, // Request body as the second argument
         {
           headers: {

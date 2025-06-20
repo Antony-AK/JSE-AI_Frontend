@@ -9,7 +9,7 @@ const Linkedin = () => {
     return (
         <div className="flex h-screen p-5 bg-white">
             {/* Left Sidebar */}
-            <div className="w-[27%] h-[99.5%] p-5 pl-7 bg-gradient-to-b from-[#2E8095] to-[#2C6472] text-white">
+            <div className="w-[30%] h-[99.5%] p-5 pl-7 bg-gradient-to-b from-[#2E8095] to-[#2C6472] text-white">
                 <div className="flex items-center mb-10">
                     <img className='w-10 h-10 object-fill' src={logo} alt="JobFusion Logo" />
                     <p className="text-white ml-2 text-lg font-semibold">JSE AI</p>

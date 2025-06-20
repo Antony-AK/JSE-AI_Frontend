@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import drop from '../../assets/drop-icon.svg'
+import { useNavigate } from 'react-router-dom';
+import right_arrow from "../../assets/left-arrow.png"
 
 const PersonalInfo = () => {
+  const navigate = useNavigate();
 
   const [showOthers, setShowOthers] = useState(false);
 
@@ -66,6 +69,11 @@ const PersonalInfo = () => {
   return (
     <div className='p-10 pt-14 flex flex-col gap-5 w-[100%] min-h-screen overflow-y-auto'>
 
+      <div className="flex items-center -mt-10 cursor-pointer">
+        <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
+        <p className='ml-2 text-lg font-medium' onClick={() => navigate('/user/dataonboarding')}>Back</p>
+      </div>
+
       <p className='text-[#2c6472] font-semibold'>STEP 1 OF 8</p>
 
       <h2 className='font-bold text-xl'>Let's start with your personal information.</h2>
@@ -76,11 +84,11 @@ const PersonalInfo = () => {
         <div className="flex justify-start gap-10 text-lg w-full">
           <div className="flex flex-col gap-2 w-[50%]">
             <label className='font-medium' htmlFor="fname">First Name <span className='text-red-500'>*</span></label>
-            <input 
-              className={`px-5 py-3 rounded-lg border ${ errors.fname ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]' } outline-none focus:border-[#2c6472]`}
-              value={formData.fname} 
-              onChange={handleChange} 
-              type="text" 
+            <input
+              className={`px-5 py-3 rounded-lg border ${errors.fname ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+              value={formData.fname}
+              onChange={handleChange}
+              type="text"
               id='fname'
             />
             {errors.fname && <span className="text-red-500 text-sm">{errors.fname}</span>}
@@ -88,10 +96,10 @@ const PersonalInfo = () => {
           <div className="flex flex-col gap-2 w-[50%]">
             <label className='font-medium' htmlFor="lname">Last Name <span className='text-red-500'>*</span></label>
             <input
-              className={`px-5 py-3 rounded-lg border ${ errors.lname ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]' } outline-none focus:border-[#2c6472]` }
+              className={`px-5 py-3 rounded-lg border ${errors.lname ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
               value={formData.lname}
-              onChange={handleChange} 
-              type="text" 
+              onChange={handleChange}
+              type="text"
               id='lname'
             />
             {errors.lname && <span className="text-red-500 text-sm">{errors.lname}</span>}
@@ -101,11 +109,11 @@ const PersonalInfo = () => {
         {/* Email */}
         <div className="flex flex-col gap-2 text-lg">
           <label className='font-medium' htmlFor="email">Email Address <span className='text-red-500'>*</span></label>
-          <input 
-            className={`px-5 py-3 rounded-lg border ${errors.email ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]' } outline-none focus:border-[#2c6472]`}
+          <input
+            className={`px-5 py-3 rounded-lg border ${errors.email ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
             value={formData.email}
-            onChange={handleChange} 
-            type="email" 
+            onChange={handleChange}
+            type="email"
             id='email'
           />
           {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
@@ -115,31 +123,31 @@ const PersonalInfo = () => {
         <div className="flex flex-col gap-2 text-lg">
           <label className='font-medium' htmlFor="phone">Phone Number <span className='text-red-500'>*</span></label>
           <input
-            className={`px-5 py-3 rounded-lg border ${ errors.phone ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]' } outline-none focus:border-[#2c6472]`} 
+            className={`px-5 py-3 rounded-lg border ${errors.phone ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
             value={formData.phone}
             onChange={handleChange}
-            type="phone"  
+            type="phone"
             id='phone'
           />
-          {errors.phone && <span className="text-red-500 text-sm">{errors.phone}</span>}  
+          {errors.phone && <span className="text-red-500 text-sm">{errors.phone}</span>}
         </div>
 
         {/* Linked in */}
         <div className="flex flex-col gap-2 text-lg">
           <label className='font-medium' htmlFor="linkedIn">Linkedin Profile <span className='text-red-500'>*</span></label>
-          <input 
-            className={`px-5 py-3 rounded-lg border ${ errors.linkedIn ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]' } outline-none focus:border-[#2c6472]`} 
+          <input
+            className={`px-5 py-3 rounded-lg border ${errors.linkedIn ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
             value={formData.linkedIn}
             onChange={handleChange}
-            type="text" 
+            type="text"
             id='linkedIn'
           />
           {errors.linkedIn && <span className="text-red-500 text-sm">{errors.linkedIn}</span>}
-        </div>   
+        </div>
 
         <div onClick={() => setShowOthers(!showOthers)} className="flex items-center gap-3 cursor-pointer w-fit">
           <p className='text-[#2c6472] font-semibold'>Others</p>
-          <img width="15px" src={drop} alt="" className={`transform transition-transform duration-300 ${showOthers ? 'rotate-180' : 'rotate-0'}`}/>
+          <img width="15px" src={drop} alt="" className={`transform transition-transform duration-300 ${showOthers ? 'rotate-180' : 'rotate-0'}`} />
         </div>
 
         {/* Portfolio */}
@@ -147,11 +155,11 @@ const PersonalInfo = () => {
           <div className="flex justify-start gap-10 text-lg w-full">
             <div className="flex flex-col gap-2 w-[50%]">
               <label className='font-medium' htmlFor="title">Title <span className='text-red-500'>*</span></label>
-              <input 
-                className={`px-5 py-3 rounded-lg border ${ errors.fname ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]' } outline-none focus:border-[#2c6472]`}
-                value={formData.title} 
-                onChange={handleChange} 
-                type="text" 
+              <input
+                className={`px-5 py-3 rounded-lg border ${errors.fname ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+                value={formData.title}
+                onChange={handleChange}
+                type="text"
                 id='title'
               />
               {errors.title && <span className="text-red-500 text-sm">{errors.title}</span>}
@@ -159,10 +167,10 @@ const PersonalInfo = () => {
             <div className="flex flex-col gap-2 w-[50%]">
               <label className='font-medium' htmlFor="link">Link <span className='text-red-500'>*</span></label>
               <input
-                className={`px-5 py-3 rounded-lg border ${ errors.lname ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]' } outline-none focus:border-[#2c6472]` }
+                className={`px-5 py-3 rounded-lg border ${errors.lname ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
                 value={formData.link}
-                onChange={handleChange} 
-                type="text" 
+                onChange={handleChange}
+                type="text"
                 id='link'
               />
               {errors.link && <span className="text-red-500 text-sm">{errors.link}</span>}
@@ -173,24 +181,24 @@ const PersonalInfo = () => {
         {/* Country */}
         <div className="flex flex-col gap-2 text-lg">
           <label className='font-medium' htmlFor="country">Country</label>
-          <input className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]' type="text" id='country'/>
-        </div>    
+          <input className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]' type="text" id='country' />
+        </div>
 
         {/* State */}
         <div className="flex flex-col gap-2 text-lg">
           <label className='font-medium' htmlFor="state">State</label>
-          <input className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]' type="text" id='state'/>
-        </div> 
+          <input className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]' type="text" id='state' />
+        </div>
 
         {/* City */}
         <div className="flex flex-col gap-2 text-lg">
           <label className='font-medium' htmlFor="city">City</label>
-          <input className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]' type="text" id='city'/>
-        </div>    
+          <input className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]' type="text" id='city' />
+        </div>
 
         <div className="flex justify-end mt-7">
-          <button type="submit" className='rounded-xl px-8 py-2 bg-[#2C6472] text-[#fff] mb-10'>Next</button>           
-        </div>                      
+          <button type="submit" className='rounded-xl px-8 py-2 bg-[#2C6472] text-[#fff] mb-10'>Next</button>
+        </div>
 
       </form>
 

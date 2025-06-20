@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png'
+import { BASE_URL } from '../../utils/api';
 
 const Certificates = () => {
 
@@ -14,13 +15,13 @@ const Certificates = () => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
- const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+        if (errors[name]) {
+            setErrors(prev => ({ ...prev, [name]: '' }));
+        }
+    };
 
     const validateForm = () => {
         const newErrors = {};
@@ -41,7 +42,8 @@ const Certificates = () => {
         }
 
         return true;
-    };
+    };    // same here
+
 
 
 
@@ -55,21 +57,34 @@ const Certificates = () => {
             return;
         }
 
+
+        const formatToISOWithoutMs = (dateStr) => {
+            const date = new Date(dateStr);
+            return date.toISOString().split('.')[0] + "Z";
+        };
+
+        const isoStart = formatToISOWithoutMs(formData.start_date); // ✅ No .000
+        const isoEnd = formatToISOWithoutMs(formData.end_date);     // ✅ No .000
+
+
         setLoading(true);
         try {
-            const formDataToSend = new FormData();
-            formDataToSend.append("certificate_name", formData.certificate_name);
-            formDataToSend.append("platform", formData.platform);
-            formDataToSend.append("start_date", formData.start_date);
-            formDataToSend.append("end_date", formData.end_date);
+            const payload = {
+                certificate_name: formData.certificate_name,
+                platform: formData.platform,
+                start_date: isoStart,
+                end_date: isoEnd,
+            };
 
 
-            const response = await fetch("https://jse.arshan.digital/b1/certificates", {
+
+            const response = await fetch(`${BASE_URL}/certificates`, {
                 method: "POST",
                 headers: {
+                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`, // ✅ No need to set Content-Type for FormData
                 },
-                body: formDataToSend,
+                body: JSON.stringify(payload),
             });
 
             if (!response.ok) {
@@ -88,7 +103,7 @@ const Certificates = () => {
 
         } catch (error) {
             console.error("Error uploading certificate:", error);
-            alert("Failed to upload certificate.");
+            alert("Failed to upload certificate. \n\n" + error.message);
         } finally {
             setLoading(false);
         }
@@ -96,9 +111,65 @@ const Certificates = () => {
 
     const handleNext = async (e) => {
         e.preventDefault();
+        if (!validateForm()) return;
+
+        const token = sessionStorage.getItem('authToken');
+        if (!token) {
+            alert("You are not authenticated. Please login.");
+            return;
+        }
+
+
+        const formatToISOWithoutMs = (dateStr) => {
+            const date = new Date(dateStr);
+            return date.toISOString().split('.')[0] + "Z";
+        };
+
+        const isoStart = formatToISOWithoutMs(formData.start_date); // ✅ No .000
+        const isoEnd = formatToISOWithoutMs(formData.end_date);     // ✅ No .000
+
+
         setLoading(true);
-        navigate("/user/onboarding/languages");  // Only navigate, no data posting here
-        setLoading(false);
+        try {
+            const payload = {
+                certificate_name: formData.certificate_name,
+                platform: formData.platform,
+                start_date: isoStart,
+                end_date: isoEnd,
+            };
+
+
+
+            const response = await fetch(`${BASE_URL}/certificates`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`, // ✅ No need to set Content-Type for FormData
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || "Upload failed");
+            }
+
+            alert(`✅ Certificates uploaded successfully`);
+
+            setFormData({
+                certificate_name: '',
+                platform: '',
+                start_date: '',
+                end_date: '',
+            });
+            navigate("/user/onboarding/jobtitles");  // Only navigate, no data posting here
+
+        } catch (error) {
+            console.error("Error uploading certificate:", error);
+            alert("Failed to upload certificate. \n\n" + error.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
 
@@ -108,7 +179,7 @@ const Certificates = () => {
             <div className="flex flex-col">
                 <div className="flex items-center mb-5 cursor-pointer">
                     <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
-                    <p className='ml-2 text-lg font-medium'  onClick={() => navigate(-1)}>Back</p>
+                    <p className='ml-2 text-lg font-medium' onClick={() => navigate(-1)}>Back</p>
                 </div>
 
                 <div>
@@ -119,7 +190,7 @@ const Certificates = () => {
                     <h1 className='text-2xl font-semibold mt-7'>List your certificates / Awards.</h1>
                 </div>
 
-                <form className="flex flex-col mt-5 ms-6" >  {/*  onSubmit={handleAddCertificate} */}
+                <form className="flex flex-col mt-5 ms-6" onSubmit={handleAddCertificate}>
                     <div className="relative ">
                         <label className="mb-3 block font-medium text-lg ">
                             Certificate /Award Name <span className='text-red-500 ms-1'>*</span>
@@ -131,7 +202,7 @@ const Certificates = () => {
                             placeholder=" "
                             value={formData.certificate_name}
                             onChange={handleChange}
-                            required
+
                             className={`w-[70%] h-14 flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
                           ${errors.certificate_name ? 'border-red-500 animate-shake' : 'border-gray-300 focus:ring-[#2c6472]'}`}
                         />
@@ -151,7 +222,7 @@ const Certificates = () => {
                             placeholder=" "
                             value={formData.platform}
                             onChange={handleChange}
-                            required
+
                             className="w-[70%] h-14 flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 border-gray-300 focus:ring-[#2c6472]"
                         />
 
@@ -168,15 +239,15 @@ const Certificates = () => {
                                 type="date"
                                 name="start_date" // Fixed name attribute
                                 placeholder=" "
-                                  value={formData.start_date}
-                                  onChange={handleChange}
-                                required
+                                value={formData.start_date}
+                                onChange={handleChange}
+
                                 className={`w-[70%] h-14 flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
                              ${errors.start_date ? 'border-red-500 animate-shake' : 'border-gray-300 focus:ring-[#2c6472]'}`}
                             />
                             {errors.start_date && (
-              <span className="text-red-500 text-sm mt-1">{errors.start_date}</span>
-            )}
+                                <span className="text-red-500 text-sm mt-1">{errors.start_date}</span>
+                            )}
                         </div>
 
                         <div className="relative w-[47%] mb-2">
@@ -188,15 +259,15 @@ const Certificates = () => {
                                 type="date"
                                 name="end_date" // Fixed name attribute
                                 placeholder=" "
-                                  value={formData.end_date}
-                                  onChange={handleChange}
-                                required
+                                value={formData.end_date}
+                                onChange={handleChange}
+
                                 className={`w-[70%] h-14 flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
                               ${errors.end_date ? 'border-red-500 animate-shake' : 'border-gray-300 focus:ring-[#2c6472]'}`}
                             />
                             {errors.end_date && (
-              <span className="text-red-500 text-sm mt-1">{errors.end_date}</span>
-            )}
+                                <span className="text-red-500 text-sm mt-1">{errors.end_date}</span>
+                            )}
                         </div>
                     </div>
 
@@ -204,7 +275,6 @@ const Certificates = () => {
                     <div className="flex w-[70%]  justify-between items-center gap-4 mt-4">
                         <button
                             type="submit"
-                            onClick={handleAddCertificate}
                             className=" py-2 w-[180px] bg-white text-[#2c6472]  h-[43px]  font-semibold cursor-pointer mt-1 hover:scale-95 transition-transform duration-200 ease-in-out"
                         >
                             +Add Certificates

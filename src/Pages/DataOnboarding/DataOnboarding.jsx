@@ -9,7 +9,7 @@ const DataOnboarding = () => {
     return (
         <div className="flex h-screen p-5 bg-white">
             {/* Left Sidebar */}
-            <div className="w-[27%] h-[99.5%] p-5 pl-7 bg-gradient-to-b from-[#2E8095] to-[#2C6472] text-white">
+            <div className="w-[30%] h-[99.5%] p-5 pl-7 bg-gradient-to-b from-[#2E8095] to-[#2C6472] text-white">
                 <div className="flex items-center mb-10">
                     <img className='w-10 h-10 object-fill' src={logo} alt="JobFusion Logo" />
                     <p className="text-white ml-2 text-lg font-semibold">JSE AI</p>
@@ -28,15 +28,15 @@ const DataOnboarding = () => {
                 </div>
 
                 <div className="flex flex-col gap-7 mt-24  -ml-32">
-                    <Link to="/user/onboarding/personal-information"><div className="flex w-[500px] h-20 gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
+                    <Link to="/user/onboarding/personal-information"><div className="flex w-[450px] h-[72px] gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
                         <img src={insert} className='w-6 h-6 -mt-1 object-cover' alt="" />
                         <p className='text-lg font-medium'>Create a Profile from Scratch</p>
                     </div></Link>
-                    <Link to="/user/resume"> <div className="flex w-[500px] h-20 gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
+                    <Link to="/user/resume"> <div className="flex w-[450px] h-[72px] gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
                         <img src={upload} className='w-6 h-6 -mt-1 object-cover' alt="" />
                         <p className='text-lg font-medium'>Upload Resume</p>
                     </div></Link>
-                    <Link to="/user/linkedin"> <div className="flex w-[500px] h-20 gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
+                    <Link to="/user/linkedin"> <div className="flex w-[450px] h-[72px] gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
                         <img src={linked} className='w-6 h-6 -mt-1 object-cover' alt="" />
                         <p className='text-lg font-medium'>Import from Linkedin</p>
                     </div></Link>

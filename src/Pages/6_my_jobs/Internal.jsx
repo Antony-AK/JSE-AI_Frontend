@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from 'framer-motion';
 import axios from "axios";
 import Loader from "../../base/loader/Loader.jsx";
 import filter_icon from '../../assets/filter-icon.svg'
@@ -28,6 +29,9 @@ const MyApplication = () => {
   });
   const perPage = pagination.per_page; // or hardcode 10 if it's fixed
   const hasFetched = useRef(false);
+  const [showFilters, setShowFilters] = useState(false);
+
+  const toggleDropdownfilter = () => setShowFilters((prev) => !prev);
 
   const token = sessionStorage.getItem("authToken");
 
@@ -354,40 +358,48 @@ const MyApplication = () => {
 
   return (
     <div className="flex flex-col h-screen bg-gray-50 px-6 ms-2">
-      <div className="flex items-center w-[60%]  justify-between py-4   mt-3">
-        {/* Job title buttons with dynamic active state */}
+      <div className="flex items-center w-[60%]  py-4 mt-3 relative">
+        {/* Recommended Jobs Button (Always Visible) */}
+        <button
+          className="px-6 py-1.5 font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105"
+        >
+          Recommended Jobs
+        </button>
         {/* Filter Button */}
         <button
-          onClick={toggleDropdown}
+          onClick={toggleDropdownfilter}
           className="flex ms-5 items-center gap-x-2 px-4 py-1.5 bg-white font-medium text-[13px] rounded text-black hover:scale-105 shadow-md"
         >
           <img src={filter_icon} alt="" />
           Filter
         </button>
-        <button
-          // key={title}
-          // className={`px-2 py-1.5 font-medium text-[13px] rounded ${selectedJob === title ? 'bg-[#2C6472] text-white' : 'bg-[#e4e2e2] text-black'} hover:scale-105`}
-          // onClick={() => handleJobTitleClick(title)}
-          className="px-6 py-1.5 flex justify-center items-center font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105"
-        >
-          Designation <img src={arrow_down} className="ms-0.5" alt="" />
-        </button>
-        <button
-          // key={title}
-          // className={`px-2 py-1.5 font-medium text-[13px] rounded ${selectedJob === title ? 'bg-[#2C6472] text-white' : 'bg-[#e4e2e2] text-black'} hover:scale-105`}
-          // onClick={() => handleJobTitleClick(title)}
-          className="px-6 py-1.5 flex justify-center items-center font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105"
-        >
-          Languages <img src={arrow_down} className="ms-0.5" alt="" />
-        </button>
-        <button
-          // key={title}
-          // className={`px-2 py-1.5 font-medium text-[13px] rounded ${selectedJob === title ? 'bg-[#2C6472] text-white' : 'bg-[#e4e2e2] text-black'} hover:scale-105`}
-          // onClick={() => handleJobTitleClick(title)}
-          className="px-6 py-1.5 font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105"
-        >
-          Recommended Jobs
-        </button>
+
+        {/* Animated Filter Buttons */}
+        <AnimatePresence>
+          {showFilters && (
+            <>
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3 }}
+                className="absolute left-[320px] px-6 py-1.5 flex justify-center items-center font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105"
+              >
+                Designation <img src={arrow_down} className="ms-0.5" alt="" />
+              </motion.button>
+
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+                className="absolute left-[500px] px-6 py-1.5 flex justify-center items-center font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105"
+              >
+                Languages <img src={arrow_down} className="ms-0.5" alt="" />
+              </motion.button>
+            </>
+          )}
+        </AnimatePresence>
 
       </div>
 
@@ -585,13 +597,13 @@ const MyApplication = () => {
 
                     <div className="flex   gap-5 ms-5 ">
                       <button
-                      //  onClick={() => handleDownloadAllDocs(cvBlobUrl, clBlobUrl, job.job_id)} 
-                      className="flex justify-center gap-2 px-5 py-3  text-[13px]  font-semibold border hover:border-[#2C6472] bg-gray-200 w-[200px] h-[47px] text-[#2c6472] rounded transition-transform hover:bg-white hover:text-[#2C6472] hover:scale-105">
+                        //  onClick={() => handleDownloadAllDocs(cvBlobUrl, clBlobUrl, job.job_id)} 
+                        className="flex justify-center gap-2 px-5 py-3  text-[13px]  font-semibold border hover:border-[#2C6472] bg-gray-200 w-[200px] h-[47px] text-[#2c6472] rounded transition-transform hover:bg-white hover:text-[#2C6472] hover:scale-105">
                         <img src={download_icon} className="text-[#2C6472] w-4 h-4 mt-0.5 object-cover" alt="" />  Download All
                       </button>
                       <button
                         className="flex gap-2 justify-center items-center font-semibold text-[#2C6472] rounded-md text-sm bg-gray-200 underline border w-[200px] h-[47px] hover:border-[#2C6472] px-4  transition  hover:bg-white hover:text-[#2C6472] hover:scale-105"
-                        // onClick={() => handleGetJobURL(job.job_id)}
+                      // onClick={() => handleGetJobURL(job.job_id)}
                       >
                         Go to Job Link
                         <img src={link_icon} alt="" />

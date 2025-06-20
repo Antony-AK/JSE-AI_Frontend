@@ -103,9 +103,8 @@ const Sidebar = () => {
                   <>
                     {/* My Jobs Parent Link */}
                     <div
-                      className={`flex items-center justify-between px-4 py-2 rounded-md transition cursor-pointer ${
-                        pathname.includes("/user/my-jobs") ? "text-[#2c6472]" : "text-gray-400"
-                      }`}
+                      className={`flex items-center justify-between px-4 py-2 rounded-md transition cursor-pointer ${pathname.includes("/user/my-jobs") ? "text-[#2c6472]" : "text-gray-400"
+                        }`}
                       onClick={() => setOpenJobs(prev => !prev)}
                     >
                       <div className="flex items-center gap-4">
@@ -128,20 +127,22 @@ const Sidebar = () => {
                       <Link
                         key={subIndex}
                         to={subItem.to}
-                        className={`block px-4 py-2 text-[14px] font-medium rounded-md ms-14 transition ${
-                          pathname === subItem.to ? "text-[#2c6472]" : "text-gray-500 hover:text-[#2c6472]"
-                        }`}
+                        className={`block px-4 py-2 text-[14px] font-medium rounded-md ms-14 transition ${pathname === subItem.to ? "text-[#2c6472]" : "text-gray-500 hover:text-[#2c6472]"
+                          }`}
                       >
                         {subItem.label}
+
+                        {["Personal Tracker", "Self Development", "Proficiency Test"].includes(subItem.label) && (
+                          <img src={lock_icon} alt="lock" className="inline w-4 h-4 ml-1" />
+                        )}
                       </Link>
                     ))}
                   </>
                 ) : (
                   <Link
                     to={item.to}
-                    className={`flex items-center gap-4 px-4 py-2 transition rounded-md ${
-                      isActiveParent ? "text-[#2c6472]" : "text-gray-400"
-                    }`}
+                    className={`flex items-center gap-4 px-4 py-2 transition rounded-md ${isActiveParent ? "text-[#2c6472]" : "text-gray-400"
+                      }`}
                   >
                     <img
                       src={isActiveParent ? item.activeIcon : item.defaultIcon}
@@ -163,9 +164,8 @@ const Sidebar = () => {
           <li>
             <Link
               to="/user/profile"
-              className={`flex items-center gap-4 px-4 py-2 rounded-md transition ${
-                pathname === "/user/profile" ? "text-[#2c6472] bg-gray-100" : "text-gray-400"
-              }`}
+              className={`flex items-center gap-4 px-4 py-2 rounded-md transition ${pathname === "/user/profile" ? "text-[#2c6472] bg-gray-100" : "text-gray-400"
+                }`}
             >
               <img
                 src={pathname === "/user/profile" ? profile_active_icon : profile_icon}
@@ -179,9 +179,8 @@ const Sidebar = () => {
           <li>
             <Link
               to="/user/upgrade"
-              className={`flex items-center gap-4 px-4 py-2 rounded-md transition ${
-                pathname === "/user/upgrade" ? "text-[#2c6472] bg-gray-100" : "text-gray-400"
-              }`}
+              className={`flex items-center gap-4 px-4 py-2 rounded-md transition ${pathname === "/user/upgrade" ? "text-[#2c6472] bg-gray-100" : "text-gray-400"
+                }`}
             >
               <img
                 src={pathname === "/user/upgrade" ? profile_active_icon : profile_icon}
@@ -195,14 +194,12 @@ const Sidebar = () => {
           <li>
             <Link
               to="/user/settings"
-              className={`flex items-center gap-4 px-4 py-2 rounded-md transition ${
-                pathname === "/user/settings" ? "text-[#2c6472] bg-gray-100" : "text-gray-400"
-              }`}
+              className={`flex items-center gap-4 px-4 py-2 rounded-md transition ${pathname === "/user/settings" ? "text-[#2c6472] bg-gray-100" : "text-gray-400"
+                }`}
             >
               <SettingsIcon
-                className={`w-5 h-5 ${
-                  pathname === "/user/settings" ? "text-[#2c6472]" : "text-[rgba(0, 0, 0, 0.25)]"
-                }`}
+                className={`w-5 h-5 ${pathname === "/user/settings" ? "text-[#2c6472]" : "text-[rgba(0, 0, 0, 0.25)]"
+                  }`}
               />
               <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">Settings</span>
             </Link>
