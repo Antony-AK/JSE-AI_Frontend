@@ -95,17 +95,17 @@ const Dashboard = () => {
     attemptsLeft: test.remaining_attempts ?? 0
   }));
 
-
-
   const statusList = [
-    { label: "Personal Info", isComplete: checklist.personalInfo },
-    { label: "Work Experience", isComplete: checklist.workExperience },
-    { label: "Academics", isComplete: checklist.academics },
-    { label: "Past Projects", isComplete: checklist.pastProjects },
-    { label: "Languages", isComplete: checklist.languages },
-    { label: "Certifications", isComplete: checklist.certifications },
-    { label: "Job Titles", isComplete: checklist.jobTitles },
-    { label: "Key Skills", isComplete: checklist.keySkills },
+    { label: "Multifactor Authentication", isComplete: checklist.personalInfo },
+    { label: "CV Format Fixed", isComplete: checklist.workExperience },
+    { label: "CL Format Fixed", isComplete: checklist.academics },
+    { label: "Profile Image", isComplete: checklist.pastProjects },
+    { label: "Data Usage", isComplete: checklist.languages },
+    { label: "Data Training", isComplete: checklist.certifications },
+    { label: "Number Lock", isComplete: checklist.jobTitles },
+    { label: "Data Finalization", isComplete: checklist.keySkills },
+    { label: "Terms", isComplete: checklist.keySkills },
+    { label: "Checklist", isComplete: checklist.keySkills },
   ];
 
 
@@ -184,6 +184,10 @@ const Dashboard = () => {
 
   if (loading) return <div className='flex justify-center items-center w-full h-full '><Loader /></div>;
   if (error) return <div className="text-red-500">{error}</div>;
+
+  const handleStatusClick = () => {
+    navigate('/user/settings');
+  };
 
   return (
     <div className=" flex flex-col gap-5 bg-gray-100 p-5 ps-7">
@@ -338,7 +342,7 @@ const Dashboard = () => {
 
               <div className="flex flex-col gap-2 px-3 py-3 h-[98px] rounded-lg bg-[#F8F8F8] overflow-y-auto scrollbar-custom">
                 {statusList.map((item, index) => (
-                  <div key={index} className="flex gap-3">
+                  <div key={index} onClick={handleStatusClick} className="flex gap-3 cursor-pointer w-fit">
                     <img width="18px" src={item.isComplete ? complete : incomplete} alt="" />
                     <p className='font-medium text-sm'>{item.label}</p>
                   </div>

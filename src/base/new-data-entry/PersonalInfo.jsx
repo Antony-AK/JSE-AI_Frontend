@@ -35,9 +35,28 @@ const PersonalInfo = () => {
   useEffect(() => {
     const hasSubmitted = sessionStorage.getItem("hasSubmittedPersonalInfo");
     if (hasSubmitted === "true") {
-      fetchProfileInfo();
+      fetchProfileInfo(); // fetch full info
+    } else {
+      fetchEmailAndPhoneOnly(); // fetch only email and phone
     }
   }, []);
+
+  const fetchEmailAndPhoneOnly = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/personal-info`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const { email, phone } = res.data || {};
+      setFormData(prev => ({
+        ...prev,
+        email: email || '',
+        phone: phone || ''
+      }));
+    } catch (err) {
+      console.error("Failed to fetch email and phone", err);
+    }
+  };
 
   const fetchProfileInfo = async () => {
     try {
