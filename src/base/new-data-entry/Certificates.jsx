@@ -14,6 +14,8 @@ const Certificates = () => {
     });
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
+    const [showSavePopup, setShowSavePopup] = useState(false);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -92,14 +94,17 @@ const Certificates = () => {
                 throw new Error(errorText || "Upload failed");
             }
 
-            alert(`✅ Certificates uploaded successfully`);
-
             setFormData({
                 certificate_name: '',
                 platform: '',
                 start_date: '',
                 end_date: '',
             });
+
+            setShowSavePopup(true);
+            setTimeout(() => {
+                setShowSavePopup(false);
+            }, 3000);
 
         } catch (error) {
             console.error("Error uploading certificate:", error);
@@ -154,15 +159,18 @@ const Certificates = () => {
                 throw new Error(errorText || "Upload failed");
             }
 
-            alert(`✅ Certificates uploaded successfully`);
-
             setFormData({
                 certificate_name: '',
                 platform: '',
                 start_date: '',
                 end_date: '',
             });
-            navigate("/user/onboarding/jobtitles");  // Only navigate, no data posting here
+
+            setShowSavePopup(true);
+            setTimeout(() => {
+                setShowSavePopup(false);
+                navigate('/user/onboarding/jobtitles');
+            }, 2500); // show toast briefly before routing
 
         } catch (error) {
             console.error("Error uploading certificate:", error);
@@ -177,9 +185,15 @@ const Certificates = () => {
     return (
         <div className='w-full  p-5 ml-5  text-black'>
             <div className="flex flex-col">
-                <div className="flex items-center mb-5 cursor-pointer">
-                    <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
-                    <p className='ml-2 text-lg font-medium' onClick={() => navigate(-1)}>Back</p>
+                <div className='flex w-full justify-between items-center'>
+                    <div className="flex items-center mb-5 cursor-pointer hover:scale-95 transition-transform duration-200 ease-in-out">
+                        <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
+                        <p className='ml-2 text-lg font-medium ' onClick={() => navigate(-1)}>Back</p>
+                    </div>
+
+                    <div className="flex items-center cursor-pointer hover:scale-95 transition-transform duration-200 ease-in-out" onClick={() => navigate('/user/onboarding/jobtitles')}>
+                        <p className='me-5 -mt-5 text-lg font-medium text-[#00000057]'>Skip</p>
+                    </div>
                 </div>
 
                 <div>
@@ -293,6 +307,15 @@ const Certificates = () => {
 
 
             </div>
+
+            {showSavePopup && (
+                <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 bg-white border-b-4 border-[#2C6472] text-black rounded-md shadow-lg transform transition-all duration-500 ease-in-out animate-toast-in`}>
+                    <div className="relative px-3 py-1">
+                        <span>✅ Certificates saved successfully!</span>
+                        <div className="absolute bottom-0 left-0 h-[3px] bg-white animate-progress w-full" />
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

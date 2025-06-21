@@ -10,7 +10,7 @@ const Projects = () => {
 
   const apiUrl = `${BASE_URL}/pastprojects`;
 
-  const token = sessionStorage.getItem('authToken');  
+  const token = sessionStorage.getItem('authToken');
 
   const [formData, setFormData] = useState({
     project_name: '',
@@ -19,9 +19,11 @@ const Projects = () => {
     end_date: '',
     currentdo: false,
     project_description: ''
-  });    
+  });
 
   const [errors, setErrors] = useState({});
+  const [showSavePopup, setShowSavePopup] = useState(false);
+
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -52,7 +54,7 @@ const Projects = () => {
 
       return updatedErrors;
     });
-  };  
+  };
 
   const validate = () => {
     const newErrors = {};
@@ -90,11 +92,18 @@ const Projects = () => {
           },
         });
 
-        console.log("✅ Submitted:", response.data);
-        alert("Project added successfully!");
+        setShowSavePopup(true);
+        setTimeout(() => {
+          setShowSavePopup(false);
+        }, 3000);
+
 
         if (navigateNext) {
-          navigate('/user/onboarding/languages'); // update the path accordingly
+          setShowSavePopup(true);
+          setTimeout(() => {
+            setShowSavePopup(false);
+            navigate('/user/onboarding/languages');
+          }, 2500);
         } else {
           // Reset form
           setFormData({
@@ -117,107 +126,116 @@ const Projects = () => {
   return (
     <div className='p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen '>
 
-        <div className="flex justify-between items-center w-[95%]">
-            <div className="flex items-center cursor-pointer" onClick={() => navigate(-1)}>
-                <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
-                <p className='ml-2 text-lg font-medium'>Back</p>
-            </div>
-
-            <div className="flex items-center cursor-pointer" onClick={() => navigate('/user/onboarding/languages')}>
-                <p className='ml-2 text-lg font-medium text-[#00000057]'>Skip</p>
-            </div>
+      <div className="flex justify-between items-center w-[95%]">
+        <div className="flex items-center cursor-pointer" onClick={() => navigate(-1)}>
+          <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
+          <p className='ml-2 text-lg font-medium'>Back</p>
         </div>
 
-        <p className='text-[#2c6472] font-semibold'>STEP 4 OF 8</p>
+        <div className="flex items-center cursor-pointer" onClick={() => navigate('/user/onboarding/languages')}>
+          <p className='ml-2 text-lg font-medium text-[#00000057]'>Skip</p>
+        </div>
+      </div>
 
-        <h2 className='font-bold text-xl'>Share your past project experience.</h2>
+      <p className='text-[#2c6472] font-semibold'>STEP 4 OF 8</p>
 
-        <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
+      <h2 className='font-bold text-xl'>Share your past project experience.</h2>
 
-            {/* Project Name */}
-            <div className="flex flex-col gap-2 text-lg">
-                <label className='font-medium' htmlFor="project_name">Project Name <span className='text-red-500'>*</span></label>
-                <input 
-                    className={`px-5 py-3 rounded-lg border ${errors.project_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`} 
-                    type="text" 
-                    id='project_name'
-                    value={formData.project_name}
-                    onChange={handleChange}
-                />
-                {errors.project_name && <p className='text-red-500 text-sm'>{errors.project_name}</p>}
-            </div>
+      <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
 
-            {/* Company Name */}
-            <div className="flex flex-col gap-2 text-lg">
-                <label className='font-medium' htmlFor="institution">University / Company Name</label>
-                <input 
-                    className={`px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]`} 
-                    type="text" 
-                    id='institution'
-                    value={formData.institution}
-                    onChange={handleChange}
-                />
-            </div>    
+        {/* Project Name */}
+        <div className="flex flex-col gap-2 text-lg">
+          <label className='font-medium' htmlFor="project_name">Project Name <span className='text-red-500'>*</span></label>
+          <input
+            className={`px-5 py-3 rounded-lg border ${errors.project_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+            type="text"
+            id='project_name'
+            value={formData.project_name}
+            onChange={handleChange}
+          />
+          {errors.project_name && <p className='text-red-500 text-sm'>{errors.project_name}</p>}
+        </div>
 
-            {/* Start & End Date */}
-            <div className="flex justify-start gap-10 text-lg w-full">
-                <div className="flex flex-col gap-2 w-[50%]">
-                    <label className='font-medium' htmlFor="start_date">Start Date <span className='text-red-500'>*</span></label>
-                    <input 
-                    className={`px-5 py-3 rounded-lg border ${errors.start_date ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-                    type="date" 
-                    id='start_date'
-                    value={formData.start_date}
-                    onChange={handleChange}
-                    />
-                    {errors.start_date && <p className='text-red-500 text-sm'>{errors.start_date}</p>}
-                </div>
-                <div className="flex flex-col gap-2 w-[50%]">
-                    <label className='font-medium' htmlFor="end_date">End Date {!formData.currentdo && <span className='text-red-500'>*</span>}</label>
-                    <input
-                    className={`px-5 py-3 rounded-lg border ${errors.end_date ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-                    type="date" 
-                    id='end_date'
-                    value={formData.end_date}
-                    onChange={handleChange}
-                    disabled={formData.currentdo}
-                    />
-                    {errors.end_date && <p className='text-red-500 text-sm'>{errors.end_date}</p>}
-                </div>
-            </div>
+        {/* Company Name */}
+        <div className="flex flex-col gap-2 text-lg">
+          <label className='font-medium' htmlFor="institution">University / Company Name</label>
+          <input
+            className={`px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]`}
+            type="text"
+            id='institution'
+            value={formData.institution}
+            onChange={handleChange}
+          />
+        </div>
 
-            {/* currently doing */}
-            <div className="flex items-center gap-5">
-                <input 
-                className='w-5 h-5 accent-[#2c6472] rounded-xl' 
-                id='currentdo' 
-                type="checkbox" 
-                checked={formData.currentdo}
-                onChange={handleChange}
-                />
-                <label className='font-medium text-lg' htmlFor="currentdo">I currently doing</label>
-            </div>
+        {/* Start & End Date */}
+        <div className="flex justify-start gap-10 text-lg w-full">
+          <div className="flex flex-col gap-2 w-[50%]">
+            <label className='font-medium' htmlFor="start_date">Start Date <span className='text-red-500'>*</span></label>
+            <input
+              className={`px-5 py-3 rounded-lg border ${errors.start_date ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+              type="date"
+              id='start_date'
+              value={formData.start_date}
+              onChange={handleChange}
+            />
+            {errors.start_date && <p className='text-red-500 text-sm'>{errors.start_date}</p>}
+          </div>
+          <div className="flex flex-col gap-2 w-[50%]">
+            <label className='font-medium' htmlFor="end_date">End Date {!formData.currentdo && <span className='text-red-500'>*</span>}</label>
+            <input
+              className={`px-5 py-3 rounded-lg border ${errors.end_date ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+              type="date"
+              id='end_date'
+              value={formData.end_date}
+              onChange={handleChange}
+              disabled={formData.currentdo}
+            />
+            {errors.end_date && <p className='text-red-500 text-sm'>{errors.end_date}</p>}
+          </div>
+        </div>
 
-            {/* Project Description */}
-            <div className="flex flex-col gap-2 text-lg">
-                <label className="font-medium" htmlFor="project_description">Project Description</label>
-                <textarea
-                    id="project_description"
-                    className="px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472] resize-none"
-                    rows={4}
-                    value={formData.project_description}
-                    onChange={handleChange}
-                ></textarea>
-            </div>
+        {/* currently doing */}
+        <div className="flex items-center gap-5">
+          <input
+            className='w-5 h-5 accent-[#2c6472] rounded-xl'
+            id='currentdo'
+            type="checkbox"
+            checked={formData.currentdo}
+            onChange={handleChange}
+          />
+          <label className='font-medium text-lg' htmlFor="currentdo">I currently doing</label>
+        </div>
 
-            <div className="flex justify-between mt-7">
-                <div className="cursor-pointer" onClick={() => handleSubmit(false)}>
-                    <p className='text-lg text-[#2C6472] font-semibold'>+ Add Project</p>
-                </div>
-                <button type="button" onClick={() => handleSubmit(true)} className='rounded-xl px-8 py-2 bg-[#2C6472] text-[#fff] mb-10'>Next</button>           
-            </div>                     
+        {/* Project Description */}
+        <div className="flex flex-col gap-2 text-lg">
+          <label className="font-medium" htmlFor="project_description">Project Description</label>
+          <textarea
+            id="project_description"
+            className="px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472] resize-none"
+            rows={4}
+            value={formData.project_description}
+            onChange={handleChange}
+          ></textarea>
+        </div>
 
-        </form>
+        <div className="flex justify-between mt-7">
+          <div className="cursor-pointer" onClick={() => handleSubmit(false)}>
+            <p className='text-lg text-[#2C6472] font-semibold'>+ Add Project</p>
+          </div>
+          <button type="button" onClick={() => handleSubmit(true)} className='rounded-xl px-8 py-2 bg-[#2C6472] text-[#fff] mb-10'>Next</button>
+        </div>
+
+      </form>
+
+      {showSavePopup && (
+        <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 bg-white border-b-4 border-[#2C6472] text-black rounded-md shadow-lg transform transition-all duration-500 ease-in-out animate-toast-in`}>
+          <div className="relative px-3 py-1">
+            <span>✅ Projects saved successfully!</span>
+            <div className="absolute bottom-0 left-0 h-[3px] bg-white animate-progress w-full" />
+          </div>
+        </div>
+      )}
 
     </div>
   )

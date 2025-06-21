@@ -45,61 +45,62 @@ const Login = () => {
 
 
 
-  const fetchEntryProgressAndRedirect = async (token) => {
-    try {
-      setLoading(true);
+ const fetchEntryProgressAndRedirect = async (token) => {
+  try {
+    setLoading(true);
 
-      const res = await fetch(`${BASE_URL}/user/entry-progress/check`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      const progress = await res.json();
-
-      console.log("🧠 Entry Progress Response:", progress);
-
-      if (res.ok) {
-        if (progress.completed) {
-          // 🎯 All onboarding steps completed
-          navigate('/user/dashboard');
-        } else {
-          // 🧭 Define where to go next
-          const stepToPath = {
-            personal_infos: '/user/onboarding/personal-information',
-            work_experiences: '/user/onboarding/work-experience',
-            educations: '/user/onboarding/education',
-            projects: '/user/onboarding/projects',
-            languages: '/user/onboarding/languages',
-            certificates: '/user/onboarding/certificates',
-            preferred_job_titles: '/user/onboarding/jobtitles',
-            Skills: '/user/onboarding/skills',
-          };
-
-          const nextStep = progress.next_step;
-
-          if (nextStep && stepToPath[nextStep]) {
-            // 🚀 Go to the appropriate onboarding step
-            navigate(stepToPath[nextStep]);
-          } else {
-            // ⛔ next_step is missing or unknown – fallback to data input selection
-            navigate('/user/dataonboarding');
-          }
-        }
-      } else {
-        // 😵 Something wrong with the response, send to dashboard as fallback
-        console.error('❌ Failed to get progress:', progress);
-        navigate('/user/dashboard');
+    const res = await fetch(`${BASE_URL}/user/entry-progress/check`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       }
-    } catch (err) {
-      console.error('💥 Error fetching entry progress:', err);
-      navigate('/user/dashboard'); // Super fallback
-    } finally {
-      setLoading(false);
+    });
+
+    const progress = await res.json();
+
+    console.log("🧠 Entry Progress Response:", progress);
+
+    if (res.ok) {
+      if (progress.completed) {
+        navigate('/user/dashboard');
+      } else {
+        const stepToPath = {
+          personal_infos: '/user/onboarding/personal-information',
+          work_experiences: '/user/onboarding/work-experience',
+          educations: '/user/onboarding/education',
+          projects: '/user/onboarding/projects',
+          languages: '/user/onboarding/languages',
+          certificates: '/user/onboarding/certificates',
+          preferred_job_titles: '/user/onboarding/jobtitles',
+          Skills: '/user/onboarding/skills',
+        };
+
+        const nextStep = progress.next_step;
+
+        // 👇 Check if it's the FIRST login after signup
+        const isFirstLogin = localStorage.getItem('firstLogin') === 'true';
+
+        if (isFirstLogin) {
+          localStorage.removeItem('firstLogin'); // ✅ Clear after using
+          navigate('/user/dataonboarding'); // 🚀 Force to onboarding method chooser
+        } else if (nextStep && stepToPath[nextStep]) {
+          navigate(stepToPath[nextStep]); // Go to next step
+        } else {
+          navigate('/user/dataonboarding'); // Fallback if no step info
+        }
+      }
+    } else {
+      navigate('/user/dashboard'); // Fallback
     }
-  };
+  } catch (err) {
+    console.error('💥 Error:', err);
+    navigate('/user/dashboard');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
 
   return (

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ChevronDown, ChevronUp, Settings as SettingsIcon } from "lucide-react";
 import logo from '../../assets/logo.png';
+import lock_icon from "../../assets/lock_icon.png"
 
 import dashboard_icon from '../../assets/dashboard-icon.svg';
 import dashboard_active_icon from '../../assets/dashboard-active-icon.svg';
@@ -26,7 +27,7 @@ import profile_active_icon from '../../assets/profile-active-icon.svg';
 
 const Sidebar = () => {
   const { pathname } = useLocation();
-  const [openJobs, setOpenJobs] = useState(true); // Toggle for My Jobs
+  const [openJobs, setOpenJobs] = useState(false); // Toggle for My Jobs
 
   const menuItems = [
     {
@@ -133,7 +134,7 @@ const Sidebar = () => {
                         {subItem.label}
 
                         {["Personal Tracker", "Self Development", "Proficiency Test"].includes(subItem.label) && (
-                          <img src={lock_icon} alt="lock" className="inline w-4 h-4 ml-1" />
+                          <img src={lock_icon} alt="lock" className="inline w-4 h-4 object-cover ml-1" />
                         )}
                       </Link>
                     ))}

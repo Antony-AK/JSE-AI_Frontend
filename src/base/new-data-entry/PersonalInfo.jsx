@@ -29,6 +29,8 @@ const PersonalInfo = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [showSavePopup, setShowSavePopup] = useState(false);
+
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -94,8 +96,11 @@ const PersonalInfo = () => {
           }
         });
 
-        console.log("✅ Form submitted successfully:", response.data);
-        navigate('/user/onboarding/work-experience');
+        setShowSavePopup(true);
+        setTimeout(() => {
+          setShowSavePopup(false);
+          navigate('/user/onboarding/work-experience');
+        }, 2500);
 
       } catch (error) {
         console.error("❌ Error submitting form:", JSON.stringify(error.response?.data, null, 2));
@@ -220,35 +225,35 @@ const PersonalInfo = () => {
         {/* Country */}
         <div className="flex flex-col gap-2 text-lg">
           <label className='font-medium' htmlFor="country">Country</label>
-          <input 
+          <input
             className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]'
             value={formData.country}
             onChange={handleChange}
             type="text"
-            id='country' 
+            id='country'
           />
         </div>
 
         {/* State */}
         <div className="flex flex-col gap-2 text-lg">
           <label className='font-medium' htmlFor="state">State</label>
-          <input 
+          <input
             className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]'
             value={formData.state}
-            onChange={handleChange} 
-            type="text" 
+            onChange={handleChange}
+            type="text"
             id='state' />
         </div>
 
         {/* City */}
         <div className="flex flex-col gap-2 text-lg">
           <label className='font-medium' htmlFor="city">City</label>
-          <input 
-            className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]' 
+          <input
+            className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]'
             value={formData.city}
             onChange={handleChange}
-            type="text" 
-            id='city' 
+            type="text"
+            id='city'
           />
         </div>
 
@@ -257,6 +262,16 @@ const PersonalInfo = () => {
         </div>
 
       </form>
+
+
+      {showSavePopup && (
+        <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 bg-white border-b-4 border-[#2C6472] text-black rounded-md shadow-lg transform transition-all duration-500 ease-in-out animate-toast-in`}>
+          <div className="relative px-3 py-1">
+            <span>✅ PersonalInfo saved successfully!</span>
+            <div className="absolute bottom-0 left-0 h-[3px] bg-white animate-progress w-full" />
+          </div>
+        </div>
+      )}
 
     </div>
   )

@@ -11,9 +11,6 @@ const Announcements = () => {
                    <h2 className='font-bold text-[15px]'>Announcements</h2>
                    <img src={announcements} alt="" />
                  </div>
-                 <div className="">
-                   <a className='text-[#2c6472] font-medium' href="">View All</a>
-                 </div>
                </div>
    
                <p className='text-[#000000A1] font-medium text-sm'>The new version of <span className='text-[#2c6472] font-semibold'>JSE AI </span>

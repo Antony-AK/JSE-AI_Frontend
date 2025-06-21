@@ -8,6 +8,7 @@ import { BASE_URL } from '../../utils/api';
 const JobTitles = () => {
   const [loading, setLoading] = useState(false);
   const [accepted, setAccepted] = useState(false);
+  const [showSavePopup, setShowSavePopup] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const sortedJobTitles = Object.keys(jobskills).sort();
@@ -111,9 +112,9 @@ const JobTitles = () => {
     if (!validateForm()) return;
 
     if (!accepted) {
-  alert('Please accept the condition before continuing.');
-  return;
-}
+      alert('Please accept the condition before continuing.');
+      return;
+    }
 
     const token = sessionStorage.getItem('authToken');
     if (!token) {
@@ -143,8 +144,11 @@ const JobTitles = () => {
         console.error('❌ Failed to upload job titles:', errorData);
         alert('❌ Failed to upload job titles:', errorData)
       } else {
-        alert('✅ Job Titles uploaded successfully');
-        navigate('/user/onboarding/skills');
+        setShowSavePopup(true);
+        setTimeout(() => {
+          setShowSavePopup(false);
+          navigate('/user/onboarding/skills');
+        }, 2500);
       }
     } catch (error) {
       console.error('❌ Error while posting job titles:', error);
@@ -201,8 +205,8 @@ const JobTitles = () => {
               onFocus={() => setShowDropdowns({ primary_title: true })}
               placeholder='Search or select job title...'
             />
-            
- 
+
+
             {showDropdowns.primary_title && (
               <ul className='absolute z-10 w-[60%] max-h-48 overflow-y-auto mt-14 bg-white border border-gray-300 rounded shadow-md'>
                 {getFilteredTitles(searchTerms.primary_title).map((title, index) => (
@@ -277,6 +281,15 @@ const JobTitles = () => {
           </div>
         </form>
       </div>
+      
+      {showSavePopup && (
+        <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 bg-white border-b-4 border-[#2C6472] text-black rounded-md shadow-lg transform transition-all duration-500 ease-in-out animate-toast-in`}>
+          <div className="relative px-3 py-1">
+            <span>✅ Jobtitles saved successfully!</span>
+            <div className="absolute bottom-0 left-0 h-[3px] bg-white animate-progress w-full" />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

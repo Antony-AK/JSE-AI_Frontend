@@ -19,6 +19,8 @@ const Skills = () => {
     const [jobSearchTerm, setJobSearchTerm] = useState('');
     const [errors, setErrors] = useState({});
     const [accepted, setAccepted] = useState(false);
+    const [showSavePopup, setShowSavePopup] = useState(false);
+
 
 
 
@@ -242,7 +244,11 @@ const Skills = () => {
             if (!response.ok) {
                 console.error("❌ Error uploading data:", data);
             } else {
-                navigate('/user/dashboard');
+                setShowSavePopup(true);
+                setTimeout(() => {
+                    setShowSavePopup(false);
+                    navigate('/user/dashboard');
+                }, 2500);
             }
         } catch (error) {
             console.error("❌ Network or server error:", error);
@@ -491,6 +497,16 @@ const Skills = () => {
 
 
             </div>
+
+            
+      {showSavePopup && (
+        <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 bg-white border-b-4 border-[#2C6472] text-black rounded-md shadow-lg transform transition-all duration-500 ease-in-out animate-toast-in`}>
+          <div className="relative px-3 py-1">
+            <span>✅ Skills saved successfully!</span>
+            <div className="absolute bottom-0 left-0 h-[3px] bg-white animate-progress w-full" />
+          </div>
+        </div>
+      )}
         </div>
     )
 }

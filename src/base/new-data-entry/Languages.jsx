@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png'
 import { BASE_URL } from '../../utils/api';
+import { MoreVertical } from "lucide-react";
+
 
 const Languages = () => {
 
@@ -14,6 +16,8 @@ const Languages = () => {
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [showSavePopup, setShowSavePopup] = useState(false);
+
 
   useEffect(() => {
     // Remove old session handling — not needed
@@ -55,7 +59,7 @@ const Languages = () => {
     if (!validateForm()) return;
 
     const token = sessionStorage.getItem('authToken');
-    
+
 
     if (!token) {
       alert('You are not authenticated. Please login.');
@@ -63,6 +67,8 @@ const Languages = () => {
     }
 
     setLoading(true);
+    setShowSavePopup(true);
+
     try {
 
       const response = await fetch(`${BASE_URL}/languages`, {
@@ -83,12 +89,16 @@ const Languages = () => {
 
       }
 
-      alert(`✅ Languages uploaded successfully`);
-
       setFormData({
         language: '',
         proficiency: ''
       });
+
+
+      setShowSavePopup(true);
+      setTimeout(() => {
+        setShowSavePopup(false);
+      }, 3000);
 
     } catch (err) {
       console.error('Error uploading language:', err);
@@ -130,13 +140,17 @@ const Languages = () => {
         throw new Error(errorText || 'Upload failed');
       }
 
-      alert(`✅ Languages uploaded successfully`);
 
       setFormData({
         language: '',
         proficiency: ''
       });
-      navigate('/user/onboarding/certificates')
+      
+      setShowSavePopup(true);
+      setTimeout(() => {
+        setShowSavePopup(false);
+        navigate('/user/onboarding/certificates');
+      }, 2500); // show toast briefly before routing
 
     } catch (err) {
       console.error('Error uploading language:', err);
@@ -230,6 +244,16 @@ const Languages = () => {
           </div>
         </form>
       </div>
+
+      {showSavePopup && (
+        <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 bg-white border-b-4 border-[#2C6472] text-black rounded-md shadow-lg transform transition-all duration-500 ease-in-out animate-toast-in`}>
+          <div className="relative px-3 py-1">
+            <span>✅ Language saved successfully!</span>
+            <div className="absolute bottom-0 left-0 h-[3px] bg-white animate-progress w-full" />
+          </div>
+        </div>
+      )}
+
 
 
 

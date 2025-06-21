@@ -27,15 +27,18 @@ const data = [
   { month: 'Dec', applications: 87 }
 ];
 
-const ApplicationsChart = () => {
+const ApplicationsChart = ({ title, data, onClose }) => {
   return (
-    <div className="w-[75%] h-[450px] bg-white rounded-xl p-6 relative justify-center items-center mx-auto mt-20 ">
+    <div className="w-[75%] h-[450px] bg-white rounded-xl p-6 absolute justify-center items-center mx-auto top-[20%] left-[13%] z-50  ">
       <h2 className="text-center text-xl font-semibold text-black mb-5">
-        Applications Submitted per Month
+        {title}
       </h2>
 
       {/* Close button */}
-      <button className="absolute top-3 right-4 text-4xl font-medium text-black">&times;</button>
+      <button className="absolute top-3 right-4 text-4xl font-medium text-black"
+      onClick={onClose}
+      >
+        &times;</button>
 
       <ResponsiveContainer width="100%" height="90%">
         <AreaChart

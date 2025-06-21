@@ -8,7 +8,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import google from "./../../assets/Google.png";
 import frame from "./../../assets/Frame.png";
 import logo from "../../assets/logo.png"
-import {BASE_URL} from "../../utils/api"
+import { BASE_URL } from "../../utils/api"
 
 const Signup = () => {
   const [loading, setLoading] = useState(false);
@@ -68,6 +68,11 @@ const Signup = () => {
       if (response.status >= 200 && response.status < 300) {
         console.log('Signup successful:', response.data);
 
+
+        // 👉 Set first login flag so we know it was a new signup
+        localStorage.setItem('firstLogin', 'true');
+
+
         setShowVerificationPopup(true); // Show popup first!
 
         setTimeout(() => {
@@ -115,7 +120,7 @@ const Signup = () => {
           <form onSubmit={handleSignUp} className='-space-y-3'>
             {/* email Field */}
             <div className="relative -mt-5">
-               <label className="mb-1 ms-3 block  text-gray-500 text-sm">
+              <label className="mb-1 ms-3 block  text-gray-500 text-sm">
                 Email
               </label>
               <input
@@ -133,10 +138,10 @@ const Signup = () => {
 
             {/* Phone Number Field */}
             <div className="relative  ">
-               <label className="mb-1 ms-3 block  text-gray-500 text-sm">
+              <label className="mb-1 ms-3 block  text-gray-500 text-sm">
                 Phone Number
               </label>
-                <span className="absolute left-3 top-1/2 text-base">+49</span>
+              <span className="absolute left-3 top-1/2 text-base">+49</span>
               <input
                 id='phoneNumber'
                 type="tel"
@@ -145,7 +150,7 @@ const Signup = () => {
                 className="w-full pl-14 h-[52px]  px-4 py-3.5 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                
+
                 required
               />
 
@@ -159,7 +164,7 @@ const Signup = () => {
             <div className="flex space-x-2 ">
               {/* Create Password */}
               <div className="relative w-1/2">
-               <label className="mb-1 ms-3 block  text-gray-500 text-sm">
+                <label className="mb-1 ms-3 block  text-gray-500 text-sm">
                   Create Password
                 </label>
                 <input
@@ -184,7 +189,7 @@ const Signup = () => {
 
               {/* Confirm Password */}
               <div className="relative w-1/2">
-               <label className="mb-1 ms-3 block  text-gray-500 text-sm">
+                <label className="mb-1 ms-3 block  text-gray-500 text-sm">
                   Confirm Password
                 </label>
                 <input

@@ -16,11 +16,15 @@ import { BASE_URL } from "../../utils/api"
 import Loader from '../../base/loader/Loader'
 import { useMemo } from "react";
 import { Player } from '@lottiefiles/react-lottie-player'
+import ApplicationsChart from './graph/graph'
 
 const Dashboard = () => {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showChart, setShowChart] = useState(false);
+  const [chartTitle, setChartTitle] = useState('');
+  const [chartData, setChartData] = useState([]);
   const navigate = useNavigate();
   const [selectedLanguageIndex, setSelectedLanguageIndex] = useState(0);
   const token = sessionStorage.getItem("authToken");
@@ -158,17 +162,37 @@ const Dashboard = () => {
     };
   }, [jobs]);
 
+   const handleCardClick = () => {
+    setChartTitle("Applications Submitted Per Month");
+    setChartData([
+      { month: 'Jan', applications: 26 },
+      { month: 'Feb', applications: 20 },
+      { month: 'Mar', applications: 14 },
+      { month: 'Apr', applications: 35 },
+      { month: 'May', applications: 15 },
+      { month: 'Jun', applications: 58 },
+      { month: 'Jul', applications: 32 },
+      { month: 'Aug', applications: 29 },
+      { month: 'Sep', applications: 10 },
+      { month: 'Oct', applications: 95 },
+      { month: 'Nov', applications: 92 },
+      { month: 'Dec', applications: 87 }
+    ]);
+    setShowChart(true);
+  };
+
 
   if (loading) return <div className='flex justify-center items-center w-full h-full '><Loader /></div>;
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (
-    <div className="flex flex-col gap-5 bg-gray-100 p-5 ps-7">
+    <div className=" flex flex-col gap-5 bg-gray-100 p-5 ps-7">
 
       <div className="flex justify-between items-center w-full pl-5 pr-5">
 
         {/* ✅ Total Applications */}
-        <div className="relative flex bg-gradient-to-br from-[#FFC2B0] to-[#FF9AA2] h-[120px] w-[250px] text-black p-4 rounded-xl">
+        <div onClick={handleCardClick}
+          className="relative flex bg-gradient-to-br from-[#FFC2B0] to-[#FF9AA2] h-[120px] w-[250px] text-black p-4 rounded-xl">
           <div className="flex flex-col justify-start items-start gap-5">
             <p className="font-bold">Total Applications</p>
             <h3 className="font-bold text-lg">{infoBlock.totalApplications}</h3>
@@ -217,6 +241,18 @@ const Dashboard = () => {
         </div>
 
       </div>
+
+
+      {showChart && (
+        <div className='absolute top-0 left-0 w-full min-h-screen z-40 bg-black/10'>
+        <ApplicationsChart
+          title={chartTitle}
+          data={chartData}
+          onClose={() => setShowChart(false)}
+        />
+        </div>
+      )}
+
 
 
       {/* Grid Layout */}
@@ -313,7 +349,7 @@ const Dashboard = () => {
           </div>
 
 
-          <img src={lock} className='absolute top-[95%] left-[33%] w-14 h-14 z-10' alt="" />
+          <img src={lock} className='absolute top-[82%] left-[33%] w-14 h-14 z-10' alt="" />
 
 
           {/* Box - 2 */}

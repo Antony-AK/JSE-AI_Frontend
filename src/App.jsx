@@ -50,7 +50,7 @@ const AppRoutes = () => {
                     </Routes>
                 </div>
             ) : (
-                <div className="main flex flex-col">
+                <div className="main relative flex flex-col">
                     <Navbar />
                     <div className='flex flex-row h-full'>
                         <Sidebar />

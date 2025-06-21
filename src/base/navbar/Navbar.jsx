@@ -78,22 +78,20 @@ const Navbar = () => {
           <img src={arrow_down} alt="" onClick={() => setMenuOpen(!menuOpen)} className='w-8 h-8 mt-1 p-2 rounded-full hover:bg-[#407684] transform duration-200 ease-linear' />
           {menuOpen && (
             <div className="absolute top-12 -right-2 bg-white border flex flex-col items-center justify-center rounded shadow-md p-1 z-20">
+              <div>
+                <Link
+                  to="/user/settings"
+                  className="flex items-center gap-4 px-4 py-2 rounded-md transition "
+                >
+                  <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">Settings</span>
+                </Link>
+              </div>
               <button
                 onClick={handleLogout}
                 className="text-red-800 hover:bg-red-600 hover:text-white transform duration-200 ease-linear font-medium px-3 py-1"
               >
                 Logout
               </button>
-              <div>
-                <Link
-                  to="/user/settings"
-                  className="flex items-center gap-4 px-4 py-2 rounded-md transition 
-                "
-                >
-
-                  <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">Settings</span>
-                </Link>
-              </div>
             </div>
           )}
         </div>
