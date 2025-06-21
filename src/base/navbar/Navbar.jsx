@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import arrow_down from "../../assets/down-arrow.svg";
 import profile from "../../assets/profile1.png";
+import { BASE_URL } from '../../utils/api';
 
 const Navbar = () => {
   const [firstName, setFirstName] = useState('User');
@@ -18,23 +19,28 @@ const Navbar = () => {
     }
 
     try {
-      const response = await fetch('https://jse.arshan.digital/b1/profile', {
+      const response = await fetch(`${BASE_URL}/profile`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
 
       const data = await response.json();
-      const name = Array.isArray(data) ? data[0]?.first_name : data.first_name;
+
+      // ✅ Now accessing from nested "profile" object
+      const name = data?.profile?.first_name;
+
       if (name) {
         setFirstName(name);
       } else {
-        console.warn("First name not found in API response. Using default.");
+        console.warn("First name not found in profile data. Using default.");
       }
+
     } catch (error) {
-      console.error('Error fetching personal info:', error);
+      console.error('❌ Error fetching personal info:', error);
     }
   };
+
 
   useEffect(() => {
     fetchUserInfo();
@@ -69,15 +75,25 @@ const Navbar = () => {
             className="w-9 h-9 rounded-full"
           />
           <span className="text-gray-800 font-bold">{firstName}</span>
-          <img src={arrow_down} alt="" onClick={() => setMenuOpen(!menuOpen)} className='w-8 h-8 mt-1 p-2 rounded-full hover:bg-[#407684] transform duration-200 ease-linear'/>
+          <img src={arrow_down} alt="" onClick={() => setMenuOpen(!menuOpen)} className='w-8 h-8 mt-1 p-2 rounded-full hover:bg-[#407684] transform duration-200 ease-linear' />
           {menuOpen && (
-            <div className="absolute top-12 -right-2 bg-white border rounded shadow-md p-1 z-20">
+            <div className="absolute top-12 -right-2 bg-white border flex flex-col items-center justify-center rounded shadow-md p-1 z-20">
               <button
                 onClick={handleLogout}
                 className="text-red-800 hover:bg-red-600 hover:text-white transform duration-200 ease-linear font-medium px-3 py-1"
               >
                 Logout
               </button>
+              <div>
+                <Link
+                  to="/user/settings"
+                  className="flex items-center gap-4 px-4 py-2 rounded-md transition 
+                "
+                >
+
+                  <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">Settings</span>
+                </Link>
+              </div>
             </div>
           )}
         </div>

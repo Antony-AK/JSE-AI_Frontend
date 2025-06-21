@@ -209,13 +209,7 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Footer (optional, like in PersonalInfoForm) */}
-        {/* <div className="bg-white text-center py-4 text-sm">
-        <Link to="#" className="text-[#2c6472] hover:underline font-semibold mx-2">Instructions</Link>|
-        <Link to="#" className="text-[#2c6472] hover:underline font-semibold mx-2">License</Link>|
-        <Link to="#" className="text-[#2c6472] hover:underline font-semibold mx-2">Terms of Use</Link>|
-        <Link to="#" className="text-[#2c6472] hover:underline font-semibold mx-2">Privacy</Link>
-      </div> */}
+   
 
         {loading && (
           <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center z-50 transition-opacity duration-1000">

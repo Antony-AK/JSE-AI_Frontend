@@ -191,19 +191,6 @@ const Sidebar = () => {
             </Link>
           </li>
 
-          <li>
-            <Link
-              to="/user/settings"
-              className={`flex items-center gap-4 px-4 py-2 rounded-md transition ${pathname === "/user/settings" ? "text-[#2c6472] bg-gray-100" : "text-gray-400"
-                }`}
-            >
-              <SettingsIcon
-                className={`w-5 h-5 ${pathname === "/user/settings" ? "text-[#2c6472]" : "text-[rgba(0, 0, 0, 0.25)]"
-                  }`}
-              />
-              <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">Settings</span>
-            </Link>
-          </li>
         </ul>
       </div><br />
     </aside>
