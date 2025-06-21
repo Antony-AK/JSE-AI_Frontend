@@ -23,14 +23,14 @@ const DataEntryPages = () => {
       <div className="ml-[30%] flex flex-col p-5 w-[73%] text-black relative z-0">
         <div className="flex-grow">
           <Routes>
-            <Route path="/languages" element={<Languages />} />
-            <Route path="/certificates" element={<Certificates />} />
-            <Route path="/jobtitles" element={<JobTitles />} />
-            <Route path="/skills" element={<Skills />} />
-            <Route path="/personal-information" element={<PersonalInfo />} />
-            <Route path="/work-experience" element={<WorkExperience />} />
-            <Route path="/education" element={<Education />} />
-            <Route path="/projects" element={<Projects />} />
+            <Route path="languages" element={<Languages />} />
+            <Route path="certificates" element={<Certificates />} />
+            <Route path="jobtitles" element={<JobTitles />} />
+            <Route path="skills" element={<Skills />} />
+            <Route path="personal-information" element={<PersonalInfo />} />
+            <Route path="work-experience" element={<WorkExperience />} />
+            <Route path="education" element={<Education />} />
+            <Route path="projects" element={<Projects />} />
           </Routes>
         </div>
 
