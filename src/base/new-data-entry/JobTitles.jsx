@@ -141,6 +141,7 @@ const JobTitles = () => {
       if (!response.ok) {
         const errorData = await response.json();
         console.error('❌ Failed to upload job titles:', errorData);
+        alert('❌ Failed to upload job titles:', errorData)
       } else {
         alert('✅ Job Titles uploaded successfully');
         navigate('/user/onboarding/skills');
