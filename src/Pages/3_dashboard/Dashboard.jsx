@@ -349,7 +349,7 @@ const Dashboard = () => {
           </div>
 
 
-          <img src={lock} className='absolute top-[82%] left-[33%] w-14 h-14 z-10' alt="" />
+          <img src={lock} className='absolute top-[78%] left-[33%] w-14 h-14 z-10' alt="" />
 
 
           {/* Box - 2 */}

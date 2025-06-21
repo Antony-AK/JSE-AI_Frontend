@@ -4,10 +4,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Login from './Pages/Login/Login.jsx';
 import Signup from './Pages/Signup/Signup.jsx';
 import Dashboard from './Pages/3_dashboard/Dashboard.jsx';
-import Joblisting from "./Pages/4_job listing/Joblistings.jsx";
-import Selectedapplication from "./Pages/5_selectedjobs/Selectedapplications.jsx";
 import Myapplication from "./Pages/6_my_jobs/Internal.jsx";
-import Applicationtracker from "./Pages/7_app_tracker/Applicationtracker.jsx";
 import Savedjob from "./Pages/8_savedjobs/Savedjob.jsx";
 import Setting from "./Pages/9_settings/Settings.jsx";
 import VerificationPage from './base/1_auth/VerificationPage/VerificationPage.jsx';
@@ -28,6 +25,7 @@ import ApplicationsChart from './Pages/3_dashboard/graph/graph.jsx';
 import Announcements from './Pages/Announcements/Announcements.jsx';
 import Cv from './base/CV/cv.jsx';
 import Cl from './base/CL/Cl.jsx';
+import ApplicationTracker from './Pages/Application tracker/ApplicationTracker.jsx';
 
 const AppRoutes = () => {
     const location = useLocation();
@@ -59,7 +57,7 @@ const AppRoutes = () => {
                                 <Route path="/user/dashboard" element={<Dashboard />} />
                                 <Route path="/user/my-jobs/internal" element={<Myapplication />} />
                                 <Route path="/user/my-jobs/external" element={<External />} />
-                                <Route path="/user/application-tracker" element={<Applicationtracker />} />
+                                <Route path="/user/application-tracker" element={<ApplicationTracker />} />
                                 <Route path="/user/saved-jobs" element={<Savedjob />} />
                                 <Route path="/user/settings" element={<Setting />} />
                                 <Route path="/test1" element={<Test1 />} />
