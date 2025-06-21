@@ -1,19 +1,26 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 import drop from '../../assets/drop-icon.svg'
 import { useNavigate } from 'react-router-dom';
 import right_arrow from "../../assets/left-arrow.png"
+import { BASE_URL } from '../../utils/api'
 
 const PersonalInfo = () => {
+
   const navigate = useNavigate();
+
+  const apiUrl = `${BASE_URL}/personal-info`;
+
+  const token = sessionStorage.getItem('authToken');
 
   const [showOthers, setShowOthers] = useState(false);
 
   const [formData, setFormData] = useState({
-    fname: '',
-    lname: '',
+    first_name: '',
+    second_name: '',
     email: '',
     phone: '',
-    linkedIn: '',
+    linkedin_profile: '',
     country: '',
     state: '',
     city: '',
@@ -24,14 +31,27 @@ const PersonalInfo = () => {
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    const { id, value, type, checked } = e.target;
+
+    const newValue = type === 'checkbox' ? checked : value;
+
+    setFormData((prev) => ({
+      ...prev,
+      [id]: newValue
+    }));
+
+    // Clear error when user starts typing
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [id]: ''
+    }));
   };
 
   const validate = () => {
     const newErrors = {};
 
-    if (!formData.fname.trim()) newErrors.fname = "First name is required";
-    if (!formData.lname.trim()) newErrors.lname = "Last name is required";
+    if (!formData.first_name.trim()) newErrors.first_name = "First name is required";
+    if (!formData.second_name.trim()) newErrors.second_name = "Last name is required";
 
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
@@ -43,7 +63,7 @@ const PersonalInfo = () => {
       newErrors.phone = "Phone number is required";
     }
 
-    if (!formData.linkedIn.trim()) newErrors.linkedIn = "LinkedIn is required";
+    if (!formData.linkedin_profile.trim()) newErrors.linkedin_profile = "LinkedIn is required";
 
     if (showOthers) {
       if (!formData.title.trim()) newErrors.title = "Title is required";
@@ -54,14 +74,33 @@ const PersonalInfo = () => {
   };
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validate();
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // Api key send data
-      console.log("Form submitted", formData);
+      try {
+        const token = sessionStorage.getItem('authToken');
+        if (!token) {
+          alert("No token found. Please login again.");
+          return;
+        }
+
+        const response = await axios.post(apiUrl, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        console.log("✅ Form submitted successfully:", response.data);
+        navigate('/user/onboarding/work-experience');
+
+      } catch (error) {
+        console.error("❌ Error submitting form:", JSON.stringify(error.response?.data, null, 2));
+        alert("Failed to submit. Please try again.");
+      }
     }
   };
 
@@ -83,26 +122,26 @@ const PersonalInfo = () => {
         {/* Name */}
         <div className="flex justify-start gap-10 text-lg w-full">
           <div className="flex flex-col gap-2 w-[50%]">
-            <label className='font-medium' htmlFor="fname">First Name <span className='text-red-500'>*</span></label>
+            <label className='font-medium' htmlFor="first_name">First Name <span className='text-red-500'>*</span></label>
             <input
-              className={`px-5 py-3 rounded-lg border ${errors.fname ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-              value={formData.fname}
+              className={`px-5 py-3 rounded-lg border ${errors.first_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+              value={formData.first_name}
               onChange={handleChange}
               type="text"
-              id='fname'
+              id='first_name'
             />
-            {errors.fname && <span className="text-red-500 text-sm">{errors.fname}</span>}
+            {errors.first_name && <span className="text-red-500 text-sm">{errors.first_name}</span>}
           </div>
           <div className="flex flex-col gap-2 w-[50%]">
-            <label className='font-medium' htmlFor="lname">Last Name <span className='text-red-500'>*</span></label>
+            <label className='font-medium' htmlFor="second_name">Last Name <span className='text-red-500'>*</span></label>
             <input
-              className={`px-5 py-3 rounded-lg border ${errors.lname ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-              value={formData.lname}
+              className={`px-5 py-3 rounded-lg border ${errors.second_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+              value={formData.second_name}
               onChange={handleChange}
               type="text"
-              id='lname'
+              id='second_name'
             />
-            {errors.lname && <span className="text-red-500 text-sm">{errors.lname}</span>}
+            {errors.second_name && <span className="text-red-500 text-sm">{errors.second_name}</span>}
           </div>
         </div>
 
@@ -110,7 +149,7 @@ const PersonalInfo = () => {
         <div className="flex flex-col gap-2 text-lg">
           <label className='font-medium' htmlFor="email">Email Address <span className='text-red-500'>*</span></label>
           <input
-            className={`px-5 py-3 rounded-lg border ${errors.email ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+            className={`px-5 py-3 rounded-lg border ${errors.email ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
             value={formData.email}
             onChange={handleChange}
             type="email"
@@ -123,10 +162,10 @@ const PersonalInfo = () => {
         <div className="flex flex-col gap-2 text-lg">
           <label className='font-medium' htmlFor="phone">Phone Number <span className='text-red-500'>*</span></label>
           <input
-            className={`px-5 py-3 rounded-lg border ${errors.phone ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+            className={`px-5 py-3 rounded-lg border ${errors.phone ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
             value={formData.phone}
             onChange={handleChange}
-            type="phone"
+            type="tel"
             id='phone'
           />
           {errors.phone && <span className="text-red-500 text-sm">{errors.phone}</span>}
@@ -134,15 +173,15 @@ const PersonalInfo = () => {
 
         {/* Linked in */}
         <div className="flex flex-col gap-2 text-lg">
-          <label className='font-medium' htmlFor="linkedIn">Linkedin Profile <span className='text-red-500'>*</span></label>
+          <label className='font-medium' htmlFor="linkedin_profile">linkedIn Profile <span className='text-red-500'>*</span></label>
           <input
-            className={`px-5 py-3 rounded-lg border ${errors.linkedIn ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-            value={formData.linkedIn}
+            className={`px-5 py-3 rounded-lg border ${errors.linkedin_profile ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+            value={formData.linkedin_profile}
             onChange={handleChange}
             type="text"
-            id='linkedIn'
+            id='linkedin_profile'
           />
-          {errors.linkedIn && <span className="text-red-500 text-sm">{errors.linkedIn}</span>}
+          {errors.linkedin_profile && <span className="text-red-500 text-sm">{errors.linkedin_profile}</span>}
         </div>
 
         <div onClick={() => setShowOthers(!showOthers)} className="flex items-center gap-3 cursor-pointer w-fit">
@@ -156,7 +195,7 @@ const PersonalInfo = () => {
             <div className="flex flex-col gap-2 w-[50%]">
               <label className='font-medium' htmlFor="title">Title <span className='text-red-500'>*</span></label>
               <input
-                className={`px-5 py-3 rounded-lg border ${errors.fname ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+                className={`px-5 py-3 rounded-lg border ${errors.title ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
                 value={formData.title}
                 onChange={handleChange}
                 type="text"
@@ -167,7 +206,7 @@ const PersonalInfo = () => {
             <div className="flex flex-col gap-2 w-[50%]">
               <label className='font-medium' htmlFor="link">Link <span className='text-red-500'>*</span></label>
               <input
-                className={`px-5 py-3 rounded-lg border ${errors.lname ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+                className={`px-5 py-3 rounded-lg border ${errors.link ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
                 value={formData.link}
                 onChange={handleChange}
                 type="text"
@@ -181,19 +220,36 @@ const PersonalInfo = () => {
         {/* Country */}
         <div className="flex flex-col gap-2 text-lg">
           <label className='font-medium' htmlFor="country">Country</label>
-          <input className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]' type="text" id='country' />
+          <input 
+            className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]'
+            value={formData.country}
+            onChange={handleChange}
+            type="text"
+            id='country' 
+          />
         </div>
 
         {/* State */}
         <div className="flex flex-col gap-2 text-lg">
           <label className='font-medium' htmlFor="state">State</label>
-          <input className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]' type="text" id='state' />
+          <input 
+            className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]'
+            value={formData.state}
+            onChange={handleChange} 
+            type="text" 
+            id='state' />
         </div>
 
         {/* City */}
         <div className="flex flex-col gap-2 text-lg">
           <label className='font-medium' htmlFor="city">City</label>
-          <input className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]' type="text" id='city' />
+          <input 
+            className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]' 
+            value={formData.city}
+            onChange={handleChange}
+            type="text" 
+            id='city' 
+          />
         </div>
 
         <div className="flex justify-end mt-7">

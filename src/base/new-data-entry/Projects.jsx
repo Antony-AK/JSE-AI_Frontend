@@ -1,15 +1,24 @@
 import React, { useState } from 'react'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../../utils/api'
 import right_arrow from '../../assets/left-arrow.png'
 
 const Projects = () => {
 
+  const navigate = useNavigate();
+
+  const apiUrl = `${BASE_URL}/pastprojects`;
+
+  const token = sessionStorage.getItem('authToken');  
+
   const [formData, setFormData] = useState({
-    project: '',
-    company: '',
-    startdate: '',
-    enddate: '',
+    project_name: '',
+    institution: '',
+    start_date: '',
+    end_date: '',
     currentdo: false,
-    projectdescription: ''
+    project_description: ''
   });    
 
   const [errors, setErrors] = useState({});
@@ -17,49 +26,104 @@ const Projects = () => {
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
 
-    if (type === 'checkbox') {
-      setFormData((prev) => ({
+    setFormData((prev) => {
+      const updatedForm = {
         ...prev,
-        [id]: checked,
-        enddate: id === 'currentdo' && checked ? '' : prev.enddate,
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [id]: value
-      }));
-    }
-  };
-  
+        [id]: type === 'checkbox' ? checked : value,
+      };
+
+      if (type === 'checkbox' && id === 'currentdo' && checked) {
+        updatedForm.end_date = '';
+      }
+
+      return updatedForm;
+    });
+
+    setErrors((prevErrors) => {
+      const updatedErrors = { ...prevErrors };
+
+      // Always clear error for the field being changed
+      delete updatedErrors[id];
+
+      // Additionally clear `end_date` error if checkbox is checked
+      if (id === 'currentdo' && checked) {
+        delete updatedErrors.end_date;
+      }
+
+      return updatedErrors;
+    });
+  };  
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.project.trim()) newErrors.project = 'Project name is required';
-    if (!formData.startdate) newErrors.startdate = 'Start date is required';
-    if (!formData.currentdo && !formData.enddate) newErrors.enddate = 'End date is required';
+    if (!formData.project_name.trim()) newErrors.project_name = 'Project name is required';
+    if (!formData.start_date) newErrors.start_date = 'Start date is required';
+    if (!formData.currentdo && !formData.end_date) newErrors.end_date = 'End date is required';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (navigateNext = false) => {
     if (validate()) {
-      console.log('Form Submitted:', formData);
-      // Proceed to next step
+      try {
+        if (!token) {
+          alert("No token found. Please log in.");
+          return;
+        }
+
+        const toISOString = (date) => date ? new Date(date).toISOString() : null;
+
+        const payload = {
+          project_name: formData.project_name,
+          institution: formData.institution,
+          start_date: toISOString(formData.start_date),
+          end_date: formData.currentdo ? null : toISOString(formData.end_date),
+          currently_doing: formData.currentdo,
+          project_description: formData.project_description,
+        };
+
+        const response = await axios.post(apiUrl, payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        console.log("✅ Submitted:", response.data);
+        alert("Project added successfully!");
+
+        if (navigateNext) {
+          navigate('/user/onboarding/languages'); // update the path accordingly
+        } else {
+          // Reset form
+          setFormData({
+            project_name: '',
+            institution: '',
+            start_date: '',
+            end_date: '',
+            currentdo: false,
+            project_description: ''
+          });
+          setErrors({});
+        }
+      } catch (error) {
+        console.error("❌ API Error:", error.response?.data || error.message);
+        alert("Submission failed. Please try again.");
+      }
     }
-  };  
+  };
 
   return (
     <div className='p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen '>
 
         <div className="flex justify-between items-center w-[95%]">
-            <div className="flex items-center cursor-pointer">
+            <div className="flex items-center cursor-pointer" onClick={() => navigate(-1)}>
                 <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
                 <p className='ml-2 text-lg font-medium'>Back</p>
             </div>
 
-            <div className="flex items-center cursor-pointer">
+            <div className="flex items-center cursor-pointer" onClick={() => navigate('/user/onboarding/languages')}>
                 <p className='ml-2 text-lg font-medium text-[#00000057]'>Skip</p>
             </div>
         </div>
@@ -72,25 +136,25 @@ const Projects = () => {
 
             {/* Project Name */}
             <div className="flex flex-col gap-2 text-lg">
-                <label className='font-medium' htmlFor="project">Project Name <span className='text-red-500'>*</span></label>
+                <label className='font-medium' htmlFor="project_name">Project Name <span className='text-red-500'>*</span></label>
                 <input 
-                    className={`px-5 py-3 rounded-lg border ${errors.project ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`} 
+                    className={`px-5 py-3 rounded-lg border ${errors.project_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`} 
                     type="text" 
-                    id='project'
-                    value={formData.project}
+                    id='project_name'
+                    value={formData.project_name}
                     onChange={handleChange}
                 />
-                {errors.project && <p className='text-red-500 text-sm'>{errors.project}</p>}
+                {errors.project_name && <p className='text-red-500 text-sm'>{errors.project_name}</p>}
             </div>
 
             {/* Company Name */}
             <div className="flex flex-col gap-2 text-lg">
-                <label className='font-medium' htmlFor="company">University / Company Name</label>
+                <label className='font-medium' htmlFor="institution">University / Company Name</label>
                 <input 
                     className={`px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]`} 
                     type="text" 
-                    id='company'
-                    value={formData.company}
+                    id='institution'
+                    value={formData.institution}
                     onChange={handleChange}
                 />
             </div>    
@@ -98,27 +162,27 @@ const Projects = () => {
             {/* Start & End Date */}
             <div className="flex justify-start gap-10 text-lg w-full">
                 <div className="flex flex-col gap-2 w-[50%]">
-                    <label className='font-medium' htmlFor="startdate">Start Date <span className='text-red-500'>*</span></label>
+                    <label className='font-medium' htmlFor="start_date">Start Date <span className='text-red-500'>*</span></label>
                     <input 
-                    className={`px-5 py-3 rounded-lg border ${errors.startdate ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+                    className={`px-5 py-3 rounded-lg border ${errors.start_date ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
                     type="date" 
-                    id='startdate'
-                    value={formData.startdate}
+                    id='start_date'
+                    value={formData.start_date}
                     onChange={handleChange}
                     />
-                    {errors.startdate && <p className='text-red-500 text-sm'>{errors.startdate}</p>}
+                    {errors.start_date && <p className='text-red-500 text-sm'>{errors.start_date}</p>}
                 </div>
                 <div className="flex flex-col gap-2 w-[50%]">
-                    <label className='font-medium' htmlFor="enddate">End Date {!formData.currentdo && <span className='text-red-500'>*</span>}</label>
+                    <label className='font-medium' htmlFor="end_date">End Date {!formData.currentdo && <span className='text-red-500'>*</span>}</label>
                     <input
-                    className={`px-5 py-3 rounded-lg border ${errors.enddate ? 'border-red-500' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+                    className={`px-5 py-3 rounded-lg border ${errors.end_date ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
                     type="date" 
-                    id='enddate'
-                    value={formData.enddate}
+                    id='end_date'
+                    value={formData.end_date}
                     onChange={handleChange}
                     disabled={formData.currentdo}
                     />
-                    {errors.enddate && <p className='text-red-500 text-sm'>{errors.enddate}</p>}
+                    {errors.end_date && <p className='text-red-500 text-sm'>{errors.end_date}</p>}
                 </div>
             </div>
 
@@ -136,21 +200,21 @@ const Projects = () => {
 
             {/* Project Description */}
             <div className="flex flex-col gap-2 text-lg">
-                <label className="font-medium" htmlFor="projectdescription">Project Description</label>
+                <label className="font-medium" htmlFor="project_description">Project Description</label>
                 <textarea
-                    id="projectdescription"
+                    id="project_description"
                     className="px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472] resize-none"
                     rows={4}
-                    value={formData.projectdescription}
+                    value={formData.project_description}
                     onChange={handleChange}
                 ></textarea>
             </div>
 
             <div className="flex justify-between mt-7">
-                <div className="cursor-pointer">
+                <div className="cursor-pointer" onClick={() => handleSubmit(false)}>
                     <p className='text-lg text-[#2C6472] font-semibold'>+ Add Project</p>
                 </div>
-                <button type="submit" className='rounded-xl px-8 py-2 bg-[#2C6472] text-[#fff] mb-10'>Next</button>           
+                <button type="button" onClick={() => handleSubmit(true)} className='rounded-xl px-8 py-2 bg-[#2C6472] text-[#fff] mb-10'>Next</button>           
             </div>                     
 
         </form>
