@@ -1,4 +1,6 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import tick from '../../assets/tick.svg';
 import logo from '../../assets/logo.png';
 import personal_icon from '../../assets/personal-info-img.svg';
@@ -17,21 +19,24 @@ import designation_active from '../../assets/designation-icon-active.svg';
 import skills from '../../assets/skills-icon.svg';
 import skills_active from '../../assets/skills-icon-active.svg';
 
-const currentSlug = 'Skills'; // Example slug, should be passed as a prop ideally
-
 const sidebarItems = [
-  { label: 'Personal Information', icon: personal_icon, activeIcon: personal_icon },
-  { label: 'Work Experience', icon: work_exp, activeIcon: work_exp_active },
-  { label: 'Education', icon: education, activeIcon: education_active },
-  { label: 'Projects', icon: project, activeIcon: project_active },
-  { label: 'Languages', icon: languages, activeIcon: languages_active },
-  { label: 'Certificates / Awards', icon: certificates, activeIcon: certificates_active },
-  { label: 'Designation', icon: designation, activeIcon: designation_active },
-  { label: 'Skills', icon: skills, activeIcon: skills_active },
+  { slug: 'personal-information', label: 'Personal Information', icon: personal_icon, activeIcon: personal_icon },
+  { slug: 'work-experience', label: 'Work Experience', icon: work_exp, activeIcon: work_exp_active },
+  { slug: 'education', label: 'Education', icon: education, activeIcon: education_active },
+  { slug: 'projects', label: 'Projects', icon: project, activeIcon: project_active },
+  { slug: 'languages', label: 'Languages', icon: languages, activeIcon: languages_active },
+  { slug: 'certificates', label: 'Certificates / Awards', icon: certificates, activeIcon: certificates_active },
+  { slug: 'jobtitles', label: 'Designation', icon: designation, activeIcon: designation_active },
+  { slug: 'skills', label: 'Skills', icon: skills, activeIcon: skills_active },
 ];
 
 const DataEntrySidebar = () => {
-  const currentIndex = sidebarItems.findIndex(item => item.label === currentSlug);
+
+  const location = useLocation();
+  const pathParts = location.pathname.split('/');
+  const slug = pathParts[pathParts.length - 1];
+
+  const currentIndex = sidebarItems.findIndex(item => item.slug === slug);
 
   return (
     <div className="w-[100%] min-h-[94vh] p-5 pl-10 bg-gradient-to-b from-[#2E8095] to-[#2C6472]">

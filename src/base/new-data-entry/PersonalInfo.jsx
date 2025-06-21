@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import drop from '../../assets/drop-icon.svg'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import right_arrow from "../../assets/left-arrow.png"
 import { BASE_URL } from '../../utils/api'
 
@@ -24,13 +24,64 @@ const PersonalInfo = () => {
     country: '',
     state: '',
     city: '',
-    title: '',
-    link: '',
+    portfolio: '',
+    resume: '',
+    blog: ''
   });
 
   const [errors, setErrors] = useState({});
   const [showSavePopup, setShowSavePopup] = useState(false);
 
+  useEffect(() => {
+    const hasSubmitted = sessionStorage.getItem("hasSubmittedPersonalInfo");
+    if (hasSubmitted === "true") {
+      fetchProfileInfo();
+    }
+  }, []);
+
+  const fetchProfileInfo = async () => {
+    try {
+      const res = await axios.get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      let info = {};
+
+      if (Array.isArray(res.data)) {
+        info = res.data[0] || {};
+      } else if (Array.isArray(res.data?.personal_info)) {
+        info = res.data.personal_info[0] || {};
+      } else if (typeof res.data?.personal_info === 'object') {
+        info = res.data.personal_info;
+      } else if (typeof res.data === 'object') {
+        info = res.data;
+      }
+
+      setFormData({
+        first_name: (info.first_name || ''),
+        second_name: (info.second_name || ''),
+        email: (info.email || ''),
+        phone: (info.phone || ''),
+        linkedin_profile: (info.linkedin_profile || ''),
+        country: (info.country || ''),
+        state: (info.state || ''),
+        city: (info.city || ''),
+        title: (info.title || ''),
+        portfolio: (info.portfolio || ''),
+        resume: (info.resume || ''),
+        blog: (info.blog || '')
+      });
+
+      if (info.portfolio || info.resume || info.blog) {
+        setShowOthers(true);
+      }
+
+    } catch (err) {
+      console.error("❌ Failed to fetch personal info", err);
+    }
+  };  
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -67,11 +118,6 @@ const PersonalInfo = () => {
 
     if (!formData.linkedin_profile.trim()) newErrors.linkedin_profile = "LinkedIn is required";
 
-    if (showOthers) {
-      if (!formData.title.trim()) newErrors.title = "Title is required";
-      if (!formData.link.trim()) newErrors.link = "Link is required";
-    }
-
     return newErrors;
   };
 
@@ -95,6 +141,8 @@ const PersonalInfo = () => {
             'Content-Type': 'application/json'
           }
         });
+
+        sessionStorage.setItem("hasSubmittedPersonalInfo", "true");
 
         setShowSavePopup(true);
         setTimeout(() => {
@@ -159,6 +207,7 @@ const PersonalInfo = () => {
             onChange={handleChange}
             type="email"
             id='email'
+            disabled
           />
           {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
         </div>
@@ -172,6 +221,7 @@ const PersonalInfo = () => {
             onChange={handleChange}
             type="tel"
             id='phone'
+            disabled
           />
           {errors.phone && <span className="text-red-500 text-sm">{errors.phone}</span>}
         </div>
@@ -194,31 +244,96 @@ const PersonalInfo = () => {
           <img width="15px" src={drop} alt="" className={`transform transition-transform duration-300 ${showOthers ? 'rotate-180' : 'rotate-0'}`} />
         </div>
 
-        {/* Portfolio */}
+        {/* Portfolio, Resume, Blog */}
         {showOthers && (
-          <div className="flex justify-start gap-10 text-lg w-full">
-            <div className="flex flex-col gap-2 w-[50%]">
-              <label className='font-medium' htmlFor="title">Title <span className='text-red-500'>*</span></label>
-              <input
-                className={`px-5 py-3 rounded-lg border ${errors.title ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-                value={formData.title}
-                onChange={handleChange}
-                type="text"
-                id='title'
-              />
-              {errors.title && <span className="text-red-500 text-sm">{errors.title}</span>}
+          <div className='flex flex-col gap-5'>
+            {/* Portfolio */}
+
+            <div className="flex justify-start gap-10 text-lg w-full">
+              <div className="flex flex-col gap-2 w-[50%]">
+                <label className='font-medium' htmlFor="portfolio_label">Portfolio</label>
+                <input
+                  className={`px-5 py-3 rounded-lg border ${errors.portfolio_label ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]  placeholder-black`}
+                  value={formData.portfolio_label}
+                  onChange={handleChange}
+                  type="text"
+                  id='portfolio_label'
+                  disabled
+                  placeholder='Portfolio'
+                />
+                {errors.portfolio_label && <span className="text-red-500 text-sm">{errors.portfolio_label}</span>}
+              </div>
+              <div className="flex flex-col gap-2 w-[50%]">
+                <label className='font-medium' htmlFor="portfolio">Link</label>
+                <input
+                  className={`px-5 py-3 rounded-lg border ${errors.portfolio ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+                  value={formData.portfolio}
+                  onChange={handleChange}
+                  type="text"
+                  id='portfolio'
+                />
+                {errors.portfolio && <span className="text-red-500 text-sm">{errors.portfolio}</span>}
+              </div>
             </div>
-            <div className="flex flex-col gap-2 w-[50%]">
-              <label className='font-medium' htmlFor="link">Link <span className='text-red-500'>*</span></label>
-              <input
-                className={`px-5 py-3 rounded-lg border ${errors.link ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-                value={formData.link}
-                onChange={handleChange}
-                type="text"
-                id='link'
-              />
-              {errors.link && <span className="text-red-500 text-sm">{errors.link}</span>}
+
+            {/* Resume */}
+            
+            <div className="flex justify-start gap-10 text-lg w-full">
+              <div className="flex flex-col gap-2 w-[50%]">
+                <label className='font-medium' htmlFor="resume_label">Resume</label>
+                <input
+                  className={`px-5 py-3 rounded-lg border ${errors.resume_label ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]  placeholder-black`}
+                  value={formData.resume_label}
+                  onChange={handleChange}
+                  type="text"
+                  id='resume_label'
+                  disabled
+                  placeholder='Resume'
+                />
+                {errors.resume_label && <span className="text-red-500 text-sm">{errors.resume_label}</span>}
+              </div>
+              <div className="flex flex-col gap-2 w-[50%]">
+                <label className='font-medium' htmlFor="resume">Link</label>
+                <input
+                  className={`px-5 py-3 rounded-lg border ${errors.resume ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+                  value={formData.resume}
+                  onChange={handleChange}
+                  type="text"
+                  id='resume'
+                />
+                {errors.resume && <span className="text-red-500 text-sm">{errors.resume}</span>}
+              </div>
             </div>
+
+            {/* Resume */}
+            
+            <div className="flex justify-start gap-10 text-lg w-full">
+              <div className="flex flex-col gap-2 w-[50%]">
+                <label className='font-medium' htmlFor="blog_label">Blog</label>
+                <input
+                  className={`px-5 py-3 rounded-lg border ${errors.blog_label ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]  placeholder-black`}
+                  value={formData.blog_label}
+                  onChange={handleChange}
+                  type="text"
+                  id='blog_label'
+                  disabled
+                  placeholder='Blog'
+                />
+                {errors.blog_label && <span className="text-red-500 text-sm">{errors.blog_label}</span>}
+              </div>
+              <div className="flex flex-col gap-2 w-[50%]">
+                <label className='font-medium' htmlFor="resume">Link</label>
+                <input
+                  className={`px-5 py-3 rounded-lg border ${errors.blog ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+                  value={formData.blog}
+                  onChange={handleChange}
+                  type="text"
+                  id='blog'
+                />
+                {errors.blog && <span className="text-red-500 text-sm">{errors.blog}</span>}
+              </div>
+            </div>
+
           </div>
         )}
 
