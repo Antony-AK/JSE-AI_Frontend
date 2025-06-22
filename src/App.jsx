@@ -23,12 +23,14 @@ import Resume from './Pages/DataOnboarding/Resume.jsx';
 import External from './Pages/6_my_jobs/External.jsx';
 import ApplicationsChart from './Pages/3_dashboard/graph/graph.jsx';
 import Announcements from './Pages/Announcements/Announcements.jsx';
-import Cv from './base/CV/cv.jsx';
-import Cl from './base/CL/Cl.jsx';
+import Cv from './base/DocumentEditor/CV/Cv.jsx';
+import Cl from './base/DocumentEditor/CL/Cl.jsx';
 import ApplicationTracker from './Pages/Application tracker/ApplicationTracker.jsx';
 
 const AppRoutes = () => {
     const location = useLocation();
+
+    const hideLayout = location.pathname === '/user/cv' || location.pathname === '/user/cl';
 
     // Define routes that are data-entry only
     const isDataEntryPage = location.pathname.startsWith('/user/onboarding') || location.pathname.startsWith('/user/dataonboarding') || location.pathname.startsWith('/user/linkedin') || location.pathname.startsWith('/user/resume') || ['/', '/user/login', '/user/signup'].includes(location.pathname);
@@ -49,10 +51,13 @@ const AppRoutes = () => {
                 </div>
             ) : (
                 <div className="main relative flex flex-col">
-                    <Navbar />
+                    {!hideLayout && <Navbar />}
                     <div className='flex flex-row h-full'>
-                        <Sidebar />
-                        <div style={{ width: "calc(100% - 264px)" }} className='ms-64 mt-16 h-full bg-[#f5f5f5]'>
+                        {!hideLayout && <Sidebar />}
+                        <div 
+                          style={{ width: hideLayout ? '100%' : 'calc(100% - 264px)' }}
+                          className={`${!hideLayout ? 'ms-64 mt-16' : ''} h-full bg-[#f5f5f5]`}
+                        >
                             <Routes>
                                 <Route path="/user/dashboard" element={<Dashboard />} />
                                 <Route path="/user/my-jobs/internal" element={<Myapplication />} />
@@ -67,7 +72,6 @@ const AppRoutes = () => {
                                 <Route path='/user/announcements' element={<Announcements />} />
                                 <Route path='user/cv' element={<Cv />} />
                                 <Route path='user/cl' element={<Cl />} />
-
                             </Routes>
                         </div>
                     </div>
