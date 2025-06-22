@@ -20,7 +20,10 @@ import proficiency_test from '../../assets/proficiency-test.png';
 import active_proficiency_test from '../../assets/active_proficiency-test.png';
 
 import self_development from '../../assets/self-developement.png';
+import self_development_active from '../../assets/self-developement.png';
+
 import personal_tracker from '../../assets/personal-tracker.png';
+import personal_tracker_active from '../../assets/personal-tracker.png';
 
 import profile_icon from '../../assets/profile-icon.svg';
 import profile_active_icon from '../../assets/profile-active-icon.svg';
@@ -134,7 +137,7 @@ const Sidebar = () => {
                       <Link
                         key={subIndex}
                         to={subItem.to}
-                        className={`block px-4 py-2 text-[14px] font-medium rounded-md ms-14 transition ${pathname === subItem.to ? "text-[#2c6472]" : "text-gray-500 hover:text-[#2c6472]"
+                        className={`block px-4 py-2 text-[14px] font-semibold rounded-md ms-14 transition ${pathname === subItem.to ? "text-[#2c6472]" : "text-gray-400"
                           }`}
                       >
                         {subItem.label}

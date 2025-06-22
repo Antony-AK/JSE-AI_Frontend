@@ -60,8 +60,12 @@ const Navbar = () => {
   const getPageTitle = () => {
     const path = location.pathname;
     const segments = path.split('/').filter(Boolean);
-    const title = segments.length ? segments[segments.length - 1] : 'Dashboard';
-    return title.charAt(0).toUpperCase() + title.slice(1);
+    const rawTitle = segments.length ? segments[segments.length - 1] : 'dashboard';
+
+    return rawTitle
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   };
 
   return (
