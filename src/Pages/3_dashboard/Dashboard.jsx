@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import profile from "../../assets/profile1.png"
 import total_app_icon from "../../assets/total-app.svg"
-// import jobs_available_icon from "../../assets/jobs-available.svg"
-// import selectable_jobs_icon from '../../assets/selectable-jobs.svg'
-// import total_experience_icon from '../../assets/total-experience.svg'
+import jobs_available_icon from "../../assets/calender.png"
+import selectable_jobs_icon from '../../assets/jobbag.png'
+import total_experience_icon from '../../assets/cubic.png'
 import complete from '../../assets/complete.svg'
 import incomplete from '../../assets/incomplete.svg'
 import announcements from '../../assets/announcements-icon.svg'
-import AOS from "aos";
 import lock from "../../assets/lock_icon.png"
 import "aos/dist/aos.css";
 import { BASE_URL } from "../../utils/api"
 import Loader from '../../base/loader/Loader'
 import { useMemo } from "react";
-import { Player } from '@lottiefiles/react-lottie-player'
 import ApplicationsChart from './graph/graph'
 
 const Dashboard = () => {
@@ -47,24 +45,25 @@ const Dashboard = () => {
       })
       .catch((err) => {
         const errorMessage = err.response?.data?.message || "⚠ Failed to load profile data.";
-        alert(errorMessage);
         setError(errorMessage);
         setLoading(false);
       });
   }, [token]);
 
 
-  const checklist = {
-    personalInfo: profileData?.checklist?.checklist_personal_info ?? false,
-    workExperience: profileData?.checklist?.checklist_work_experience ?? false,
-    academics: profileData?.checklist?.checklist_academics ?? false,
-    pastProjects: profileData?.checklist?.checklist_past_projects ?? false,
-    languages: profileData?.checklist?.checklist_languages ?? false,
-    certifications: profileData?.checklist?.checklist_certifications ?? false,
-    jobTitles: profileData?.checklist?.checklist_job_titles ?? false,
-    keySkills: profileData?.checklist?.checklist_key_skills ?? false,
-    profileComplete: profileData?.checklist?.checklist_complete ?? false,
-  };
+const checklist = {
+  mfa: profileData?.checklist?.checklist_mfa ?? false,
+  cvFormat: profileData?.checklist?.checklist_cv_format_fixed ?? false,
+  clFormat: profileData?.checklist?.checklist_cl_format_fixed ?? false,
+  profileImg: profileData?.checklist?.checklist_profile_img ?? false,
+  dataUsage: profileData?.checklist?.checklist_data_usage ?? false,
+  dataTraining: profileData?.checklist?.checklist_data_training ?? false,
+  numberLock: profileData?.checklist?.checklist_number_lock ?? false,
+  dataFinalization: profileData?.checklist?.checklist_data_finalization ?? false,
+  terms: profileData?.checklist?.checklist_terms ?? false,
+  profileComplete: profileData?.checklist?.checklist_complete ?? false,
+};
+
 
   const infoBlock = {
     userId: profileData?.info_block?.auth_user_id ?? "",
@@ -95,18 +94,19 @@ const Dashboard = () => {
     attemptsLeft: test.remaining_attempts ?? 0
   }));
 
-  const statusList = [
-    { label: "Multifactor Authentication", isComplete: checklist.personalInfo },
-    { label: "CV Format Fixed", isComplete: checklist.workExperience },
-    { label: "CL Format Fixed", isComplete: checklist.academics },
-    { label: "Profile Image", isComplete: checklist.pastProjects },
-    { label: "Data Usage", isComplete: checklist.languages },
-    { label: "Data Training", isComplete: checklist.certifications },
-    { label: "Number Lock", isComplete: checklist.jobTitles },
-    { label: "Data Finalization", isComplete: checklist.keySkills },
-    { label: "Terms", isComplete: checklist.keySkills },
-    { label: "Checklist", isComplete: checklist.keySkills },
-  ];
+const statusList = [
+  { label: "Multifactor Authentication", isComplete: checklist.mfa },
+  { label: "CV Format Fixed", isComplete: checklist.cvFormat },
+  { label: "CL Format Fixed", isComplete: checklist.clFormat },
+  { label: "Profile Image", isComplete: checklist.profileImg },
+  { label: "Data Usage", isComplete: checklist.dataUsage },
+  { label: "Data Training", isComplete: checklist.dataTraining },
+  { label: "Number Lock", isComplete: checklist.numberLock },
+  { label: "Data Finalization", isComplete: checklist.dataFinalization },
+  { label: "Terms", isComplete: checklist.terms },
+  { label: "Checklist", isComplete: checklist.profileComplete },
+];
+
 
 
   const jobs = useMemo(() => {
@@ -213,7 +213,7 @@ const Dashboard = () => {
             <h3 className="font-bold text-lg">{infoBlock.dailyJobLimit}</h3> {/* Just an example fallback */}
           </div>
           <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm w-fit h-fit">
-            <img width="22px" height="22px" className="p-1" src={total_app_icon} alt="" />
+            <img width="24px" height="24px" className="p-1" src={jobs_available_icon} alt="" />
           </div>
         </div>
 
@@ -224,7 +224,7 @@ const Dashboard = () => {
             <h3 className="font-bold text-lg">{infoBlock.totalJobs}</h3>
           </div>
           <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm w-fit h-fit">
-            <img width="22px" height="22px" className="p-1" src={total_app_icon} alt="" />
+            <img width="24px" height="24px" className="p-1" src={selectable_jobs_icon} alt="" />
           </div>
         </div>
 
@@ -240,7 +240,7 @@ const Dashboard = () => {
             </h3>
           </div>
           <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm w-fit h-fit">
-            <img width="22px" height="22px" className="p-1" src={total_app_icon} alt="" />
+            <img width="26px" height="26px" className="p-1" src={total_experience_icon} alt="" />
           </div>
         </div>
 
@@ -321,8 +321,8 @@ const Dashboard = () => {
             <div className="border-t border-t-[#0000000F]"></div>
 
             {/* Designation */}
-            <div className="flex flex-col gap-2">
-              <h2 className='font-bold text-[15px]'>Designation</h2>
+            <div className="flex flex-col h-[100px] overflow-y-auto scrollbar-custom gap-2">
+              <h2 className='font-bold  text-[15px]'>Designation</h2>
 
               <div className="flex flex-wrap gap-2">
                 {jobTitles.map((title, index) => (
@@ -487,7 +487,7 @@ const Dashboard = () => {
                 <img src={announcements} alt="" />
               </div>
               <div className="">
-                <a className='text-[#2c6472] font-medium' href="/user/announcements">View All</a>
+                <Link to="/user/announcements"><p className='text-[#2c6472] font-medium' >View All</p></Link>
               </div>
             </div>
 

@@ -73,8 +73,9 @@ const Navbar = () => {
             src={profile}
             alt="Profile"
             className="w-9 h-9 rounded-full"
+            onClick={() => setMenuOpen(!menuOpen)}
           />
-          <span className="text-gray-800 font-bold">{firstName}</span>
+          <span className="text-gray-800 font-bold" onClick={() => setMenuOpen(!menuOpen)} >{firstName}</span>
           <img src={arrow_down} alt="" onClick={() => setMenuOpen(!menuOpen)} className='w-8 h-8 mt-1 p-2 rounded-full hover:bg-[#407684] transform duration-200 ease-linear' />
           {menuOpen && (
             <div className="absolute top-12 -right-2 bg-white border flex flex-col items-center justify-center rounded shadow-md p-1 z-20">
@@ -103,7 +104,7 @@ const Navbar = () => {
           <div className="bg-white rounded shadow-2xl px-10 py-8 w-[92%] max-w-md text-center border-b-8 border-[#2c6472]">
             <h2 className="text-2xl font-bold text-[#2c6472] mb-4">Logged Out Successfully</h2>
             <p className="text-gray-600 w-full ">
-              Thanks for visiting - we’ll see you again soon!👋
+              Thanks for visiting - we’ll see you again soon!
             </p>
             {/* <div className="w-10 h-1 bg-[#2c6472] mx-auto rounded-full animate-pulse"></div> */}
           </div>

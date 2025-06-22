@@ -27,7 +27,7 @@ const DataOnboarding = () => {
                     <p className=' mt-3  -ml-72 '>Select an option that works best for you.</p>
                 </div>
 
-                <div className="flex flex-col gap-7 mt-24  -ml-32">
+                <div className="flex flex-col gap-7 mt-36  -ml-32">
                     <Link to="/user/onboarding/personal-information"><div className="flex w-[450px] h-[72px] gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
                         <img src={insert} className='w-6 h-6 -mt-1 object-cover' alt="" />
                         <p className='text-lg font-medium'>Create a Profile from Scratch</p>
@@ -36,10 +36,10 @@ const DataOnboarding = () => {
                         <img src={upload} className='w-6 h-6 -mt-1 object-cover' alt="" />
                         <p className='text-lg font-medium'>Upload Resume</p>
                     </div></Link>
-                    <Link to="/user/linkedin"> <div className="flex w-[450px] h-[72px] gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
+                    {/* <Link to="/user/linkedin"> <div className="flex w-[450px] h-[72px] gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
                         <img src={linked} className='w-6 h-6 -mt-1 object-cover' alt="" />
                         <p className='text-lg font-medium'>Import from Linkedin</p>
-                    </div></Link>
+                    </div></Link> */}
                 </div>
 
             </div>

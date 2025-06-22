@@ -62,7 +62,22 @@ const Skills = () => {
             });
 
             setJobTitle(res.data);
-            console.log(res.data);
+
+            const fetchedJobTitle = res.data;
+            setJobTitle(fetchedJobTitle);
+
+            const allFetchedTitles = [
+                fetchedJobTitle.primary_title,
+                fetchedJobTitle.secondary_title,
+                fetchedJobTitle.tertiary_title,
+            ].filter(Boolean);
+
+            // 👇 Set first job title as default
+            if (allFetchedTitles.length > 0) {
+                setSelectedTitle(allFetchedTitles[0]);
+                setDropdownType("job");
+                setShowDropdown(true); // 👈 open job-specific dropdown
+            }
         } catch (err) {
             console.error("Failed to fetch jobtitles info", err);
         }
@@ -244,11 +259,7 @@ const Skills = () => {
             if (!response.ok) {
                 console.error("❌ Error uploading data:", data);
             } else {
-                setShowSavePopup(true);
-                setTimeout(() => {
-                    setShowSavePopup(false);
                     navigate('/user/dashboard');
-                }, 2500);
             }
         } catch (error) {
             console.error("❌ Network or server error:", error);
@@ -276,13 +287,10 @@ const Skills = () => {
     return (
         <div className='w-full min-h-screen p-5 ml-5 text-black'>
             <div className="flex flex-col">
-                <div className="flex items-center mb-5 cursor-pointer">
-                    <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
-                    <p className='ml-2 text-lg font-medium' onClick={() => navigate(-1)}>Back</p>
-                </div>
+
 
                 <div>
-                    <p className=' flex font-semibold text-[#2c6472]'>STEP 5 OF 8</p>
+                    <p className=' flex font-semibold text-[#2c6472]'>STEP 8 OF 8</p>
                 </div>
 
                 <div>
@@ -498,15 +506,15 @@ const Skills = () => {
 
             </div>
 
-            
-      {showSavePopup && (
-        <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 bg-white border-b-4 border-[#2C6472] text-black rounded-md shadow-lg transform transition-all duration-500 ease-in-out animate-toast-in`}>
-          <div className="relative px-3 py-1">
-            <span>✅ Skills saved successfully!</span>
-            <div className="absolute bottom-0 left-0 h-[3px] bg-white animate-progress w-full" />
-          </div>
-        </div>
-      )}
+
+            {showSavePopup && (
+                <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 bg-white border-b-4 border-[#2C6472] text-black rounded-md shadow-lg transform transition-all duration-500 ease-in-out animate-toast-in`}>
+                    <div className="relative px-3 py-1">
+                        <span>✅ Skills saved successfully!</span>
+                        <div className="absolute bottom-0 left-0 h-[3px] bg-white animate-progress w-full" />
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

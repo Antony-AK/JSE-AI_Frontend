@@ -17,6 +17,8 @@ const Languages = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [showSavePopup, setShowSavePopup] = useState(false);
+  const [addedCompanies, setAddedCompanies] = useState([]);
+
 
 
   useEffect(() => {
@@ -94,11 +96,9 @@ const Languages = () => {
         proficiency: ''
       });
 
+       setAddedCompanies((prev) => [...prev, formData.language]);
 
-      setShowSavePopup(true);
-      setTimeout(() => {
-        setShowSavePopup(false);
-      }, 3000);
+
 
     } catch (err) {
       console.error('Error uploading language:', err);
@@ -145,12 +145,8 @@ const Languages = () => {
         language: '',
         proficiency: ''
       });
-      
-      setShowSavePopup(true);
-      setTimeout(() => {
-        setShowSavePopup(false);
+
         navigate('/user/onboarding/certificates');
-      }, 2500); // show toast briefly before routing
 
     } catch (err) {
       console.error('Error uploading language:', err);
@@ -178,6 +174,16 @@ const Languages = () => {
         <div>
           <h1 className='text-2xl font-semibold mt-7'>Add the languages you know.</h1>
         </div>
+
+           {addedCompanies.length > 0 && (
+                <div className=" px-6 py-4 -mb-5 flex gap-3 rounded-lg">
+                    <ul className="flex gap-3 overflow-x-auto scrollbar-hide">
+                        {addedCompanies.map((company, index) => (
+                            <li className='bg-gray-500/30 px-4 py-2 rounded-lg min-w-32 text-center font-semibold text-[#2c6472]' key={index}>{company}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
 
         <form className="flex flex-col mt-5 ms-6 " onSubmit={handleAddCertificate}>
           {/* Language Input */}
@@ -231,15 +237,15 @@ const Languages = () => {
               type="submit"
               className=" py-2 w-[180px] bg-white text-[#2c6472]  h-[43px]  font-semibold cursor-pointer mt-1 hover:scale-95 transition-transform duration-200 ease-in-out"
             >
-              +Add languages
+              +Add Another
             </button>
 
             <button
               type="button"
-              className=" teal-button px-6 py-2 bg-[#2c6472] text-white w-[100px] h-[41px]  rounded-xl focus:outline-none transition-transform duration-200 ease-in-out"
+              className=" teal-button px-6 py-2 bg-[#2c6472] text-white  h-[41px]  rounded-xl focus:outline-none transition-transform duration-200 ease-in-out"
               onClick={handleNext}
             >
-              {loading ? 'Saving...' : 'Next'}
+              {loading ? 'Saving...' : 'Save & Next'}
             </button>
           </div>
         </form>

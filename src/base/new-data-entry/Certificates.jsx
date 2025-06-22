@@ -15,6 +15,8 @@ const Certificates = () => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [showSavePopup, setShowSavePopup] = useState(false);
+    const [addedCompanies, setAddedCompanies] = useState([]);
+
 
 
     const handleChange = (e) => {
@@ -101,10 +103,8 @@ const Certificates = () => {
                 end_date: '',
             });
 
-            setShowSavePopup(true);
-            setTimeout(() => {
-                setShowSavePopup(false);
-            }, 3000);
+            setAddedCompanies((prev) => [...prev, formData.certificate_name]);
+
 
         } catch (error) {
             console.error("Error uploading certificate:", error);
@@ -166,11 +166,8 @@ const Certificates = () => {
                 end_date: '',
             });
 
-            setShowSavePopup(true);
-            setTimeout(() => {
-                setShowSavePopup(false);
+
                 navigate('/user/onboarding/jobtitles');
-            }, 2500); // show toast briefly before routing
 
         } catch (error) {
             console.error("Error uploading certificate:", error);
@@ -197,12 +194,22 @@ const Certificates = () => {
                 </div>
 
                 <div>
-                    <p className=' flex font-semibold text-[#2c6472]'>STEP 5 OF 8</p>
+                    <p className=' flex font-semibold text-[#2c6472]'>STEP 6 OF 8</p>
                 </div>
 
                 <div>
                     <h1 className='text-2xl font-semibold mt-7'>List your certificates / Awards.</h1>
                 </div>
+
+                {addedCompanies.length > 0 && (
+                    <div className=" px-6 py-4 -mb-5 -m-1 flex gap-3 rounded-lg">
+                        <ul className="flex gap-3 overflow-x-auto scrollbar-hide">
+                            {addedCompanies.map((company, index) => (
+                                <li className='bg-gray-500/30 px-4 py-2 rounded-lg min-w-32 text-center font-semibold text-[#2c6472]' key={index}>{company}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
 
                 <form className="flex flex-col mt-5 ms-6" onSubmit={handleAddCertificate}>
                     <div className="relative ">
@@ -291,15 +298,15 @@ const Certificates = () => {
                             type="submit"
                             className=" py-2 w-[180px] bg-white text-[#2c6472]  h-[43px]  font-semibold cursor-pointer mt-1 hover:scale-95 transition-transform duration-200 ease-in-out"
                         >
-                            +Add Certificates
+                            +Add Another
                         </button>
 
                         <button
                             type="button"
-                            className=" teal-button px-6 py-2 bg-[#2c6472] text-white w-[100px] h-[41px]  rounded-xl focus:outline-none transition-transform duration-200 ease-in-out"
+                            className=" teal-button px-6 py-2 bg-[#2c6472] text-white  h-[41px]  rounded-xl focus:outline-none transition-transform duration-200 ease-in-out"
                             onClick={handleNext}
                         >
-                            {loading ? 'Saving...' : 'Next'}
+                            {loading ? 'Saving...' : 'Save & Next'}
                         </button>
                     </div>
 

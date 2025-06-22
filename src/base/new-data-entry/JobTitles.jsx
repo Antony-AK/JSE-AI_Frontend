@@ -144,11 +144,7 @@ const JobTitles = () => {
         console.error('❌ Failed to upload job titles:', errorData);
         alert('❌ Failed to upload job titles:', errorData)
       } else {
-        setShowSavePopup(true);
-        setTimeout(() => {
-          setShowSavePopup(false);
           navigate('/user/onboarding/skills');
-        }, 2500);
       }
     } catch (error) {
       console.error('❌ Error while posting job titles:', error);
@@ -181,7 +177,7 @@ const JobTitles = () => {
           <p className='ml-2 text-lg font-medium' onClick={() => navigate(-1)}>Back</p>
         </div>
 
-        <p className='flex font-semibold text-[#2c6472]'>STEP 5 OF 8</p>
+        <p className='flex font-semibold text-[#2c6472]'>STEP 7 OF 8</p>
 
         <h1 className='text-2xl font-semibold mt-7'>Your designation defines your position.</h1>
 
@@ -230,7 +226,7 @@ const JobTitles = () => {
               disabled={selectedTitles.length >= 3}
               className='w-24 mt-2 ms-5 px-2 py-2 border-2 border-[#2c6472] text-[#2c6472] h-[44px] text-sm font-medium bg-white hover:scale-95 transition-transform ease-linear duration-200 ml-2'
             >
-              +Add Skill
+              +Add 
             </button>
           </div>
 
@@ -274,9 +270,9 @@ const JobTitles = () => {
           <div className='flex w-[70%] justify-end items-center gap-4 mt-8'>
             <button
               type='submit'
-              className='teal-button px-6 py-2 bg-[#2c6472] text-white w-[100px] h-[41px] rounded-xl focus:outline-none transition-transform duration-200 ease-in-out'
+              className='teal-button px-6 py-2 bg-[#2c6472] text-white  h-[41px] rounded-xl focus:outline-none transition-transform duration-200 ease-in-out'
             >
-              {loading ? 'Saving...' : 'Next'}
+              {loading ? 'Saving...' : 'Save & Next'}
             </button>
           </div>
         </form>

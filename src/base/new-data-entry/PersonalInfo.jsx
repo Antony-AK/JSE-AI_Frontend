@@ -21,7 +21,7 @@ const PersonalInfo = () => {
     email: '',
     phone: '',
     linkedin_profile: '',
-    country: '',
+    country: 'Germany',
     state: '',
     city: '',
     portfolio: '',
@@ -163,11 +163,13 @@ const PersonalInfo = () => {
 
         sessionStorage.setItem("hasSubmittedPersonalInfo", "true");
 
+        navigate('/user/onboarding/work-experience');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+
         setShowSavePopup(true);
         setTimeout(() => {
           setShowSavePopup(false);
-          navigate('/user/onboarding/work-experience');
-        }, 2500);
+        }, 1000);
 
       } catch (error) {
         console.error("❌ Error submitting form:", JSON.stringify(error.response?.data, null, 2));
@@ -361,10 +363,12 @@ const PersonalInfo = () => {
           <label className='font-medium' htmlFor="country">Country</label>
           <input
             className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]'
-            value={formData.country}
+            value="Germany"
             onChange={handleChange}
             type="text"
             id='country'
+              name="country"
+              disabled
           />
         </div>
 
@@ -392,7 +396,7 @@ const PersonalInfo = () => {
         </div>
 
         <div className="flex justify-end mt-7">
-          <button type="submit" className='rounded-xl px-8 py-2 bg-[#2C6472] text-[#fff] mb-10'>Next</button>
+          <button type="submit" className='rounded-xl px-6 py-2 bg-[#2C6472] text-[#fff] mb-10'>Save & Next</button>
         </div>
 
       </form>

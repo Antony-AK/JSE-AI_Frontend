@@ -25,9 +25,15 @@ import personal_tracker from '../../assets/personal-tracker.png';
 import profile_icon from '../../assets/profile-icon.svg';
 import profile_active_icon from '../../assets/profile-active-icon.svg';
 
+
+
 const Sidebar = () => {
   const { pathname } = useLocation();
   const [openJobs, setOpenJobs] = useState(false); // Toggle for My Jobs
+
+  // inside your Sidebar component
+  const [openUpcoming, setOpenUpcoming] = useState(false);
+
 
   const menuItems = [
     {
@@ -63,22 +69,22 @@ const Sidebar = () => {
       activeIcon: saved_jobs_active_icon,
       label: "Saved Jobs"
     },
-    {
-      to: "/user/proficiency-test",
-      defaultIcon: proficiency_test,
-      activeIcon: active_proficiency_test,
-      label: "Proficiency Test"
-    },
-    {
-      to: "/user/self-development",
-      defaultIcon: self_development,
-      label: "Self Development"
-    },
-    {
-      to: "/user/personal-tracker",
-      defaultIcon: personal_tracker,
-      label: "Personal Tracker"
-    }
+    // {
+    //   to: "/user/proficiency-test",
+    //   defaultIcon: proficiency_test,
+    //   activeIcon: active_proficiency_test,
+    //   label: "Proficiency Test"
+    // },
+    // {
+    //   to: "/user/self-development",
+    //   defaultIcon: self_development,
+    //   label: "Self Development"
+    // },
+    // {
+    //   to: "/user/personal-tracker",
+    //   defaultIcon: personal_tracker,
+    //   label: "Personal Tracker"
+    // }
   ];
 
   return (
@@ -157,7 +163,45 @@ const Sidebar = () => {
             );
           })}
         </ul>
+
+         {/* Upcoming Features Dropdown */}
+      <div>
+        <div
+          className="flex items-center justify-between px-4 py-2 ms-4 mt-2 cursor-pointer text-gray-400"
+          onClick={() => setOpenUpcoming(!openUpcoming)}
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">Upcoming Features</span>   
+                     <img src={lock_icon} alt="lock" className="w-4 h-4" />
+
+          </div>
+          {openUpcoming ? (
+            <ChevronUp className="w-4 h-4 text-gray-500" />
+          ) : (
+            <ChevronDown className="w-4 h-4 text-gray-500" />
+          )}
+        </div>
+
+        {/* Hidden until dropdown opens */}
+        {openUpcoming && (
+          <ul className="ms-16 mt-2 space-y-5 font-medium text-sm text-gray-500">
+            <li className="flex items-center gap-2">
+              <span>Proficiency Test</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span>Self Development</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span>Personal Tracker</span>
+            </li>
+          </ul>
+        )}
       </div>
+      </div>
+
+     
+
+
 
       {/* Bottom Section */}
       <div>

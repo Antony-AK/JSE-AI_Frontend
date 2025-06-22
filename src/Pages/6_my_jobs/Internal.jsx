@@ -363,7 +363,7 @@ const MyApplication = () => {
         <button
           className="px-6 py-1.5 font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105"
         >
-          Recommended Jobs
+          Designation
         </button>
         {/* Filter Button */}
         <button
@@ -383,9 +383,9 @@ const MyApplication = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.3 }}
-                className="absolute left-[320px] px-6 py-1.5 flex justify-center items-center font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105"
+                className="absolute left-[260px] px-6 py-1.5 flex justify-center items-center font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105"
               >
-                Designation <img src={arrow_down} className="ms-0.5" alt="" />
+                Recommended Jobs <img src={arrow_down} className="ms-0.5" alt="" />
               </motion.button>
 
               <motion.button
@@ -435,21 +435,35 @@ const MyApplication = () => {
                   <div
                     key={index}
                     onClick={() => setSelectedJob(job)}
-                    className={`flex items-start h-40 bg-white justify-between border-y rounded-s-xl border-gray-400/20 px-4  py-5 hover:scale-[1.01] transition-transform ease-in-out duration-200 cursor-pointer ${selectedJob === job ? " border-l-4 border-teal-700 bg-[#2c6472]/10 transition-transform ease-in-out duration-200" : ""
+                    className={`flex items-start h-44 bg-white justify-between border-y rounded-s-xl border-gray-400/20 px-4  py-5 hover:scale-[1.01] transition-transform ease-in-out duration-200 cursor-pointer ${selectedJob === job ? " border-l-4 border-teal-700 bg-[#2c6472]/10 transition-transform ease-in-out duration-200" : ""
                       }`}
                   >
-                    <div className="flex items-start space-x-10 justify-center ms-5 ">
+                    <div className="flex flex-col min-w-[400px] items-start space-x-10 justify-center ms-5 ">
                       <div className="space-y-2">
                         <h3 className="text-lg font-semibold text-[#2C6472]">{job.jobTitle}</h3>
                         <p className="text-sm text-gray-600">{job.companyName}</p>
                         <p className="text-sm text-gray-500">{job.location}</p>
-                        <p className="text-sm text-gray-500">{job.salaryRange}</p>
-                        <p className="text-sm text-gray-700 mt-1">
-                          {job.skillData[2]?.value}
-                        </p>
+                     
                       </div>
+                      
+                  <div className="flex flex-col gap-2  mt-2">
+                    {selectedJob?.skillData?.slice(0, 2).map((item, index) => (
+                      <div key={index} className="flex gap-5 -ms-10 text-sm">
+                        <span
+                          className={`font-semibold text-black ${item.label === "Your Skills" ? "me-8" : ""
+                            }`}
+                        >
+                          {item.label}
+                        </span>
+                        <span className="text-gray-400 text-end">
+                          {Array.isArray(item.value) ? item.value.join(', ') : item.value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+               
                     </div>
-                    <div className="flex  flex-col justify-start ms-48 -mt-3 items-center"><br />
+                    <div className="flex  flex-col justify-start  -mt-3 items-center"><br />
                       <div className="relative w-16 h-16">
                         <svg
                           viewBox="0 0 100 100"
@@ -585,24 +599,40 @@ const MyApplication = () => {
                   </div><br />
 
 
+                  <div className="flex flex-col gap-2 ms-7 mt-2">
+                    {selectedJob?.skillData?.slice(0, 2).map((item, index) => (
+                      <div key={index} className="flex gap-5 text-sm">
+                        <span
+                          className={`font-semibold text-black ${item.label === "Your Skills" ? "me-8" : ""
+                            }`}
+                        >
+                          {item.label}
+                        </span>
+                        <span className="text-gray-400 text-end">
+                          {Array.isArray(item.value) ? item.value.join(', ') : item.value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+
+
+
+
                   <div className="flex flex-col ">
                     <div className="flex mx-auto  gap-5"><br />
-                      <button onClick={() => handleGenerateCV(selectedJob.id)} className="px-5 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[200px] h-[47px]w-[200px] h-[47px] text-white items-center justify-center rounded transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105">
+                      <button onClick={() => handleGenerateCV(selectedJob.id)} className="px-5 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[200px] h-[47px] text-white items-center justify-center rounded transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105">
                         Generate CV
                       </button>
-                      <button onClick={() => handleGenerateCoverLetter(selectedJob.id)} className="px-5 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] h-[47px] text-white rounded transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105">
-                        Generate Cover Letter
+                      <button onClick={() => handleGenerateCoverLetter(selectedJob.id)} className="px-5 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[200px] h-[47px] text-white rounded transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105">
+                        Generate CL
                       </button>
                     </div><br />
 
-                    <div className="flex   gap-5 ms-5 ">
+                    <div className="flex w-[90%] mx-auto items-center  gap-5 ms-5 ">
+                      
                       <button
-                        //  onClick={() => handleDownloadAllDocs(cvBlobUrl, clBlobUrl, job.job_id)} 
-                        className="flex justify-center gap-2 px-5 py-3  text-[13px]  font-semibold border hover:border-[#2C6472] bg-gray-200 w-[200px] h-[47px] text-[#2c6472] rounded transition-transform hover:bg-white hover:text-[#2C6472] hover:scale-105">
-                        <img src={download_icon} className="text-[#2C6472] w-4 h-4 mt-0.5 object-cover" alt="" />  Download All
-                      </button>
-                      <button
-                        className="flex gap-2 justify-center items-center font-semibold text-[#2C6472] rounded-md text-sm bg-gray-200 underline border w-[200px] h-[47px] hover:border-[#2C6472] px-4  transition  hover:bg-white hover:text-[#2C6472] hover:scale-105"
+                        className="flex gap-2 mx-auto justify-center items-center font-semibold text-[#2C6472] rounded-md text-sm bg-gray-200 underline border w-[200px] h-[47px] hover:border-[#2C6472] px-4  transition  hover:bg-white hover:text-[#2C6472] hover:scale-105"
                       // onClick={() => handleGetJobURL(job.job_id)}
                       >
                         Go to Job Link

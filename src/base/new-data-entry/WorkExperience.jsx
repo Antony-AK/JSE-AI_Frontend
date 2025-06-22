@@ -24,6 +24,8 @@ const WorkExperience = () => {
 
   const [errors, setErrors] = useState({});
   const [showSavePopup, setShowSavePopup] = useState(false);
+  const [addedCompanies, setAddedCompanies] = useState([]);
+
 
 
   const handleChange = (e) => {
@@ -95,19 +97,19 @@ const WorkExperience = () => {
           },
         });
 
-        setShowSavePopup(true);
-        setTimeout(() => {
-          setShowSavePopup(false);
-        }, 3000);
+
+
+
 
 
         if (navigateNext) {
-          setShowSavePopup(true);
-          setTimeout(() => {
-            setShowSavePopup(false);
-            navigate('/user/onboarding/education');
-          }, 2500);
+          navigate('/user/onboarding/education');
+          window.scrollTo({ top: 0, behavior: 'auto' });
+
         } else {
+
+          setAddedCompanies((prev) => [...prev, formData.company_name]);
+
           // Clear form after add
           setFormData({
             job_title: '',
@@ -118,6 +120,8 @@ const WorkExperience = () => {
             currentwork: false,
             key_responsibilities: ''
           });
+          window.scrollTo({ top: 0, behavior: 'auto' });
+
           setErrors({});
         }
 
@@ -144,6 +148,16 @@ const WorkExperience = () => {
       <p className='text-[#2c6472] font-semibold'>STEP 2 OF 8</p>
 
       <h2 className='font-bold text-xl'>Highlight your Work Experience.</h2>
+
+      {addedCompanies.length > 0 && (
+        <div className=" px-6 py-4 -m-3 flex gap-3 rounded-lg">
+          <ul className="flex gap-3 overflow-x-auto scrollbar-hide">
+            {addedCompanies.map((company, index) => (
+              <li className='bg-gray-500/30 px-4 py-2 rounded-lg min-w-32 text-center font-semibold text-[#2c6472]' key={index}>{company}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
 
@@ -239,9 +253,9 @@ const WorkExperience = () => {
 
         <div className="flex justify-between mt-7">
           <div className="cursor-pointer" onClick={() => handleSubmit(false)}>
-            <p className='text-lg text-[#2C6472] font-semibold'>+ Add Work Experience</p>
+            <p className='text-lg text-[#2C6472] font-semibold'>+ Add Another</p>
           </div>
-          <button type="button" onClick={() => handleSubmit(true)} className='rounded-xl px-8 py-2 bg-[#2C6472] text-[#fff] mb-10'>Next</button>
+          <button type="button" onClick={() => handleSubmit(true)} className='rounded-xl px-6 py-2 bg-[#2C6472] text-[#fff] mb-10'>Save & Next</button>
         </div>
 
       </form>
