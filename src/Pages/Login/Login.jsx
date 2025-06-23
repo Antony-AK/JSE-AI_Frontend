@@ -47,7 +47,6 @@ const Login = () => {
 
  const fetchEntryProgressAndRedirect = async (token) => {
   try {
-    setLoading(true);
 
     const res = await fetch(`${BASE_URL}/user/entry-progress/check`, {
       method: 'GET',
@@ -97,7 +96,6 @@ const Login = () => {
     console.error('💥 Error:', err);
     navigate('/user/dashboard');
   } finally {
-    setLoading(false);
   }
 };
 
@@ -111,7 +109,7 @@ const Login = () => {
           <div className="max-w-lg w-full">
             <h2 className="text-3xl font-semibold text-center mb-2">Login now</h2><br /><br />
 
-            <button className="w-full h-[52px] flex items-center justify-center border border-gray-300 py-3 rounded-md mb-1 hover:bg-[#2c6472]/5 hover:border-[#2c6472] transition">
+            {/* <button className="w-full h-[52px] flex items-center justify-center border border-gray-300 py-3 rounded-md mb-1 hover:bg-[#2c6472]/5 hover:border-[#2c6472] transition">
               <img src={google} className="mr-4 text-xl text-gray-600" />
               <span className="text-base text-gray-700">Continue with Google</span>
             </button><br />
@@ -120,7 +118,7 @@ const Login = () => {
               <div className="flex-grow h-px bg-gray-300" />
               <span className="mx-3 text-gray-400 text-sm">or</span>
               <div className="flex-grow h-px bg-gray-300" />
-            </div><br />
+            </div><br /> */}
 
             <form onSubmit={handleSubmit} className="grid gap-y-3">
               <div className="relative -mt-5">

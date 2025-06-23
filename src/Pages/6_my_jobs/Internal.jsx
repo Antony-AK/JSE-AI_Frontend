@@ -7,7 +7,7 @@ import filter_icon from '../../assets/filter-icon.svg'
 import arrow_down from '../../assets/arrow-down-drop.png'
 import download_icon from '../../assets/downloadicon.png'
 import link_icon from '../../assets/link-icon.svg'
-
+import { Link } from "react-router-dom";
 
 
 
@@ -222,7 +222,6 @@ const MyApplication = () => {
       if (error.response) {
         console.log("Server responded with:", error.response.data);
       }
-      alert("Failed to generate CV. Please try again.");
     } finally {
       setIsGenerating(false); // Hide animation
     }
@@ -319,7 +318,6 @@ const MyApplication = () => {
       alert("Cover Letter generated successfully!");
     } catch (error) {
       console.error("Error generating Cover Letter:", error);
-      alert("Failed to generate Cover Letter. Please try again.");
     } finally {
       setIsGenerating(false); // Hide animation
     }
@@ -621,12 +619,12 @@ const MyApplication = () => {
 
                   <div className="flex flex-col ">
                     <div className="flex mx-auto  gap-5"><br />
-                      <button onClick={() => handleGenerateCV(selectedJob.id)} className="px-5 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[200px] h-[47px] text-white items-center justify-center rounded transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105">
-                        Generate CV
-                      </button>
-                      <button onClick={() => handleGenerateCoverLetter(selectedJob.id)} className="px-5 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[200px] h-[47px] text-white rounded transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105">
-                        Generate CL
-                      </button>
+                      <Link to='/user/cv'> <button onClick={() => handleGenerateCV(selectedJob.id)} className="px-5 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[200px] h-[47px] text-white items-center justify-center rounded transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105">
+                         CV
+                      </button></Link>
+                     <Link to='/user/cl'>  <button onClick={() => handleGenerateCoverLetter(selectedJob.id)} className="px-5 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[200px] h-[47px] text-white rounded transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105">
+                         CL
+                      </button></Link>
                     </div><br />
 
                     <div className="flex w-[90%] mx-auto items-center  gap-5 ms-5 ">

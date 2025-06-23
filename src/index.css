@@ -11,6 +11,16 @@ html {
   }
 
 
+* {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Force Times New Roman on the PDF container */
+#cl-pdf-preview {
+  font-family: "Times New Roman", Times, serif !important;
+}
+
 
 
 

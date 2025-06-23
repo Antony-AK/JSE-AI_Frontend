@@ -12,4 +12,7 @@ export default defineConfig({
       cert: fs.readFileSync(path.resolve(__dirname, 'src/certs/localhost.pem')),
     },
   },
+  optimizeDeps: {
+    include: ['latex.js', 'html2pdf.js'],
+  },
 });

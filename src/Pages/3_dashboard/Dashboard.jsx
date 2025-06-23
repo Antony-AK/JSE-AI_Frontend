@@ -353,7 +353,8 @@ const statusList = [
           </div>
 
 
-          <img src={lock} className='absolute top-[78%] left-[33%] w-14 h-14 z-10' alt="" />
+          {/* <img src={lock} className='absolute top-[78%] left-[33%] w-14 h-14 z-10' alt="" /> */}
+          <p className='absolute top-[80%] left-[28%] rounded-lg w-52 font-medium text-center flex items-center pl-8 z-10 bg-gray-300/80 px-4 py-2'><img src={lock} className='w-4 h-4 object-cover me-3' alt="" /> Coming Soon</p>
 
 
           {/* Box - 2 */}

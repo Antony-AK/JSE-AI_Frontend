@@ -100,24 +100,26 @@ const Signup = () => {
   return (
     <div className="flex min-h-screen ">
       {/* Left Panel */}
-      <div className="flex flex-1 justify-center items-center p-8 bg-white">
+      <div className="flex flex-1 justify-center items-center p-8 bg-white ">
         <div className="max-w-lg w-full">
           <h2 className="text-3xl font-semibold text-center ">Create account</h2><br /><br />
 
           {/* Google Auth Button */}
-          <button className="w-full h-[52px] flex items-center justify-center border border-gray-300 -mb-2 rounded-md  hover:shadow transition">
-            <img src={google} className="mr-4 text-xl text-green-600" />
-            <span className="text-base text-gray-700">Continue with Google</span>
-          </button><br />
+          {/* <button className="w-full h-[52px] flex items-center justify-center border cursor-not-allowed bg-gray-300 relative border-gray-300 -mb-2 rounded-md  hover:shadow transition">
+            <img src={google} className="mr-4 text-xl text-green-600 opacity-20" />
+            <span className="text-base text-gray-700/20 ">Continue with Google</span>
+          </button><br /> */}
+          {/* <span className="absolute text-lg text-gray-300 cursor-wait top-48 left-80  font-semibold">Coming Soon</span> */}
 
-          <div className="flex items-center  ">
+
+          {/* <div className="flex items-center  ">
             <div className="flex-grow h-px bg-gray-300" />
             <span className="mx-3 text-gray-400 text-sm">or</span>
             <div className="flex-grow h-px bg-gray-300" />
-          </div><br />
+          </div><br /> */}
 
           {/* Signup Form */}
-          <form onSubmit={handleSignUp} className='-space-y-3'>
+          <form onSubmit={handleSignUp} className='-space-y-4'>
             {/* email Field */}
             <div className="relative -mt-5">
               <label className="mb-1 ms-3 block  text-gray-500 text-sm">
