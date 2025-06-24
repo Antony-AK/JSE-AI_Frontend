@@ -1,6 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
+import { ToastContainer, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { CvProvider } from './base/DocumentEditor/Context/CvContext.jsx';
 import { ClProvider } from './base/DocumentEditor/Context/ClContext.jsx';
 
@@ -88,7 +91,21 @@ const AppRoutes = () => {
 
 function App() {
     return (
-        <AppRoutes />
+        <>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnHover={false}
+                pauseOnFocusLoss={false}
+                draggable
+                theme="light"
+                transition={Bounce}
+            />
+            <AppRoutes />
+        </>
     );
 }
 

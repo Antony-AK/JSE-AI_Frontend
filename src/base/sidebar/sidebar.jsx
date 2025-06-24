@@ -175,8 +175,7 @@ const Sidebar = () => {
         >
           <div className="flex items-center gap-2">
             <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">Upcoming Features</span>   
-                     <img src={lock_icon} alt="lock" className="w-4 h-4" />
-
+            <img src={lock_icon} alt="lock" className="w-4 h-4" />
           </div>
           {openUpcoming ? (
             <ChevronUp className="w-4 h-4 text-gray-500" />
@@ -187,16 +186,23 @@ const Sidebar = () => {
 
         {/* Hidden until dropdown opens */}
         {openUpcoming && (
-          <ul className="ms-16 mt-2 space-y-5 font-medium text-sm text-gray-500">
-            <li className="flex items-center gap-2">
-              <span>Proficiency Test</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <span>Self Development</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <span>Personal Tracker</span>
-            </li>
+          <ul className="flex flex-col items-center justify-center mx-auto space-y-5 font-medium text-sm text-gray-500 mt-5 ms-5">
+
+            <div className="flex items-center gap-2">
+               <img src={proficiency_test} alt="lock" className="w-5 h-5" />
+              <span className="text-[15px] text-gray-400 w-40 font-semibold text-[rgba(0, 0, 0, 0.25)]">Proficiency Test</span>   
+            </div>
+
+            <div className="flex items-center gap-2">
+              <img src={self_development} alt="lock" className="w-5 h-5" />              
+              <span className="text-[15px] text-gray-400 w-40 font-semibold text-[rgba(0, 0, 0, 0.25)]">Self Development</span>   
+            </div>
+
+            <div className="flex items-center gap-2">
+              <img src={personal_tracker} alt="lock" className="w-5 h-5" />
+              <span className="text-[15px] text-gray-400 w-40 font-semibold text-[rgba(0, 0, 0, 0.25)]">Personal Tracker</span>
+            </div>
+
           </ul>
         )}
       </div>

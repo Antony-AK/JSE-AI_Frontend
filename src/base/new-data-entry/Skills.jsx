@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png'
 import axios from 'axios';
@@ -22,8 +23,8 @@ const Skills = () => {
     const [showSavePopup, setShowSavePopup] = useState(false);
 
 
-
-
+    const generalInputRef = useRef(null);
+    const jobInputRef = useRef(null);
 
 
     const allSkills = Object.values(jobskills).flatMap(job => job.skills);
@@ -170,7 +171,7 @@ const Skills = () => {
                 : formData.jobSpecificSkills.includes(term);
 
         if (alreadyExists) {
-            alert("⚠️ This skill is already added.");
+            toast.error("This skill was already added.");
             return;
         }
 
@@ -220,7 +221,7 @@ const Skills = () => {
         if (!validateForm()) return;
 
         if (!accepted) {
-            alert('Please accept the condition before continuing.');
+            toast.error('Please accept the condition.');
             return;
         }
 
@@ -309,6 +310,7 @@ const Skills = () => {
                         <div className="relative items-center mb-2" ref={dropdownRef}>
                             <div className='flex'>
                                 <input
+                                    ref={generalInputRef}
                                     type="text"
                                     className="peer w-[60%] h-[64px] rounded-lg text-lg scrollbar-custom px-4 py-2 border border-gray-300  text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]"
                                     value={generalSearchTerm}
@@ -318,6 +320,13 @@ const Skills = () => {
                                         setDropdownType("general");
                                         setErrors((prev) => ({ ...prev, generalSkills: null }));
 
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        addSkill();
+                                        generalInputRef.current?.blur();
+                                        }
                                     }}
                                     onFocus={() => {
                                         setShowDropdown(true);
@@ -407,6 +416,7 @@ const Skills = () => {
 
                         <div className='flex relative ' ref={jobDropdownRef}>
                             <input
+                                ref={jobInputRef}
                                 type="text"
                                 className="peer w-[60%] h-[64px] rounded-lg text-lg scrollbar-custom px-4 py-2 border border-gray-300  text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]"
                                 value={jobSearchTerm}
@@ -416,6 +426,13 @@ const Skills = () => {
                                     setDropdownType("job");
                                     setErrors((prev) => ({ ...prev, jobSpecificSkills: null }));
 
+                                }}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    addSkill();
+                                    jobInputRef.current?.blur();
+                                    }
                                 }}
                                 onFocus={() => {
                                     setShowDropdown(true);
@@ -497,9 +514,6 @@ const Skills = () => {
                             {loading ? 'Saving...' : 'Go to Dashboard'}
                         </button>
                     </div>
-
-
-
 
                 </form>
 

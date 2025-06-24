@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png'
 import { BASE_URL } from '../../utils/api';
@@ -43,6 +44,7 @@ const Languages = () => {
     }
     if (!formData.proficiency) {
       newErrors.proficiency = 'Proficiency level is required';
+      toast.error('Please select a proficiency level');
     }
 
     setErrors(newErrors);
@@ -63,13 +65,13 @@ const Languages = () => {
 
 
     if (!token) {
-      alert('You are not authenticated. Please login.');
+      navigate('/user/login');
+      toast.error('User not found. Please log in');
       return;
     }
 
     setLoading(true);
-    setShowSavePopup(true);
-
+    
     try {
 
       const response = await fetch(`${BASE_URL}/languages`, {
@@ -101,7 +103,7 @@ const Languages = () => {
 
     } catch (err) {
       console.error('Error uploading language:', err);
-      alert(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }
@@ -113,7 +115,7 @@ const Languages = () => {
 
     const token = sessionStorage.getItem('authToken');
     if (!token) {
-      alert('You are not authenticated. Please login.');
+      toast.error('User not found. Please log in.');
       return;
     }
 
@@ -149,7 +151,7 @@ const Languages = () => {
 
     } catch (err) {
       console.error('Error uploading language:', err);
-      alert('Failed to upload language data.');
+      toast.error('Failed to upload language.');
     } finally {
       setLoading(false);
     }
