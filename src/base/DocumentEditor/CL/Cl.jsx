@@ -8,7 +8,7 @@ const Cl = () => {
   const [activeSection, setActiveSection] = useState(null);
 
   const [personalInfo, setPersonalInfo] = useState({
-    name: "Koushik Babu2025 now",
+    name: "Koushik Babu2025",
     title: "Software Engineer",
     mail: "Ramani.mallempuri@gmail.com",
     contact: "+49 17624931591",
@@ -38,13 +38,12 @@ const Cl = () => {
   };
 
   return (
-    <>
+    <div className='flex flex-col justify-center items-center mx-auto'>
       <div className="flex items-center w-full px-4 mt-7">
         <div className="" />
         <div className=" w-full text-center">
           <h2 className="text-2xl mx-auto font-semibold">CL</h2>
         </div>
-
       </div>
 
       <div className="flex w-full gap-5 p-5 mt-5">
@@ -52,7 +51,7 @@ const Cl = () => {
         <div className="w-[600px] space-y-4 ">
           {/* Personal Info */}
           <div className={`rounded-md px-4 py-3 bg-white text-sm text-gray-700 border 
-        ${activeSection === 'personalInfo' ? 'border-[#2c6472]' : 'border-gray-300'}`}>
+          ${activeSection === 'personalInfo' ? 'border-[#2c6472]' : 'border-gray-300'}`}>
             <div className="flex justify-between items-start mb-2">
               <h2 className="font-semibold text-gray-800">Personal Information</h2>
               <img
@@ -116,7 +115,7 @@ const Cl = () => {
         </div>
 
         {/* RIGHT */}
-        <div className=" flex flex-col gap-5">
+        <div className="w-[794px] h-[1123px] flex flex-col gap-5">
           <ClPreview data={{
             name: personalInfo.name,
             title: personalInfo.title,
@@ -126,8 +125,9 @@ const Cl = () => {
             paragraphs
           }} />
         </div>
+
       </div>
-    </>
+    </div>
   );
 };
 
