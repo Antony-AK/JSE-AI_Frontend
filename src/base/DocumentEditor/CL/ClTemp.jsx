@@ -41,8 +41,8 @@ const ClPreview = ({ data }) => {
         ref={previewRef}
         className="bg-white text-black px-10 py-8 shadow-md "
         style={{
-          width: '794px',
-          height: '1123px',
+          // width: '794px',
+          // height: '1123px',
           boxSizing: 'border-box',
           fontFamily: '"Times New Roman", Times, serif',
           fontSize: '16px',

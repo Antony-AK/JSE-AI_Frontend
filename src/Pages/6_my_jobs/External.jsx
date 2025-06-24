@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const External = () => {
+
+  const navigate = useNavigate();
+
 const [formData, setFormData] = useState({
     companyName: '',
     jobTitle: '',
@@ -18,6 +22,7 @@ const [formData, setFormData] = useState({
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted 🚀", formData);
+    navigate('/user/document-editor');
   };
 
   return (

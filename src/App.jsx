@@ -1,6 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
+import { CvProvider } from './base/DocumentEditor/Context/CvContext.jsx';
+import { ClProvider } from './base/DocumentEditor/Context/ClContext.jsx';
+
 import Login from './Pages/Login/Login.jsx';
 import Signup from './Pages/Signup/Signup.jsx';
 import Dashboard from './Pages/3_dashboard/Dashboard.jsx';
@@ -26,11 +29,12 @@ import Announcements from './Pages/Announcements/Announcements.jsx';
 import Cv from './base/DocumentEditor/CV/Cv.jsx';
 import Cl from './base/DocumentEditor/CL/Cl.jsx';
 import ApplicationTracker from './Pages/Application tracker/ApplicationTracker.jsx';
+import DocumentEditor from './base/DocumentEditor/DocumentEditor.jsx';
 
 const AppRoutes = () => {
     const location = useLocation();
 
-    const hideLayout = location.pathname === '/user/cv' || location.pathname === '/user/cl';
+    const hideLayout = location.pathname === '/user/cv' || location.pathname === '/user/cl' || location.pathname === '/user/document-editor';
 
     // Define routes that are data-entry only
     const isDataEntryPage = location.pathname.startsWith('/user/onboarding') || location.pathname.startsWith('/user/dataonboarding') || location.pathname.startsWith('/user/linkedin') || location.pathname.startsWith('/user/resume') || ['/', '/user/login', '/user/signup'].includes(location.pathname);
@@ -70,8 +74,9 @@ const AppRoutes = () => {
                                 <Route path="/user/profile" element={<Profile />} />
                                 <Route path='/user/graph' element={<ApplicationsChart />} />
                                 <Route path='/user/announcements' element={<Announcements />} />
-                                <Route path='user/cv' element={<Cv />} />
-                                <Route path='user/cl' element={<Cl />} />
+                                <Route path="/user/cv" element={<CvProvider> <Cv /> </CvProvider>} />
+                                <Route path="/user/cl" element={<ClProvider> <Cl /> </ClProvider>} />
+                                <Route path="/user/document-editor"element={<CvProvider> <ClProvider> <DocumentEditor /> </ClProvider> </CvProvider>}/>
                             </Routes>
                         </div>
                     </div>
