@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../utils/api'
 import right_arrow from '../../assets/left-arrow.png'
+import { toast } from 'react-toastify';
 
 const Projects = () => {
 
@@ -23,8 +24,7 @@ const Projects = () => {
 
   const [errors, setErrors] = useState({});
   const [showSavePopup, setShowSavePopup] = useState(false);
-      const [addedCompanies, setAddedCompanies] = useState([]);
-  
+  const [addedCompanies, setAddedCompanies] = useState([]); 
 
 
   const handleChange = (e) => {
@@ -64,6 +64,26 @@ const Projects = () => {
     if (!formData.start_date) newErrors.start_date = 'Start date is required';
     if (!formData.currentdo && !formData.end_date) newErrors.end_date = 'End date is required';
 
+    const start = new Date(formData.start_date);
+    const end = new Date(formData.end_date);
+    const today = new Date();
+
+    if (!formData.start_date) {
+      newErrors.start_date = "Start date is required.";
+    }
+
+    if (!formData.currentdo) {
+      if (!formData.end_date) {
+        newErrors.end_date = "End date is required.";
+      } else if (start > end) {
+        newErrors.end_date = "End date cannot be before start date.";
+      }
+    } else {
+      if (start > today) {
+        newErrors.start_date = "Start date cannot be after the current date.";
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -72,7 +92,8 @@ const Projects = () => {
     if (validate()) {
       try {
         if (!token) {
-          alert("No token found. Please log in.");
+          navigate('/user/login');          
+          toast.error("User not found. Please log in.");
           return;
         }
 
@@ -120,7 +141,7 @@ const Projects = () => {
         }
       } catch (error) {
         console.error("❌ API Error:", error.response?.data || error.message);
-        alert("Submission failed. Please try again.");
+        toast.error("Submission failed. Please try again.");
       }
     }
   };
@@ -216,7 +237,7 @@ const Projects = () => {
             checked={formData.currentdo}
             onChange={handleChange}
           />
-          <label className='font-medium text-lg' htmlFor="currentdo">I currently doing</label>
+          <label className='font-medium text-lg' htmlFor="currentdo">I currently doing this</label>
         </div>
 
         {/* Project Description */}

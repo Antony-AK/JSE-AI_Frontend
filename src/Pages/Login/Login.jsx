@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import { Player } from '@lottiefiles/react-lottie-player';
 import animationData from "../../assets/Animation - 1745282599914.json";
@@ -36,10 +37,10 @@ const Login = () => {
         sessionStorage.setItem('authToken', data.token);
         fetchEntryProgressAndRedirect(data.token);
       } else {
-        alert(data.message || 'Something went wrong. Please try again.');
+        toast.error(data.message || 'Error occurred. Try again.');
       }
     } catch (err) {
-      alert('Network error: ' + err.message);
+        toast.error('Network error: ' + err.message);
     }
   };
 
@@ -120,7 +121,7 @@ const Login = () => {
               <div className="flex-grow h-px bg-gray-300" />
             </div><br /> */}
 
-            <form onSubmit={handleSubmit} className="grid gap-y-3">
+            <form onSubmit={handleSubmit} className="grid gap-y-5">
               <div className="relative -mt-5">
                 <label className="mb-1 ms-3 block  text-gray-500 text-sm">
 

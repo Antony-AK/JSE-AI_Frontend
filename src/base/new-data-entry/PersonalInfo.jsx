@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import drop from '../../assets/drop-icon.svg'
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -150,7 +151,7 @@ const PersonalInfo = () => {
       try {
         const token = sessionStorage.getItem('authToken');
         if (!token) {
-          alert("No token found. Please login again.");
+          toast.error("No User found. Please login again.");
           return;
         }
 
@@ -173,7 +174,7 @@ const PersonalInfo = () => {
 
       } catch (error) {
         console.error("❌ Error submitting form:", JSON.stringify(error.response?.data, null, 2));
-        alert("Failed to submit. Please try again.");
+        toast.error("Failed to submit. Please try again.");
       }
     }
   };

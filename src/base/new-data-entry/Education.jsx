@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../utils/api'
@@ -74,6 +75,29 @@ const Education = () => {
             newErrors.enddate = "End Date is required";
         }
 
+        const start = new Date(formData.start_date);
+        const end = new Date(formData.enddate);
+        const today = new Date();
+
+        // Validate start date
+        if (!formData.start_date) {
+            newErrors.start_date = "Start date is required.";
+        }
+
+        // Validate end date
+        if (!formData.currentstudy) {
+            if (!formData.enddate) {
+            newErrors.enddate = "End date is required.";
+            } else if (start > end) {
+            newErrors.enddate = "End date cannot be before start date.";
+            }
+        } else {
+            // Optional: prevent selecting future start date for ongoing studies
+            if (start > today) {
+            newErrors.start_date = "Start date cannot be after current date.";
+            }
+        }
+
         return newErrors;
     };
 
@@ -84,7 +108,8 @@ const Education = () => {
         if (Object.keys(validationErrors).length === 0) {
             try {
                 if (!token) {
-                    alert("No token found. Please log in.");
+                    navigate('/user/login');                    
+                    toast.error("No User found. Please log in.");
                     return;
                 }
 
@@ -136,7 +161,7 @@ const Education = () => {
                 }
             } catch (error) {
                 console.error("❌ API Error:", error.response?.data || error.message);
-                alert("Submission failed. Please try again.");
+                toast.error("Submission failed. Please try again.");
             }
         }
     };

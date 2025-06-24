@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png';
 import { jobskills } from '../../assets/data';
@@ -6,6 +7,9 @@ import { BASE_URL } from '../../utils/api';
 
 
 const JobTitles = () => {
+
+  const inputRef = useRef(null);
+
   const [loading, setLoading] = useState(false);
   const [accepted, setAccepted] = useState(false);
   const [showSavePopup, setShowSavePopup] = useState(false);
@@ -54,7 +58,7 @@ const JobTitles = () => {
     if (!jobtitle) return;
 
     if (isDuplicate(jobtitle)) {
-      alert('This job title is already added!');
+      toast.error('This job title was already added!');
       return;
     }
 
@@ -65,7 +69,7 @@ const JobTitles = () => {
     } else if (!formData.tertiary_title) {
       setFormData((prev) => ({ ...prev, tertiary_title: jobtitle }));
     } else {
-      alert('You can only add up to 3 job titles.');
+      toast.error('You can only add up to 3 job titles.');
       return;
     }
 
@@ -96,6 +100,10 @@ const JobTitles = () => {
   const handleSelect = (fieldName, value) => {
     setSearchTerms((prev) => ({ ...prev, [fieldName]: value }));
     setShowDropdowns((prev) => ({ ...prev, [fieldName]: false }));
+
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
   };
 
   const validateForm = () => {
@@ -112,7 +120,7 @@ const JobTitles = () => {
     if (!validateForm()) return;
 
     if (!accepted) {
-      alert('Please accept the condition before continuing.');
+      toast.error('Please accept the condition.');
       return;
     }
 
@@ -142,7 +150,7 @@ const JobTitles = () => {
       if (!response.ok) {
         const errorData = await response.json();
         console.error('❌ Failed to upload job titles:', errorData);
-        alert('❌ Failed to upload job titles:', errorData)
+        toast.error('❌ Failed to upload job titles:', errorData)
       } else {
           navigate('/user/onboarding/skills');
       }
@@ -194,11 +202,21 @@ const JobTitles = () => {
 
           <div className='relative flex mt-4 mb-1' ref={dropdownRef}>
             <input
+              ref={inputRef}
               type='text'
               className={`w-[60%] h-[64px] px-4 py-3 border ${errors.primary_title ? 'border-red-500' : 'border-gray-300'} rounded-lg text-lg text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]`}
               value={searchTerms.primary_title}
               onChange={(e) => handleSearchChange(e, 'primary_title')}
               onFocus={() => setShowDropdowns({ primary_title: true })}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  if (selectedTitles.length < 3 && searchTerms.primary_title.trim() !== '') {
+                    addSkill(); // Trigger the same as the "+ Add" button
+                    inputRef.current?.blur();
+                  }
+                }
+              }}
               placeholder='Search or select job title...'
             />
 
@@ -226,7 +244,7 @@ const JobTitles = () => {
               disabled={selectedTitles.length >= 3}
               className='w-24 mt-2 ms-5 px-2 py-2 border-2 border-[#2c6472] text-[#2c6472] h-[44px] text-sm font-medium bg-white hover:scale-95 transition-transform ease-linear duration-200 ml-2'
             >
-              +Add 
+              + Add 
             </button>
           </div>
 

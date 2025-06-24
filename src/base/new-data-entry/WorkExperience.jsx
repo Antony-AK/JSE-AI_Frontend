@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/api'
@@ -23,7 +24,7 @@ const WorkExperience = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const [showSavePopup, setShowSavePopup] = useState(false);
+  // const [showSavePopup, setShowSavePopup] = useState(false);
   const [addedCompanies, setAddedCompanies] = useState([]);
 
 
@@ -32,19 +33,29 @@ const WorkExperience = () => {
     const { id, value, type, checked } = e.target;
     const newValue = type === 'checkbox' ? checked : value;
 
-    setFormData((prev) => ({
-      ...prev,
-      [id]: newValue,
-    }));
+    setFormData((prev) => {
+      let updatedFormData = {
+        ...prev,
+        [id]: newValue,
+      };
+
+      // Special case: If 'currentwork' is checked, clear 'enddate'
+      if (id === 'currentwork' && checked) {
+        updatedFormData.enddate = '';
+      }
+
+      return updatedFormData;
+    });
 
     // Clear the error for the specific field when the user starts typing
     setErrors((prevErrors) => {
       const updatedErrors = { ...prevErrors };
+
       if (newValue && updatedErrors[id]) {
         delete updatedErrors[id];
       }
 
-      // Special case: If currentwork is checked, remove enddate error
+      // Also clear enddate error if 'currentwork' is checked
       if (id === 'currentwork' && checked) {
         delete updatedErrors['enddate'];
       }
@@ -64,6 +75,27 @@ const WorkExperience = () => {
       newErrors.enddate = 'End date is required if not currently working';
     }
 
+    const start = new Date(formData.start_date);
+      const end = new Date(formData.enddate);
+      const today = new Date();
+
+      if (!formData.start_date) {
+        newErrors.start_date = "Start date is required.";
+      }
+
+      if (!formData.currentwork) {
+        if (!formData.enddate) {
+          newErrors.enddate = "End date is required.";
+        } else if (start > end) {
+          newErrors.enddate = "End date cannot be before start date.";
+        }
+      } else {
+        // If currently working, ensure start date is not in the future
+        if (start > today) {
+          newErrors.start_date = "Start date cannot be after current date";
+        }
+      }
+
     return newErrors;
   };
 
@@ -74,7 +106,8 @@ const WorkExperience = () => {
     if (Object.keys(newErrors).length === 0) {
       try {
         if (!token) {
-          alert("No token found. Please log in.");
+          navigate('/user/login');
+          toast.error("User not found. Please log in.");
           return;
         }
 
@@ -96,11 +129,6 @@ const WorkExperience = () => {
             'Content-Type': 'application/json',
           },
         });
-
-
-
-
-
 
         if (navigateNext) {
           navigate('/user/onboarding/education');
@@ -127,7 +155,7 @@ const WorkExperience = () => {
 
       } catch (error) {
         console.error("❌ API Error:", error.response?.data || error.message);
-        alert("Submission failed. Please try again.");
+        toast.error("Submission failed. Please try again.");
       }
     }
   };
@@ -241,7 +269,7 @@ const WorkExperience = () => {
 
         {/* Work Description */}
         <div className="flex flex-col gap-2 text-lg">
-          <label className="font-medium" htmlFor="key_responsibilities">Work Description</label>
+          <label className="font-medium" htmlFor="key_responsibilities">Work Description <span className='text-[#0000009c]'>(Optional)</span></label>
           <textarea
             id="key_responsibilities"
             className="px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472] resize-none"
@@ -260,14 +288,14 @@ const WorkExperience = () => {
 
       </form>
 
-      {showSavePopup && (
+      {/* {showSavePopup && (
         <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 bg-white border-b-4 border-[#2C6472] text-black rounded-md shadow-lg transform transition-all duration-500 ease-in-out animate-toast-in`}>
           <div className="relative px-3 py-1">
             <span>✅ WorkExperience saved successfully!</span>
             <div className="absolute bottom-0 left-0 h-[3px] bg-white animate-progress w-full" />
           </div>
         </div>
-      )}
+      )} */}
 
     </div>
   )

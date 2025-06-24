@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import { Player } from '@lottiefiles/react-lottie-player';
 import animationData from "../../assets/Animation - 1745282599914.json";
@@ -42,7 +43,7 @@ const Signup = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords don't match!");
+      toast.error("Passwords don't match!");
       return;
     }
 
@@ -89,12 +90,12 @@ const Signup = () => {
       } else {
         console.error('Signup failed');
         setLoading(false);
-        alert('Signup failed, please try again.');
+        toast.error("Signup failed, please try again.");
       }
     } catch (error) {
       console.error('Error during signup:', error.response?.data || error.message);
       setLoading(false);
-      alert(error.response?.data?.message || 'Signup failed, please try again.');
+      toast.error(error.response?.data?.message || 'Signup failed, please try again.');
     }
   };
   return (
@@ -119,7 +120,7 @@ const Signup = () => {
           </div><br /> */}
 
           {/* Signup Form */}
-          <form onSubmit={handleSignUp} className='-space-y-4'>
+          <form onSubmit={handleSignUp} className='-space-y-1'>
             {/* email Field */}
             <div className="relative -mt-5">
               <label className="mb-1 ms-3 block  text-gray-500 text-sm">

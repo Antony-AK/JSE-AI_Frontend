@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png'
 import { BASE_URL } from '../../utils/api';
@@ -39,6 +40,15 @@ const Certificates = () => {
             newErrors.end_date = 'End date is required';
         }
 
+        if (formData.start_date && formData.end_date) {
+            const start = new Date(formData.start_date);
+            const end = new Date(formData.end_date);
+
+            if (start > end) {
+            newErrors.end_date = 'End date cannot be before start date';
+            }
+        }
+
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length > 0) {
@@ -57,7 +67,8 @@ const Certificates = () => {
 
         const token = sessionStorage.getItem('authToken');
         if (!token) {
-            alert("You are not authenticated. Please login.");
+            navigate('/user/login');            
+            toast.error("User not found. Please log in.");
             return;
         }
 
@@ -108,7 +119,7 @@ const Certificates = () => {
 
         } catch (error) {
             console.error("Error uploading certificate:", error);
-            alert("Failed to upload certificate. \n\n" + error.message);
+            toast.error("Failed to upload certificate." + error.message);
         } finally {
             setLoading(false);
         }
@@ -120,7 +131,8 @@ const Certificates = () => {
 
         const token = sessionStorage.getItem('authToken');
         if (!token) {
-            alert("You are not authenticated. Please login.");
+            navigate('/user/login');
+            toast.error('User not found. Please log in');
             return;
         }
 
@@ -171,7 +183,7 @@ const Certificates = () => {
 
         } catch (error) {
             console.error("Error uploading certificate:", error);
-            alert("Failed to upload certificate. \n\n" + error.message);
+            toast.error("Failed to upload certificate. \n\n" + error.message);
         } finally {
             setLoading(false);
         }

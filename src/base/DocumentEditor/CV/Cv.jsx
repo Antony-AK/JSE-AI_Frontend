@@ -67,9 +67,8 @@ const Cv = () => {
                 </div>
             </div>
 
-            <div className='w-full flex gap-5 p-5 mt-3 ms-2'>
+            <div className='flex gap-5 p-5 mt-3 ms-2'>
 
-                <div className='w-[45%]'>
                 <div className='w-[600px]'>
 
                     {/* Personal Info */}
@@ -587,7 +586,6 @@ const Cv = () => {
 
 
             </div>
-        </div>
         </div>
     )
 }
