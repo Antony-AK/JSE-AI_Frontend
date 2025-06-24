@@ -47,7 +47,7 @@ const Cl = () => {
 
       </div>
 
-      <div className="flex w-full gap-5 p-5 mt-8">
+      <div className="flex w-full gap-5 p-5 mt-5">
         {/* LEFT */}
         <div className="w-[600px] space-y-4 ">
           {/* Personal Info */}

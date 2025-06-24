@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import html2pdf from 'html2pdf.js';
 import { blue } from '@mui/material/colors';
+import download_icon from '../../../assets/download.svg'
+
 
 const ClPreview = ({ data }) => {
   const previewRef = useRef();
@@ -29,12 +31,12 @@ const ClPreview = ({ data }) => {
   return (
     <div className="w-full relative flex flex-col items-center justify-center bg-[#f5f5f5] pb-10">
 
-            <button
-        onClick={handleDownload}
-        className="mt-6 bg-[#2c6472] absolute -top-24 right-6 text-white px-8 py-2 rounded shadow-lg hover:bg-[#1e4b55]"
-      >
-        Download PDF
-      </button>
+      <div className="flex-1 flex justify-end">
+        <button onClick={handleDownload} className="flex -mt-14 mb-5 gap-4 ms-[550px] bg-[#2c6472] px-8 py-2 rounded-md">
+          <img width="12px" height="12px" src={download_icon} alt=" " />
+          <p className="text-white text-sm">Download PDF</p>
+        </button>
+      </div>
       <div
         suppressHydrationWarning
         id="cl-pdf-preview"
@@ -79,7 +81,7 @@ const ClPreview = ({ data }) => {
         {/* Footer */}
         <div style={{ marginTop: '50px' }} className='border-b border-black pb-6'>
           <p>Yours sincerely,</p>
-          <p  style={{ fontWeight: '600', marginTop: '15px', borderBottom: '2px', }}>{data.name}</p>
+          <p style={{ fontWeight: '600', marginTop: '15px', borderBottom: '2px', }}>{data.name}</p>
         </div>
       </div>
 

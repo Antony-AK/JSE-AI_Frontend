@@ -8,6 +8,7 @@ import arrow_down from '../../assets/arrow-down-drop.png'
 import download_icon from '../../assets/downloadicon.png'
 import link_icon from '../../assets/link-icon.svg'
 import { Link } from "react-router-dom";
+import { BASE_URL } from "../../utils/api.js";
 
 
 
@@ -17,8 +18,8 @@ const MyApplication = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [generateCV, setGenerateCV] = useState(null);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [expandedSections, setExpandedSections] = useState({});
+
   const [offset, setOffset] = useState(0);
   const [pagination, setPagination] = useState({
     current: 1,
@@ -33,227 +34,87 @@ const MyApplication = () => {
 
   const toggleDropdownfilter = () => setShowFilters((prev) => !prev);
 
+  const toggleExpand = (label) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [label]: !prev[label],
+    }));
+  };
+
   const token = sessionStorage.getItem("authToken");
-
-
-
-  const useDummyData = true; // 👉 set this to false when you want to call API
 
   const fetchSelectedJobs = async (customOffset = offset) => {
     setLoading(true);
 
-    if (useDummyData) {
-      // ✅ Dummy Job Data for Testing
-      const dummyJob = {
-        job_id: 1,
-        title: "Full Stack Developer",
-        company: "OpenAI",
-        posted_date: "2025-05-01",
-        expected_salary: { min: 1200000, max: 1800000 },
-        location: "Remote",
-        description: "Work on cutting-edge AI web applications.",
-        skills: ["React", "Node.js", "MongoDB", "Express"],
-        user_skills: ["React", "Node.js"],
-        match_score: 88,
-        selected: true,
-        cv_generated: true,
-        cover_letter_generated: true,
-        view_link: "https://example.com/view",
-      };
-
-      const mappedJobs = [{
-        id: dummyJob.job_id,
-        title: dummyJob.title,
-        jobTitle: dummyJob.title,
-        company: dummyJob.company,
-        companyName: dummyJob.company,
-        postedDate: dummyJob.posted_date || "Not specified",
-        minSalary: dummyJob.expected_salary.min || "?",
-        maxSalary: dummyJob.expected_salary.max || "?",
-        location: dummyJob.location || "Location not specified",
-        description: `We are looking for a skilled ${dummyJob.title} to join ${dummyJob.company}.`,
-        Description: dummyJob.description || "No role description provided.",
-        skillData: [
-          {
-            label: "Required Skills",
-            value: dummyJob.skills,
-          },
-          {
-            label: "Your Skills",
-            value: dummyJob.user_skills,
-          },
-          {
-            label: "Expected Salary",
-            value: `${dummyJob.expected_salary?.min || "?"} - ${dummyJob.expected_salary?.max || "?"}`,
-          },
-        ],
-        matchValue: dummyJob.match_score,
-        selected: dummyJob.selected,
-        cvGenerated: dummyJob.cv_generated,
-        coverLetterGenerated: dummyJob.cover_letter_generated,
-        viewLink: dummyJob.view_link,
-      }];
-
-      setSelectedJobs(mappedJobs);
-      setSelectedJob(mappedJobs[0]);
-      setPagination({
-        current: 1,
-        total: 1,
-        per_page: perPage,
-        next: null,
-        prev: null,
-      });
-
-      setLoading(false);
-      return;
-    }
-
     try {
       const token = sessionStorage.getItem("authToken");
-      const response = await axios.get("https://jse.arshan.digital/b1/api/my-applications", {
+
+      const response = await axios.get(`${BASE_URL}/api/jobs`, {
         headers: { Authorization: `Bearer ${token}` },
         params: { offset: customOffset, limit: perPage },
       });
 
-      const fetchedJobs = response.data.applications || [];
+      const fetchedJobs = response.data.jobs || [];
       const paginationInfo = response.data.pagination || {};
       const totalItems = paginationInfo.total || 0;
       const currentPage = Math.floor(customOffset / perPage) + 1;
 
       const mappedJobs = fetchedJobs.map((job) => ({
-        id: job.job_id,
-        title: job.title,
-        jobTitle: job.title,
-        company: job.company,
-        companyName: job.company,
-        postedDate: job.posted_date || "Not specified",
-        minSalary: job.expected_salary.min || "?",
-        maxSalary: job.expected_salary.max || "?",
+        id: job.job_id || job.id,
+        jobTitle: job.job_title || job.title || "Untitled Job",
+        title: job.title || job.job_title,
+        companyName: job.company || "Unknown Company",
+        company: job.company || "Unknown Company",
         location: job.location || "Location not specified",
-        description: `We are looking for a skilled ${job.title} to join ${job.company}.`,
-        Description: job.description || "No role description provided.",
+        postedDate: job.posted_date || "Not specified",
+        description: job.description?.slice(0, 100) + "...",
+        Description: job.description || "No description available",
+        matchValue: job.match_score || 50,
         skillData: [
           {
             label: "Required Skills",
-            value: Array.isArray(job.skills)
-              ? job.skills
-              : typeof job.skills === "string"
-                ? job.skills.split(",").map((s) => s.trim())
-                : [],
+            value: job.skills ? job.skills.split(",").map(skill => skill.trim()) : [],
           },
           {
             label: "Your Skills",
-            value: Array.isArray(job.user_skills)
-              ? job.user_skills
-              : typeof job.user_skills === "string"
-                ? job.user_skills.split(",").map((s) => s.trim())
-                : [],
+            value: Array.isArray(job.user_skills) ? job.user_skills : [],
           },
           {
-            label: "Expected Salary",
-            value: `${job.expected_salary?.min || "?"} - ${job.expected_salary?.max || "?"}`,
-          },
+            label: "Job Type",
+            value: job.job_type || "Not specified",
+          }
         ],
-        matchValue: job.match_score || Math.floor(Math.random() * 30) + 70,
-        selected: job.selected,
-        cvGenerated: job.cv_generated,
-        coverLetterGenerated: job.cover_letter_generated,
-        viewLink: job.view_link,
+        selected: job.selected || false,
+        cvGenerated: job.cv_generated || false,
+        coverLetterGenerated: job.cover_letter_generated || false,
+        viewLink: job.view_link || "#",
       }));
 
       setSelectedJobs(mappedJobs);
-      setSelectedJob(mappedJobs[0]);
+      setSelectedJob(mappedJobs[0]); // Default selected
+
       setPagination({
         current: currentPage,
         total: totalItems,
-        per_page: perPage,
-        next: customOffset + perPage < totalItems ? customOffset + perPage : null,
-        prev: customOffset - perPage >= 0 ? customOffset - perPage : null,
+        per_page: paginationInfo.per_page || perPage,
+        next: paginationInfo.next || null,
+        prev: paginationInfo.prev || null,
       });
 
       setOffset(customOffset);
       setLoading(false);
     } catch (error) {
-      const errMsg = error.response?.data?.message || "⚠ Failed to load applications.";
+      const errMsg = error.response?.data?.message || "⚠ Failed to fetch jobs.";
       setError(errMsg);
       setLoading(false);
     }
   };
 
+
+
   useEffect(() => {
     fetchSelectedJobs();
   }, []);
-
-
-
-
-
-  const handleGenerateCV = async (jobId) => {
-    try {
-      setIsGenerating(true); // Show animation
-      setGenerateCV("cv");
-
-      const response = await axios.post(
-        "https://jse.arshan.digital/b1/generate-resume",
-        { job_id: jobId }, // <-- This is the request body (data)
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // <-- Replace this with actual token variable
-          },
-        }
-      );
-
-      const blob = new Blob([response.data], {
-        type: "application/pdf",
-      });
-
-      const url = window.URL.createObjectURL(blob);
-      const cvLink = document.createElement("a");
-      cvLink.href = url;
-      cvLink.setAttribute("download", `CV_${jobId}.pdf`);
-      document.body.appendChild(cvLink);
-      cvLink.click();
-      cvLink.remove();
-      window.URL.revokeObjectURL(url); // optional cleanup
-      alert("CV generated successfully!");
-    } catch (error) {
-      console.error("Error generating CV:", error);
-      if (error.response) {
-        console.log("Server responded with:", error.response.data);
-      }
-    } finally {
-      setIsGenerating(false); // Hide animation
-    }
-  };
-
-  // const handleDownloadAllDocs = (cvBlobUrl, clBlobUrl, jobId) => {
-  //   if (!cvBlobUrl || !clBlobUrl) {
-  //     alert("Please generate both the CV and Cover Letter first.");
-  //     return;
-  //   }
-
-  //   // Download CV
-  //   const cvLink = document.createElement("a");
-  //   cvLink.href = cvBlobUrl;
-  //   cvLink.setAttribute("download", `CV_${jobId}.docx`);
-  //   document.body.appendChild(cvLink);
-  //   cvLink.click();
-  //   cvLink.remove();
-  //   window.URL.revokeObjectURL(cvBlobUrl); // optional cleanup
-
-  //   // Download Cover Letter
-  //   const clLink = document.createElement("a");
-  //   clLink.href = clBlobUrl;
-  //   clLink.setAttribute("download", `Cover_Letter_${jobId}.docx`);
-  //   document.body.appendChild(clLink);
-  //   clLink.click();
-  //   clLink.remove();
-  //   window.URL.revokeObjectURL(clBlobUrl); // optional cleanup
-  // };
-
-
-
 
 
   // const handleGetJobURL = async (job_id) => {
@@ -287,41 +148,6 @@ const MyApplication = () => {
 
 
 
-
-  const handleGenerateCoverLetter = async (jobId) => {
-    try {
-      setIsGenerating(true);
-      setGenerateCV("cl");
-      const response = await axios.post(
-        "https://jse.arshan.digital/b1/generate-cover-letter",
-        { job_id: jobId }, // <-- This is the request body (data)
-        {
-          responseType: "blob", // Important for downloading Word files
-          headers: {
-            Authorization: `Bearer ${token}`, // <-- Replace this with actual token variable
-          },
-        }
-      );
-
-      const blob = new Blob([response.data], {
-        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      });
-
-      const url = window.URL.createObjectURL(blob);
-      const clLink = document.createElement("a");
-      clLink.href = url;
-      clLink.setAttribute("download", `Cover_Letter_${jobId}.docx`);
-      document.body.appendChild(clLink);
-      clLink.click();
-      clLink.remove();
-      window.URL.revokeObjectURL(url); // optional cleanup
-      alert("Cover Letter generated successfully!");
-    } catch (error) {
-      console.error("Error generating Cover Letter:", error);
-    } finally {
-      setIsGenerating(false); // Hide animation
-    }
-  };
 
   const handleJobTitleClick = (title) => {
     setSelectedJob(title);
@@ -376,7 +202,7 @@ const MyApplication = () => {
         <AnimatePresence>
           {showFilters && (
             <>
-              <motion.button
+              {/* <motion.button
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
@@ -384,14 +210,14 @@ const MyApplication = () => {
                 className="absolute left-[260px] px-6 py-1.5 flex justify-center items-center font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105"
               >
                 Recommended Jobs <img src={arrow_down} className="ms-0.5" alt="" />
-              </motion.button>
+              </motion.button> */}
 
               <motion.button
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
-                className="absolute left-[500px] px-6 py-1.5 flex justify-center items-center font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105"
+                className="absolute left-[260px] px-6 py-1.5 flex justify-center items-center font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105"
               >
                 Languages <img src={arrow_down} className="ms-0.5" alt="" />
               </motion.button>
@@ -441,25 +267,30 @@ const MyApplication = () => {
                         <h3 className="text-lg font-semibold text-[#2C6472]">{job.jobTitle}</h3>
                         <p className="text-sm text-gray-600">{job.companyName}</p>
                         <p className="text-sm text-gray-500">{job.location}</p>
-                     
+
                       </div>
-                      
-                  <div className="flex flex-col gap-2  mt-2">
-                    {selectedJob?.skillData?.slice(0, 2).map((item, index) => (
-                      <div key={index} className="flex gap-5 -ms-10 text-sm">
-                        <span
-                          className={`font-semibold text-black ${item.label === "Your Skills" ? "me-8" : ""
-                            }`}
-                        >
-                          {item.label}
-                        </span>
-                        <span className="text-gray-400 text-end">
-                          {Array.isArray(item.value) ? item.value.join(', ') : item.value}
-                        </span>
+
+                      <div className="flex flex-col gap-2 mt-2 pr-2">
+                        {selectedJob?.skillData?.slice(0, 2).map((item, index) => (
+                          <div
+                            key={index}
+                            className="grid grid-cols-[120px_1fr] gap-2 text-sm"
+                          >
+                            <span className="font-semibold text-black">
+                              {item.label}
+                            </span>
+                            <span className="text-gray-500 w-64 overflow-hidden h-5 leading-snug break-words">
+                              {Array.isArray(item.value) && (item.label === "Required Skills" || item.label === "Your Skills")
+                                ? item.value.slice(0, 3).join(', ')
+                                : item.value}
+                            </span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-               
+
+
+
+
                     </div>
                     <div className="flex  flex-col justify-start  -mt-3 items-center"><br />
                       <div className="relative w-16 h-16">
@@ -597,38 +428,50 @@ const MyApplication = () => {
                   </div><br />
 
 
-                  <div className="flex flex-col gap-2 ms-7 mt-2">
-                    {selectedJob?.skillData?.slice(0, 2).map((item, index) => (
-                      <div key={index} className="flex gap-5 text-sm">
-                        <span
-                          className={`font-semibold text-black ${item.label === "Your Skills" ? "me-8" : ""
-                            }`}
+                  <div className="flex flex-col gap-2 mt-2 pr-2">
+                    {selectedJob?.skillData?.slice(0, 2).map((item, index) => {
+                      const skills = Array.isArray(item.value) ? item.value : [];
+                      const isExpanded = expandedSections[item.label];
+                      const displaySkills = isExpanded ? skills : skills.slice(0, 2);
+
+                      return (
+                        <div
+                          key={index}
+                          className="grid grid-cols-[120px_1fr] gap-2 text-sm"
                         >
-                          {item.label}
-                        </span>
-                        <span className="text-gray-400 text-end">
-                          {Array.isArray(item.value) ? item.value.join(', ') : item.value}
-                        </span>
-                      </div>
-                    ))}
+                          <span className="font-semibold text-black">{item.label}</span>
+
+                          <div className="text-gray-500 w-full leading-snug break-words">
+                            <span>
+                              {displaySkills.join(", ")}
+                            </span>
+
+                            {skills.length > 2 && (
+                              <button
+                                onClick={() => toggleExpand(item.label)}
+                                className="ml-2 text-[#2C6472] underline font-medium text-xs hover:text-teal-800"
+                              >
+                                {isExpanded ? "Less..." : "More..."}
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
 
-
-
-
-
-                  <div className="flex flex-col ">
-                    <div className="flex mx-auto  gap-5"><br />
+                  <div className="flex flex-col mt-5">
+                    <div className="flex mx-auto mt-5  gap-5"><br />
                       <Link to='/user/cv'> <button onClick={() => handleGenerateCV(selectedJob.id)} className="px-5 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[200px] h-[47px] text-white items-center justify-center rounded transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105">
-                         CV
+                        CV
                       </button></Link>
-                     <Link to='/user/cl'>  <button onClick={() => handleGenerateCoverLetter(selectedJob.id)} className="px-5 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[200px] h-[47px] text-white rounded transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105">
-                         CL
+                      <Link to='/user/cl'>  <button onClick={() => handleGenerateCoverLetter(selectedJob.id)} className="px-5 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[200px] h-[47px] text-white rounded transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105">
+                        CL
                       </button></Link>
                     </div><br />
 
                     <div className="flex w-[90%] mx-auto items-center  gap-5 ms-5 ">
-                      
+
                       <button
                         className="flex gap-2 mx-auto justify-center items-center font-semibold text-[#2C6472] rounded-md text-sm bg-gray-200 underline border w-[200px] h-[47px] hover:border-[#2C6472] px-4  transition  hover:bg-white hover:text-[#2C6472] hover:scale-105"
                       // onClick={() => handleGetJobURL(job.job_id)}
@@ -688,26 +531,6 @@ const MyApplication = () => {
         {/* )} */}
       </div>
 
-      {isGenerating && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-          <div className="flex w-[300px] h-[320px] rounded border-b-8 border-[#2C6472] bg-white flex-col items-center justify-center">
-
-
-            <div className="relative flex justify-center items-center w-[130px] h-[200px] border mt-7 mb-5 bg-black/30 shadow-lg overflow-hidden">
-
-              {/* Scan line animation */}
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#2C6472] to-transparent animate-scan"></div>
-
-              {/* Typewriter Text */}
-
-            </div>
-            <div className="">
-              <h3 className="text-base font-semibold  text-gray-800 mb-4">  AI is generating {generateCV === 'cv' ? 'CV' : 'Cover Letter'}...
-              </h3>
-            </div>
-          </div>
-        </div>
-      )}
 
     </div>
   );
