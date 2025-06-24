@@ -9,10 +9,12 @@ import download_icon from '../../assets/downloadicon.png'
 import link_icon from '../../assets/link-icon.svg'
 import { Link } from "react-router-dom";
 import { BASE_URL } from "../../utils/api.js";
+import { useNavigate } from "react-router-dom";
 
 
 
 const MyApplication = () => {
+  const navigate = useNavigate();
   const [selectedJobs, setSelectedJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -221,74 +223,81 @@ const MyApplication = () => {
   //   }
   // };
 
-  const handleGenerateCV = async () => {
-    const jobId = selectedJob?.id;
-    if (!jobId) return console.warn("No selected job!");
+  // In Internal.jsx
 
-    try {
-      const token = sessionStorage.getItem("authToken");
+const handleGenerateCV = async () => {
+  const jobId = selectedJob?.id;
+  if (!jobId) return console.warn("No selected job!");
 
-      const response = await axios.post(
-        `${BASE_URL}/internal/generate-resume`,
-        { job_id: jobId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+  navigate("/user/cv", { state: { jobId } }); // Navigate first
 
-      console.log("Posting to:", `${BASE_URL}/internal/generate-resume`, "payload:", { job_id: jobId });
+  try {
+    const token = sessionStorage.getItem("authToken");
 
-
-      if (response.status === 200) {
-        console.log("✅ CV triggered with ID:", jobId);
-        navigate("/user/cv");
+    const response = await axios.post(
+      `${BASE_URL}/internal/generate-resume`,
+      { job_id: jobId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       }
-    } catch (error) {
-      console.error(
-        "CV generation failed",
-        error.response?.status,
-        error.response?.data,
-        error.config?.url
-      );
-    }
-  };
+    );
 
-  const handleGenerateCoverLetter = async () => {
-    const jobId = selectedJob?.id;
-    if (!jobId) return console.warn("No selected job!");
+    console.log("✅ CV generated:", response.data);
 
-          console.log(jobId);
+    // Save data to sessionStorage
+    sessionStorage.setItem("generatedCV", JSON.stringify(response.data));
+
+  } catch (error) {
+    console.error("❌ CV generation failed:", error);
+    sessionStorage.setItem("generatedCV", JSON.stringify({ error: true }));
+  }
+};
 
 
-    try {
-      const token = sessionStorage.getItem("authToken");
+const handleGenerateCoverLetter = async () => {
+  const jobId = selectedJob?.id;
+  if (!jobId) return console.warn("⚠️ No selected job!");
 
-      const response = await axios.post(
-        `${BASE_URL}/internal/generate-cover-letter`,
-        { job_id: jobId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log("Posting to:", `${BASE_URL}/internal/generate-cover-letter`, "payload:", { job_id: jobId });
+        navigate("/user/cl" , { state: { jobId } });
 
 
+  try {
+    const token = sessionStorage.getItem("authToken");
 
-      if (response.status === 200) {
-        console.log("✅ CL triggered with ID:", jobId);
-        navigate("/user/cl");
+    const response = await axios.post(
+      `${BASE_URL}/internal/generate-cover-letter`,
+      { job_id: jobId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       }
-    } catch (error) {
-      console.error("❌ CL generation failed:", error);
+    );
+
+    console.log("📨 Posting to:", `${BASE_URL}/internal/generate-cover-letter`);
+    console.log("📦 Payload:", { job_id: jobId });
+    console.log("✅ Response:", response.data);
+
+    if (response.status === 200 && response.data) {
+      // Store the generated cover letter data
+      sessionStorage.setItem("generatedCL", JSON.stringify(response.data));
+
+      // Navigate to CL page where loading/animation happens
+    } else {
+      console.warn("⚠️ Unexpected response:", response.status);
     }
-  };
+  } catch (error) {
+    console.error("❌ CL generation failed:");
+    console.error("Status:", error.response?.status);
+    console.error("Data:", error.response?.data);
+    console.error("URL:", error.config?.url);
+  }
+};
+
 
 
   const handleJobTitleClick = (title) => {

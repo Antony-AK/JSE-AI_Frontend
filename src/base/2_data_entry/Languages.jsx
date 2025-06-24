@@ -86,7 +86,6 @@ const Language = () => {
         throw new Error(errorText || 'Upload failed');
       }
 
-      alert(`✅ Languages uploaded successfully`);
 
       setFormData({
         LanguageName: '',
