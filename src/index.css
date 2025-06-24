@@ -14,7 +14,26 @@ html {
 * {
   word-wrap: break-word;
   overflow-wrap: break-word;
+
 }
+
+@media print {
+  .print-area {
+    width: 794px;
+    height: 1123px;
+    overflow: hidden;
+    page-break-after: always;
+  }
+
+  .print-area > * {
+    page-break-inside: avoid;
+  }
+}
+.page-break {
+  page-break-before: always;
+  break-before: page; /* for modern browsers */
+}
+
 
 /* Force Times New Roman on the PDF container */
 #cl-pdf-preview {

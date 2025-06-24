@@ -196,109 +196,117 @@ const MyApplication = () => {
   console.log("Selected Jobs:", selectedJobs);
 
 
-  // const handleGetJobURL = async (job_id) => {
-  //   try {
-  //     const token = sessionStorage.getItem("authToken") || "your-fallback-token";
+ const handleGetJobURL = async (job_id) => {
+  console.log("👉 job_id being passed:", job_id); // Check if valid
 
-  //     const response = await axios.post(
-  //       "https://jse.arshan.digital/b1/provide-link",
-  //       { job_id: job_id },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-
-  //     // SAFE checking 🔥
-  //     if (response.data?.job_link) {
-  //       const jobLink = response.data.job_link;
-  //       window.open(jobLink, "_blank"); // Open in new tab
-  //     } else {
-  //       console.error("🚨 No valid job link found in the response:", response.data);
-  //     }
-  //   } catch (error) {
-  //     console.error("❌ AxiosError:", error);
-  //   }
-  // };
-
-  // In Internal.jsx
-
-const handleGenerateCV = async () => {
-  const jobId = selectedJob?.id;
-  if (!jobId) return console.warn("No selected job!");
-
-  navigate("/user/cv", { state: { jobId } }); // Navigate first
-
-  try {
-    const token = sessionStorage.getItem("authToken");
-
-    const response = await axios.post(
-      `${BASE_URL}/internal/generate-resume`,
-      { job_id: jobId },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    console.log("✅ CV generated:", response.data);
-
-    // Save data to sessionStorage
-    sessionStorage.setItem("generatedCV", JSON.stringify(response.data));
-
-  } catch (error) {
-    console.error("❌ CV generation failed:", error);
-    sessionStorage.setItem("generatedCV", JSON.stringify({ error: true }));
+  if (!job_id) {
+    console.error("❌ job_id is undefined or invalid.");
+    return;
   }
-};
-
-
-const handleGenerateCoverLetter = async () => {
-  const jobId = selectedJob?.id;
-  if (!jobId) return console.warn("⚠️ No selected job!");
-
-        navigate("/user/cl" , { state: { jobId } });
-
 
   try {
     const token = sessionStorage.getItem("authToken");
+    if (!token) {
+      console.error("⚠ No auth token found.");
+      return;
+    }
 
     const response = await axios.post(
-      `${BASE_URL}/internal/generate-cover-letter`,
-      { job_id: jobId },
+      `${BASE_URL}/provide-link`,
+      JSON.stringify({ job_id }), // Explicit payload
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }
     );
 
-    console.log("📨 Posting to:", `${BASE_URL}/internal/generate-cover-letter`);
-    console.log("📦 Payload:", { job_id: jobId });
-    console.log("✅ Response:", response.data);
-
-    if (response.status === 200 && response.data) {
-      // Store the generated cover letter data
-      sessionStorage.setItem("generatedCL", JSON.stringify(response.data));
-
-      // Navigate to CL page where loading/animation happens
+    const jobLink = response.data?.job_link;
+    if (jobLink) {
+      window.open(jobLink, "_blank");
     } else {
-      console.warn("⚠️ Unexpected response:", response.status);
+      console.warn("⚠ No job link found:", response.data);
     }
   } catch (error) {
-    console.error("❌ CL generation failed:");
-    console.error("Status:", error.response?.status);
-    console.error("Data:", error.response?.data);
-    console.error("URL:", error.config?.url);
+    console.error("❌ AxiosError:", error.response?.data || error.message);
   }
 };
 
 
+
+  const handleGenerateCV = async () => {
+    const jobId = selectedJob?.id;
+    if (!jobId) return console.warn("No selected job!");
+
+    navigate("/user/cv", { state: { jobId } }); // Navigate first
+
+    try {
+      const token = sessionStorage.getItem("authToken");
+
+      const response = await axios.post(
+        `${BASE_URL}/internal/generate-resume`,
+        { job_id: jobId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("✅ CV generated:", response.data);
+
+      // Save data to sessionStorage
+      sessionStorage.setItem("generatedCV", JSON.stringify(response.data));
+
+    } catch (error) {
+      console.error("❌ CV generation failed:", error);
+      sessionStorage.setItem("generatedCV", JSON.stringify({ error: true }));
+    }
+  };
+
+
+  const handleGenerateCoverLetter = async () => {
+    const jobId = selectedJob?.id;
+    if (!jobId) return console.warn("⚠️ No selected job!");
+
+    navigate("/user/cl", { state: { jobId } });
+
+
+    try {
+      const token = sessionStorage.getItem("authToken");
+
+      const response = await axios.post(
+        `${BASE_URL}/internal/generate-cover-letter`,
+        { job_id: jobId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("📨 Posting to:", `${BASE_URL}/internal/generate-cover-letter`);
+      console.log("📦 Payload:", { job_id: jobId });
+      console.log("✅ Response:", response.data);
+
+      if (response.status === 200 && response.data) {
+        // Store the generated cover letter data
+        sessionStorage.setItem("generatedCL", JSON.stringify(response.data));
+
+        // Navigate to CL page where loading/animation happens
+      } else {
+        console.warn("⚠️ Unexpected response:", response.status);
+      }
+    } catch (error) {
+      console.error("❌ CL generation failed:");
+      console.error("Status:", error.response?.status);
+      console.error("Data:", error.response?.data);
+      console.error("URL:", error.config?.url);
+    }
+  };
 
   const handleJobTitleClick = (title) => {
     setSelectedJob(title);
@@ -647,11 +655,13 @@ const handleGenerateCoverLetter = async () => {
 
                       <button
                         className="flex gap-2 mx-auto justify-center items-center font-semibold text-[#2C6472] rounded-md text-sm bg-gray-200 underline border w-[200px] h-[47px] hover:border-[#2C6472] px-4  transition  hover:bg-white hover:text-[#2C6472] hover:scale-105"
-                      // onClick={() => handleGetJobURL(job.job_id)}
+                        onClick={() => handleGetJobURL(selectedJob.id)}
                       >
                         Go to Job Link
                         <img src={link_icon} alt="" />
                       </button>
+
+
                     </div><br />
 
 

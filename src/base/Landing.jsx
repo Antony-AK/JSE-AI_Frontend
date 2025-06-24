@@ -41,14 +41,14 @@ const Landing = ({ footerLinks = [] }) => {
                 className="teal-button px-6 py-3 bg-[#2c6472] text-white w-[100px] rounded-full focus:outline-none"
                 disabled={loading}
               >
-                {loading ? 'Loading...' : 'Login'}
+                Login
               </button>
               <button
                 onClick={() => handleNavigation('/user/signup')}
                 className="teal-button px-6 py-3 h-[50px] bg-[#2c6472] text-white w-[120px] rounded-full focus:outline-none"
                 disabled={loading}
               >
-                {loading ? 'Loading...' : 'Sign Up'}
+                Sign up
               </button>
             </div>
           </div>

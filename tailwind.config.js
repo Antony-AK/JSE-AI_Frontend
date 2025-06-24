@@ -59,7 +59,10 @@ module.exports = {
           '80%': { transform: 'translateX(4px)' },
           '100%': { transform: 'translateX(0)' },
         },
-
+        spacing: {
+          a4w: '794px',
+          a4h: '1123px',
+        }
       },
     },
   },

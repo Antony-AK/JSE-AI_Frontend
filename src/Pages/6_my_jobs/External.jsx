@@ -1,7 +1,54 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { BASE_URL } from '../../utils/api';
 
 const External = () => {
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const job_id = `job_${Date.now()}${Math.floor(Math.random() * 1000)}`;
+  const payload = {
+    job_id,
+    company: formData.companyName,
+    job_title: formData.jobTitle,
+    link: formData.jobLink,
+    description: formData.jobDescription,
+    source: "external", // ✅ always added!
+  };
+
+      navigate('/user/document-editor');
+
+
+  try {
+    const token = sessionStorage.getItem('authToken');
+
+    const response = await axios.post(
+      `${BASE_URL}/external/generate`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    console.log("✅ External job generated:", response.data);
+
+    // Store response data in sessionStorage
+    sessionStorage.setItem("cv_data", JSON.stringify(response.data));
+
+    // Navigate to document editor
+    navigate('/user/document-editor');
+
+  } catch (error) {
+    console.error("❌ Failed to generate external resume:", error);
+    alert("Something went wrong. Please try again.");
+  }
+};
+
 
   const navigate = useNavigate();
 
@@ -19,11 +66,6 @@ const [formData, setFormData] = useState({
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted 🚀", formData);
-    navigate('/user/document-editor');
-  };
 
   return (
     <div className="max-w-lg mx-auto mt-10 px-4">
