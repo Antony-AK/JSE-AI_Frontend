@@ -7,6 +7,8 @@ import save_icon from '../../../assets/tick.svg'
 import edit_icon from '../../../assets/edit-icon.svg';
 import ExternalClTemp from './ExternalClTemp';
 import { useExternalCl } from '../Context/ExternalClContext';
+import axios from 'axios';
+import { BASE_URL } from '../../../utils/api';
 
 const ExternalCl = () => {
 
@@ -15,7 +17,7 @@ const ExternalCl = () => {
   const navigate = useNavigate();
 
   const [activeSection, setActiveSection] = useState(null);
-  const { personalInfo, setPersonalInfo, paragraphs, setParagraphs } = useExternalCl();
+  const { personalInfo, setPersonalInfo, paragraphs, setParagraphs, isLoading } = useExternalCl();
 
   const handleFieldChange = (key, value) => {
     setPersonalInfo(prev => ({ ...prev, [key]: value }));
@@ -25,7 +27,7 @@ const ExternalCl = () => {
     const updated = [...paragraphs];
     updated[index] = value;
     setParagraphs(updated);
-  };    
+  };
 
   const handleDownloadAndNavigate = () => {
     if (!personalInfo.name || !personalInfo.title || paragraphs.length === 0) {
@@ -50,6 +52,59 @@ const ExternalCl = () => {
     });
   };
 
+  const handleUpdateCoverLetter = async () => {
+    const token = sessionStorage.getItem("authToken");
+    const jobId = sessionStorage.getItem("externalJobId"); // ✅ Make sure this is stored earlier
+
+    if (!token || !jobId) {
+      console.warn("⚠️ Missing auth token or cover letter data.");
+      return;
+    }
+
+
+
+    try {
+      const payload = {
+        job_id: jobId,
+        cl_data: {
+          name: personalInfo.name,
+          title: personalInfo.title,
+          mail: personalInfo.mail,
+          contact: personalInfo.contact,
+          address: personalInfo.address,
+          paragraphs: paragraphs
+        }
+      };
+
+      console.log("📦 Final PUT Payload:", payload);
+
+      const response = await axios.put(
+        `${BASE_URL}/external/generate/cl`, // ✅ Use correct endpoint
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      console.log("✅ Cover letter updated successfully:", response.data);
+    } catch (error) {
+      console.error("❌ Failed to update cover letter:", error.response?.data || error.message);
+    }
+  };
+
+  if (isLoading) {
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <p className="text-lg font-medium text-gray-600 animate-pulse"> Loading your cover letter </p>
+    </div>
+  );
+}
+
+
+
   return (
 
     <div className='flex flex-col justify-center items-center mx-auto'>
@@ -65,43 +120,43 @@ const ExternalCl = () => {
           {/* Personal Info */}
           <div className={`rounded-md px-4 py-3 bg-white text-sm border 
           ${activeSection === 'personalInfo' ? 'border-[#2c6472]' : 'border-gray-300'}`}>
-          <div className="flex justify-between mb-2">
-            <h2 className="font-semibold">Personal Information</h2>
-            <img
-              width="30px"
-              className={`cursor-pointer p-2 rounded-full transition hover:bg-gray-300`}
-              src={activeSection === 'personalInfo' ? save_icon : edit_icon}
-              alt=""
-              onClick={() => {
-                if (activeSection === 'personalInfo') {
-                  setActiveSection(null);
-                } else {
-                  setActiveSection('personalInfo');
-                }
-              }}
-            />
-          </div>
+            <div className="flex justify-between mb-2">
+              <h2 className="font-semibold">Personal Information</h2>
+              <img
+                width="30px"
+                className={`cursor-pointer p-2 rounded-full transition hover:bg-gray-300`}
+                src={activeSection === 'personalInfo' ? save_icon : edit_icon}
+                alt=""
+                onClick={() => {
+                  if (activeSection === 'personalInfo') {
+                    setActiveSection(null);
+                  } else {
+                    setActiveSection('personalInfo');
+                  }
+                }}
+              />
+            </div>
 
-          <div className="pl-1 space-y-2">
-            {Object.entries(personalInfo).map(([key, value]) => {
-              const isEditable = !['name', 'mail', 'contact'].includes(key);
+            <div className="pl-1 space-y-2">
+              {Object.entries(personalInfo).map(([key, value]) => {
+                const isEditable = !['name', 'mail', 'contact'].includes(key);
 
-              return (
-                <div key={key} className="flex items-center gap-3">
-                  <span className="font-semibold capitalize">{key}:</span>
-                  <input
-                    value={value}
-                    onChange={(e) => handleFieldChange(key, e.target.value)}
-                    className={`w-[80%] outline-none bg-transparent 
+                return (
+                  <div key={key} className="flex items-center gap-3">
+                    <span className="font-semibold capitalize">{key}:</span>
+                    <input
+                      value={value}
+                      onChange={(e) => handleFieldChange(key, e.target.value)}
+                      className={`w-[80%] outline-none bg-transparent 
                       ${activeSection === 'personalInfo' && isEditable ? 'border-b border-[#2c6472]' : ''}
                       ${!isEditable ? 'text-gray-600 cursor-not-allowed' : ''}`}
-                    disabled={!isEditable || activeSection !== 'personalInfo'}
-                  />
-                </div>
-              );
-            })}
+                      disabled={!isEditable || activeSection !== 'personalInfo'}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
 
           {/* Paragraphs */}
           <div className={`rounded-md px-4 py-3 bg-white text-sm border 
@@ -110,19 +165,18 @@ const ExternalCl = () => {
               <h2 className="font-semibold">Content</h2>
               <img
                 width="30px"
-                className={`cursor-pointer p-2 rounded-full transition ${
-                activeSection === 'content' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                }`}
+                className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'content' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
+                  }`}
                 src={activeSection === 'content' ? save_icon : edit_icon}
                 alt=""
                 onClick={() => {
-                if (activeSection === 'content') {
-                setActiveSection(null);
-                } else {
-                setActiveSection('content');
-                }
+                  if (activeSection === 'content') {
+                    setActiveSection(null);
+                  } else {
+                    setActiveSection('content');
+                  }
                 }}
-              />   
+              />
             </div>
             <div className="pl-1 space-y-3">
               {paragraphs.map((para, index) => (
@@ -137,10 +191,16 @@ const ExternalCl = () => {
             </div>
           </div>
 
-          <button className="bg-[#2c6472] text-white mt-4 px-8 py-1.5 rounded-lg"
-            onClick={handleDownloadAndNavigate}>
-              Download & Finish Editing
+          <button
+            className="bg-[#2c6472] text-white mt-4 px-8 py-1.5 rounded-lg"
+            onClick={async () => {
+              await handleUpdateCoverLetter();  // First update
+              handleDownloadAndNavigate();     // Then download and navigate
+            }}
+          >
+            Download & Finish Editing
           </button>
+
         </div>
 
         {/* RIGHT */}
@@ -148,7 +208,7 @@ const ExternalCl = () => {
           <ExternalClTemp />
         </div>
       </div>
-    </div>    
+    </div>
   )
 }
 

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png'
 import axios from 'axios';
 import { jobskills } from '../../assets/data';
+import { generalskills } from '../../assets/data';
 import { BASE_URL } from '../../utils/api';
 
 const Skills = () => {
@@ -124,7 +125,7 @@ const Skills = () => {
             );
         }
         if (dropdownType === "general") {
-            return (allSkills || []).filter(skill =>
+            return (generalskills || []).filter(skill =>
                 skill.toLowerCase().includes((generalSearchTerm || '').toLowerCase())
             );
         }
