@@ -65,7 +65,7 @@ const DocumentEditor = () => {
     };
 
   return (
-    <div className='flex flex-col gap-5 p-5'>
+    <div className='flex flex-col gap-5 p-5 mb-14'>
 
         <div className="flex items-center w-full px-10 mb-5">
             {/* Empty left space */}
@@ -74,22 +74,22 @@ const DocumentEditor = () => {
                 <p className='ml-2 text-base font-medium'>Back</p>
             </div>        
             <div className="flex-1 text-center">
-                <h2 className="text-xl font-semibold">CV & Cover Letter</h2>
+                <h2 className="text-xl font-semibold">CV & CL</h2>
             </div>       
             <div className="flex-1" />
         </div>
 
-        <div className="grid grid-cols-2">
+        <div className="grid gap-5 grid-cols-2">
             
             <div className="flex flex-col gap-5 justify-center mx-auto">
 
                 <div className="flex justify-between px-5  max-w-[710px]">
-                    <div onClick={() => navigate('/user/external-cv')} className="flex-1 flex gap-2 items-center cursor-pointer">
+                    <div onClick={() => navigate('/user/external-cv')} className="flex-1 -mt-2 flex gap-2 items-center cursor-pointer">
                         <img width="12px" src={edit_icon} alt="" />
-                        <p className='text-[#2c6472] font-medium'>Edit</p>
+                        <p className='text-[#2c6472] text-lg  font-medium'>Edit</p>
                     </div>
-                    <h2 className='flex-1 text-xl font-semibold'>CV</h2>
-                    <div className="">
+                    <h2 className='flex-1 text-xl ms-32 font-semibold'>CV</h2>
+                    <div className="mb-5">
                         <button onClick={handleCvDownload} className="flex-1 flex items-center gap-4 bg-[#2c6472] px-8 py-1.5 rounded-lg">
                             <img width="12px" src={download_icon} alt=" " />
                             <p className="text-white text-sm">Download</p>
@@ -118,12 +118,12 @@ const DocumentEditor = () => {
             <div className="flex flex-col gap-5 justify-center mx-auto">
 
                 <div className="flex justify-between px-5 max-w-[710px]">
-                    <div onClick={() => navigate('/user/external-cl')} className="flex-1 flex gap-2 items-center cursor-pointer">
+                    <div onClick={() => navigate('/user/external-cl')} className="flex-1 flex -mt-2 gap-2 items-center cursor-pointer">
                         <img width="12px" src={edit_icon} alt="" />
-                        <p className='text-[#2c6472] font-medium'>Edit</p>
+                        <p className='text-[#2c6472] text-lg font-medium'>Edit</p>
                     </div>
-                    <h2 className='flex-1 text-xl font-semibold'>CL</h2>
-                    <div className="">
+                    <h2 className='flex-1 text-xl ms-32 font-semibold'>CL</h2>
+                    <div className="mb-5">
                         <button onClick={handleClDownload} className="flex-1 flex items-center gap-4 bg-[#2c6472] px-8 py-1.5 rounded-lg">
                             <img width="12px" src={download_icon} alt=" " />
                             <p className="text-white text-sm">Download</p>
@@ -154,10 +154,10 @@ const DocumentEditor = () => {
 
             <div className="">
                 <div className="flex gap-3 items-center">
-                    <input className='accent-[#2c6472] w-4 h-4' id='checkDownload' type="checkbox" />
-                    <label htmlFor="checkDownload">Your CV and Cover Letter have been successfully downloaded.</label>
+                    <input className='accent-[#2c6472] w-4 h-4 -mt-4' id='checkDownload' type="checkbox" />
+                    <label htmlFor="checkDownload" className='text-sm mb-3' >Your CV and Cover Letter have been successfully downloaded.</label>
                 </div>
-                <p className='text-[#2c6472] font-semibold max-w-[600px]'>To locate them, check your device's Downloads folder — the files are saved with the company name and designation for easy access.</p>
+                <p className='text-[#2c6472] text-sm font-semibold max-w-[600px]'>To locate them, check your device's Downloads folder — the files are saved with the company name and designation for easy access.</p>
             </div>
 
             <div className="">

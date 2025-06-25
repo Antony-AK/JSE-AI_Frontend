@@ -9,6 +9,7 @@ const External = () => {
   e.preventDefault();
 
   const job_id = `job_${Date.now()}${Math.floor(Math.random() * 1000)}`;
+
   const payload = {
     job_id,
     company: formData.companyName,
@@ -17,7 +18,6 @@ const External = () => {
     description: formData.jobDescription,
     source: "external", // ✅ always added!
   };
-
 
   try {
     const token = sessionStorage.getItem('authToken');
@@ -35,10 +35,10 @@ const External = () => {
 
     console.log("✅ External job generated:", response.data);
 
-    // Store response data in sessionStorage
-    sessionStorage.setItem("cv_data", JSON.stringify(response.data));
+    // ✅ Save only the job_id
+    sessionStorage.setItem("externalJobId", job_id);
 
-    // Navigate to document editor
+    // 🚀 Navigate to document editor
     navigate('/user/document-editor');
 
   } catch (error) {
@@ -46,6 +46,7 @@ const External = () => {
     alert("Something went wrong. Please try again.");
   }
 };
+
 
 
   const navigate = useNavigate();

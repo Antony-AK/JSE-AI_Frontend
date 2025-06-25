@@ -16,6 +16,8 @@ const Cl = () => {
   const navigate = useNavigate();
 
   const [activeSection, setActiveSection] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   const { personalInfo, setPersonalInfo, paragraphs, setParagraphs } = useCl();
 
   const handleFieldChange = (key, value) => {
@@ -47,74 +49,75 @@ const Cl = () => {
     };
 
     html2pdf().set(opt).from(previewRef.current).save();
+
   };
 
+
   useEffect(() => {
-    const storedData = sessionStorage.getItem("generatedCL");
-
-    if (storedData) {
-      const parsed = JSON.parse(storedData);
-
-      setPersonalInfo({
-        name: parsed.name || "",
-        title: parsed.title || "",
-        mail: parsed.mail || "",
-        contact: parsed.contact || "",
-        address: parsed.address || "[ address ]"
-      });
-
-      setParagraphs(parsed.paragraphs || []);
+    // Wait until context data is populated
+    if (personalInfo.name && paragraphs.length > 0) {
+      setIsLoading(false);
     }
-  }, []);
+  }, [personalInfo, paragraphs]);
 
-const handleUpdateCoverLetter = async () => {
-  const token = sessionStorage.getItem("authToken");
-  const stored = sessionStorage.getItem("generatedCL");
 
-  if (!token || !stored) {
-    console.warn("⚠️ Missing auth token or cover letter data.");
-    return;
-  }
+  const handleUpdateCoverLetter = async () => {
+    const token = sessionStorage.getItem("authToken");
+    const stored = sessionStorage.getItem("generatedCL");
 
-  const parsed = JSON.parse(stored);
-  const jobId = parsed.job_id; // ✅ Get job_id from session data
+    if (!token || !stored) {
+      console.warn("⚠️ Missing auth token or cover letter data.");
+      return;
+    }
 
-  if (!jobId) {
-    console.warn("⚠️ job_id is missing in generatedCL.");
-    return;
-  }
+    const parsed = JSON.parse(stored);
+    const jobId = parsed.job_id; // ✅ Get job_id from session data
 
-  try {
-    const payload = {
-      job_id: jobId,
-      cl_data: {
-        name: personalInfo.name,
-        title: personalInfo.title,
-        mail: personalInfo.mail,
-        contact: personalInfo.contact,
-        address: personalInfo.address,
-        paragraphs: paragraphs
-      }
-    };
+    if (!jobId) {
+      console.warn("⚠️ job_id is missing in generatedCL.");
+      return;
+    }
 
-    console.log("📦 Final PUT Payload:", payload);
-
-    const response = await axios.put(
-      `${BASE_URL}/internal/generate-cover-letter`, // ✅ Use correct endpoint
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+    try {
+      const payload = {
+        job_id: jobId,
+        cl_data: {
+          name: personalInfo.name,
+          title: personalInfo.title,
+          mail: personalInfo.mail,
+          contact: personalInfo.contact,
+          address: personalInfo.address,
+          paragraphs: paragraphs
         }
-      }
-    );
+      };
 
-    console.log("✅ Cover letter updated successfully:", response.data);
-  } catch (error) {
-    console.error("❌ Failed to update cover letter:", error.response?.data || error.message);
+      console.log("📦 Final PUT Payload:", payload);
+
+      const response = await axios.put(
+        `${BASE_URL}/internal/generate-cover-letter`, // ✅ Use correct endpoint
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      console.log("✅ Cover letter updated successfully:", response.data);
+    } catch (error) {
+      console.error("❌ Failed to update cover letter:", error.response?.data || error.message);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-lg font-medium text-gray-600 animate-pulse">Loading your cover letter...</p>
+      </div>
+    );
   }
-};
+
 
 
   return (

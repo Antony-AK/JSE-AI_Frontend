@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { BASE_URL } from '../../../utils/api';
 
 const CvContext = createContext();
 
@@ -36,71 +37,96 @@ export const CvProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    let rawData = {};
-    try {
-      rawData = JSON.parse(sessionStorage.getItem("generatedCV")) || {};
-    } catch (e) {
-      console.error("Invalid JSON in sessionStorage for generatedCV:", e);
-    }
+    const fetchCVData = async () => {
+      try {
+        const stored = sessionStorage.getItem("generatedCV");
+        const parsed = JSON.parse(stored || "{}");
+        const jobId = parsed.job_id;
+        const token = sessionStorage.getItem("authToken"); // 🔐 Fetch Bearer token
 
-    setPersonalInfo({
-      Name: rawData.personal_info?.name || "",
-      Title: rawData.personal_info?.title || "",
-      Mail: rawData.personal_info?.mail || "",
-      Phone: rawData.personal_info?.phone || "",
-      LinkedIn: rawData.personal_info?.linkedin || "",
-      Website: rawData.personal_info?.portfolio || "",
-    });
+        if (!jobId) {
+          console.warn("No job_id found in sessionStorage.");
+          return;
+        }
 
-    setProfessionalSummary({
-      title: "Professional Summary",
-      content: rawData.profile_summary || ""
-    });
+        const response = await fetch(
+          `${BASE_URL}/internal/generate-resume?job_id=${jobId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // 🔐 Add Bearer token here
+              "Content-Type": "application/json"
+            }
+          }
+        );
 
-    setWorkExperience({
-      title: "Work Experience",
-      content: (rawData.work_experience || []).map(item => ({
-        Role: item.position || "",
-        Company: item.company_name || "",
-        Duration: item.period || "",
-        Description: item.description || ""
-      }))
-    });
+        const result = await response.json();
+        const rawData = result.cv_data;
 
-    setEducation({
-      title: "Education",
-      content: (rawData.education || []).map(entry => ({
-        degree: entry || ""
-      }))
-    });
+        setPersonalInfo({
+          Name: rawData.personal_info?.name || "",
+          Title: rawData.personal_info?.title || "",
+          Mail: rawData.personal_info?.mail || "",
+          Phone: rawData.personal_info?.phone || "",
+          LinkedIn: rawData.personal_info?.linkedin || "",
+          Website: rawData.personal_info?.portfolio || "",
+        });
 
-    setProjects({
-      title: "Projects",
-      content: (rawData.projects || []).map(item => ({
-        Name: item.project_name || "",
-        Company: item.company_name || "",
-        Duration: item.period || "",
-        Skills: item.skills_used || "",
-        Description: item.description || ""
-      }))
-    });
+        setProfessionalSummary({
+          title: "Professional Summary",
+          content: rawData.profile_summary || ""
+        });
 
-    setCertificates({
-      title: "Certificates",
-      content: (rawData.certifications || []).map(name => ({
-        Name: name || ""
-      }))
-    });
+        setWorkExperience({
+          title: "Work Experience",
+          content: (rawData.work_experience || []).map(item => ({
+            Role: item.position || "",
+            Company: item.company_name || "",
+            Duration: item.period || "",
+            Description: item.description || ""
+          }))
+        });
 
-    setSkills({
-      title: "Skills",
-      content: rawData.skills || []
-    });
+        setEducation({
+          title: "Education",
+          content: (rawData.education || []).map(entry => ({
+            degree: entry || ""
+          }))
+        });
 
-    setLanguages({
-      title: "Languages",
-      content: rawData.languages || []
-    });
+        setProjects({
+          title: "Projects",
+          content: (rawData.projects || []).map(item => ({
+            Name: item.project_name || "",
+            Company: item.company_name || "",
+            Duration: item.period || "",
+            Skills: item.skills_used || "",
+            Description: item.description || ""
+          }))
+        });
+
+        setCertificates({
+          title: "Certificates",
+          content: (rawData.certifications || []).map(name => ({
+            Name: name || ""
+          }))
+        });
+
+        setSkills({
+          title: "Skills",
+          content: rawData.skills || []
+        });
+
+        setLanguages({
+          title: "Languages",
+          content: rawData.languages || []
+        });
+
+      } catch (error) {
+        console.error("Error fetching CV data from backend:", error);
+      }
+    };
+
+    fetchCVData();
   }, []);
 
   return (

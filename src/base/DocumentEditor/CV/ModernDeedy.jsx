@@ -5,47 +5,48 @@ const ModernDeedy = ({ personalInfo, professionalSummary, workExperience, educat
   return (
     <div className='flex flex-col gap-2 px-6 pt-5 w-full h-full'>
 
-        {/* Header */}
-        <div className="text-center">
-            {/* Name */}
-            <h1 className="text-3xl font-bold tracking-wide text-purple-500">{personalInfo.Name}</h1>
+      {/* Header */}
+      <div className="text-center">
+        {/* Name */}
+        <h1 className="text-3xl font-bold tracking-wide text-purple-500">{personalInfo.Name}</h1>
 
-            {personalInfo.Title && (
-                <p className='text-[#2c6474] mt-2 font-medium'>{personalInfo.Title}</p>
-            )}
-
-            {/* Contact Info */}
-            <div className="mt-2 flex flex-wrap justify-center text-sm text-gray-600 gap-x-2 gap-y-1">
-                {[
-                    personalInfo.Mail,
-                    personalInfo.Phone,
-                    personalInfo.LinkedIn,
-                    personalInfo.Website
-                ]
-                    .filter(Boolean) // remove empty values
-                    .map((item, idx, arr) => (
-                    <p key={idx} className='text-blue-600'>
-                        {idx !== 0 && '|'} {item}
-                    </p>
-                    ))}
-            </div>
-        </div>
-
-        {/* Summary */}
-        {professionalSummary.content && (
-        <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-3">
-            <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>SUMMARY</h2>
-            <div className="w-full border border-t-gray-400"></div>
-            </div>
-            <p className='ml-2 text-[13px] text-gray-600'>{professionalSummary.content}</p>
-        </div>
+        {personalInfo.Title && (
+          <p className='text-[#2c6474] mt-2 font-medium'>{personalInfo.Title}</p>
         )}
 
-        {/* Work Experience */}
-        {workExperience.content.some(exp =>
-          exp.Company || exp.Role || exp.Duration || exp.Description
-        ) && (
+        {/* Contact Info */}
+        <div className="mt-2 flex flex-wrap justify-center text-sm text-gray-600 gap-x-2 gap-y-1">
+          {[
+            personalInfo.Mail,
+            personalInfo.Phone,
+            personalInfo.LinkedIn,
+            personalInfo.Website
+          ]
+            .filter(Boolean) // remove empty values
+            .map((item, idx, arr) => (
+              <p key={idx} className='text-blue-600'>
+                {idx !== 0 && '|'} {item}
+              </p>
+            ))}
+        </div>
+      </div>
+
+      {/* Summary */}
+      {professionalSummary.content && (
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-3">
+            <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>SUMMARY</h2>
+            <div className="w-full border border-t-gray-400"></div>
+          </div>
+          <p className='ml-2 text-[13px] text-gray-600'>{professionalSummary.content}</p>
+        </div>
+      )}
+
+      {/* Work Experience */}
+      {/* Work Experience */}
+      {workExperience.content.some(exp =>
+        exp.Company || exp.Role || exp.Duration || exp.Description
+      ) && (
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-3">
               <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>WORK EXPERIENCE</h2>
@@ -78,94 +79,94 @@ const ModernDeedy = ({ personalInfo, professionalSummary, workExperience, educat
           </div>
         )}
 
-        {/* Education */}
-        {education.content.length > 0 && (
-            <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-3">
-                <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>EDUCATION</h2>
-                <div className="w-full border border-t-gray-400"></div>
-                </div>
-                {education.content.map((entry, idx) => (
-                <p key={idx} className="text-sm ml-2 text-gray-700">{entry.degree}</p>
-                ))}
-            </div>
-        )}
-
-        {/* Projects */}
-        {projects.content.some(
-            proj => proj.Name || proj.Company || proj.Duration || proj.Skills || proj.Description
-            ) && (
-        <div className="flex flex-col gap-1.5">
-            <div className="flex items-center gap-3">
-            <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>PROJECTS</h2>
+      {/* Education */}
+      {education.content.length > 0 && (
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-3">
+            <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>EDUCATION</h2>
             <div className="w-full border border-t-gray-400"></div>
+          </div>
+          {education.content.map((entry, idx) => (
+            <p key={idx} className="text-sm ml-2 text-gray-700">{entry.degree}</p>
+          ))}
+        </div>
+      )}
+
+      {/* Projects */}
+      {projects.content.some(
+        proj => proj.Name || proj.Company || proj.Duration || proj.Skills || proj.Description
+      ) && (
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-3">
+              <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>PROJECTS</h2>
+              <div className="w-full border border-t-gray-400"></div>
             </div>
 
             {projects.content.map((proj, idx) => (
-            <div key={idx} className="mb-1 flex flex-col gap-1">
+              <div key={idx} className="mb-1 flex flex-col gap-1">
                 <div className="ml-2 flex justify-between w-full">
-                    <p className='text-sm font-bold text-[#2c6472]'>
-                        {proj.Name}
-                        {proj.Company && <> | <span className='font-medium text-gray-600'>{proj.Company}</span></>}
-                    </p>
-                    {proj.Duration && (
-                        <p className='text-xs text-gray-600'>{proj.Duration}</p>
-                    )}
+                  <p className='text-sm font-bold text-[#2c6472]'>
+                    {proj.Name}
+                    {proj.Company && <> | <span className='font-medium text-gray-600'>{proj.Company}</span></>}
+                  </p>
+                  {proj.Duration && (
+                    <p className='text-xs text-gray-600'>{proj.Duration}</p>
+                  )}
                 </div>
 
                 {proj.Skills && (
-                    <p className='text-sm italic text-gray-500 ml-2'>Skills: {proj.Skills}</p>
+                  <p className='text-sm italic text-gray-500 ml-2'>Skills: {proj.Skills}</p>
                 )}
-                
+
                 {proj.Description && (
-                    <p className='text-[13px] text-gray-800 ml-2'>{proj.Description}</p>
+                  <p className='text-[13px] text-gray-800 ml-2'>{proj.Description}</p>
                 )}
-            </div>
+              </div>
             ))}
-        </div>
+          </div>
         )}
 
-        {/* Skills */}
-        <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-3">
-                <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>SKILLS</h2>
-                <div className="w-full border border-t-gray-400"></div>
-            </div>
-            <div className="text-[13px] ml-2 text-gray-800">
-            {skills.content.map((skill, idx) => (
-                <span key={idx}>{skill}{idx !== skills.content.length - 1 ? ', ' : ''}</span>
-            ))}
-            </div>
+      {/* Skills */}
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center gap-3">
+          <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>SKILLS</h2>
+          <div className="w-full border border-t-gray-400"></div>
         </div>
+        <div className="text-[13px] ml-2 text-gray-800">
+          {skills.content.map((skill, idx) => (
+            <span key={idx}>{skill}{idx !== skills.content.length - 1 ? ', ' : ''}</span>
+          ))}
+        </div>
+      </div>
 
-        {/* Languages */}
-        {languages.content.length > 0 && (
+      {/* Languages */}
+      {languages.content.length > 0 && (
         <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3">
             <h2 className='font-semibold text-lg whitespace-nowrap text-purple-500'>LANGUAGES</h2>
             <div className="w-full border border-t-gray-400"></div>
-            </div>
-            <div className="text-[13px] ml-2 text-gray-800">
+          </div>
+          <div className="text-[13px] ml-2 text-gray-800">
             {languages.content.map((lang, idx) => (
-                <p key={idx}>{lang}</p>
+              <p key={idx}>{lang}</p>
             ))}
-            </div>
+          </div>
         </div>
-        )}
+      )}
 
-        {/* Certificates */}
-        <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-3">
-                <h2 className='font-semibold text-lg whitespace-nowrap text-purple-500'>CERTIFICATES</h2>
-                <div className="w-full border border-t-gray-400"></div>
-            </div>
-            <div className="text-[13px] ml-2 text-gray-800">
-            {certificates.content.map((cert, idx) => (
-                <p key={idx}>{cert.Name}</p>
-            ))}
-            </div>
+      {/* Certificates */}
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center gap-3">
+          <h2 className='font-semibold text-lg whitespace-nowrap text-purple-500'>CERTIFICATES</h2>
+          <div className="w-full border border-t-gray-400"></div>
         </div>
-        
+        <div className="text-[13px] ml-2 text-gray-800">
+          {certificates.content.map((cert, idx) => (
+            <p key={idx}>{cert.Name}</p>
+          ))}
+        </div>
+      </div>
+
     </div>
   )
 }

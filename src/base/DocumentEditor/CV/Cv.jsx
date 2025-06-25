@@ -6,6 +6,8 @@ import edit_icon from '../../../assets/edit-icon.svg'
 import ModernDeedy from './ModernDeedy';
 import html2pdf from 'html2pdf.js';
 import { useCv } from '../Context/CvContext';
+import axios from 'axios';
+import { BASE_URL } from '../../../utils/api';
 
 const Cv = () => {
 
@@ -38,13 +40,14 @@ const Cv = () => {
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true },
             jsPDF: { unit: 'px', format: [794, 1123], orientation: 'portrait' }
-            
+
         };
 
         html2pdf().set(opt).from(element).save();
     };
-    
+
     const [activeSection, setActiveSection] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleFieldChange = (key, value) => {
         setPersonalInfo((prev) => ({
@@ -53,74 +56,158 @@ const Cv = () => {
         }));
     };
 
-     // ✅ Add this useEffect to refresh sessionStorage data on mount
-  useEffect(() => {
-    let rawData = {};
-    try {
-      rawData = JSON.parse(sessionStorage.getItem("generatedCV")) || {};
-    } catch (e) {
-      console.error("Invalid JSON in sessionStorage for generatedCV:", e);
+    // ✅ Add this useEffect to refresh sessionStorage data on mount
+    useEffect(() => {
+        let rawData = {};
+        try {
+            rawData = JSON.parse(sessionStorage.getItem("generatedCV")) || {};
+
+        } catch (e) {
+            console.error("Invalid JSON in sessionStorage for generatedCV:", e);
+
+        }
+
+        setPersonalInfo({
+            Name: rawData.personal_info?.name || "",
+            Title: rawData.personal_info?.title || "",
+            Mail: rawData.personal_info?.mail || "",
+            Phone: rawData.personal_info?.phone || "",
+            LinkedIn: rawData.personal_info?.linkedin || "",
+            Website: rawData.personal_info?.portfolio || "[your website]",
+        });
+
+        setProfessionalSummary({
+            title: "Professional Summary",
+            content: rawData.profile_summary || ""
+        });
+
+        setWorkExperience({
+            title: "Work Experience",
+            content: (rawData.work_experience || []).map(item => ({
+                Role: item.position || "",
+                Company: item.company_name || "",
+                Duration: item.period || "",
+                Description: item.description || ""
+            }))
+        });
+
+        setEducation({
+            title: "Education",
+            content: (rawData.education || []).map(entry => ({
+                degree: entry || ""
+            }))
+        });
+
+        setProjects({
+            title: "Projects",
+            content: (rawData.projects || []).map(item => ({
+                Name: item.project_name || "",
+                Company: item.company_name || "",
+                Duration: item.period || "",
+                Skills: item.skills_used || "",
+                Description: item.description || ""
+            }))
+        });
+
+        setCertificates({
+            title: "Certificates",
+            content: (rawData.certifications || []).map(name => ({
+                Name: name || ""
+            }))
+        });
+
+        setSkills({
+            title: "Skills",
+            content: rawData.skills || []
+        });
+
+        setLanguages({
+            title: "Languages",
+            content: rawData.languages || []
+        });
+        setIsLoading(false); // Set loading to false after data is set
+    }, []); // 👈 Run only once when CV page mounts
+
+   const handleUpdateCV = async () => {
+    const token = sessionStorage.getItem("authToken");
+    const stored = sessionStorage.getItem("generatedCV");
+
+    if (!token || !stored) {
+        console.warn("⚠️ Missing auth token or generatedCV data.");
+        return;
     }
 
-    setPersonalInfo({
-      Name: rawData.personal_info?.name || "",
-      Title: rawData.personal_info?.title || "",
-      Mail: rawData.personal_info?.mail || "",
-      Phone: rawData.personal_info?.phone || "",
-      LinkedIn: rawData.personal_info?.linkedin || "",
-      Website: rawData.personal_info?.portfolio || "",
-    });
+    const parsed = JSON.parse(stored);
+    const jobId = parsed.job_id;
 
-    setProfessionalSummary({
-      title: "Professional Summary",
-      content: rawData.profile_summary || ""
-    });
+    if (!jobId) {
+        console.warn("⚠️ job_id is missing in generatedCV.");
+        return;
+    }
 
-    setWorkExperience({
-      title: "Work Experience",
-      content: (rawData.work_experience || []).map(item => ({
-        Role: item.position || "",
-        Company: item.company_name || "",
-        Duration: item.period || "",
-        Description: item.description || ""
-      }))
-    });
+    // 🧠 BUILD CV PAYLOAD FROM CURRENT STATE
+    const payload = {
+        job_id: jobId,
+        cv_data: {
+            personal_info: {
+                name: personalInfo.Name,
+                title: personalInfo.Title,
+                mail: personalInfo.Mail,
+                phone: personalInfo.Phone,
+                address: personalInfo.Address || "", // optional
+                linkedin: personalInfo.LinkedIn,
+                portfolio: personalInfo.Website
+            },
+            profile_summary: professionalSummary.content || "",
+            education: education.content.map(e => e.degree),
+            certifications: certificates.content.map(c => c.Name),
+            skills: skills.content,
+            languages: languages.content,
+            work_experience: workExperience.content.map(item => ({
+                position: item.Role,
+                company_name: item.Company,
+                period: item.Duration,
+                description: item.Description
+            })),
+            projects: projects.content.map(item => ({
+                project_name: item.Name,
+                company_name: item.Company,
+                period: item.Duration,
+                skills_used: item.Skills,
+                description: item.Description
+            }))
+        }
+    };
 
-    setEducation({
-      title: "Education",
-      content: (rawData.education || []).map(entry => ({
-        degree: entry || ""
-      }))
-    });
+    console.log("📦 Final PUT Payload:", payload);
 
-    setProjects({
-      title: "Projects",
-      content: (rawData.projects || []).map(item => ({
-        Name: item.project_name || "",
-        Company: item.company_name || "",
-        Duration: item.period || "",
-        Skills: item.skills_used || "",
-        Description: item.description || ""
-      }))
-    });
+    try {
+        const response = await axios.put(
+            `${BASE_URL}/internal/generate-resume`,
+            payload,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            }
+        );
 
-    setCertificates({
-      title: "Certificates",
-      content: (rawData.certifications || []).map(name => ({
-        Name: name || ""
-      }))
-    });
+        console.log("✅ CV updated successfully:", response.data);
+    } catch (error) {
+        console.error("❌ Failed to update CV:", error.response?.data || error.message);
+    }
+};
 
-    setSkills({
-      title: "Skills",
-      content: rawData.skills || []
-    });
 
-    setLanguages({
-      title: "Languages",
-      content: rawData.languages || []
-    });
-  }, []); // 👈 Run only once when CV page mounts
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <p className="text-lg font-medium text-gray-600 animate-pulse">Loading your cv...</p>
+            </div>
+        );
+    }
+
 
     return (
         <div className='flex flex-col justify-center items-center mx-auto'>
@@ -141,52 +228,50 @@ const Cv = () => {
                 <div className='w-[600px]'>
 
                     {/* Personal Info */}
-                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${
-                    activeSection === 'personalInfo' ? 'border-[#2c6472]' : 'border-gray-300'
-                    }`}>
-                    <div className="flex justify-between items-start mb-2">
-                        <h2 className="font-semibold text-gray-800">Personal Information</h2>
-                        <img
-                            width="30px"
-                            className={`cursor-pointer p-2 rounded-full transition ${
-                                activeSection === 'personalInfo' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                            }`}
-                            src={activeSection === 'personalInfo' ? save_icon : edit_icon}
-                            alt=""
-                            onClick={() => {
-                                if (activeSection === 'personalInfo') {
-                                setActiveSection(null);
-                                } else {
-                                setActiveSection('personalInfo');
-                                }
-                            }}
-                        />
-                    </div>
+                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'personalInfo' ? 'border-[#2c6472]' : 'border-gray-300'
+                        }`}>
+                        <div className="flex justify-between items-start mb-2">
+                            <h2 className="font-semibold text-gray-800">Personal Information</h2>
+                            <img
+                                width="30px"
+                                className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'personalInfo' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
+                                    }`}
+                                src={activeSection === 'personalInfo' ? save_icon : edit_icon}
+                                alt=""
+                                onClick={() => {
+                                    if (activeSection === 'personalInfo') {
+                                        setActiveSection(null);
+                                    } else {
+                                        setActiveSection('personalInfo');
+                                    }
+                                }}
+                            />
+                        </div>
 
-                    <div className="pl-1 text-sm space-y-1.5">
-                        {Object.entries(personalInfo).map(([key, value]) => {
-                        const isReadOnly = ["Name", "Mail", "Phone"].includes(key);
-                        return (
-                            <div key={key} className="flex items-center gap-2 mb-2">
-                            <span className="text-sm font-semibold text-gray-700 min-w-[80px]">{key}:</span>
-                            {activeSection === 'personalInfo' ? (
-                                isReadOnly ? (
-                                <p className="text-[#00000082] font-medium">{value}</p>
-                                ) : (
-                                <input
-                                    type="text"
-                                    value={value}
-                                    onChange={(e) => handleFieldChange(key, e.target.value)}
-                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1 flex-1"
-                                />
-                                )
-                            ) : (
-                                <p className="text-[#00000082] font-medium">{value}</p>
-                            )}
-                            </div>
-                        );
-                        })}
-                    </div>
+                        <div className="pl-1 text-sm space-y-1.5">
+                            {Object.entries(personalInfo).map(([key, value]) => {
+                                const isReadOnly = ["Name", "Mail", "Phone"].includes(key);
+                                return (
+                                    <div key={key} className="flex items-center gap-2 mb-2">
+                                        <span className="text-sm font-semibold text-gray-700 min-w-[80px]">{key}:</span>
+                                        {activeSection === 'personalInfo' ? (
+                                            isReadOnly ? (
+                                                <p className="text-[#00000082] font-medium">{value}</p>
+                                            ) : (
+                                                <input
+                                                    type="text"
+                                                    value={value}
+                                                    onChange={(e) => handleFieldChange(key, e.target.value)}
+                                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1 flex-1"
+                                                />
+                                            )
+                                        ) : (
+                                            <p className="text-[#00000082] font-medium">{value}</p>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
 
                     {/* Professional Summary */}
@@ -196,16 +281,15 @@ const Cv = () => {
                             <h2 className="font-semibold text-gray-800">{professionalSummary.title}</h2>
                             <img
                                 width="30px"
-                                className={`cursor-pointer p-2 rounded-full transition ${
-                                    activeSection === 'summary' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                                }`}
+                                className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'summary' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
+                                    }`}
                                 src={activeSection === 'summary' ? save_icon : edit_icon}
                                 alt=""
                                 onClick={() => {
                                     if (activeSection === 'summary') {
-                                    setActiveSection(null);
+                                        setActiveSection(null);
                                     } else {
-                                    setActiveSection('summary');
+                                        setActiveSection('summary');
                                     }
                                 }}
                             />
@@ -240,16 +324,15 @@ const Cv = () => {
                             <h2 className="font-semibold text-gray-800">{workExperience.title}</h2>
                             <img
                                 width="30px"
-                                className={`cursor-pointer p-2 rounded-full transition ${
-                                    activeSection === 'workExperience' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                                }`}
+                                className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'workExperience' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
+                                    }`}
                                 src={activeSection === 'workExperience' ? save_icon : edit_icon}
                                 alt=""
                                 onClick={() => {
                                     if (activeSection === 'workExperience') {
-                                    setActiveSection(null);
+                                        setActiveSection(null);
                                     } else {
-                                    setActiveSection('workExperience');
+                                        setActiveSection('workExperience');
                                     }
                                 }}
                             />
@@ -261,8 +344,8 @@ const Cv = () => {
                                     key={idx}
                                     onClick={() => setSelectedCompanyIdx(idx)}
                                     className={`px-3.5 py-1.5 text-xs border rounded-full ${selectedCompanyIdx === idx
-                                            ? 'bg-[#2c6472] text-white border-[#2c6472]'
-                                            : 'bg-white text-gray-700 border-gray-300'
+                                        ? 'bg-[#2c6472] text-white border-[#2c6472]'
+                                        : 'bg-white text-gray-700 border-gray-300'
                                         }`}
                                 >
                                     {exp.Company}
@@ -288,7 +371,7 @@ const Cv = () => {
                                     />
                                 ) : (
                                     <p className="text-[#00000082] font-medium">
-                                    {workExperience?.content?.[selectedCompanyIdx]?.Role || ''}
+                                        {workExperience?.content?.[selectedCompanyIdx]?.Role || ''}
                                     </p>
                                 )}
                             </div>
@@ -350,7 +433,7 @@ const Cv = () => {
                                     />
                                 ) : (
                                     <p className="text-[#00000082] font-medium whitespace-pre-line">
-                                    {workExperience?.content?.[selectedCompanyIdx]?.Description || ''}
+                                        {workExperience?.content?.[selectedCompanyIdx]?.Description || ''}
                                     </p>
                                 )}
                             </div>
@@ -359,173 +442,166 @@ const Cv = () => {
 
                     {/* Education */}
                     {education.content.length > 0 && (
-                    <div
-                        className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${
-                        activeSection === 'education' ? 'border-[#2c6472]' : 'border-gray-300'
-                        }`}
-                    >
-                        <div className="flex justify-between items-start mb-2">
-                        <h2 className="font-semibold text-gray-800">{education.title}</h2>
-                        <img
-                            width="30px"
-                            className={`cursor-pointer p-2 rounded-full transition ${
-                                activeSection === 'education' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                            }`}
-                            src={activeSection === 'education' ? save_icon : edit_icon}
-                            alt=""
-                            onClick={() => {
-                                if (activeSection === 'education') {
-                                setActiveSection(null);
-                                } else {
-                                setActiveSection('education');
-                                }
-                            }}
-                        />
-                        </div>
+                        <div
+                            className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'education' ? 'border-[#2c6472]' : 'border-gray-300'
+                                }`}
+                        >
+                            <div className="flex justify-between items-start mb-2">
+                                <h2 className="font-semibold text-gray-800">{education.title}</h2>
+                                <img
+                                    width="30px"
+                                    className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'education' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
+                                        }`}
+                                    src={activeSection === 'education' ? save_icon : edit_icon}
+                                    alt=""
+                                    onClick={() => {
+                                        if (activeSection === 'education') {
+                                            setActiveSection(null);
+                                        } else {
+                                            setActiveSection('education');
+                                        }
+                                    }}
+                                />
+                            </div>
 
-                        {/* Education Tabs */}
-                        <div className="flex gap-2 flex-wrap my-3">
-                        {education.content.map((edu, idx) => (
-                            <button
-                            key={idx}
-                            onClick={() => setSelectedEducationIdx(idx)}
-                            className={`px-3.5 py-1.5 text-xs border rounded-full ${
-                                selectedEducationIdx === idx
-                                ? 'bg-[#2c6472] text-white border-[#2c6472]'
-                                : 'bg-white text-gray-700 border-gray-300'
-                            }`}
-                            >
-                            Education {idx + 1}
-                            </button>
-                        ))}
-                        </div>
+                            {/* Education Tabs */}
+                            <div className="flex gap-2 flex-wrap my-3">
+                                {education.content.map((edu, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => setSelectedEducationIdx(idx)}
+                                        className={`px-3.5 py-1.5 text-xs border rounded-full ${selectedEducationIdx === idx
+                                                ? 'bg-[#2c6472] text-white border-[#2c6472]'
+                                                : 'bg-white text-gray-700 border-gray-300'
+                                            }`}
+                                    >
+                                        Education {idx + 1}
+                                    </button>
+                                ))}
+                            </div>
 
-                        {/* Single Degree Field */}
-                        <div className="pl-1 text-sm space-y-3">
-                        <div className="flex items-start gap-2">
-                            <label className="text-sm font-semibold text-gray-700 min-w-[80px]">Degree:</label>
-                            {activeSection === 'education' ? (
-                            <input
-                                type="text"
-                                value={education.content[selectedEducationIdx].degree}
-                                onChange={(e) => {
-                                const updated = [...education.content];
-                                updated[selectedEducationIdx].degree = e.target.value;
-                                setEducation(prev => ({ ...prev, content: updated }));
-                                }}
-                                className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
-                            />
-                            ) : (
-                            <p className="text-[#00000082] font-medium">
-                                {education.content[selectedEducationIdx].degree}
-                            </p>
-                            )}
+                            {/* Single Degree Field */}
+                            <div className="pl-1 text-sm space-y-3">
+                                <div className="flex items-start gap-2">
+                                    <label className="text-sm font-semibold text-gray-700 min-w-[80px]">Degree:</label>
+                                    {activeSection === 'education' ? (
+                                        <input
+                                            type="text"
+                                            value={education.content[selectedEducationIdx].degree}
+                                            onChange={(e) => {
+                                                const updated = [...education.content];
+                                                updated[selectedEducationIdx].degree = e.target.value;
+                                                setEducation(prev => ({ ...prev, content: updated }));
+                                            }}
+                                            className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                        />
+                                    ) : (
+                                        <p className="text-[#00000082] font-medium">
+                                            {education.content[selectedEducationIdx].degree}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
                         </div>
-                        </div>
-                    </div>
                     )}
 
                     {/* Projects */}
                     {projects.content.length > 0 && (
-                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${
-                        activeSection === 'projects' ? 'border-[#2c6472]' : 'border-gray-300'
-                    }`}>
-                        <div className="flex justify-between items-start mb-2">
-                        <h2 className="font-semibold text-gray-800">{projects.title}</h2>
-                        <img
-                            width="30px"
-                            className="cursor-pointer p-2 rounded-full hover:bg-gray-300 transition"
-                            src={activeSection === 'projects' ? save_icon : edit_icon}
-                            alt=""
-                            onClick={() =>
-                            setActiveSection(activeSection === 'projects' ? null : 'projects')
-                            }
-                        />
-                        </div>
-
-                        {/* Project Tabs */}
-                        <div className="flex gap-2 flex-wrap my-3">
-                        {projects.content.map((proj, idx) => (
-                            <button
-                            key={idx}
-                            onClick={() => setSelectedProjectIdx(idx)}
-                            className={`px-3.5 py-1.5 text-xs border rounded-full ${
-                                selectedProjectIdx === idx
-                                ? 'bg-[#2c6472] text-white border-[#2c6472]'
-                                : 'bg-white text-gray-700 border-gray-300'
-                            }`}
-                            >
-                            {proj.Name || `Project ${idx + 1}`}
-                            </button>
-                        ))}
-                        </div>
-
-                        {/* Selected Project Fields */}
-                        {projects.content[selectedProjectIdx] && (
-                        <div className="space-y-3">
-                            {["Name", "Company", "Duration", "Skills"].map((field) => (
-                            <div key={field} className="flex items-start gap-2">
-                                <label className="text-sm font-semibold text-gray-700 min-w-[90px]">{field}:</label>
-                                {activeSection === 'projects' ? (
-                                <input
-                                    type="text"
-                                    value={projects.content[selectedProjectIdx][field]}
-                                    onChange={(e) => {
-                                    const updated = [...projects.content];
-                                    updated[selectedProjectIdx][field] = e.target.value;
-                                    setProjects((prev) => ({ ...prev, content: updated }));
-                                    }}
-                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                        <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'projects' ? 'border-[#2c6472]' : 'border-gray-300'
+                            }`}>
+                            <div className="flex justify-between items-start mb-2">
+                                <h2 className="font-semibold text-gray-800">{projects.title}</h2>
+                                <img
+                                    width="30px"
+                                    className="cursor-pointer p-2 rounded-full hover:bg-gray-300 transition"
+                                    src={activeSection === 'projects' ? save_icon : edit_icon}
+                                    alt=""
+                                    onClick={() =>
+                                        setActiveSection(activeSection === 'projects' ? null : 'projects')
+                                    }
                                 />
-                                ) : (
-                                <p className="text-[#00000082] font-medium">{projects.content[selectedProjectIdx][field]}</p>
-                                )}
                             </div>
-                            ))}
 
-                            {/* Description */}
-                            <div className="flex flex-col">
-                            <label className="text-sm font-semibold text-gray-700 mb-1">Description:</label>
-                            {activeSection === 'projects' ? (
-                                <textarea
-                                rows={4}
-                                value={projects.content[selectedProjectIdx].Description}
-                                onChange={(e) => {
-                                    const updated = [...projects.content];
-                                    updated[selectedProjectIdx].Description = e.target.value;
-                                    setProjects((prev) => ({ ...prev, content: updated }));
-                                }}
-                                className="w-full min-h-[120px] rounded px-2 py-1 text-[#00000082] font-medium outline-none resize-y"
-                                />
-                            ) : (
-                                <p className="text-[#00000082] font-medium whitespace-pre-wrap">
-                                {projects.content[selectedProjectIdx].Description}
-                                </p>
+                            {/* Project Tabs */}
+                            <div className="flex gap-2 flex-wrap my-3">
+                                {projects.content.map((proj, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => setSelectedProjectIdx(idx)}
+                                        className={`px-3.5 py-1.5 text-xs border rounded-full ${selectedProjectIdx === idx
+                                                ? 'bg-[#2c6472] text-white border-[#2c6472]'
+                                                : 'bg-white text-gray-700 border-gray-300'
+                                            }`}
+                                    >
+                                        {proj.Name || `Project ${idx + 1}`}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Selected Project Fields */}
+                            {projects.content[selectedProjectIdx] && (
+                                <div className="space-y-3">
+                                    {["Name", "Company", "Duration", "Skills"].map((field) => (
+                                        <div key={field} className="flex items-start gap-2">
+                                            <label className="text-sm font-semibold text-gray-700 min-w-[90px]">{field}:</label>
+                                            {activeSection === 'projects' ? (
+                                                <input
+                                                    type="text"
+                                                    value={projects.content[selectedProjectIdx][field]}
+                                                    onChange={(e) => {
+                                                        const updated = [...projects.content];
+                                                        updated[selectedProjectIdx][field] = e.target.value;
+                                                        setProjects((prev) => ({ ...prev, content: updated }));
+                                                    }}
+                                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                                />
+                                            ) : (
+                                                <p className="text-[#00000082] font-medium">{projects.content[selectedProjectIdx][field]}</p>
+                                            )}
+                                        </div>
+                                    ))}
+
+                                    {/* Description */}
+                                    <div className="flex flex-col">
+                                        <label className="text-sm font-semibold text-gray-700 mb-1">Description:</label>
+                                        {activeSection === 'projects' ? (
+                                            <textarea
+                                                rows={4}
+                                                value={projects.content[selectedProjectIdx].Description}
+                                                onChange={(e) => {
+                                                    const updated = [...projects.content];
+                                                    updated[selectedProjectIdx].Description = e.target.value;
+                                                    setProjects((prev) => ({ ...prev, content: updated }));
+                                                }}
+                                                className="w-full min-h-[120px] rounded px-2 py-1 text-[#00000082] font-medium outline-none resize-y"
+                                            />
+                                        ) : (
+                                            <p className="text-[#00000082] font-medium whitespace-pre-wrap">
+                                                {projects.content[selectedProjectIdx].Description}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
                             )}
-                            </div>
                         </div>
-                        )}
-                    </div>
                     )}
 
                     {/* Skills */}
-                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${
-                        activeSection === 'skills' ? 'border-[#2c6472]' : 'border-gray-300'
-                    }`}>
+                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'skills' ? 'border-[#2c6472]' : 'border-gray-300'
+                        }`}>
                         <div className="flex justify-between items-start mb-2">
                             <h2 className="font-semibold text-gray-800">{skills.title}</h2>
                             <img
                                 width="30px"
-                                className={`cursor-pointer p-2 rounded-full transition ${
-                                    activeSection === 'skills' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                                }`}
+                                className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'skills' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
+                                    }`}
                                 src={activeSection === 'skills' ? save_icon : edit_icon}
                                 alt=""
                                 onClick={() => {
                                     if (activeSection === 'skills') {
-                                    setActiveSection(null);
+                                        setActiveSection(null);
                                     } else {
-                                    setActiveSection('skills');
+                                        setActiveSection('skills');
                                     }
                                 }}
                             />
@@ -548,50 +624,50 @@ const Cv = () => {
                     </div>
 
                     {/* Languages */}
-                        <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'languages' ? 'border-[#2c6472]' : 'border-gray-300'
+                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'languages' ? 'border-[#2c6472]' : 'border-gray-300'
                         }`}>
                         <div className="flex justify-between items-start mb-2">
                             <h2 className="font-semibold text-gray-800">{languages.title}</h2>
                             <img
-                            width="30px"
-                            className="cursor-pointer p-2 rounded-full transition hover:bg-gray-300"
-                            src={activeSection === 'languages' ? save_icon : edit_icon}
-                            alt=""
-                            onClick={() => {
-                                if (activeSection === 'languages') {
-                                setActiveSection(null);
-                                } else {
-                                setActiveSection('languages');
-                                }
-                            }}
+                                width="30px"
+                                className="cursor-pointer p-2 rounded-full transition hover:bg-gray-300"
+                                src={activeSection === 'languages' ? save_icon : edit_icon}
+                                alt=""
+                                onClick={() => {
+                                    if (activeSection === 'languages') {
+                                        setActiveSection(null);
+                                    } else {
+                                        setActiveSection('languages');
+                                    }
+                                }}
                             />
                         </div>
 
                         <div className="pl-1 text-sm space-y-2">
                             {activeSection === 'languages' ? (
-                            <textarea
-                                value={languages.content.join(', ')}
-                                onChange={(e) =>
-                                setLanguages(prev => ({
-                                    ...prev,
-                                    content: e.target.value.split(',').map(l => l.trim()).filter(Boolean)
-                                }))
-                                }
-                                className="w-full rounded p-2 outline-none text-[#00000082] font-medium resize-none"
-                                rows={3}
-                            />
+                                <textarea
+                                    value={languages.content.join(', ')}
+                                    onChange={(e) =>
+                                        setLanguages(prev => ({
+                                            ...prev,
+                                            content: e.target.value.split(',').map(l => l.trim()).filter(Boolean)
+                                        }))
+                                    }
+                                    className="w-full rounded p-2 outline-none text-[#00000082] font-medium resize-none"
+                                    rows={3}
+                                />
                             ) : (
-                            <div className="text-[#00000082] font-medium">
-                                {languages.content.length > 0
-                                ? languages.content.map((lang, idx) => (
-                                    <p key={idx}>{lang}</p>
-                                    ))
-                                : <p className="italic text-gray-400">No languages added</p>
-                                }
-                            </div>
+                                <div className="text-[#00000082] font-medium">
+                                    {languages.content.length > 0
+                                        ? languages.content.map((lang, idx) => (
+                                            <p key={idx}>{lang}</p>
+                                        ))
+                                        : <p className="italic text-gray-400">No languages added</p>
+                                    }
+                                </div>
                             )}
                         </div>
-                        </div>
+                    </div>
 
                     {/* Certificates */}
                     <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'certificates' ? 'border-[#2c6472]' : 'border-gray-300'
@@ -600,16 +676,15 @@ const Cv = () => {
                             <h2 className="font-semibold text-gray-800">{certificates.title}</h2>
                             <img
                                 width="30px"
-                                className={`cursor-pointer p-2 rounded-full transition ${
-                                    activeSection === 'skills' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                                }`}
+                                className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'skills' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
+                                    }`}
                                 src={activeSection === 'certificates' ? save_icon : edit_icon}
                                 alt=""
                                 onClick={() => {
                                     if (activeSection === 'certificates') {
-                                    setActiveSection(null);
+                                        setActiveSection(null);
                                     } else {
-                                    setActiveSection('certificates');
+                                        setActiveSection('certificates');
                                     }
                                 }}
                             />
@@ -659,16 +734,17 @@ const Cv = () => {
 
                     <div className="flex w-[794px] justify-end">
                         <button
-                            onClick={() => {
-                            handleDownload();
-                            setActiveSection(null);
-                            // Delay navigation to ensure download starts first
-                            setTimeout(() => navigate(-1), 800);
+                            onClick={async () => {
+                                await handleUpdateCV();           // ✅ Wait for CV update to finish
+                                handleDownload();              // 🧾 Then trigger PDF download (for CV)
+                                setActiveSection(null);           // 🎨 Reset UI
+                                setTimeout(() => navigate(-1), 800); // ⏳ Delay navigation
                             }}
                             className="bg-[#2c6472] text-white px-8 py-1.5 rounded-lg"
                         >
                             Download & Finish Editing
                         </button>
+
                     </div>
 
                 </div>
