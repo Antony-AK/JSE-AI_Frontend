@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import download_icon from '../../assets/download.svg'
 import right_arrow from '../../assets/left-arrow.png'
 import edit_icon from '../../assets/edit-icon.svg'
-import { useCv } from './Context/CvContext';
-import { useCl } from './Context/ClContext';
-import ModernDeedy from './CV/ModernDeedy';
-import ClPreview from './CL/ClTemp';
+import { useExternalCv } from './Context/ExternalCvContext';
+import { useExternalCl } from './Context/ExternalClContext';
+import ExternalClTemp from './CL/ExternalClTemp';
+import ExternalModernDeedy from './CV/ExternalModernDeedy';
 
 const DocumentEditor = () => {
 
@@ -25,14 +25,14 @@ const DocumentEditor = () => {
         certificates,
         skills,
         languages
-    } = useCv();
+    } = useExternalCv();
 
     const {
         personalInfo: clPersonalInfo,
         setPersonalInfo: setClPersonalInfo,
         paragraphs,
         setParagraphs
-    } = useCl();
+    } = useExternalCl();
 
     const handleClDownload = () => {
         const element = clPreviewRef.current;
@@ -84,7 +84,7 @@ const DocumentEditor = () => {
             <div className="flex flex-col gap-5 justify-center mx-auto">
 
                 <div className="flex justify-between px-5  max-w-[710px]">
-                    <div onClick={() => navigate('/user/cv')} className="flex-1 flex gap-2 items-center cursor-pointer">
+                    <div onClick={() => navigate('/user/external-cv')} className="flex-1 flex gap-2 items-center cursor-pointer">
                         <img width="12px" src={edit_icon} alt="" />
                         <p className='text-[#2c6472] font-medium'>Edit</p>
                     </div>
@@ -99,7 +99,7 @@ const DocumentEditor = () => {
 
                 <div ref={cvPreviewRef} className="h-full w-[710px] flex bg-white mx-auto overflow-hidden overflow-y-auto scrollbar-custom">
 
-                    <ModernDeedy
+                    <ExternalModernDeedy
                         personalInfo={cvPersonalInfo}
                         professionalSummary={professionalSummary}
                         workExperience={workExperience}
@@ -112,14 +112,13 @@ const DocumentEditor = () => {
 
                 </div>
                 
-            </div>
-            
+            </div>           
             
 
             <div className="flex flex-col gap-5 justify-center mx-auto">
 
                 <div className="flex justify-between px-5 max-w-[710px]">
-                    <div onClick={() => navigate('/user/cl')} className="flex-1 flex gap-2 items-center cursor-pointer">
+                    <div onClick={() => navigate('/user/external-cl')} className="flex-1 flex gap-2 items-center cursor-pointer">
                         <img width="12px" src={edit_icon} alt="" />
                         <p className='text-[#2c6472] font-medium'>Edit</p>
                     </div>
@@ -134,7 +133,7 @@ const DocumentEditor = () => {
 
                 <div ref={clPreviewRef} className="h-full w-[710px] bg-white mx-auto overflow-hidden overflow-y-auto scrollbar-custom">
 
-                    <ClPreview
+                    <ExternalClTemp
                         data={{
                             name: clPersonalInfo.name,
                             title: clPersonalInfo.title,

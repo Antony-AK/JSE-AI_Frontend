@@ -7,6 +7,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { CvProvider } from './base/DocumentEditor/Context/CvContext.jsx';
 import { ClProvider } from './base/DocumentEditor/Context/ClContext.jsx';
 
+import { ExternalCvProvider } from './base/DocumentEditor/Context/ExternalCvContext.jsx';
+import { ExternalClProvider } from './base/DocumentEditor/Context/ExternalClContext.jsx';
+
 import Login from './Pages/Login/Login.jsx';
 import Signup from './Pages/Signup/Signup.jsx';
 import Dashboard from './Pages/3_dashboard/Dashboard.jsx';
@@ -33,11 +36,13 @@ import Cv from './base/DocumentEditor/CV/Cv.jsx';
 import Cl from './base/DocumentEditor/CL/Cl.jsx';
 import ApplicationTracker from './Pages/Application tracker/ApplicationTracker.jsx';
 import DocumentEditor from './base/DocumentEditor/DocumentEditor.jsx';
+import ExternalCv from './base/DocumentEditor/CV/ExternalCv.jsx';
+import ExternalCl from './base/DocumentEditor/CL/ExternalCl.jsx';
 
 const AppRoutes = () => {
     const location = useLocation();
 
-    const hideLayout = location.pathname === '/user/cv' || location.pathname === '/user/cl' || location.pathname === '/user/document-editor';
+    const hideLayout = location.pathname === '/user/cv' || location.pathname === '/user/cl' || location.pathname === '/user/document-editor' || location.pathname === '/user/external-cv' || location.pathname === '/user/external-cl';
 
     // Define routes that are data-entry only
     const isDataEntryPage = location.pathname.startsWith('/user/onboarding') || location.pathname.startsWith('/user/dataonboarding') || location.pathname.startsWith('/user/linkedin') || location.pathname.startsWith('/user/resume') || ['/', '/user/login', '/user/signup'].includes(location.pathname);
@@ -79,7 +84,9 @@ const AppRoutes = () => {
                                 <Route path='/user/announcements' element={<Announcements />} />
                                 <Route path="/user/cv" element={<CvProvider> <Cv /> </CvProvider>} />
                                 <Route path="/user/cl" element={<ClProvider> <Cl /> </ClProvider>} />
-                                <Route path="/user/document-editor"element={<CvProvider> <ClProvider> <DocumentEditor /> </ClProvider> </CvProvider>}/>
+                                <Route path="/user/document-editor"element={<ExternalCvProvider> <ExternalClProvider> <DocumentEditor /> </ExternalClProvider> </ExternalCvProvider>}/>
+                                <Route path='/user/external-cv' element={<ExternalCvProvider> <ExternalCv /> </ExternalCvProvider>} />
+                                <Route path='/user/external-cl' element={<ExternalClProvider> <ExternalCl /> </ExternalClProvider>} />
                             </Routes>
                         </div>
                     </div>

@@ -1,12 +1,16 @@
 import React, { useRef } from 'react';
-import { useCl } from '../Context/ClContext';
+import { useExternalCl } from '../Context/ExternalClContext';
 import download_icon from '../../../assets/download.svg';
 
-const ClPreview = () => {
+const ExternalClTemp = () => {
+
   const previewRef = useRef();
-  const { personalInfo, paragraphs } = useCl();
+  const { personalInfo, paragraphs } = useExternalCl();
+
+
 
   return (
+
     <div className="w-full relative flex flex-col items-center justify-center bg-[#f5f5f5] pb-10">
 
       <div
@@ -52,7 +56,9 @@ const ClPreview = () => {
         </div>
       </div>
     </div>
-  );
-};
 
-export default ClPreview;
+    
+  )
+}
+
+export default ExternalClTemp

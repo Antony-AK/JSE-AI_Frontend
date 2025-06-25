@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import download_icon from '../../../assets/download.svg'
 import save_icon from '../../../assets/tick.svg'
 import edit_icon from '../../../assets/edit-icon.svg'
-import ModernDeedy from './ModernDeedy';
 import html2pdf from 'html2pdf.js';
-import { useCv } from '../Context/CvContext';
+import { useExternalCv } from '../Context/ExternalCvContext';
+import ExternalModernDeedy from './ExternalModernDeedy';
 
-const Cv = () => {
+const ExternalCv = () => {
 
     const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ const Cv = () => {
         certificates, setCertificates,
         skills, setSkills,
         languages, setLanguages
-    } = useCv();
+    } = useExternalCv();    
 
     const [selectedCompanyIdx, setSelectedCompanyIdx] = useState(0);
     const [selectedProjectIdx, setSelectedProjectIdx] = useState(0);
@@ -28,7 +28,7 @@ const Cv = () => {
 
     const previewRef = useRef();
 
-    const handleDownload = () => {
+    const handleDownloadAndGoBack = (previewRef, navigate) => {
         const element = previewRef.current;
         if (!element) return;
 
@@ -38,10 +38,15 @@ const Cv = () => {
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true },
             jsPDF: { unit: 'px', format: [794, 1123], orientation: 'portrait' }
-            
         };
 
-        html2pdf().set(opt).from(element).save();
+        html2pdf()
+            .set(opt)
+            .from(element)
+            .save()
+            .then(() => {
+            navigate(-1); // 👈 navigate after download completes
+            });
     };
     
     const [activeSection, setActiveSection] = useState(null);
@@ -51,10 +56,11 @@ const Cv = () => {
             ...prev,
             [key]: value,
         }));
-    };
+    };    
 
-    return (
-        <div className='flex flex-col justify-center items-center mx-auto'>
+  return (
+
+<div className='flex flex-col justify-center items-center mx-auto'>
             <div className="flex items-center w-full px-4 mt-5 max-w-[1400px]">
                 {/* Empty left space */}
                 <div className="flex-1" />
@@ -575,7 +581,7 @@ const Cv = () => {
 
                     <div ref={previewRef} className="h-[1123px] w-[794px] flex bg-white">
 
-                        <ModernDeedy
+                        <ExternalModernDeedy
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -590,14 +596,9 @@ const Cv = () => {
 
                     <div className="flex w-[794px] justify-end">
                         <button
-                            onClick={() => {
-                            handleDownload();
-                            setActiveSection(null);
-                            // Delay navigation to ensure download starts first
-                            setTimeout(() => navigate(-1), 800);
-                            }}
                             className="bg-[#2c6472] text-white px-8 py-1.5 rounded-lg"
-                        >
+                            onClick={() => handleDownloadAndGoBack(previewRef, navigate)}
+                            >
                             Download & Finish Editing
                         </button>
                     </div>
@@ -606,8 +607,9 @@ const Cv = () => {
 
 
             </div>
-        </div>
-    )
+        </div>    
+
+  )
 }
 
-export default Cv
+export default ExternalCv
