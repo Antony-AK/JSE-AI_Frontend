@@ -19,7 +19,6 @@ const External = () => {
   };
 
 
-
   try {
     const token = sessionStorage.getItem('authToken');
 

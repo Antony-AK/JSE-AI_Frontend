@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
+import { BASE_URL } from '../../../utils/api'; // adjust path as needed
 
 const ClContext = createContext();
 
@@ -13,38 +15,65 @@ export const ClProvider = ({ children }) => {
 
   const [paragraphs, setParagraphs] = useState([]);
 
-  
+  // ✅ Load from API on mount
+  useEffect(() => {
+  const fetchCoverLetter = async () => {
+    try {
+      const token = sessionStorage.getItem('authToken');
+      const stored = sessionStorage.getItem('generatedCL');
 
-  // Load from sessionStorage only on first render
- useEffect(() => {
-  const updateDataFromSession = () => {
-    const storedData = sessionStorage.getItem('generatedCL');
-    if (storedData) {
-      const parsed = JSON.parse(storedData);
+      if (!token || !stored) {
+        console.warn("⚠️ Missing token or generatedCL session data.");
+        return;
+      }
+
+      const parsed = JSON.parse(stored);
+      const jobId = parsed.job_id; // ✅ make sure this line is here!
+
+      if (!jobId) {
+        console.warn("⚠️ job_id missing in session storage.");
+        return;
+      }
+
+      const response = await axios.get(
+        `${BASE_URL}/internal/generate-cover-letter?job_id=${jobId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = response.data;
+      console.log("📩 Fetched CL from API:", data);
+
+      const clData = data.cl_data;
+
       setPersonalInfo({
-        name: parsed.name || '',
-        title: parsed.title || '',
-        mail: parsed.mail || '',
-        contact: parsed.contact || '',
-        address: parsed.address || '[ address ]',
+        name: clData.name || '',
+        title: clData.title || '',
+        mail: clData.mail || '',
+        contact: clData.contact || '',
+        address: clData.address || '[ address ]',
       });
-      setParagraphs(parsed.paragraphs || []);
+
+      setParagraphs(clData.paragraphs || []);
+    } catch (error) {
+      console.error("❌ Failed to fetch CL from API:", error.response?.data || error.message);
     }
   };
 
-  updateDataFromSession(); // Load on mount
-
-  // 🧠 Listen for navigation changes that might change sessionStorage
-  window.addEventListener("storage", updateDataFromSession);
-
-  return () => {
-    window.removeEventListener("storage", updateDataFromSession);
-  };
+  fetchCoverLetter();
 }, []);
 
 
   return (
-    <ClContext.Provider value={{ personalInfo, setPersonalInfo, paragraphs, setParagraphs }}>
+    <ClContext.Provider value={{
+      personalInfo,
+      setPersonalInfo,
+      paragraphs,
+      setParagraphs
+    }}>
       {children}
     </ClContext.Provider>
   );
