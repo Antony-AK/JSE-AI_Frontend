@@ -228,50 +228,52 @@ const Cv = () => {
                 <div className='w-[600px]'>
 
                     {/* Personal Info */}
-                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'personalInfo' ? 'border-[#2c6472]' : 'border-gray-300'
-                        }`}>
-                        <div className="flex justify-between items-start mb-2">
-                            <h2 className="font-semibold text-gray-800">Personal Information</h2>
-                            <img
-                                width="30px"
-                                className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'personalInfo' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                                    }`}
-                                src={activeSection === 'personalInfo' ? save_icon : edit_icon}
-                                alt=""
-                                onClick={() => {
-                                    if (activeSection === 'personalInfo') {
-                                        setActiveSection(null);
-                                    } else {
-                                        setActiveSection('personalInfo');
-                                    }
-                                }}
-                            />
-                        </div>
+                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${
+                    activeSection === 'personalInfo' ? 'border-[#2c6472]' : 'border-gray-300'
+                    }`}>
+                    <div className="flex justify-between items-start mb-2">
+                        <h2 className="font-semibold text-gray-800">Personal Information</h2>
+                        <img
+                            width="30px"
+                            className={`cursor-pointer p-2 rounded-full transition ${
+                                activeSection === 'personalInfo' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
+                            }`}
+                            src={activeSection === 'personalInfo' ? save_icon : edit_icon}
+                            alt=""
+                            onClick={() => {
+                                if (activeSection === 'personalInfo') {
+                                setActiveSection(null);
+                                } else {
+                                setActiveSection('personalInfo');
+                                }
+                            }}
+                        />
+                    </div>
 
-                        <div className="pl-1 text-sm space-y-1.5">
-                            {Object.entries(personalInfo).map(([key, value]) => {
-                                const isReadOnly = ["Name", "Mail", "Phone"].includes(key);
-                                return (
-                                    <div key={key} className="flex items-center gap-2 mb-2">
-                                        <span className="text-sm font-semibold text-gray-700 min-w-[80px]">{key}:</span>
-                                        {activeSection === 'personalInfo' ? (
-                                            isReadOnly ? (
-                                                <p className="text-[#00000082] font-medium">{value}</p>
-                                            ) : (
-                                                <input
-                                                    type="text"
-                                                    value={value}
-                                                    onChange={(e) => handleFieldChange(key, e.target.value)}
-                                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1 flex-1"
-                                                />
-                                            )
-                                        ) : (
-                                            <p className="text-[#00000082] font-medium">{value}</p>
-                                        )}
-                                    </div>
-                                );
-                            })}
-                        </div>
+                    <div className="pl-1 text-sm space-y-1.5">
+                        {Object.entries(personalInfo).map(([key, value]) => {
+                        const isReadOnly = ["Name", "Mail", "Phone"].includes(key);
+                        return (
+                            <div key={key} className="flex items-center gap-2 mb-2">
+                            <span className="text-sm font-semibold text-gray-700 min-w-[80px]">{key}:</span>
+                            {activeSection === 'personalInfo' ? (
+                                isReadOnly ? (
+                                <p className="text-[#00000082] font-medium">{value}</p>
+                                ) : (
+                                <input
+                                    type="text"
+                                    value={value}
+                                    onChange={(e) => handleFieldChange(key, e.target.value)}
+                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1 flex-1"
+                                />
+                                )
+                            ) : (
+                                <p className="text-[#00000082] font-medium">{value}</p>
+                            )}
+                            </div>
+                        );
+                        })}
+                    </div>
                     </div>
 
                     {/* Professional Summary */}
@@ -281,15 +283,16 @@ const Cv = () => {
                             <h2 className="font-semibold text-gray-800">{professionalSummary.title}</h2>
                             <img
                                 width="30px"
-                                className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'summary' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                                    }`}
+                                className={`cursor-pointer p-2 rounded-full transition ${
+                                    activeSection === 'summary' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
+                                }`}
                                 src={activeSection === 'summary' ? save_icon : edit_icon}
                                 alt=""
                                 onClick={() => {
                                     if (activeSection === 'summary') {
-                                        setActiveSection(null);
+                                    setActiveSection(null);
                                     } else {
-                                        setActiveSection('summary');
+                                    setActiveSection('summary');
                                     }
                                 }}
                             />
@@ -324,15 +327,16 @@ const Cv = () => {
                             <h2 className="font-semibold text-gray-800">{workExperience.title}</h2>
                             <img
                                 width="30px"
-                                className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'workExperience' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                                    }`}
+                                className={`cursor-pointer p-2 rounded-full transition ${
+                                    activeSection === 'workExperience' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
+                                }`}
                                 src={activeSection === 'workExperience' ? save_icon : edit_icon}
                                 alt=""
                                 onClick={() => {
                                     if (activeSection === 'workExperience') {
-                                        setActiveSection(null);
+                                    setActiveSection(null);
                                     } else {
-                                        setActiveSection('workExperience');
+                                    setActiveSection('workExperience');
                                     }
                                 }}
                             />
@@ -344,11 +348,11 @@ const Cv = () => {
                                     key={idx}
                                     onClick={() => setSelectedCompanyIdx(idx)}
                                     className={`px-3.5 py-1.5 text-xs border rounded-full ${selectedCompanyIdx === idx
-                                        ? 'bg-[#2c6472] text-white border-[#2c6472]'
-                                        : 'bg-white text-gray-700 border-gray-300'
+                                            ? 'bg-[#2c6472] text-white border-[#2c6472]'
+                                            : 'bg-white text-gray-700 border-gray-300'
                                         }`}
                                 >
-                                    {exp.Company}
+                                    {exp.Company && exp.Company.trim() !== '' ? exp.Company : `Work ${idx + 1}`}
                                 </button>
                             ))}
                         </div>
@@ -371,7 +375,7 @@ const Cv = () => {
                                     />
                                 ) : (
                                     <p className="text-[#00000082] font-medium">
-                                        {workExperience?.content?.[selectedCompanyIdx]?.Role || ''}
+                                    {workExperience?.content?.[selectedCompanyIdx]?.Role || ''}
                                     </p>
                                 )}
                             </div>
@@ -433,7 +437,7 @@ const Cv = () => {
                                     />
                                 ) : (
                                     <p className="text-[#00000082] font-medium whitespace-pre-line">
-                                        {workExperience?.content?.[selectedCompanyIdx]?.Description || ''}
+                                    {workExperience?.content?.[selectedCompanyIdx]?.Description || ''}
                                     </p>
                                 )}
                             </div>
@@ -442,163 +446,171 @@ const Cv = () => {
 
                     {/* Education */}
                     {education.content.length > 0 && (
-                        <div
-                            className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'education' ? 'border-[#2c6472]' : 'border-gray-300'
-                                }`}
-                        >
-                            <div className="flex justify-between items-start mb-2">
-                                <h2 className="font-semibold text-gray-800">{education.title}</h2>
-                                <img
-                                    width="30px"
-                                    className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'education' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                                        }`}
-                                    src={activeSection === 'education' ? save_icon : edit_icon}
-                                    alt=""
-                                    onClick={() => {
-                                        if (activeSection === 'education') {
-                                            setActiveSection(null);
-                                        } else {
-                                            setActiveSection('education');
-                                        }
-                                    }}
-                                />
-                            </div>
-
-                            {/* Education Tabs */}
-                            <div className="flex gap-2 flex-wrap my-3">
-                                {education.content.map((edu, idx) => (
-                                    <button
-                                        key={idx}
-                                        onClick={() => setSelectedEducationIdx(idx)}
-                                        className={`px-3.5 py-1.5 text-xs border rounded-full ${selectedEducationIdx === idx
-                                                ? 'bg-[#2c6472] text-white border-[#2c6472]'
-                                                : 'bg-white text-gray-700 border-gray-300'
-                                            }`}
-                                    >
-                                        Education {idx + 1}
-                                    </button>
-                                ))}
-                            </div>
-
-                            {/* Single Degree Field */}
-                            <div className="pl-1 text-sm space-y-3">
-                                <div className="flex items-start gap-2">
-                                    <label className="text-sm font-semibold text-gray-700 min-w-[80px]">Degree:</label>
-                                    {activeSection === 'education' ? (
-                                        <input
-                                            type="text"
-                                            value={education.content[selectedEducationIdx].degree}
-                                            onChange={(e) => {
-                                                const updated = [...education.content];
-                                                updated[selectedEducationIdx].degree = e.target.value;
-                                                setEducation(prev => ({ ...prev, content: updated }));
-                                            }}
-                                            className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
-                                        />
-                                    ) : (
-                                        <p className="text-[#00000082] font-medium">
-                                            {education.content[selectedEducationIdx].degree}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
+                    <div
+                        className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${
+                        activeSection === 'education' ? 'border-[#2c6472]' : 'border-gray-300'
+                        }`}
+                    >
+                        <div className="flex justify-between items-start mb-2">
+                        <h2 className="font-semibold text-gray-800">{education.title}</h2>
+                        <img
+                            width="30px"
+                            className={`cursor-pointer p-2 rounded-full transition ${
+                                activeSection === 'education' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
+                            }`}
+                            src={activeSection === 'education' ? save_icon : edit_icon}
+                            alt=""
+                            onClick={() => {
+                                if (activeSection === 'education') {
+                                setActiveSection(null);
+                                } else {
+                                setActiveSection('education');
+                                }
+                            }}
+                        />
                         </div>
+
+                        {/* Education Tabs */}
+                        <div className="flex gap-2 flex-wrap my-3">
+                        {education.content.map((edu, idx) => (
+                            <button
+                            key={idx}
+                            onClick={() => setSelectedEducationIdx(idx)}
+                            className={`px-3.5 py-1.5 text-xs border rounded-full ${
+                                selectedEducationIdx === idx
+                                ? 'bg-[#2c6472] text-white border-[#2c6472]'
+                                : 'bg-white text-gray-700 border-gray-300'
+                            }`}
+                            >
+                            Education {idx + 1}
+                            </button>
+                        ))}
+                        </div>
+
+                        {/* Single Degree Field */}
+                        <div className="pl-1 text-sm space-y-3">
+                        <div className="flex items-start gap-2">
+                            <label className="text-sm font-semibold text-gray-700 min-w-[80px]">Degree:</label>
+                            {activeSection === 'education' ? (
+                            <input
+                                type="text"
+                                value={education.content[selectedEducationIdx].degree}
+                                onChange={(e) => {
+                                const updated = [...education.content];
+                                updated[selectedEducationIdx].degree = e.target.value;
+                                setEducation(prev => ({ ...prev, content: updated }));
+                                }}
+                                className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                            />
+                            ) : (
+                            <p className="text-[#00000082] font-medium">
+                                {education.content[selectedEducationIdx].degree}
+                            </p>
+                            )}
+                        </div>
+                        </div>
+                    </div>
                     )}
 
                     {/* Projects */}
                     {projects.content.length > 0 && (
-                        <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'projects' ? 'border-[#2c6472]' : 'border-gray-300'
-                            }`}>
-                            <div className="flex justify-between items-start mb-2">
-                                <h2 className="font-semibold text-gray-800">{projects.title}</h2>
-                                <img
-                                    width="30px"
-                                    className="cursor-pointer p-2 rounded-full hover:bg-gray-300 transition"
-                                    src={activeSection === 'projects' ? save_icon : edit_icon}
-                                    alt=""
-                                    onClick={() =>
-                                        setActiveSection(activeSection === 'projects' ? null : 'projects')
-                                    }
-                                />
-                            </div>
-
-                            {/* Project Tabs */}
-                            <div className="flex gap-2 flex-wrap my-3">
-                                {projects.content.map((proj, idx) => (
-                                    <button
-                                        key={idx}
-                                        onClick={() => setSelectedProjectIdx(idx)}
-                                        className={`px-3.5 py-1.5 text-xs border rounded-full ${selectedProjectIdx === idx
-                                                ? 'bg-[#2c6472] text-white border-[#2c6472]'
-                                                : 'bg-white text-gray-700 border-gray-300'
-                                            }`}
-                                    >
-                                        {proj.Name || `Project ${idx + 1}`}
-                                    </button>
-                                ))}
-                            </div>
-
-                            {/* Selected Project Fields */}
-                            {projects.content[selectedProjectIdx] && (
-                                <div className="space-y-3">
-                                    {["Name", "Company", "Duration", "Skills"].map((field) => (
-                                        <div key={field} className="flex items-start gap-2">
-                                            <label className="text-sm font-semibold text-gray-700 min-w-[90px]">{field}:</label>
-                                            {activeSection === 'projects' ? (
-                                                <input
-                                                    type="text"
-                                                    value={projects.content[selectedProjectIdx][field]}
-                                                    onChange={(e) => {
-                                                        const updated = [...projects.content];
-                                                        updated[selectedProjectIdx][field] = e.target.value;
-                                                        setProjects((prev) => ({ ...prev, content: updated }));
-                                                    }}
-                                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
-                                                />
-                                            ) : (
-                                                <p className="text-[#00000082] font-medium">{projects.content[selectedProjectIdx][field]}</p>
-                                            )}
-                                        </div>
-                                    ))}
-
-                                    {/* Description */}
-                                    <div className="flex flex-col">
-                                        <label className="text-sm font-semibold text-gray-700 mb-1">Description:</label>
-                                        {activeSection === 'projects' ? (
-                                            <textarea
-                                                rows={4}
-                                                value={projects.content[selectedProjectIdx].Description}
-                                                onChange={(e) => {
-                                                    const updated = [...projects.content];
-                                                    updated[selectedProjectIdx].Description = e.target.value;
-                                                    setProjects((prev) => ({ ...prev, content: updated }));
-                                                }}
-                                                className="w-full min-h-[120px] rounded px-2 py-1 text-[#00000082] font-medium outline-none resize-y"
-                                            />
-                                        ) : (
-                                            <p className="text-[#00000082] font-medium whitespace-pre-wrap">
-                                                {projects.content[selectedProjectIdx].Description}
-                                            </p>
-                                        )}
-                                    </div>
-                                </div>
-                            )}
+                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${
+                        activeSection === 'projects' ? 'border-[#2c6472]' : 'border-gray-300'
+                    }`}>
+                        <div className="flex justify-between items-start mb-2">
+                        <h2 className="font-semibold text-gray-800">{projects.title}</h2>
+                        <img
+                            width="30px"
+                            className="cursor-pointer p-2 rounded-full hover:bg-gray-300 transition"
+                            src={activeSection === 'projects' ? save_icon : edit_icon}
+                            alt=""
+                            onClick={() =>
+                            setActiveSection(activeSection === 'projects' ? null : 'projects')
+                            }
+                        />
                         </div>
+
+                        {/* Project Tabs */}
+                        <div className="flex gap-2 flex-wrap my-3">
+                        {projects.content.map((proj, idx) => (
+                            <button
+                            key={idx}
+                            onClick={() => setSelectedProjectIdx(idx)}
+                            className={`px-3.5 py-1.5 text-xs border rounded-full ${
+                                selectedProjectIdx === idx
+                                ? 'bg-[#2c6472] text-white border-[#2c6472]'
+                                : 'bg-white text-gray-700 border-gray-300'
+                            }`}
+                            >
+                            {proj.Name || `Project ${idx + 1}`}
+                            </button>
+                        ))}
+                        </div>
+
+                        {/* Selected Project Fields */}
+                        {projects.content[selectedProjectIdx] && (
+                        <div className="space-y-3">
+                            {["Name", "Company", "Duration", "Skills"].map((field) => (
+                            <div key={field} className="flex items-start gap-2">
+                                <label className="text-sm font-semibold text-gray-700 min-w-[90px]">{field}:</label>
+                                {activeSection === 'projects' ? (
+                                <input
+                                    type="text"
+                                    value={projects.content[selectedProjectIdx][field]}
+                                    onChange={(e) => {
+                                    const updated = [...projects.content];
+                                    updated[selectedProjectIdx][field] = e.target.value;
+                                    setProjects((prev) => ({ ...prev, content: updated }));
+                                    }}
+                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                />
+                                ) : (
+                                <p className="text-[#00000082] font-medium">{projects.content[selectedProjectIdx][field]}</p>
+                                )}
+                            </div>
+                            ))}
+
+                            {/* Description */}
+                            <div className="flex flex-col">
+                            <label className="text-sm font-semibold text-gray-700 mb-1">Description:</label>
+                            {activeSection === 'projects' ? (
+                                <textarea
+                                rows={4}
+                                value={projects.content[selectedProjectIdx].Description}
+                                onChange={(e) => {
+                                    const updated = [...projects.content];
+                                    updated[selectedProjectIdx].Description = e.target.value;
+                                    setProjects((prev) => ({ ...prev, content: updated }));
+                                }}
+                                className="w-full min-h-[120px] rounded px-2 py-1 text-[#00000082] font-medium outline-none resize-y"
+                                />
+                            ) : (
+                                <p className="text-[#00000082] font-medium whitespace-pre-wrap">
+                                {projects.content[selectedProjectIdx].Description}
+                                </p>
+                            )}
+                            </div>
+                        </div>
+                        )}
+                    </div>
                     )}
 
                     {/* Skills */}
-                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'skills' ? 'border-[#2c6472]' : 'border-gray-300'
-                        }`}>
+                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${
+                        activeSection === 'skills' ? 'border-[#2c6472]' : 'border-gray-300'
+                    }`}>
                         <div className="flex justify-between items-start mb-2">
                             <h2 className="font-semibold text-gray-800">{skills.title}</h2>
                             <img
                                 width="30px"
-                                className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'skills' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                                    }`}
+                                className="cursor-pointer p-2 rounded-full transition hover:bg-gray-300"
                                 src={activeSection === 'skills' ? save_icon : edit_icon}
                                 alt=""
                                 onClick={() => {
                                     if (activeSection === 'skills') {
+                                        // Optional: Remove empty or whitespace-only entries on save
+                                        const cleanedSkills = skills.content.filter(skill => skill.trim() !== '');
+                                        setSkills({ ...skills, content: cleanedSkills });
                                         setActiveSection(null);
                                     } else {
                                         setActiveSection('skills');
@@ -607,66 +619,77 @@ const Cv = () => {
                             />
                         </div>
 
-                        <div className="pl-1 text-sm">
+                        <div className="pl-1 text-sm flex flex-wrap gap-2">
                             {activeSection === 'skills' ? (
-                                <textarea
-                                    rows={4}
-                                    value={skills.content.join(', ')}
-                                    onChange={(e) =>
-                                        setSkills({ ...skills, content: e.target.value.split(',').map(skill => skill.trim()) })
-                                    }
-                                    className="w-full rounded-md outline-none text-[#00000082] font-medium px-2 py-1 resize-y"
-                                />
+                                skills.content.map((skill, idx) => (
+                                    <input
+                                        key={idx}
+                                        type="text"
+                                        value={skill}
+                                        onChange={(e) => {
+                                            const updatedSkills = [...skills.content];
+                                            updatedSkills[idx] = e.target.value;
+                                            setSkills({ ...skills, content: updatedSkills });
+                                        }}
+                                        className="border outline-none rounded px-2 py-1 text-[#00000082] font-medium"
+                                    />
+                                ))
                             ) : (
-                                <p className="text-[#00000082] font-medium">{skills.content.join(', ')}</p>
+                                <p className="text-[#00000082] font-medium">
+                                    {skills.content.filter(s => s.trim() !== '').join(', ')}
+                                </p>
                             )}
                         </div>
                     </div>
 
                     {/* Languages */}
-                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'languages' ? 'border-[#2c6472]' : 'border-gray-300'
-                        }`}>
-                        <div className="flex justify-between items-start mb-2">
-                            <h2 className="font-semibold text-gray-800">{languages.title}</h2>
-                            <img
-                                width="30px"
-                                className="cursor-pointer p-2 rounded-full transition hover:bg-gray-300"
-                                src={activeSection === 'languages' ? save_icon : edit_icon}
-                                alt=""
-                                onClick={() => {
-                                    if (activeSection === 'languages') {
-                                        setActiveSection(null);
-                                    } else {
-                                        setActiveSection('languages');
-                                    }
-                                }}
-                            />
-                        </div>
+                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${
+                    activeSection === 'languages' ? 'border-[#2c6472]' : 'border-gray-300'
+                    }`}>
+                    <div className="flex justify-between items-start mb-2">
+                        <h2 className="font-semibold text-gray-800">{languages.title}</h2>
+                        <img
+                        width="30px"
+                        className="cursor-pointer p-2 rounded-full transition hover:bg-gray-300"
+                        src={activeSection === 'languages' ? save_icon : edit_icon}
+                        alt=""
+                        onClick={() => {
+                            if (activeSection === 'languages') {
+                            const cleaned = languages.content.filter(l => l.trim() !== '');
+                            setLanguages({ ...languages, content: cleaned });
+                            setActiveSection(null);
+                            } else {
+                            setActiveSection('languages');
+                            }
+                        }}
+                        />
+                    </div>
 
-                        <div className="pl-1 text-sm space-y-2">
-                            {activeSection === 'languages' ? (
-                                <textarea
-                                    value={languages.content.join(', ')}
-                                    onChange={(e) =>
-                                        setLanguages(prev => ({
-                                            ...prev,
-                                            content: e.target.value.split(',').map(l => l.trim()).filter(Boolean)
-                                        }))
-                                    }
-                                    className="w-full rounded p-2 outline-none text-[#00000082] font-medium resize-none"
-                                    rows={3}
-                                />
+                    <div className="pl-1 text-sm space-y-2">
+                        {activeSection === 'languages' ? (
+                        languages.content.map((lang, idx) => (
+                            <input
+                            key={idx}
+                            type="text"
+                            value={lang}
+                            onChange={(e) => {
+                                const updated = [...languages.content];
+                                updated[idx] = e.target.value;
+                                setLanguages({ ...languages, content: updated });
+                            }}
+                            className="w-full outline-none border rounded px-2 py-1 text-[#00000082] font-medium"
+                            />
+                        ))
+                        ) : (
+                        <div className="text-[#00000082] font-medium space-y-1">
+                            {languages.content.length > 0 ? (
+                            languages.content.map((lang, idx) => <p key={idx}>{lang}</p>)
                             ) : (
-                                <div className="text-[#00000082] font-medium">
-                                    {languages.content.length > 0
-                                        ? languages.content.map((lang, idx) => (
-                                            <p key={idx}>{lang}</p>
-                                        ))
-                                        : <p className="italic text-gray-400">No languages added</p>
-                                    }
-                                </div>
+                            <p className="italic text-gray-400">No languages added</p>
                             )}
                         </div>
+                        )}
+                    </div>
                     </div>
 
                     {/* Certificates */}
@@ -676,15 +699,16 @@ const Cv = () => {
                             <h2 className="font-semibold text-gray-800">{certificates.title}</h2>
                             <img
                                 width="30px"
-                                className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'skills' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                                    }`}
+                                className={`cursor-pointer p-2 rounded-full transition ${
+                                    activeSection === 'skills' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
+                                }`}
                                 src={activeSection === 'certificates' ? save_icon : edit_icon}
                                 alt=""
                                 onClick={() => {
                                     if (activeSection === 'certificates') {
-                                        setActiveSection(null);
+                                    setActiveSection(null);
                                     } else {
-                                        setActiveSection('certificates');
+                                    setActiveSection('certificates');
                                     }
                                 }}
                             />
@@ -734,17 +758,16 @@ const Cv = () => {
 
                     <div className="flex w-[794px] justify-end">
                         <button
-                            onClick={async () => {
-                                await handleUpdateCV();           // ✅ Wait for CV update to finish
-                                handleDownload();              // 🧾 Then trigger PDF download (for CV)
-                                setActiveSection(null);           // 🎨 Reset UI
-                                setTimeout(() => navigate(-1), 800); // ⏳ Delay navigation
+                            onClick={() => {
+                            handleDownload();
+                            setActiveSection(null);
+                            // Delay navigation to ensure download starts first
+                            setTimeout(() => navigate(-1), 800);
                             }}
                             className="bg-[#2c6472] text-white px-8 py-1.5 rounded-lg"
                         >
                             Download & Finish Editing
                         </button>
-
                     </div>
 
                 </div>
