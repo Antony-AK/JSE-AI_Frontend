@@ -1,20 +1,21 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
+import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import download_icon from '../../../assets/download.svg';
+import html2pdf from 'html2pdf.js';
 import save_icon from '../../../assets/tick.svg'
 import edit_icon from '../../../assets/edit-icon.svg';
-import ClPreview from './ClTemp';
-import { useCl } from '../Context/ClContext';
-import { useNavigate } from 'react-router-dom';
-import html2pdf from 'html2pdf.js';
+import ExternalClTemp from './ExternalClTemp';
+import { useExternalCl } from '../Context/ExternalClContext';
 
-const Cl = () => {
+const ExternalCl = () => {
 
   const previewRef = useRef(null);
 
   const navigate = useNavigate();
 
   const [activeSection, setActiveSection] = useState(null);
-  const { personalInfo, setPersonalInfo, paragraphs, setParagraphs } = useCl();
+  const { personalInfo, setPersonalInfo, paragraphs, setParagraphs } = useExternalCl();
 
   const handleFieldChange = (key, value) => {
     setPersonalInfo(prev => ({ ...prev, [key]: value }));
@@ -24,9 +25,9 @@ const Cl = () => {
     const updated = [...paragraphs];
     updated[index] = value;
     setParagraphs(updated);
-  };
+  };    
 
-const handleDownload = () => {
+  const handleDownloadAndNavigate = () => {
     if (!personalInfo.name || !personalInfo.title || paragraphs.length === 0) {
       alert("Please fill in all fields before downloading.");
       return;
@@ -44,10 +45,13 @@ const handleDownload = () => {
       jsPDF: { unit: 'px', format: [794, 1123], orientation: 'portrait' },
     };
 
-    html2pdf().set(opt).from(previewRef.current).save();
-  };  
+    html2pdf().set(opt).from(previewRef.current).save().then(() => {
+      navigate(-1); // 👈 navigate after download finishes
+    });
+  };
 
   return (
+
     <div className='flex flex-col justify-center items-center mx-auto'>
       <div className="flex items-center w-full px-4 mt-7">
         <div className="w-full text-center">
@@ -133,25 +137,19 @@ const handleDownload = () => {
             </div>
           </div>
 
-          <button
-            className="bg-[#2c6472] text-white mt-4 px-8 py-1.5 rounded-lg"
-            onClick={() => {
-              handleDownload();               // Trigger download first
-              setActiveSection(null);         // Optional: cleanup UI
-              navigate(-1); // Navigate back after delay
-            }}
-          >
-            Download & Finish Editing
-        </button>
+          <button className="bg-[#2c6472] text-white mt-4 px-8 py-1.5 rounded-lg"
+            onClick={handleDownloadAndNavigate}>
+              Download & Finish Editing
+          </button>
         </div>
 
         {/* RIGHT */}
         <div ref={previewRef} className="w-[794px] h-[1123px] flex flex-col gap-5">
-          <ClPreview />
+          <ExternalClTemp />
         </div>
       </div>
-    </div>
-  );
-};
+    </div>    
+  )
+}
 
-export default Cl;
+export default ExternalCl

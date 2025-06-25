@@ -1,15 +1,13 @@
 import { createContext, useContext, useState } from 'react';
 
-const CvContext = createContext();
+const ExternalCvContext = createContext();
 
-export const CvProvider = ({ children }) => {
-  let rawData = {};
-  try {
-    rawData = JSON.parse(sessionStorage.getItem("generatedCV")) || {};
-  } catch (e) {
-    console.error("Invalid JSON in sessionStorage for generatedCV:", e);
-  }
+export const ExternalCvProvider = ({ children }) => {
+  // Fetch from sessionStorage
+  const stored = JSON.parse(sessionStorage.getItem("cv_data")) || {};
+  const rawData = stored.cv_data || {};
 
+  // Transform rawData to match internal structure
   const cvData = {
     personalInfo: {
       Name: rawData.personal_info?.name || "",
@@ -33,10 +31,10 @@ export const CvProvider = ({ children }) => {
       }))
     },
     education: {
-        title: "Education",
-        content: (rawData.education || []).map(entry => ({
-            degree: entry || ""
-        }))
+      title: "Education",
+      content: (rawData.education || []).map(entry => ({
+        degree: entry || ""
+      }))
     },
     projects: {
       title: "Projects",
@@ -55,16 +53,16 @@ export const CvProvider = ({ children }) => {
       }))
     },
     skills: {
-        title: "Skills",
-        content: rawData.skills || []
+      title: "Skills",
+      content: rawData.skills || []
     },
     languages: {
-        title: "Languages",
-        content: rawData.languages || []
+      title: "Languages",
+      content: rawData.languages || []
     }
   };
 
-  // Initial state setup using transformed data
+  // Initialize state
   const [personalInfo, setPersonalInfo] = useState(cvData.personalInfo);
   const [professionalSummary, setProfessionalSummary] = useState(cvData.professionalSummary);
   const [workExperience, setWorkExperience] = useState(cvData.workExperience);
@@ -75,7 +73,7 @@ export const CvProvider = ({ children }) => {
   const [languages, setLanguages] = useState(cvData.languages);
 
   return (
-    <CvContext.Provider value={{
+    <ExternalCvContext.Provider value={{
       personalInfo, setPersonalInfo,
       professionalSummary, setProfessionalSummary,
       workExperience, setWorkExperience,
@@ -86,8 +84,8 @@ export const CvProvider = ({ children }) => {
       languages, setLanguages
     }}>
       {children}
-    </CvContext.Provider>
+    </ExternalCvContext.Provider>
   );
 };
 
-export const useCv = () => useContext(CvContext);
+export const useExternalCv = () => useContext(ExternalCvContext);

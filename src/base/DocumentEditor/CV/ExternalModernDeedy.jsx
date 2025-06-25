@@ -1,7 +1,6 @@
 import React from 'react'
 
-const ModernDeedy = ({ personalInfo, professionalSummary, workExperience, education, projects, skills, languages, certificates }) => {
-
+const ExternalModernDeedy = ({ personalInfo, professionalSummary, workExperience, education, projects, skills, languages, certificates }) => {
   return (
     <div className='flex flex-col gap-2 px-6 pt-5 w-full h-full'>
 
@@ -170,4 +169,4 @@ const ModernDeedy = ({ personalInfo, professionalSummary, workExperience, educat
   )
 }
 
-export default ModernDeedy
+export default ExternalModernDeedy
