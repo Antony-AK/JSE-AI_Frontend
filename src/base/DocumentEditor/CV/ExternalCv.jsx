@@ -6,6 +6,8 @@ import edit_icon from '../../../assets/edit-icon.svg'
 import html2pdf from 'html2pdf.js';
 import { useExternalCv } from '../Context/ExternalCvContext';
 import ExternalModernDeedy from './ExternalModernDeedy';
+import axios from 'axios';
+import { BASE_URL } from '../../../utils/api';
 
 const ExternalCv = () => {
 
@@ -56,6 +58,71 @@ const ExternalCv = () => {
             ...prev,
             [key]: value,
         }));
+    };    
+
+    const handleUpdateCV = async () => {
+        const token = sessionStorage.getItem("authToken");
+        const jobId = sessionStorage.getItem("externalJobId"); // ✅ Make sure this is stored earlier
+
+        if (!token || !jobId) {
+            console.warn("⚠ Missing auth token or generatedCV data.");
+            return;
+        }
+
+
+
+        // 🧠 BUILD CV PAYLOAD FROM CURRENT STATE
+        const payload = {
+            job_id: jobId,
+            cv_data: {
+                personal_info: {
+                    name: personalInfo.Name,
+                    title: personalInfo.Title,
+                    mail: personalInfo.Mail,
+                    phone: personalInfo.Phone,
+                    address: personalInfo.Address || "", // optional
+                    linkedin: personalInfo.LinkedIn,
+                    portfolio: personalInfo.Website
+                },
+                profile_summary: professionalSummary.content || "",
+                education: education.content.map(e => e.degree),
+                certifications: certificates.content.map(c => c.Name),
+                skills: skills.content,
+                languages: languages.content,
+                work_experience: workExperience.content.map(item => ({
+                    position: item.Role,
+                    company_name: item.Company,
+                    period: item.Duration,
+                    description: item.Description
+                })),
+                projects: projects.content.map(item => ({
+                    project_name: item.Name,
+                    company_name: item.Company,
+                    period: item.Duration,
+                    skills_used: item.Skills,
+                    description: item.Description
+                }))
+            }
+        };
+
+        console.log("📦 Final PUT Payload:", payload);
+
+        try {
+            const response = await axios.put(
+                `${BASE_URL}/internal/generate/cv`,
+                payload,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
+
+            console.log("✅ CV updated successfully:", response.data);
+        } catch (error) {
+            console.error("❌ Failed to update CV:", error.response?.data || error.message);
+        }
     };    
 
   return (
@@ -124,7 +191,7 @@ const ExternalCv = () => {
                         );
                         })}
                     </div>
-                    </div>
+                    </div>                    
 
                     {/* Professional Summary */}
                     <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'summary' ? 'border-[#2c6472]' : 'border-gray-300'
@@ -202,7 +269,7 @@ const ExternalCv = () => {
                                             : 'bg-white text-gray-700 border-gray-300'
                                         }`}
                                 >
-                                    {exp.Company}
+                                    {exp.Company && exp.Company.trim() !== '' ? exp.Company : `Work ${idx + 1}`}
                                 </button>
                             ))}
                         </div>
@@ -453,82 +520,94 @@ const ExternalCv = () => {
                             <h2 className="font-semibold text-gray-800">{skills.title}</h2>
                             <img
                                 width="30px"
-                                className={`cursor-pointer p-2 rounded-full transition ${
-                                    activeSection === 'skills' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                                }`}
+                                className="cursor-pointer p-2 rounded-full transition hover:bg-gray-300"
                                 src={activeSection === 'skills' ? save_icon : edit_icon}
                                 alt=""
                                 onClick={() => {
                                     if (activeSection === 'skills') {
-                                    setActiveSection(null);
+                                        // Optional: Remove empty or whitespace-only entries on save
+                                        const cleanedSkills = skills.content.filter(skill => skill.trim() !== '');
+                                        setSkills({ ...skills, content: cleanedSkills });
+                                        setActiveSection(null);
                                     } else {
-                                    setActiveSection('skills');
+                                        setActiveSection('skills');
                                     }
                                 }}
                             />
                         </div>
 
-                        <div className="pl-1 text-sm">
+                        <div className="pl-1 text-sm flex flex-wrap gap-2">
                             {activeSection === 'skills' ? (
-                                <textarea
-                                    rows={4}
-                                    value={skills.content.join(', ')}
-                                    onChange={(e) =>
-                                        setSkills({ ...skills, content: e.target.value.split(',').map(skill => skill.trim()) })
-                                    }
-                                    className="w-full rounded-md outline-none text-[#00000082] font-medium px-2 py-1 resize-y"
-                                />
+                                skills.content.map((skill, idx) => (
+                                    <input
+                                        key={idx}
+                                        type="text"
+                                        value={skill}
+                                        onChange={(e) => {
+                                            const updatedSkills = [...skills.content];
+                                            updatedSkills[idx] = e.target.value;
+                                            setSkills({ ...skills, content: updatedSkills });
+                                        }}
+                                        className="border outline-none rounded px-2 py-1 text-[#00000082] font-medium"
+                                    />
+                                ))
                             ) : (
-                                <p className="text-[#00000082] font-medium">{skills.content.join(', ')}</p>
+                                <p className="text-[#00000082] font-medium">
+                                    {skills.content.filter(s => s.trim() !== '').join(', ')}
+                                </p>
                             )}
                         </div>
                     </div>
 
                     {/* Languages */}
-                        <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'languages' ? 'border-[#2c6472]' : 'border-gray-300'
-                        }`}>
-                        <div className="flex justify-between items-start mb-2">
-                            <h2 className="font-semibold text-gray-800">{languages.title}</h2>
-                            <img
-                            width="30px"
-                            className="cursor-pointer p-2 rounded-full transition hover:bg-gray-300"
-                            src={activeSection === 'languages' ? save_icon : edit_icon}
-                            alt=""
-                            onClick={() => {
-                                if (activeSection === 'languages') {
-                                setActiveSection(null);
-                                } else {
-                                setActiveSection('languages');
-                                }
-                            }}
-                            />
-                        </div>
+                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${
+                    activeSection === 'languages' ? 'border-[#2c6472]' : 'border-gray-300'
+                    }`}>
+                    <div className="flex justify-between items-start mb-2">
+                        <h2 className="font-semibold text-gray-800">{languages.title}</h2>
+                        <img
+                        width="30px"
+                        className="cursor-pointer p-2 rounded-full transition hover:bg-gray-300"
+                        src={activeSection === 'languages' ? save_icon : edit_icon}
+                        alt=""
+                        onClick={() => {
+                            if (activeSection === 'languages') {
+                            const cleaned = languages.content.filter(l => l.trim() !== '');
+                            setLanguages({ ...languages, content: cleaned });
+                            setActiveSection(null);
+                            } else {
+                            setActiveSection('languages');
+                            }
+                        }}
+                        />
+                    </div>
 
-                        <div className="pl-1 text-sm space-y-2">
-                            {activeSection === 'languages' ? (
-                            <textarea
-                                value={languages.content.join(', ')}
-                                onChange={(e) =>
-                                setLanguages(prev => ({
-                                    ...prev,
-                                    content: e.target.value.split(',').map(l => l.trim()).filter(Boolean)
-                                }))
-                                }
-                                className="w-full rounded p-2 outline-none text-[#00000082] font-medium resize-none"
-                                rows={3}
+                    <div className="pl-1 text-sm space-y-2">
+                        {activeSection === 'languages' ? (
+                        languages.content.map((lang, idx) => (
+                            <input
+                            key={idx}
+                            type="text"
+                            value={lang}
+                            onChange={(e) => {
+                                const updated = [...languages.content];
+                                updated[idx] = e.target.value;
+                                setLanguages({ ...languages, content: updated });
+                            }}
+                            className="w-full outline-none border rounded px-2 py-1 text-[#00000082] font-medium"
                             />
+                        ))
+                        ) : (
+                        <div className="text-[#00000082] font-medium space-y-1">
+                            {languages.content.length > 0 ? (
+                            languages.content.map((lang, idx) => <p key={idx}>{lang}</p>)
                             ) : (
-                            <div className="text-[#00000082] font-medium">
-                                {languages.content.length > 0
-                                ? languages.content.map((lang, idx) => (
-                                    <p key={idx}>{lang}</p>
-                                    ))
-                                : <p className="italic text-gray-400">No languages added</p>
-                                }
-                            </div>
+                            <p className="italic text-gray-400">No languages added</p>
                             )}
                         </div>
-                        </div>
+                        )}
+                    </div>
+                    </div>
 
                     {/* Certificates */}
                     <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'certificates' ? 'border-[#2c6472]' : 'border-gray-300'
@@ -597,10 +676,13 @@ const ExternalCv = () => {
                     <div className="flex w-[794px] justify-end">
                         <button
                             className="bg-[#2c6472] text-white px-8 py-1.5 rounded-lg"
-                            onClick={() => handleDownloadAndGoBack(previewRef, navigate)}
-                            >
+                            onClick={async () => {
+                                await handleUpdateCV(); // ✅ First update the CV
+                                handleDownloadAndGoBack(previewRef, navigate); // ✅ Then download + go back
+                            }}
+                        >
                             Download & Finish Editing
-                        </button>
+                        </button>
                     </div>
 
                 </div>

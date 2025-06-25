@@ -78,17 +78,19 @@ const ExternalModernDeedy = ({ personalInfo, professionalSummary, workExperience
         )}
 
         {/* Education */}
-        {education.content.length > 0 && (
-            <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-3">
-                <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>EDUCATION</h2>
-                <div className="w-full border border-t-gray-400"></div>
-                </div>
-                {education.content.map((entry, idx) => (
-                <p key={idx} className="text-sm ml-2 text-gray-700">{entry.degree}</p>
-                ))}
+        {education?.content?.length > 0 && education.content.some(entry => entry.degree?.trim()) && (
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-3">
+              <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>EDUCATION</h2>
+              <div className="w-full border border-t-gray-400"></div>
             </div>
-        )}
+            {education.content.map((entry, idx) => (
+              entry.degree?.trim() && (
+                <p key={idx} className="text-sm ml-2 text-gray-700">{entry.degree}</p>
+              )
+            ))}
+          </div>
+        )}        
 
         {/* Projects */}
         {projects.content.some(
@@ -125,17 +127,24 @@ const ExternalModernDeedy = ({ personalInfo, professionalSummary, workExperience
         )}
 
         {/* Skills */}
-        <div className="flex flex-col gap-1">
+        {skills.content.filter(skill => skill.trim() !== '').length > 0 && (
+          <div className="flex flex-col gap-1">
             <div className="flex items-center gap-3">
-                <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>SKILLS</h2>
-                <div className="w-full border border-t-gray-400"></div>
+              <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>SKILLS</h2>
+              <div className="w-full border border-t-gray-400"></div>
             </div>
             <div className="text-[13px] ml-2 text-gray-800">
-            {skills.content.map((skill, idx) => (
-                <span key={idx}>{skill}{idx !== skills.content.length - 1 ? ', ' : ''}</span>
-            ))}
+              {skills.content
+                .filter(skill => skill.trim() !== '')
+                .map((skill, idx, arr) => (
+                  <span key={idx}>
+                    {skill}
+                    {idx !== arr.length - 1 ? ', ' : ''}
+                  </span>
+                ))}
             </div>
-        </div>
+          </div>
+        )}        
 
         {/* Languages */}
         {languages.content.length > 0 && (
@@ -153,17 +162,21 @@ const ExternalModernDeedy = ({ personalInfo, professionalSummary, workExperience
         )}
 
         {/* Certificates */}
-        <div className="flex flex-col gap-1">
+        {certificates.content.filter(cert => cert.Name?.trim() !== '').length > 0 && (
+          <div className="flex flex-col gap-1">
             <div className="flex items-center gap-3">
-                <h2 className='font-semibold text-lg whitespace-nowrap text-purple-500'>CERTIFICATES</h2>
-                <div className="w-full border border-t-gray-400"></div>
+              <h2 className='font-semibold text-lg whitespace-nowrap text-purple-500'>CERTIFICATES</h2>
+              <div className="w-full border border-t-gray-400"></div>
             </div>
             <div className="text-[13px] ml-2 text-gray-800">
-            {certificates.content.map((cert, idx) => (
-                <p key={idx}>{cert.Name}</p>
-            ))}
+              {certificates.content
+                .filter(cert => cert.Name?.trim() !== '')
+                .map((cert, idx) => (
+                  <p key={idx}>{cert.Name}</p>
+                ))}
             </div>
-        </div>
+          </div>
+        )}
         
     </div>
   )
