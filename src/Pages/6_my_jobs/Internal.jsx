@@ -196,42 +196,42 @@ const MyApplication = () => {
   console.log("Selected Jobs:", selectedJobs);
 
 
- const handleGetJobURL = async (job_id) => {
-  console.log("👉 job_id being passed:", job_id); // Check if valid
+  const handleGetJobURL = async (job_id) => {
+    console.log("👉 job_id being passed:", job_id); // Check if valid
 
-  if (!job_id) {
-    console.error("❌ job_id is undefined or invalid.");
-    return;
-  }
-
-  try {
-    const token = sessionStorage.getItem("authToken");
-    if (!token) {
-      console.error("⚠ No auth token found.");
+    if (!job_id) {
+      console.error("❌ job_id is undefined or invalid.");
       return;
     }
 
-    const response = await axios.post(
-      `${BASE_URL}/provide-link`,
-      JSON.stringify({ job_id }), // Explicit payload
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+    try {
+      const token = sessionStorage.getItem("authToken");
+      if (!token) {
+        console.error("⚠ No auth token found.");
+        return;
       }
-    );
 
-    const jobLink = response.data?.job_link;
-    if (jobLink) {
-      window.open(jobLink, "_blank");
-    } else {
-      console.warn("⚠ No job link found:", response.data);
+      const response = await axios.post(
+        `${BASE_URL}/provide-link`,
+        JSON.stringify({ job_id }), // Explicit payload
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      const jobLink = response.data?.job_link;
+      if (jobLink) {
+        window.open(jobLink, "_blank");
+      } else {
+        console.warn("⚠ No job link found:", response.data);
+      }
+    } catch (error) {
+      console.error("❌ AxiosError:", error.response?.data || error.message);
     }
-  } catch (error) {
-    console.error("❌ AxiosError:", error.response?.data || error.message);
-  }
-};
+  };
 
 
 
@@ -239,7 +239,6 @@ const MyApplication = () => {
     const jobId = selectedJob?.id;
     if (!jobId) return console.warn("No selected job!");
 
-    navigate("/user/cv", { state: { jobId } }); // Navigate first
 
     try {
       const token = sessionStorage.getItem("authToken");
@@ -260,6 +259,9 @@ const MyApplication = () => {
       // Save data to sessionStorage
       sessionStorage.setItem("generatedCV", JSON.stringify(response.data));
 
+      navigate("/user/cv", { state: { jobId } }); // Navigate first
+
+
     } catch (error) {
       console.error("❌ CV generation failed:", error);
       sessionStorage.setItem("generatedCV", JSON.stringify({ error: true }));
@@ -271,7 +273,6 @@ const MyApplication = () => {
     const jobId = selectedJob?.id;
     if (!jobId) return console.warn("⚠️ No selected job!");
 
-    navigate("/user/cl", { state: { jobId } });
 
 
     try {
@@ -295,6 +296,9 @@ const MyApplication = () => {
       if (response.status === 200 && response.data) {
         // Store the generated cover letter data
         sessionStorage.setItem("generatedCL", JSON.stringify(response.data));
+
+        navigate("/user/cl", { state: { jobId } });
+
 
         // Navigate to CL page where loading/animation happens
       } else {

@@ -13,8 +13,11 @@ export const ClProvider = ({ children }) => {
 
   const [paragraphs, setParagraphs] = useState([]);
 
+  
+
   // Load from sessionStorage only on first render
-  useEffect(() => {
+ useEffect(() => {
+  const updateDataFromSession = () => {
     const storedData = sessionStorage.getItem('generatedCL');
     if (storedData) {
       const parsed = JSON.parse(storedData);
@@ -27,7 +30,18 @@ export const ClProvider = ({ children }) => {
       });
       setParagraphs(parsed.paragraphs || []);
     }
-  }, []);
+  };
+
+  updateDataFromSession(); // Load on mount
+
+  // 🧠 Listen for navigation changes that might change sessionStorage
+  window.addEventListener("storage", updateDataFromSession);
+
+  return () => {
+    window.removeEventListener("storage", updateDataFromSession);
+  };
+}, []);
+
 
   return (
     <ClContext.Provider value={{ personalInfo, setPersonalInfo, paragraphs, setParagraphs }}>

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import download_icon from '../../../assets/download.svg';
 import save_icon from '../../../assets/tick.svg'
 import edit_icon from '../../../assets/edit-icon.svg';
@@ -46,6 +46,24 @@ const handleDownload = () => {
 
     html2pdf().set(opt).from(previewRef.current).save();
   };  
+
+  useEffect(() => {
+    const storedData = sessionStorage.getItem("generatedCL");
+
+    if (storedData) {
+      const parsed = JSON.parse(storedData);
+
+      setPersonalInfo({
+        name: parsed.name || "",
+        title: parsed.title || "",
+        mail: parsed.mail || "",
+        contact: parsed.contact || "",
+        address: parsed.address || "[ address ]"
+      });
+
+      setParagraphs(parsed.paragraphs || []);
+    }
+  }, []);
 
   return (
     <div className='flex flex-col justify-center items-center mx-auto'>

@@ -1,29 +1,63 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const CvContext = createContext();
 
 export const CvProvider = ({ children }) => {
-  let rawData = {};
-  try {
-    rawData = JSON.parse(sessionStorage.getItem("generatedCV")) || {};
-  } catch (e) {
-    console.error("Invalid JSON in sessionStorage for generatedCV:", e);
-  }
+  const [personalInfo, setPersonalInfo] = useState({
+    Name: "", Title: "", Mail: "", Phone: "", LinkedIn: "", Website: ""
+  });
 
-  const cvData = {
-    personalInfo: {
+  const [professionalSummary, setProfessionalSummary] = useState({
+    title: "Professional Summary", content: ""
+  });
+
+  const [workExperience, setWorkExperience] = useState({
+    title: "Work Experience", content: []
+  });
+
+  const [education, setEducation] = useState({
+    title: "Education", content: []
+  });
+
+  const [projects, setProjects] = useState({
+    title: "Projects", content: []
+  });
+
+  const [certificates, setCertificates] = useState({
+    title: "Certificates", content: []
+  });
+
+  const [skills, setSkills] = useState({
+    title: "Skills", content: []
+  });
+
+  const [languages, setLanguages] = useState({
+    title: "Languages", content: []
+  });
+
+  useEffect(() => {
+    let rawData = {};
+    try {
+      rawData = JSON.parse(sessionStorage.getItem("generatedCV")) || {};
+    } catch (e) {
+      console.error("Invalid JSON in sessionStorage for generatedCV:", e);
+    }
+
+    setPersonalInfo({
       Name: rawData.personal_info?.name || "",
       Title: rawData.personal_info?.title || "",
       Mail: rawData.personal_info?.mail || "",
       Phone: rawData.personal_info?.phone || "",
       LinkedIn: rawData.personal_info?.linkedin || "",
-      Website: rawData.personal_info?.portfolio || "[ your website ]",
-    },
-    professionalSummary: {
+      Website: rawData.personal_info?.portfolio || "",
+    });
+
+    setProfessionalSummary({
       title: "Professional Summary",
       content: rawData.profile_summary || ""
-    },
-    workExperience: {
+    });
+
+    setWorkExperience({
       title: "Work Experience",
       content: (rawData.work_experience || []).map(item => ({
         Role: item.position || "",
@@ -31,14 +65,16 @@ export const CvProvider = ({ children }) => {
         Duration: item.period || "",
         Description: item.description || ""
       }))
-    },
-    education: {
-        title: "Education",
-        content: (rawData.education || []).map(entry => ({
-            degree: entry || ""
-        }))
-    },
-    projects: {
+    });
+
+    setEducation({
+      title: "Education",
+      content: (rawData.education || []).map(entry => ({
+        degree: entry || ""
+      }))
+    });
+
+    setProjects({
       title: "Projects",
       content: (rawData.projects || []).map(item => ({
         Name: item.project_name || "",
@@ -47,32 +83,25 @@ export const CvProvider = ({ children }) => {
         Skills: item.skills_used || "",
         Description: item.description || ""
       }))
-    },
-    certificates: {
+    });
+
+    setCertificates({
       title: "Certificates",
       content: (rawData.certifications || []).map(name => ({
         Name: name || ""
       }))
-    },
-    skills: {
-        title: "Skills",
-        content: rawData.skills || []
-    },
-    languages: {
-        title: "Languages",
-        content: rawData.languages || []
-    }
-  };
+    });
 
-  // Initial state setup using transformed data
-  const [personalInfo, setPersonalInfo] = useState(cvData.personalInfo);
-  const [professionalSummary, setProfessionalSummary] = useState(cvData.professionalSummary);
-  const [workExperience, setWorkExperience] = useState(cvData.workExperience);
-  const [education, setEducation] = useState(cvData.education);
-  const [projects, setProjects] = useState(cvData.projects);
-  const [certificates, setCertificates] = useState(cvData.certificates);
-  const [skills, setSkills] = useState(cvData.skills);
-  const [languages, setLanguages] = useState(cvData.languages);
+    setSkills({
+      title: "Skills",
+      content: rawData.skills || []
+    });
+
+    setLanguages({
+      title: "Languages",
+      content: rawData.languages || []
+    });
+  }, []);
 
   return (
     <CvContext.Provider value={{

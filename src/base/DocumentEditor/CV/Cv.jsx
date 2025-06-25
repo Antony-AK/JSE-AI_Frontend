@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import download_icon from '../../../assets/download.svg'
 import save_icon from '../../../assets/tick.svg'
@@ -52,6 +52,75 @@ const Cv = () => {
             [key]: value,
         }));
     };
+
+     // ✅ Add this useEffect to refresh sessionStorage data on mount
+  useEffect(() => {
+    let rawData = {};
+    try {
+      rawData = JSON.parse(sessionStorage.getItem("generatedCV")) || {};
+    } catch (e) {
+      console.error("Invalid JSON in sessionStorage for generatedCV:", e);
+    }
+
+    setPersonalInfo({
+      Name: rawData.personal_info?.name || "",
+      Title: rawData.personal_info?.title || "",
+      Mail: rawData.personal_info?.mail || "",
+      Phone: rawData.personal_info?.phone || "",
+      LinkedIn: rawData.personal_info?.linkedin || "",
+      Website: rawData.personal_info?.portfolio || "",
+    });
+
+    setProfessionalSummary({
+      title: "Professional Summary",
+      content: rawData.profile_summary || ""
+    });
+
+    setWorkExperience({
+      title: "Work Experience",
+      content: (rawData.work_experience || []).map(item => ({
+        Role: item.position || "",
+        Company: item.company_name || "",
+        Duration: item.period || "",
+        Description: item.description || ""
+      }))
+    });
+
+    setEducation({
+      title: "Education",
+      content: (rawData.education || []).map(entry => ({
+        degree: entry || ""
+      }))
+    });
+
+    setProjects({
+      title: "Projects",
+      content: (rawData.projects || []).map(item => ({
+        Name: item.project_name || "",
+        Company: item.company_name || "",
+        Duration: item.period || "",
+        Skills: item.skills_used || "",
+        Description: item.description || ""
+      }))
+    });
+
+    setCertificates({
+      title: "Certificates",
+      content: (rawData.certifications || []).map(name => ({
+        Name: name || ""
+      }))
+    });
+
+    setSkills({
+      title: "Skills",
+      content: rawData.skills || []
+    });
+
+    setLanguages({
+      title: "Languages",
+      content: rawData.languages || []
+    });
+  }, []); // 👈 Run only once when CV page mounts
 
     return (
         <div className='flex flex-col justify-center items-center mx-auto'>

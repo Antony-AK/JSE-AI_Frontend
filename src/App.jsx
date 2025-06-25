@@ -82,8 +82,8 @@ const AppRoutes = () => {
                                 <Route path="/user/profile" element={<Profile />} />
                                 <Route path='/user/graph' element={<ApplicationsChart />} />
                                 <Route path='/user/announcements' element={<Announcements />} />
-                                <Route path="/user/cv" element={<CvProvider> <Cv /> </CvProvider>} />
-                                <Route path="/user/cl" element={<ClProvider> <Cl /> </ClProvider>} />
+                                <Route path="/user/cv" element={<CvProvider> <Cv key={Date.now()} /> </CvProvider>} />
+                                <Route path="/user/cl" element={<ClProvider> <Cl key={Date.now()}/> </ClProvider>} />
                                 <Route path="/user/document-editor"element={<ExternalCvProvider> <ExternalClProvider> <DocumentEditor /> </ExternalClProvider> </ExternalCvProvider>}/>
                                 <Route path='/user/external-cv' element={<ExternalCvProvider> <ExternalCv /> </ExternalCvProvider>} />
                                 <Route path='/user/external-cl' element={<ExternalClProvider> <ExternalCl /> </ExternalClProvider>} />

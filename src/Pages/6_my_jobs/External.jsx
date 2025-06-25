@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/api';
-import axios from 'axios';
-import { BASE_URL } from '../../utils/api';
 
 const External = () => {
 
@@ -20,7 +18,6 @@ const External = () => {
     source: "external", // ✅ always added!
   };
 
-      navigate('/user/document-editor');
 
 
   try {
