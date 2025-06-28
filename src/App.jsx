@@ -38,6 +38,7 @@ import ApplicationTracker from './Pages/Application tracker/ApplicationTracker.j
 import DocumentEditor from './base/DocumentEditor/DocumentEditor.jsx';
 import ExternalCv from './base/DocumentEditor/CV/ExternalCv.jsx';
 import ExternalCl from './base/DocumentEditor/CL/ExternalCl.jsx';
+import Settings from './Pages/Settings/Settings.jsx';
 
 const AppRoutes = () => {
     const location = useLocation();
@@ -76,7 +77,8 @@ const AppRoutes = () => {
                                 <Route path="/user/my-jobs/external" element={<External />} />
                                 <Route path="/user/application-tracker" element={<ApplicationTracker />} />
                                 <Route path="/user/saved-jobs" element={<Savedjob />} />
-                                <Route path="/user/settings" element={<Setting />} />
+                                <Route path="/user/setting" element={<Setting />} />
+                                <Route path="/user/settings" element={<Settings />} />
                                 <Route path="/test1" element={<Test1 />} />
                                 <Route path="/verification" element={<VerificationPage />} />
                                 <Route path="/user/profile" element={<Profile />} />
