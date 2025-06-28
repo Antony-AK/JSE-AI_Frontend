@@ -741,7 +741,7 @@ const Cv = () => {
 
                 <div className="w-[60%] flex flex-col gap-8">
 
-                    <div ref={previewRef} className="h-[1123px] w-[794px] flex bg-white">
+                    <div ref={previewRef} className="min-h-[1123px] w-[794px] flex bg-white">
 
                         <ModernDeedy
                             personalInfo={personalInfo}

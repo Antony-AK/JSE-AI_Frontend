@@ -40,7 +40,10 @@ html {
   font-family: "Times New Roman", Times, serif !important;
 }
 
-
+.avoid-page-break {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
 
 
 /* Scrollbar customization */

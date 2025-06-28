@@ -1,245 +1,58 @@
 export const jobskills = {
-  "Mechanical Engineer": {
-    "skills": [
-      "CAD Software (e.g., SolidWorks, AutoCAD)",
-      "Finite Element Analysis (FEA)",
-      "Thermodynamics",
-      "Fluid Dynamics",
-      "Material Science"
-    ]
-  },
-  "Design Engineer": {
-    "skills": [
-      "Product Design",
-      "DFM (Design for Manufacturability)",
-      "Prototyping",
-      "Geometric Dimensioning & Tolerancing (GD&T)",
-      "Concept Development"
-    ]
-  },
-  "Manufacturing Engineer": {
-    "skills": [
-      "Process Optimization",
-      "Lean Manufacturing",
-      "Six Sigma",
-      "CNC Programming",
-      "Quality Control"
-    ]
-  },
   "Automation Engineer": {
     "skills": [
       "PLC Programming",
-      "Robotics (Industrial)",
       "SCADA Systems",
-      "Instrumentation",
-      "Control Systems Design"
+      "Control Systems Design",
+      "Industrial Robotics",
+      "Sensor Integration",
+      "Electrical Schematics",
+      "Python/Scripting for Automation",
+      "Human-Machine Interface (HMI)",
+      "Machine Vision Systems",
+      "Industrial Communication Protocols (e.g., Modbus, Profibus)"
     ]
   },
   "Electrical Engineer": {
     "skills": [
       "Circuit Design",
-      "Power Electronics",
+      "Power Systems",
+      "Signal Processing",
+      "Control Systems",
+      "Electromagnetics",
       "Embedded Systems",
-      "Electromagnetic Theory",
-      "Troubleshooting"
-    ]
-  },
-  "Power Engineer": {
-    "skills": [
-      "Power Systems Analysis",
+      "Electrical Safety Standards (e.g., NEC, IEC)",
+      "MATLAB/Simulink",
       "Renewable Energy Systems",
-      "High Voltage Engineering",
-      "Grid Integration",
-      "Power Generation"
+      "Load Calculations"
     ]
   },
   "Control Systems Engineer": {
     "skills": [
       "PID Control",
-      "System Modeling",
+      "State-Space Modeling",
+      "System Dynamics",
       "MATLAB/Simulink",
-      "Automation Software",
-      "Feedback Control"
+      "Control Loop Tuning",
+      "PLC/DCS Programming",
+      "Signal Filtering",
+      "Sensor Calibration",
+      "Stability Analysis",
+      "Real-Time Systems"
     ]
   },
   "Electronics Engineer": {
     "skills": [
       "Analog Circuit Design",
-      "Digital Circuit Design",
+      "Digital Electronics",
       "PCB Design",
+      "Embedded Systems",
       "Microcontrollers",
-      "Signal Processing"
-    ]
-  },
-  "Civil Engineer": {
-    "skills": [
-      "Structural Analysis",
-      "Geotechnical Engineering",
-      "Hydraulics",
-      "Construction Management",
-      "AutoCAD Civil 3D"
-    ]
-  },
-  "Structural Engineer": {
-    "skills": [
-      "Structural Analysis Software (e.g., SAP2000, ETABS)",
-      "Building Codes",
-      "Seismic Design",
-      "Steel Design",
-      "Concrete Design"
-    ]
-  },
-  "Construction Manager": {
-    "skills": [
-      "Project Planning & Scheduling",
-      "Budget Management",
-      "Site Supervision",
-      "Contract Administration",
-      "Risk Management (Construction)"
-    ]
-  },
-  "Transportation Engineer": {
-    "skills": [
-      "Traffic Modeling",
-      "Highway Design",
-      "Public Transportation Systems",
-      "Pavement Design",
-      "Transportation Planning"
-    ]
-  },
-  "Software Developer": {
-    "skills": [
-      "Programming Languages (e.g., Python, Java, C++)",
-      "Data Structures & Algorithms",
-      "Version Control (Git)",
-      "Debugging",
-      "Software Testing"
-    ]
-  },
-  "Frontend Developer": {
-    "skills": [
-      "HTML/CSS",
-      "JavaScript Frameworks (e.g., React, Angular, Vue.js)",
-      "Responsive Design",
-      "UI/UX Principles",
-      "Web Performance Optimization"
-    ]
-  },
-  "Backend Developer": {
-    "skills": [
-      "Server-side Languages (e.g., Node.js, Python, Ruby, Java)",
-      "Database Management (SQL/NoSQL)",
-      "API Development (RESTful)",
-      "Cloud Platforms (e.g., AWS, Azure, GCP)",
-      "Security Best Practices"
-    ]
-  },
-  "Full Stack Developer": {
-    "skills": [
-      "Frontend Development",
-      "Backend Development",
-      "Database Management",
-      "DevOps Principles",
-      "System Architecture"
-    ]
-  },
-  "Data Scientist": {
-    "skills": [
-      "Statistical Analysis",
-      "Machine Learning Algorithms",
-      "Python/R Programming",
-      "Data Visualization",
-      "SQL"
-    ]
-  },
-  "Data Engineer": {
-    "skills": [
-      "ETL Processes",
-      "Big Data Technologies (e.g., Hadoop, Spark)",
-      "Database Design",
-      "Data Warehousing",
-      "Cloud Data Services"
-    ]
-  },
-  "Machine Learning Engineer": {
-    "skills": [
-      "Deep Learning Frameworks (e.g., TensorFlow, PyTorch)",
-      "Model Deployment",
-      "MLOps",
-      "Algorithm Optimization",
-      "Feature Engineering"
-    ]
-  },
-  "Data Analyst": {
-    "skills": [
-      "Data Cleaning & Preprocessing",
-      "Statistical Software (e.g., Excel, R, Python)",
-      "Business Intelligence Tools (e.g., Tableau, Power BI)",
-      "Report Generation",
-      "Data Storytelling"
-    ]
-  },
-  "Cybersecurity Specialist": {
-    "skills": [
-      "Network Security",
-      "Vulnerability Assessment",
-      "Incident Response",
-      "Security Information and Event Management (SIEM)",
-      "Cryptography"
-    ]
-  },
-  "Network Security Engineer": {
-    "skills": [
-      "Firewall Configuration",
-      "Intrusion Detection/Prevention Systems (IDS/IPS)",
-      "VPN Management",
-      "Network Protocols (TCP/IP)",
-      "Security Auditing"
-    ]
-  },
-  "Penetration Tester": {
-    "skills": [
-      "Ethical Hacking",
-      "Vulnerability Scanning Tools",
-      "Exploit Development",
-      "Social Engineering",
-      "Reporting & Remediation"
-    ]
-  },
-  "Incident Response Analyst": {
-    "skills": [
-      "Digital Forensics",
-      "Malware Analysis",
-      "Security Operations Center (SOC)",
-      "Threat Intelligence",
-      "Crisis Management"
-    ]
-  },
-  "AI/ML Engineer": {
-    "skills": [
-      "Machine Learning Algorithms",
-      "Deep Learning",
-      "Python Programming",
-      "Data Preprocessing",
-      "Model Evaluation"
-    ]
-  },
-  "AI Research Scientist": {
-    "skills": [
-      "Advanced Machine Learning",
-      "Algorithm Development",
-      "Statistical Modeling",
-      "Experimental Design",
-      "Academic Publishing"
-    ]
-  },
-  "Natural Language Processing Engineer": {
-    "skills": [
-      "Text Mining",
-      "Sentiment Analysis",
-      "Named Entity Recognition (NER)",
-      "Transformer Models",
-      "Speech Recognition"
+      "VHDL/Verilog",
+      "Signal Integrity",
+      "RF Design",
+      "Power Electronics",
+      "Testing & Troubleshooting"
     ]
   },
   "Automotive Engineer": {
@@ -247,1118 +60,1604 @@ export const jobskills = {
       "Vehicle Dynamics",
       "Powertrain Systems",
       "Automotive Electronics",
-      "CAD (Automotive)",
-      "Testing & Validation"
-    ]
-  },
-  "Automotive Systems Engineer": {
-    "skills": [
-      "Systems Integration",
-      "Requirement Management",
-      "Functional Safety (ISO 26262)",
-      "CAN Bus Communication",
-      "Embedded Software Development"
-    ]
-  },
-  "Vehicle Integration Engineer": {
-    "skills": [
-      "Vehicle Architecture",
-      "Component Integration",
-      "Packaging Design",
-      "Test Plan Development",
-      "Troubleshooting (Vehicle)"
+      "CAD Software (e.g., CATIA, SolidWorks)",
+      "Emission Control Systems",
+      "CAN Protocol",
+      "NVH Analysis",
+      "Automotive Safety Standards",
+      "Battery Management Systems (EV)",
+      "Thermal Systems Design"
     ]
   },
   "Testing Engineer": {
     "skills": [
+      "Manual Testing",
+      "Automated Testing Tools (e.g., Selenium)",
       "Test Case Development",
-      "Automated Testing",
+      "Bug Tracking (e.g., JIRA)",
       "Regression Testing",
-      "Performance Testing",
-      "Bug Reporting"
+      "Load & Performance Testing",
+      "API Testing",
+      "Continuous Integration Testing",
+      "Test Automation Frameworks",
+      "Quality Assurance Standards"
     ]
   },
   "Robotics Engineer": {
     "skills": [
       "Robot Kinematics",
-      "Robot Programming (e.g., ROS)",
-      "Sensor Integration",
-      "Computer Vision",
-      "Motion Planning"
-    ]
-  },
-  "Robotic Systems Designer": {
-    "skills": [
-      "Robot Design",
-      "Mechatronics",
-      "Simulation Software (e.g., Gazebo)",
-      "Control Systems",
-      "Actuator Selection"
-    ]
-  },
-  "Robot Programmer": {
-    "skills": [
-      "Industrial Robot Programming (e.g., KUKA, ABB, Fanuc)",
+      "ROS (Robot Operating System)",
+      "Control Algorithms",
+      "Sensor Fusion",
       "Path Planning",
-      "Robot Calibration",
-      "Safety Programming",
-      "PLC Integration"
-    ]
-  },
-  "Environmental Engineer": {
-    "skills": [
-      "Environmental Regulations (e.g., EPA)",
-      "Pollution Control",
-      "Waste Treatment",
-      "Environmental Impact Assessment",
-      "Sustainability Practices"
-    ]
-  },
-  "Water Resources Engineer": {
-    "skills": [
-      "Hydrology",
-      "Hydraulic Modeling",
-      "Water Treatment",
-      "Flood Control",
-      "Stormwater Management"
-    ]
-  },
-  "Waste Management Engineer": {
-    "skills": [
-      "Solid Waste Management",
-      "Recycling Systems",
-      "Landfill Design",
-      "Hazardous Waste Management",
-      "Resource Recovery"
-    ]
-  },
-  "Sustainability Engineer": {
-    "skills": [
-      "Life Cycle Assessment (LCA)",
-      "Renewable Energy Integration",
-      "Green Building Design (e.g., LEED)",
-      "Carbon Footprint Analysis",
-      "Sustainable Materials"
-    ]
-  },
-  "Chemical Engineer": {
-    "skills": [
-      "Process Design",
-      "Unit Operations",
-      "Thermodynamics",
-      "Reaction Engineering",
-      "Process Simulation (e.g., Aspen Plus)"
-    ]
-  },
-  "Process Engineer": {
-    "skills": [
-      "Process Optimization",
-      "P&ID Development",
-      "Statistical Process Control (SPC)",
-      "Troubleshooting (Process)",
-      "Safety Systems (Process)"
-    ]
-  },
-  "Materials Engineer": {
-    "skills": [
-      "Material Characterization (e.g., SEM, XRD)",
-      "Corrosion Engineering",
-      "Polymer Science",
-      "Metallurgy",
-      "Failure Analysis"
-    ]
-  },
-  "Biochemical Engineer": {
-    "skills": [
-      "Bioreactor Design",
-      "Bioseparations",
-      "Cell Culture",
-      "Enzyme Kinetics",
-      "Pharmaceutical Manufacturing"
+      "Actuators & Motors",
+      "Embedded Systems for Robotics",
+      "Machine Learning for Robotics",
+      "Vision Systems",
+      "Real-Time Operating Systems"
     ]
   },
   "Industrial Engineer": {
     "skills": [
-      "Lean Principles",
+      "Lean Manufacturing",
       "Six Sigma",
-      "Work Measurement",
-      "Facility Layout Planning",
-      "Supply Chain Optimization"
-    ]
-  },
-  "Operations Research Analyst": {
-    "skills": [
-      "Optimization Algorithms",
-      "Simulation Modeling",
-      "Statistical Modeling",
-      "Linear Programming",
-      "Decision Analysis"
-    ]
-  },
-  "Supply Chain Engineer": {
-    "skills": [
-      "Logistics Management",
-      "Inventory Control",
-      "Demand Planning",
-      "Transportation Optimization",
-      "Supply Chain Software"
-    ]
-  },
-  "Construction Engineer": {
-    "skills": [
-      "Construction Methods",
-      "Structural Design",
-      "Site Management",
-      "Cost Estimation (Construction)",
-      "Quality Assurance (Construction)"
-    ]
-  },
-  "Site Engineer": {
-    "skills": [
-      "Site Supervision",
-      "Drawing Interpretation",
-      "Quality Control (Site)",
-      "Health & Safety Regulations",
-      "Problem Solving (On-site)"
-    ]
-  },
-  "Cost Engineer": {
-    "skills": [
-      "Cost Estimating",
-      "Budget Control",
-      "Value Engineering",
-      "Cost Analysis",
-      "Risk Assessment (Cost)"
-    ]
-  },
-  "Health & Safety Engineer": {
-    "skills": [
-      "OSHA Regulations",
-      "Risk Assessment",
-      "Accident Investigation",
-      "Safety Training",
-      "Ergonomics"
+      "Process Optimization",
+      "Workflow Design",
+      "Time and Motion Study",
+      "Supply Chain Management",
+      "Production Planning",
+      "Quality Control",
+      "Simulation Tools (e.g., Arena)",
+      "Data Analysis for Manufacturing"
     ]
   },
   "HVAC Engineer": {
     "skills": [
-      "HVAC System Design",
-      "ASHRAE Standards",
-      "Thermodynamics",
-      "Load Calculation",
-      "Energy Efficiency"
-    ]
-  },
-  "Heating Engineer": {
-    "skills": [
-      "Boiler Systems",
-      "Heat Transfer",
-      "Piping Design",
-      "Hydronic Systems",
-      "Combustion Systems"
-    ]
-  },
-  "Ventilation Engineer": {
-    "skills": [
-      "Airflow Dynamics",
+      "Heating & Cooling Load Calculations",
       "Ductwork Design",
-      "Fan Selection",
-      "Indoor Air Quality",
-      "Fume Hood Systems"
-    ]
-  },
-  "Air Conditioning Engineer": {
-    "skills": [
       "Refrigeration Cycles",
-      "Chiller Plants",
-      "Cooling Towers",
-      "Refrigerant Management",
-      "Comfort Cooling Design"
+      "Thermal Comfort Design",
+      "Energy Efficiency Standards",
+      "HVAC Software (e.g., HAP, TRACE)",
+      "Building Automation Systems",
+      "Ventilation Design",
+      "Green Building Standards",
+      "Airflow Simulation"
     ]
   },
   "Mechatronics Engineer": {
     "skills": [
-      "Robotics",
-      "Control Systems",
-      "Embedded Systems",
+      "Microcontroller Programming",
       "Mechanical Design",
-      "Electrical Circuitry"
+      "Electrical Systems",
+      "PLC & HMI Development",
+      "Actuator Control",
+      "Sensor Integration",
+      "Embedded Systems",
+      "3D CAD Modeling",
+      "Real-Time Control",
+      "Interdisciplinary System Design"
     ]
   },
+
   "Embedded Systems Engineer": {
     "skills": [
-      "C/C++ Programming (Embedded)",
-      "Microcontroller Programming",
+      "C/C++ Programming",
+      "Microcontroller Architecture (e.g., ARM, AVR)",
       "RTOS (Real-Time Operating Systems)",
+      "Embedded Linux",
       "Hardware-Software Integration",
-      "Debugging (Embedded)"
+      "PCB Design for Embedded Systems",
+      "Serial Communication Protocols (UART, SPI, I2C)",
+      "Low Power Design",
+      "Bootloaders and Firmware",
+      "Signal Timing and Debugging Tools (e.g., JTAG, Oscilloscope)"
     ]
   },
   "Telecommunications Engineer": {
     "skills": [
-      "Network Protocols (e.g., TCP/IP, SIP)",
-      "Wireless Communication",
-      "Optical Fiber Communication",
-      "Network Architecture",
-      "VoIP Systems"
+      "RF Engineering",
+      "Network Design",
+      "Wireless Communication Protocols (e.g., LTE, 5G)",
+      "Fiber Optic Technology",
+      "Telecom Switching Systems",
+      "Signal Processing",
+      "Microwave Engineering",
+      "VoIP Systems",
+      "Satellite Communication",
+      "Telecom Standards (ITU, IEEE)"
     ]
   },
   "Network Engineer": {
     "skills": [
-      "Cisco Networking",
-      "Network Routing & Switching",
-      "LAN/WAN Technologies",
+      "Network Configuration (Routers, Switches)",
+      "TCP/IP Protocol Suite",
+      "Firewall Management",
+      "Network Monitoring Tools (e.g., Wireshark, Nagios)",
+      "Cisco Technologies (e.g., CCNA, CCNP)",
+      "VPN Setup and Management",
+      "LAN/WAN Design",
+      "Network Security Best Practices",
+      "Load Balancing",
+      "Cloud Networking (AWS, Azure)"
+    ]
+  },
+  "Software Engineer": {
+    "skills": [
+      "Data Structures & Algorithms",
+      "Object-Oriented Programming",
+      "Version Control (Git)",
+      "System Design Principles",
+      "Agile/Scrum Methodologies",
+      "Software Testing and QA",
+      "Databases (SQL/NoSQL)",
+      "CI/CD Pipelines",
+      "API Development (REST, GraphQL)",
+      "Code Review and Debugging"
+    ]
+  },
+  "Cloud Engineer": {
+    "skills": [
+      "Cloud Platforms (AWS, Azure, GCP)",
+      "Infrastructure as Code (Terraform, CloudFormation)",
+      "Virtualization & Containers (Docker, Kubernetes)",
+      "Networking in Cloud",
+      "Security & IAM",
+      "Cloud Monitoring & Logging",
+      "Serverless Architecture",
+      "Data Backup and Recovery",
+      "Cloud Cost Optimization",
+      "DevOps Tools Integration"
+    ]
+  },
+  "DevOps Engineer": {
+    "skills": [
+      "CI/CD Pipelines (Jenkins, GitLab CI)",
+      "Infrastructure as Code (Terraform, Ansible)",
+      "Cloud Platforms (AWS, GCP, Azure)",
+      "Monitoring Tools (Prometheus, Grafana)",
+      "Containerization (Docker)",
+      "Kubernetes",
+      "Log Management (ELK Stack)",
+      "Version Control (Git)",
+      "Scripting (Bash, Python)",
+      "Release Management"
+    ]
+  },
+  "Systems Engineer": {
+    "skills": [
+      "System Architecture Design",
+      "Linux/Windows Server Administration",
+      "Virtualization (VMware, Hyper-V)",
+      "Configuration Management",
+      "Performance Tuning",
+      "Security Policies & Compliance",
+      "Backup and Disaster Recovery",
+      "Monitoring and Alerting Tools",
+      "Networking Fundamentals",
+      "Automation Tools (Ansible, Puppet)"
+    ]
+  },
+  "IT Systems Engineer": {
+    "skills": [
+      "Enterprise IT Infrastructure",
+      "System Administration",
+      "Cloud & On-Premises Integration",
+      "Active Directory & LDAP",
+      "VM Provisioning",
+      "Disaster Recovery Planning",
+      "Network & Security Protocols",
+      "ITIL Framework",
+      "Backup Solutions",
+      "Incident and Change Management"
+    ]
+  },
+  "Green Energy Engineer": {
+    "skills": [
+      "Renewable Energy Systems",
+      "Solar & Wind Energy Design",
+      "Energy Efficiency Analysis",
+      "Sustainable Engineering Practices",
+      "Grid Integration",
+      "Battery Storage Systems",
+      "Energy Policy & Regulations",
+      "Smart Grids",
+      "Environmental Impact Assessment",
+      "Power Electronics for Renewable Sources"
+    ]
+  },
+  "Developer": {
+    "skills": [
+      "Programming Languages (e.g., Java, Python, C++)",
+      "Version Control (Git)",
+      "API Integration",
+      "Agile Development",
+      "Database Management",
+      "Debugging and Testing",
+      "UI/UX Fundamentals",
+      "Object-Oriented Design",
+      "RESTful Web Services",
+      "DevOps Collaboration"
+    ]
+  },
+  "Software Developer": {
+    "skills": [
+      "Object-Oriented Programming (OOP)",
+      "Agile Development Practices",
+      "Database Integration (SQL, NoSQL)",
+      "Debugging and Testing",
+      "API Development",
+      "Software Development Lifecycle (SDLC)",
+      "Version Control Systems (Git)",
+      "Problem Solving & Algorithm Design",
+      "Code Optimization",
+      "Continuous Integration/Continuous Deployment (CI/CD)"
+    ]
+  },
+  "Frontend Developer": {
+    "skills": [
+      "HTML/CSS/JavaScript",
+      "Frontend Frameworks (React, Angular, Vue)",
+      "Responsive Design",
+      "Cross-Browser Compatibility",
+      "State Management (Redux, Context API)",
+      "RESTful API Integration",
+      "Webpack/Bundlers",
+      "Accessibility (WCAG Standards)",
+      "Testing (Jest, Cypress)",
+      "UI/UX Principles"
+    ]
+  },
+  "Backend Developer": {
+    "skills": [
+      "Server-Side Programming (Node.js, Python, Java, Go)",
+      "Database Design & Management",
+      "RESTful & GraphQL APIs",
+      "Authentication & Authorization",
+      "Middleware Integration",
+      "Caching (Redis, Memcached)",
+      "Security Best Practices (OWASP)",
+      "Scalability and Load Balancing",
+      "Error Handling and Logging",
+      "Microservices Architecture"
+    ]
+  },
+  "Full Stack Developer": {
+    "skills": [
+      "Frontend & Backend Technologies",
+      "API Design & Integration",
+      "Database Management (SQL/NoSQL)",
+      "DevOps Basics (CI/CD, Docker)",
+      "Authentication & Security",
+      "Cloud Services (AWS, Firebase)",
+      "Responsive Design",
+      "Code Versioning (Git)",
+      "Testing & Debugging",
+      "Agile Workflow"
+    ]
+  },
+  "Mobile App Developer": {
+    "skills": [
+      "Mobile Frameworks (Flutter, React Native)",
+      "Platform SDKs (Android, iOS)",
+      "State Management",
+      "Push Notifications",
+      "RESTful API Integration",
+      "UI/UX for Mobile",
+      "App Store Deployment",
+      "Offline Storage & Sync",
+      "Mobile Testing Tools",
+      "Performance Optimization"
+    ]
+  },
+  "Game Developer": {
+    "skills": [
+      "Game Engines (Unity, Unreal)",
+      "3D Mathematics & Physics",
+      "Graphics Programming (OpenGL, DirectX)",
+      "AI for Games",
+      "Game Mechanics Design",
+      "Scripting (C#, Lua)",
+      "Animation Systems",
+      "Networking for Multiplayer",
+      "Optimization Techniques",
+      "Level Design Tools"
+    ]
+  },
+  "Blockchain Developer": {
+    "skills": [
+      "Smart Contract Development (Solidity)",
+      "Blockchain Protocols (Ethereum, Solana)",
+      "Consensus Algorithms",
+      "Cryptographic Techniques",
+      "Decentralized Application (dApp) Design",
+      "Web3.js/Ethers.js",
+      "Token Standards (ERC-20, ERC-721)",
+      "Security Auditing",
+      "Blockchain Data Structures",
+      "Distributed Ledger Concepts"
+    ]
+  },
+  "Embedded Software Developer": {
+    "skills": [
+      "Embedded C/C++ Programming",
+      "Microcontroller Programming",
+      "RTOS Implementation",
+      "Memory-Constrained Optimization",
+      "Low-Level Debugging (Oscilloscopes, JTAG)",
+      "Peripheral Driver Development",
+      "Communication Protocols (UART, SPI, CAN)",
+      "Power Management Techniques",
+      "Hardware Abstraction Layers",
+      "Bare-Metal Programming"
+    ]
+  },
+  "Java Developer": {
+    "skills": [
+      "Core Java",
+      "Spring Framework (Boot, MVC)",
+      "JPA/Hibernate",
+      "Multithreading and Concurrency",
+      "RESTful API Development",
+      "Build Tools (Maven, Gradle)",
+      "Unit Testing (JUnit, Mockito)",
+      "JVM Internals",
+      "Security in Java",
+      "CI/CD in Java Projects"
+    ]
+  },
+  "Python Developer": {
+    "skills": [
+      "Python (Core + Advanced Concepts)",
+      "Web Frameworks (Django, Flask)",
+      "REST API Development",
+      "ORMs (SQLAlchemy, Django ORM)",
+      "Database Integration (PostgreSQL, MongoDB)",
+      "Unit Testing (pytest, unittest)",
+      "Asynchronous Programming (asyncio)",
+      "Version Control (Git)",
+      "Containerization (Docker)",
+      "CI/CD Pipelines (GitHub Actions, Jenkins)"
+    ]
+  },
+  "C++ Developer": {
+    "skills": [
+      "Object-Oriented Programming",
+      "STL (Standard Template Library)",
+      "Multithreading & Concurrency",
+      "Memory Management",
+      "Low-Level System Programming",
+      "Debugging with GDB/Valgrind",
+      "Cross-Platform Development",
+      "Embedded & Real-Time Systems",
+      "Design Patterns in C++",
+      "Performance Optimization"
+    ]
+  },
+  "Data Scientist": {
+    "skills": [
+      "Python/R Programming",
+      "Statistical Analysis",
+      "Machine Learning Algorithms",
+      "Data Cleaning & Wrangling",
+      "Data Visualization (Matplotlib, Seaborn, Plotly)",
+      "SQL and NoSQL Databases",
+      "Model Evaluation & Validation",
+      "Big Data Tools (Spark, Hadoop)",
+      "Deep Learning Basics",
+      "Experiment Design (A/B Testing)"
+    ]
+  },
+  "Data Engineer": {
+    "skills": [
+      "ETL Pipeline Development",
+      "Data Warehousing (Redshift, BigQuery)",
+      "SQL & NoSQL Databases",
+      "Apache Spark & Hadoop",
+      "Airflow or Other Workflow Orchestration",
+      "Cloud Data Services (AWS Glue, Azure Data Factory)",
+      "Programming (Python, Scala, Java)",
+      "Data Modeling",
+      "Data Quality & Governance",
+      "Real-Time Data Processing (Kafka, Flink)"
+    ]
+  },
+  "Machine Learning Engineer": {
+    "skills": [
+      "Supervised & Unsupervised Learning",
+      "Model Deployment (Flask, FastAPI, Docker)",
+      "Feature Engineering",
+      "ML Libraries (Scikit-learn, XGBoost, LightGBM)",
+      "Deep Learning Frameworks (TensorFlow, PyTorch)",
+      "Hyperparameter Tuning",
+      "ML Pipelines (MLflow, Kubeflow)",
+      "Cloud ML Platforms (SageMaker, Vertex AI)",
+      "Data Versioning (DVC)",
+      "Model Interpretability Tools (SHAP, LIME)"
+    ]
+  },
+  "Data Analyst": {
+    "skills": [
+      "Excel (Advanced)",
+      "SQL Queries",
+      "Data Visualization (Tableau, Power BI)",
+      "Statistical Analysis",
+      "Dashboard Development",
+      "Data Cleaning & Transformation",
+      "Business Intelligence Tools",
+      "Reporting Automation",
+      "Descriptive & Inferential Stats",
+      "Python for Analysis (Pandas, NumPy)"
+    ]
+  },
+  "AI/ML Engineer": {
+    "skills": [
+      "Artificial Intelligence Fundamentals",
+      "Neural Networks & Deep Learning",
+      "Model Training & Evaluation",
+      "Computer Vision/NLP Techniques",
+      "Data Annotation & Preprocessing",
+      "TensorFlow/PyTorch",
+      "Cloud AI Services (Google AI, Azure ML)",
+      "Model Deployment (ONNX, TensorRT)",
+      "Reinforcement Learning Basics",
+      "Scalability & Optimization"
+    ]
+  },
+  "AI Research Scientist": {
+    "skills": [
+      "Advanced Machine Learning Theory",
+      "Mathematical Modeling",
+      "Research Paper Reading & Writing",
+      "Deep Learning Architectures",
+      "Experimental Design",
+      "High-Performance Computing (HPC)",
+      "Publication & Peer Review Processes",
+      "Ethical AI Frameworks",
+      "Open Source Contributions",
+      "Academic Collaboration Tools (LaTeX, arXiv)"
+    ]
+  },
+  "Natural Language Processing Engineer": {
+    "skills": [
+      "Text Preprocessing Techniques",
+      "Language Models (BERT, GPT)",
+      "Tokenization & Embeddings (Word2Vec, GloVe)",
+      "Named Entity Recognition",
+      "Part-of-Speech Tagging",
+      "Sentiment Analysis",
+      "Transformer Architectures",
+      "Hugging Face Transformers",
+      "Speech-to-Text/NLP Integration",
+      "Evaluation Metrics (BLEU, ROUGE)"
+    ]
+  },
+  "Big Data Engineer": {
+    "skills": [
+      "Distributed Computing (Hadoop, Spark)",
+      "Data Lake Design",
+      "Batch & Stream Processing",
+      "NoSQL Databases (Cassandra, HBase)",
+      "Kafka Messaging System",
+      "Cluster Management (YARN, Mesos)",
+      "HDFS and File Formats (Parquet, ORC)",
+      "Data Pipeline Orchestration",
+      "Data Governance & Security",
+      "Performance Tuning"
+    ]
+  },
+  "Computer Vision Engineer": {
+    "skills": [
+      "Image Processing",
+      "Object Detection & Tracking",
+      "OpenCV",
+      "Convolutional Neural Networks (CNNs)",
+      "3D Vision Techniques",
+      "Camera Calibration & Geometry",
+      "Video Analysis",
+      "Dataset Annotation Tools",
+      "Deep Learning Models (YOLO, Mask R-CNN)",
+      "Model Evaluation for Vision Tasks"
+    ]
+  },
+  "AI Ethics Specialist": {
+    "skills": [
+      "Ethical AI Principles",
+      "Bias Detection & Mitigation",
+      "Fairness and Transparency in Models",
+      "Regulatory Frameworks (GDPR, HIPAA)",
+      "Explainable AI (XAI)",
+      "Algorithmic Accountability",
+      "Risk Assessment for AI Systems",
+      "Ethics-by-Design Approach",
+      "AI Governance",
+      "Human-Centered Design in AI"
+    ]
+  },
+  "Data Architect": {
+    "skills": [
+      "Enterprise Data Modeling",
+      "Data Warehousing Architecture",
+      "Metadata Management",
+      "Data Integration Strategies",
+      "Cloud Data Platforms (Snowflake, BigQuery)",
+      "ETL Design & Optimization",
+      "Database Design (Relational & NoSQL)",
+      "Data Security & Privacy",
+      "Master Data Management (MDM)",
+      "Data Lifecycle Management"
+    ]
+  },
+  "Healthcare IT Specialist": {
+    "skills": [
+      "Electronic Health Record (EHR) Systems",
+      "HL7/FHIR Standards",
+      "HIPAA Compliance",
+      "Healthcare Analytics",
+      "Medical Terminology Knowledge",
+      "Telehealth Systems",
+      "Healthcare Software Integration",
+      "Patient Data Privacy & Security",
+      "Clinical Workflow Optimization",
+      "Medical Imaging Systems (PACS, DICOM)"
+    ]
+  },
+  "Cybersecurity Specialist": {
+    "skills": [
       "Network Security",
-      "Troubleshooting (Network)"
+      "Threat Detection and Prevention",
+      "Firewall Configuration",
+      "Incident Response",
+      "Security Information and Event Management (SIEM)",
+      "Vulnerability Assessment",
+      "Intrusion Detection Systems (IDS/IPS)",
+      "Penetration Testing Basics",
+      "Encryption and Cryptography",
+      "Security Compliance (ISO, NIST)"
     ]
   },
-  "Radio Frequency (RF) Engineer": {
+  "Network Security Engineer": {
     "skills": [
-      "RF Circuit Design",
-      "Antenna Theory",
-      "Spectrum Analysis",
-      "Electromagnetic Compatibility (EMC)",
-      "Wireless Communication Protocols"
+      "Network Protocols and Security",
+      "Firewall and VPN Configuration",
+      "Intrusion Prevention Systems",
+      "LAN/WAN Security",
+      "Zero Trust Architecture",
+      "Cisco ASA/Palo Alto/Juniper Configuration",
+      "Security Policy Implementation",
+      "Threat Intelligence",
+      "DDoS Protection Techniques",
+      "Security Auditing"
     ]
   },
-  "Telecom Systems Engineer": {
+  "Penetration Tester": {
     "skills": [
-      "Telecommunication Standards",
-      "Network Planning & Design",
-      "System Integration",
-      "Network Performance Optimization",
-      "Client-Server Architecture"
+      "Vulnerability Scanning (Nmap, Nessus)",
+      "Exploit Development",
+      "Web Application Testing (OWASP Top 10)",
+      "Network Penetration Testing",
+      "Social Engineering Techniques",
+      "Metasploit Framework",
+      "Report Writing & Risk Analysis",
+      "Password Cracking Tools (John the Ripper, Hashcat)",
+      "Wireless Network Testing",
+      "Red Team Operations"
     ]
   },
-  "Aerospace Engineer": {
+  "Security Analyst": {
     "skills": [
-      "Aerodynamics",
-      "Aircraft Propulsion",
-      "Flight Mechanics",
-      "Structural Analysis (Aerospace)",
-      "System Integration (Aerospace)"
+      "Security Monitoring (SIEM Tools)",
+      "Log Analysis",
+      "Threat Detection and Response",
+      "Incident Handling Procedures",
+      "Risk Assessment",
+      "Malware Analysis Basics",
+      "Phishing Detection",
+      "Regulatory Compliance (GDPR, HIPAA)",
+      "Security Metrics Reporting",
+      "Access Control Monitoring"
     ]
   },
-  "Aircraft Systems Engineer": {
+  "Cryptography Specialist": {
     "skills": [
-      "Avionics Systems",
-      "Aircraft Control Systems",
-      "Hydraulic & Pneumatic Systems (Aircraft)",
-      "Aircraft Power Systems",
-      "Fault Isolation (Aircraft)"
+      "Public Key Infrastructure (PKI)",
+      "Symmetric & Asymmetric Encryption",
+      "Hashing Algorithms (SHA-256, MD5)",
+      "SSL/TLS Protocols",
+      "Key Management Systems (KMS)",
+      "Secure Protocol Design",
+      "Quantum-Safe Cryptography",
+      "Blockchain-based Security",
+      "Digital Signatures",
+      "Cryptanalysis Techniques"
     ]
   },
-  "Spacecraft Engineer": {
+  "Information Security Manager": {
     "skills": [
-      "Orbital Mechanics",
-      "Spacecraft Propulsion",
-      "Attitude Determination and Control Systems (ADCS)",
-      "Thermal Control Systems (Spacecraft)",
-      "Satellite Communications"
+      "Security Risk Management",
+      "Security Governance & Compliance",
+      "Incident Response Planning",
+      "Policy Development & Enforcement",
+      "Team Leadership",
+      "Auditing & Reporting",
+      "Business Continuity Planning",
+      "Security Awareness Training",
+      "Vendor Risk Management",
+      "Budgeting for Security Programs"
     ]
   },
-  "Flight Test Engineer": {
+  "IT Security Specialist": {
     "skills": [
-      "Flight Test Planning",
-      "Data Acquisition & Analysis",
-      "Aircraft Performance Evaluation",
-      "Flight Safety",
-      "Test Reporting"
-    ]
-  },
-  "Marine Engineer": {
-    "skills": [
-      "Marine Propulsion Systems",
-      "Shipboard Power Systems",
-      "Marine Auxiliary Systems",
-      "Naval Architecture Principles",
-      "Maritime Regulations"
-    ]
-  },
-  "Ship Design Engineer": {
-    "skills": [
-      "Ship Hydrodynamics",
-      "Structural Design (Ship)",
-      "Stability Analysis (Ship)",
-      "CAD Software (Ship Design)",
-      "Classification Society Rules"
-    ]
-  },
-  "Marine Systems Engineer": {
-    "skills": [
-      "Marine HVAC Systems",
-      "Piping & Pumping Systems (Marine)",
-      "Deck Machinery",
-      "Ballast Water Treatment",
-      "Corrosion Control (Marine)"
-    ]
-  },
-  "Naval Architect": {
-    "skills": [
-      "Ship Theory",
-      "Resistance & Propulsion",
-      "Ship Motions",
-      "Seakeeping",
-      "Marine Structures"
-    ]
-  },
-  "Geotechnical Engineer": {
-    "skills": [
-      "Soil Mechanics",
-      "Foundation Design",
-      "Site Investigation",
-      "Slope Stability Analysis",
-      "Earth Retaining Structures"
-    ]
-  },
-  "Soil Engineer": {
-    "skills": [
-      "Soil Classification",
-      "Compaction Testing",
-      "Bearing Capacity Analysis",
-      "Ground Improvement Techniques",
-      "Laboratory Soil Testing"
-    ]
-  },
-  "Rock Mechanics Engineer": {
-    "skills": [
-      "Rock Mass Characterization",
-      "Tunnel Design",
-      "Rock Slope Stability",
-      "Excavation Support Systems",
-      "Geophysical Methods"
-    ]
-  },
-  "Foundation Engineer": {
-    "skills": [
-      "Shallow Foundations",
-      "Deep Foundations (Piles, Caissons)",
-      "Settlement Analysis",
-      "Groundwater Control",
-      "Soil-Structure Interaction"
-    ]
-  },
-  "Nuclear Engineer": {
-    "skills": [
-      "Nuclear Reactor Physics",
-      "Radiation Shielding",
-      "Thermal Hydraulics (Nuclear)",
-      "Nuclear Fuel Cycle",
-      "Nuclear Safety Analysis"
-    ]
-  },
-  "Radiation Protection Engineer": {
-    "skills": [
-      "Radiation Dosimetry",
-      "Radiation Detection",
-      "Health Physics",
-      "Radioactive Waste Management",
-      "Emergency Preparedness (Radiation)"
-    ]
-  },
-  "Reactor Engineer": {
-    "skills": [
-      "Reactor Operations",
-      "Core Design",
-      "Fuel Management",
-      "Neutron Transport",
-      "Reactor Control Systems"
-    ]
-  },
-  "Nuclear Safety Engineer": {
-    "skills": [
-      "Probabilistic Risk Assessment (PRA)",
-      "Safety Culture",
-      "Regulatory Compliance (Nuclear)",
-      "Accident Analysis (Nuclear)",
-      "Human Factors Engineering (Nuclear)"
+      "Endpoint Security",
+      "Antivirus and EDR Solutions",
+      "Security Patch Management",
+      "Access Control Systems",
+      "Secure System Configuration",
+      "Two-Factor Authentication (2FA)",
+      "Threat Intelligence Tools",
+      "Operating System Hardening",
+      "SIEM Monitoring",
+      "Identity and Access Management (IAM)"
     ]
   },
   "Project Manager": {
     "skills": [
-      "Project Planning",
+      "Project Planning and Scheduling",
       "Budget Management",
       "Risk Management",
       "Stakeholder Communication",
-      "Team Leadership"
+      "Agile/Scrum Methodologies",
+      "Project Management Software (e.g., MS Project, Jira)",
+      "Team Leadership",
+      "Resource Allocation",
+      "Performance Tracking (KPIs, OKRs)",
+      "Change Management"
     ]
   },
   "IT Project Manager": {
     "skills": [
-      "Software Development Life Cycle (SDLC)",
-      "Agile Methodologies",
-      "IT Infrastructure",
+      "IT Infrastructure Planning",
+      "Software Development Lifecycle (SDLC)",
+      "Agile/Waterfall/Hybrid Methods",
+      "Technical Documentation",
       "Vendor Management",
-      "Technical Documentation"
-    ]
-  },
-  "Construction Project Manager": {
-    "skills": [
-      "Construction Scheduling",
-      "Contract Negotiation",
-      "Site Safety Management",
-      "Quality Control (Construction Projects)",
-      "Permitting & Regulations"
+      "Cybersecurity Awareness",
+      "System Integration Oversight",
+      "Project Budgeting",
+      "Timeline and Scope Control",
+      "Risk Mitigation in IT Projects"
     ]
   },
   "Agile Project Manager": {
     "skills": [
-      "Scrum Master",
-      "Kanban",
-      "User Stories",
-      "Sprint Planning",
-      "Retrospectives"
+      "Scrum & Kanban Methodologies",
+      "Sprint Planning & Review",
+      "Agile Metrics (Velocity, Burndown Charts)",
+      "Backlog Grooming",
+      "Cross-functional Team Collaboration",
+      "Continuous Delivery & Integration",
+      "Facilitation of Standups",
+      "Jira/Confluence Usage",
+      "Agile Coaching",
+      "Stakeholder Alignment"
     ]
   },
   "Product Manager": {
     "skills": [
-      "Product Strategy",
-      "Market Research",
-      "Roadmap Development",
-      "User Empathy",
-      "Cross-functional Collaboration"
+      "Product Roadmap Planning",
+      "User Research and Feedback",
+      "Market Analysis",
+      "Feature Prioritization",
+      "Agile Development Collaboration",
+      "MVP Development",
+      "KPI Tracking",
+      "Product Lifecycle Management",
+      "Stakeholder Communication",
+      "Go-to-Market Strategy"
     ]
   },
   "Digital Product Manager": {
     "skills": [
-      "Web Analytics",
+      "UI/UX Design Collaboration",
+      "Mobile & Web Product Planning",
+      "Digital Analytics (Google Analytics, Mixpanel)",
       "A/B Testing",
-      "SEO/SEM",
-      "Mobile App Development Lifecycle",
-      "Conversion Rate Optimization (CRO)"
-    ]
-  },
-  "Mobile Product Manager": {
-    "skills": [
-      "iOS/Android Ecosystems",
-      "Mobile UX/UI",
-      "App Store Optimization (ASO)",
-      "Push Notifications",
-      "Mobile Analytics"
+      "Customer Journey Mapping",
+      "Agile Product Development",
+      "Tech Stack Understanding",
+      "API Knowledge",
+      "Product Launch Strategies",
+      "Conversion Rate Optimization"
     ]
   },
   "E-commerce Product Manager": {
     "skills": [
-      "Online Retail",
-      "Payment Gateways",
-      "Inventory Management Systems",
-      "Customer Journey Mapping",
-      "Conversion Funnels"
+      "E-commerce Platforms (Shopify, Magento)",
+      "Product Catalog Management",
+      "Customer Behavior Analytics",
+      "SEO & SEM Integration",
+      "Checkout Flow Optimization",
+      "A/B Testing & Conversion Tracking",
+      "Inventory Coordination",
+      "Omnichannel Strategy",
+      "Pricing Strategy",
+      "Vendor & Supplier Coordination"
     ]
   },
   "Operations Manager": {
     "skills": [
-      "Process Improvement",
+      "Process Optimization",
+      "Supply Chain Coordination",
+      "KPI Tracking & Reporting",
+      "Team Supervision",
       "Resource Allocation",
-      "Performance Management",
-      "Problem Solving",
-      "Logistics Management"
-    ]
-  },
-  "Supply Chain Operations Manager": {
-    "skills": [
-      "Supply Chain Optimization",
       "Inventory Management",
-      "Logistics",
-      "Supplier Relationship Management",
-      "Forecasting"
+      "Budget Planning",
+      "Cross-department Collaboration",
+      "Workflow Automation",
+      "Risk Assessment"
     ]
   },
   "Manufacturing Operations Manager": {
     "skills": [
-      "Production Planning",
       "Lean Manufacturing",
-      "Quality Assurance",
-      "Workforce Management",
-      "Safety Compliance"
+      "Production Scheduling",
+      "Quality Control",
+      "Machine Maintenance Coordination",
+      "Six Sigma Tools",
+      "Workplace Safety Standards",
+      "Cost Efficiency Analysis",
+      "Labor Supervision",
+      "Material Planning",
+      "Process Documentation"
     ]
   },
   "Facility Operations Manager": {
     "skills": [
-      "Building Maintenance",
-      "Space Planning",
-      "Vendor Management (Facilities)",
-      "Security Systems",
-      "Energy Management"
+      "Facility Maintenance Planning",
+      "Building Safety & Compliance",
+      "Vendor Management",
+      "Energy Usage Monitoring",
+      "Asset Lifecycle Management",
+      "Security Systems Oversight",
+      "Staff Scheduling",
+      "Budgeting and Cost Control",
+      "Emergency Preparedness",
+      "HVAC & Utility Oversight"
     ]
   },
   "Supply Chain Manager": {
     "skills": [
-      "Global Supply Chain",
-      "Procurement",
-      "Demand Planning",
-      "Logistics Strategy",
-      "Risk Mitigation (Supply Chain)"
+      "Demand Forecasting",
+      "Inventory Planning",
+      "Logistics Management",
+      "Supplier Relationship Management",
+      "Procurement Strategy",
+      "ERP Systems (SAP, Oracle)",
+      "Transportation Coordination",
+      "Warehousing Techniques",
+      "Supply Chain Analytics",
+      "Cost Optimization"
     ]
   },
   "Logistics Manager": {
     "skills": [
-      "Transportation Management",
-      "Warehouse Operations",
-      "Freight Forwarding",
+      "Freight and Transportation Planning",
+      "Warehouse Management",
       "Route Optimization",
-      "Customs & Compliance"
+      "Logistics Software (TMS/WMS)",
+      "Shipment Tracking Systems",
+      "Vendor and Carrier Coordination",
+      "Customs Compliance",
+      "Logistics KPIs",
+      "Inventory Distribution",
+      "Cost Control Strategies"
     ]
   },
   "Inventory Manager": {
     "skills": [
-      "Inventory Control Systems",
-      "Stock Optimization",
-      "Warehouse Layout",
-      "Demand Forecasting",
-      "Material Handling"
+      "Stock Level Monitoring",
+      "Reorder Point Calculation",
+      "Inventory Auditing",
+      "ERP Software Usage",
+      "Forecasting Demand",
+      "Shrinkage Reduction",
+      "Cycle Counting",
+      "Supply Chain Coordination",
+      "Warehouse Organization",
+      "Barcode/RFID Implementation"
     ]
   },
   "Procurement Manager": {
     "skills": [
-      "Vendor Negotiation",
-      "Contract Management",
+      "Supplier Negotiation",
+      "Purchase Order Management",
       "Strategic Sourcing",
-      "Supplier Relationship Management",
-      "Cost Reduction"
+      "Cost Reduction Analysis",
+      "Contract Management",
+      "Vendor Performance Evaluation",
+      "Procurement Policies & Compliance",
+      "Market Price Analysis",
+      "Tendering & Bidding",
+      "Procurement Software (SAP Ariba, Coupa)"
     ]
   },
   "HR Manager": {
     "skills": [
-      "Recruitment & Staffing",
+      "Recruitment and Talent Acquisition",
+      "Performance Management",
       "Employee Relations",
-      "Compensation & Benefits",
-      "HR Policies & Procedures",
-      "Performance Management"
-    ]
-  },
-  "Talent Acquisition Manager": {
-    "skills": [
-      "Recruitment Strategy",
-      "Candidate Sourcing",
-      "Interviewing Techniques",
-      "Employer Branding",
-      "Applicant Tracking Systems (ATS)"
+      "HR Policies & Compliance",
+      "Payroll & Benefits Administration",
+      "Conflict Resolution",
+      "Training & Development",
+      "Labor Law Knowledge",
+      "Onboarding Process",
+      "Employee Engagement Programs"
     ]
   },
   "Employee Relations Manager": {
     "skills": [
-      "Conflict Resolution",
-      "Disciplinary Actions",
-      "Labor Law",
-      "Mediation",
-      "Employee Engagement"
+      "Conflict Resolution Strategies",
+      "Employee Grievance Handling",
+      "Compliance with Labor Laws",
+      "Mediation & Dispute Resolution",
+      "Internal Investigations",
+      "HR Policy Communication",
+      "Diversity and Inclusion",
+      "Performance Counseling",
+      "Documentation of Incidents",
+      "Union Negotiations"
     ]
   },
   "Compensation and Benefits Manager": {
     "skills": [
-      "Salary Structure Design",
-      "Benefit Program Administration",
-      "Market Pricing",
-      "Payroll Management",
-      "HRIS (Human Resources Information Systems)"
+      "Salary Benchmarking",
+      "Benefits Program Design",
+      "Payroll Compliance",
+      "Job Evaluation Techniques",
+      "Total Rewards Strategy",
+      "Incentive Plan Management",
+      "HRIS Systems (Workday, SAP)",
+      "Regulatory Compliance (FMLA, ESIC)",
+      "Market Survey Analysis",
+      "Pension and Retirement Plans"
     ]
   },
   "Financial Manager": {
     "skills": [
+      "Financial Planning & Analysis",
+      "Budget Preparation",
       "Financial Reporting",
-      "Budgeting & Forecasting",
-      "Financial Analysis",
-      "Investment Management",
-      "Risk Assessment"
+      "Cash Flow Management",
+      "Tax Planning & Compliance",
+      "Investment Strategies",
+      "Risk Management",
+      "Cost-Benefit Analysis",
+      "Accounting Software (SAP, QuickBooks)",
+      "Financial Forecasting"
     ]
   },
   "Risk Manager": {
     "skills": [
-      "Risk Identification",
       "Risk Assessment & Mitigation",
-      "Compliance Management",
-      "Insurance Management",
-      "Crisis Management"
-    ]
-  },
-  "Treasury Manager": {
-    "skills": [
-      "Cash Flow Management",
-      "Debt Management",
-      "Foreign Exchange Management",
-      "Investment Strategy",
-      "Banking Relationships"
+      "Internal Controls Evaluation",
+      "Regulatory Compliance",
+      "Business Continuity Planning",
+      "Insurance and Claims Management",
+      "Enterprise Risk Management (ERM)",
+      "Incident Reporting",
+      "Audit Coordination",
+      "Legal Risk Awareness",
+      "Crisis Management Planning"
     ]
   },
   "Compliance Manager": {
     "skills": [
-      "Regulatory Compliance",
-      "Internal Controls",
-      "Policy Development",
-      "Auditing",
-      "Legal Research"
+      "Policy Development & Enforcement",
+      "Regulatory Research (GDPR, HIPAA, SOX)",
+      "Audit Readiness",
+      "Training Program Implementation",
+      "Ethical Conduct Oversight",
+      "Internal Controls Monitoring",
+      "Compliance Documentation",
+      "Anti-Bribery & Anti-Corruption",
+      "Reporting and Escalation",
+      "Regulatory Filing"
     ]
   },
   "Marketing Manager": {
     "skills": [
-      "Marketing Strategy",
-      "Campaign Management",
+      "Marketing Campaign Management",
+      "SEO & SEM Strategies",
+      "Content Marketing",
+      "Digital Advertising",
+      "Brand Messaging",
       "Market Research",
-      "Digital Marketing",
-      "Brand Management"
+      "Analytics Tools (Google Analytics, HubSpot)",
+      "Social Media Strategy",
+      "Email Marketing",
+      "Budget Allocation"
     ]
   },
   "Brand Manager": {
     "skills": [
-      "Brand Strategy",
       "Brand Positioning",
-      "Marketing Communications",
-      "Market Segmentation",
-      "Consumer Insights"
-    ]
-  },
-  "Content Marketing Manager": {
-    "skills": [
-      "Content Strategy",
-      "Content Creation (Writing, Video)",
-      "SEO Content",
-      "Content Distribution",
-      "Analytics (Content)"
+      "Market Trend Analysis",
+      "Visual Identity Oversight",
+      "Brand Guidelines Enforcement",
+      "Advertising Strategy",
+      "Consumer Behavior Research",
+      "Competitor Benchmarking",
+      "Product Packaging Strategy",
+      "Cross-functional Collaboration",
+      "Campaign Performance Metrics"
     ]
   },
   "Social Media Manager": {
     "skills": [
-      "Social Media Strategy",
-      "Platform Management (e.g., Facebook, Instagram, LinkedIn)",
-      "Content Scheduling",
-      "Community Management",
-      "Social Media Analytics"
+      "Platform-Specific Strategy (Instagram, LinkedIn, etc.)",
+      "Content Creation and Scheduling",
+      "Audience Engagement",
+      "Analytics & Performance Tracking",
+      "Social Listening",
+      "Paid Campaign Management",
+      "Influencer Collaboration",
+      "Trend Monitoring",
+      "Crisis Communication",
+      "Community Moderation"
     ]
   },
   "Sales Manager": {
     "skills": [
-      "Sales Strategy",
-      "Team Leadership",
+      "Sales Strategy Development",
+      "Customer Relationship Management (CRM)",
       "Sales Forecasting",
-      "Negotiation",
-      "CRM Software (e.g., Salesforce)"
+      "Negotiation Skills",
+      "Team Leadership",
+      "Sales Metrics Analysis",
+      "Lead Generation",
+      "Territory Management",
+      "B2B/B2C Sales",
+      "Revenue Growth Planning"
     ]
   },
   "Regional Sales Manager": {
     "skills": [
-      "Territory Management",
-      "Sales Performance Analysis",
-      "Client Relationship Management",
-      "Market Penetration",
-      "Sales Training"
-    ]
-  },
-  "Inside Sales Manager": {
-    "skills": [
-      "Lead Generation",
-      "Remote Sales",
-      "Sales Scripting",
-      "CRM Usage",
-      "Call Coaching"
+      "Regional Market Analysis",
+      "Sales Team Supervision",
+      "Territory Planning",
+      "Customer Retention Strategies",
+      "Sales Quota Management",
+      "Cross-functional Collaboration",
+      "Sales Forecasting",
+      "Client Relationship Development",
+      "Data-Driven Decision Making",
+      "Budgeting and Planning"
     ]
   },
   "Key Account Manager": {
     "skills": [
-      "Strategic Account Planning",
-      "Relationship Building (Client)",
-      "Upselling/Cross-selling",
-      "Contract Renewal",
-      "Problem Solving (Client)"
+      "Account Management",
+      "Strategic Relationship Building",
+      "Client Retention",
+      "Contract Negotiation",
+      "Sales Planning",
+      "Upselling & Cross-selling",
+      "Customer Success Planning",
+      "Performance Metrics Tracking",
+      "CRM Tools (Salesforce, HubSpot)",
+      "Problem Resolution"
     ]
   },
   "IT Manager": {
     "skills": [
       "IT Infrastructure Management",
+      "Budgeting and Cost Control",
       "Network Administration",
-      "Cybersecurity",
-      "IT Support",
-      "Budget Management (IT)"
+      "Security Best Practices",
+      "ITIL Framework",
+      "Project Management",
+      "Vendor Management",
+      "Team Leadership",
+      "Disaster Recovery Planning",
+      "Help Desk Supervision"
     ]
   },
   "Systems Manager": {
     "skills": [
-      "Server Administration",
-      "Operating Systems (Windows, Linux)",
-      "Virtualization (e.g., VMware)",
-      "Cloud Computing",
-      "System Monitoring"
+      "System Administration",
+      "Performance Monitoring",
+      "Enterprise Systems Management",
+      "Incident Response",
+      "Automation Tools (Ansible, Puppet)",
+      "Change Management",
+      "IT Compliance",
+      "Virtualization (VMware, Hyper-V)",
+      "System Upgrades & Patching",
+      "Root Cause Analysis"
     ]
   },
   "Network Manager": {
     "skills": [
-      "Network Architecture",
-      "Network Security",
-      "Wireless Networking",
-      "VoIP Systems",
-      "Network Troubleshooting"
+      "Network Design & Architecture",
+      "LAN/WAN Management",
+      "Firewall Configuration",
+      "Switching & Routing Protocols",
+      "Network Monitoring Tools (Nagios, PRTG)",
+      "IP Address Management",
+      "VPN Configuration",
+      "Troubleshooting",
+      "Security Policies Enforcement",
+      "Capacity Planning"
     ]
   },
   "Security Manager": {
     "skills": [
-      "Information Security Policy",
-      "Risk Management (InfoSec)",
+      "Cybersecurity Policy Development",
+      "Risk Assessment",
+      "Incident Management",
+      "Compliance Standards (ISO 27001, NIST)",
+      "Penetration Testing Oversight",
+      "Access Control Systems",
       "Vulnerability Management",
-      "Incident Response Planning",
-      "Compliance Frameworks (e.g., ISO 27001, GDPR)"
+      "Security Auditing",
+      "Encryption Standards",
+      "SIEM Tools"
     ]
   },
   "Business Development Manager": {
     "skills": [
+      "Market Research",
       "Lead Generation",
-      "Client Acquisition",
-      "Partnership Development",
-      "Market Analysis",
-      "Negotiation"
-    ]
-  },
-  "Partnerships Manager": {
-    "skills": [
-      "Strategic Alliance Development",
-      "Joint Ventures",
-      "Contract Negotiation (Partnerships)",
-      "Relationship Management",
-      "Ecosystem Mapping"
-    ]
-  },
-  "Sales Development Manager": {
-    "skills": [
-      "Sales Pipeline Management",
-      "Outbound Prospecting",
-      "Sales Tools (e.g., HubSpot, Salesloft)",
-      "Performance Coaching",
-      "Lead Qualification"
-    ]
-  },
-  "Market Development Manager": {
-    "skills": [
-      "New Market Entry Strategy",
-      "Competitive Analysis",
-      "Market Opportunity Identification",
-      "Go-to-Market Strategy",
-      "Pricing Strategy"
-    ]
-  },
-  "Insurance Risk Manager": {
-    "skills": [
-      "Insurance Policy Analysis",
-      "Underwriting Principles",
-      "Claims Management",
-      "Actuarial Science (Basic)",
-      "Regulatory Compliance (Insurance)"
-    ]
-  },
-  "Operational Risk Manager": {
-    "skills": [
-      "Process Mapping",
-      "Internal Controls",
-      "Business Continuity Planning",
-      "Fraud Detection",
-      "Root Cause Analysis"
-    ]
-  },
-  "Credit Risk Manager": {
-    "skills": [
-      "Credit Analysis",
-      "Financial Modeling",
-      "Loan Underwriting",
-      "Debt Recovery",
-      "Regulatory Compliance (Credit)"
-    ]
-  },
-  "Legal Manager": {
-    "skills": [
-      "Contract Law",
-      "Corporate Governance",
-      "Litigation Management",
-      "Intellectual Property Law",
-      "Legal Research"
-    ]
-  },
-  "Contract Manager": {
-    "skills": [
-      "Contract Drafting",
-      "Contract Negotiation",
-      "Compliance (Contractual)",
-      "Vendor Relationship Management",
-      "Legal Risk Assessment"
-    ]
-  },
-  "Corporate Counsel": {
-    "skills": [
-      "Corporate Law",
-      "Mergers & Acquisitions (Legal)",
-      "Securities Law",
-      "Employment Law",
-      "Litigation Strategy"
+      "Pitch Development",
+      "B2B Sales Strategies",
+      "CRM Proficiency",
+      "Sales Funnel Management",
+      "Revenue Forecasting",
+      "Networking & Partnerships",
+      "Strategic Planning",
+      "Customer Negotiation"
     ]
   },
   "Quality Assurance Manager": {
     "skills": [
-      "Quality Management Systems (e.g., ISO 9001)",
-      "Process Auditing",
-      "Statistical Process Control (SPC)",
+      "QA Methodologies (Agile, Waterfall)",
+      "Test Strategy Development",
+      "Automation Tools (Selenium, JMeter)",
+      "ISO/IEC Compliance",
+      "Bug Tracking Systems (JIRA, Bugzilla)",
       "Root Cause Analysis",
-      "Continuous Improvement"
+      "Performance Testing",
+      "Regulatory Standards",
+      "Team Management",
+      "Documentation & Reporting"
     ]
   },
   "Test Manager": {
     "skills": [
-      "Test Strategy Development",
-      "Test Automation Frameworks",
-      "Test Planning & Execution",
+      "Test Planning",
+      "Automated Testing Frameworks",
+      "Manual Testing Techniques",
+      "Test Case Design",
+      "Risk-Based Testing",
+      "Team Coordination",
+      "Test Execution & Reporting",
+      "Performance Benchmarking",
       "Defect Management",
-      "Performance Testing"
+      "Test Environment Setup"
     ]
   },
   "Process Improvement Manager": {
     "skills": [
       "Lean Six Sigma",
-      "Business Process Reengineering (BPR)",
-      "Data Analysis (Process)",
-      "Change Management",
-      "Workflow Optimization"
-    ]
-  },
-  "Auditing Manager": {
-    "skills": [
-      "Internal Audit",
-      "External Audit",
-      "Financial Reporting Standards (e.g., IFRS, GAAP)",
-      "Compliance Auditing",
-      "Fraud Detection"
+      "Process Mapping",
+      "Root Cause Analysis",
+      "KPI Development",
+      "Change Implementation",
+      "Continuous Improvement Tools",
+      "Data Analysis & Reporting",
+      "Workflow Automation",
+      "Stakeholder Engagement",
+      "Standard Operating Procedures"
     ]
   },
   "Customer Service Manager": {
     "skills": [
-      "Customer Relationship Management (CRM)",
-      "Team Leadership (Customer Service)",
-      "Problem Solving (Customer Issues)",
-      "Service Level Agreements (SLAs)",
-      "Conflict Resolution"
-    ]
-  },
-  "Call Center Manager": {
-    "skills": [
+      "Customer Relationship Management",
       "Call Center Operations",
-      "Workforce Management (Call Center)",
-      "Quality Monitoring",
-      "Customer Experience (CX)",
-      "IVR Systems"
+      "Service Quality Monitoring",
+      "Team Coaching & Supervision",
+      "Conflict Resolution",
+      "Service Level Agreement (SLA) Management",
+      "Customer Satisfaction Metrics",
+      "Omnichannel Support",
+      "Complaint Handling",
+      "Process Optimization"
     ]
   },
   "Client Relations Manager": {
     "skills": [
-      "Account Management",
-      "Client Retention",
-      "Service Delivery",
-      "Client Feedback Management",
-      "Relationship Building"
+      "Account Handling",
+      "Client Communication",
+      "Feedback Management",
+      "Service Delivery Assurance",
+      "Strategic Relationship Management",
+      "Client Retention Tactics",
+      "CRM Systems",
+      "Customer Lifecycle Management",
+      "Upsell & Cross-sell Strategies",
+      "Professional Networking"
     ]
   },
   "Technical Support Manager": {
     "skills": [
+      "Helpdesk Management",
+      "Knowledge Base Development",
+      "Incident Resolution",
+      "ITIL Practices",
       "Technical Troubleshooting",
-      "ITIL Framework",
-      "Help Desk Management",
-      "Knowledge Base Management",
-      "Software/Hardware Support"
-    ]
-  },
-  "Sourcing Manager": {
-    "skills": [
-      "Strategic Sourcing",
-      "Supplier Selection",
-      "Category Management",
-      "Global Sourcing",
-      "Market Intelligence"
-    ]
-  },
-  "Vendor Manager": {
-    "skills": [
-      "Vendor Performance Management",
-      "Contract Compliance",
-      "Relationship Management (Vendor)",
-      "Risk Assessment (Vendor)",
-      "Cost Optimization (Vendor)"
+      "Service Request Escalation",
+      "Staff Scheduling",
+      "Remote Support Tools",
+      "Customer Communication",
+      "SLA Enforcement"
     ]
   },
   "Purchasing Manager": {
     "skills": [
+      "Vendor Negotiation",
+      "Procurement Strategy",
+      "Inventory Management",
+      "Contract Management",
+      "Supply Chain Coordination",
+      "Cost Control",
+      "ERP Systems",
+      "Sourcing Strategy",
       "Purchase Order Management",
-      "Inventory Control",
-      "Negotiation (Purchasing)",
-      "Supplier Development",
-      "E-procurement Systems"
-    ]
-  },
-  "Regulatory Affairs Manager": {
-    "skills": [
-      "Regulatory Compliance (Specific Industry)",
-      "Submission Preparation (e.g., FDA, EMA)",
-      "Quality Systems (Regulatory)",
-      "Clinical Trials Regulations",
-      "Labeling & Advertising Compliance"
-    ]
-  },
-  "Internal Auditor": {
-    "skills": [
-      "Audit Planning & Execution",
-      "Risk-Based Auditing",
-      "Internal Control Assessment",
-      "Report Writing (Audit)",
-      "Compliance Frameworks"
-    ]
-  },
-  "Environmental Compliance Manager": {
-    "skills": [
-      "Environmental Regulations (e.g., CERCLA, RCRA)",
-      "Permitting & Licensing",
-      "Environmental Auditing",
-      "Waste Management Regulations",
-      "Air & Water Quality Standards"
+      "Risk Mitigation"
     ]
   },
   "Change Manager": {
     "skills": [
-      "Change Management Methodologies (e.g., ADKAR)",
+      "Change Management Frameworks (ADKAR, Kotter)",
       "Communication Planning",
-      "Stakeholder Engagement",
+      "Stakeholder Impact Analysis",
+      "Training & Enablement Planning",
+      "Organizational Assessment",
       "Resistance Management",
-      "Training & Development"
+      "Change Roadmapping",
+      "Project Integration",
+      "Measurement & Feedback Systems",
+      "Cross-functional Coordination"
     ]
   },
+
   "Organizational Development Manager": {
     "skills": [
-      "Talent Management",
-      "Workforce Planning",
-      "Culture Transformation",
-      "Leadership Development",
-      "Organizational Design"
+      "Change Management",
+      "Organizational Assessment",
+      "Talent Development",
+      "Performance Management Systems",
+      "Leadership Training",
+      "Employee Engagement",
+      "Succession Planning",
+      "Coaching & Mentoring",
+      "HR Strategy Alignment",
+      "Stakeholder Facilitation"
     ]
   },
+
   "Transition Manager": {
     "skills": [
-      "Project Transition Planning",
-      "Knowledge Transfer",
-      "Go-Live Management",
-      "Post-Implementation Support",
-      "Risk Management (Transition)"
-    ]
-  },
-  "Change Communication Manager": {
-    "skills": [
-      "Communication Strategy",
-      "Crisis Communication",
-      "Employee Communications",
-      "Storytelling",
-      "Multi-channel Communication"
+      "Transition Planning",
+      "Change Readiness Assessment",
+      "Knowledge Transfer Management",
+      "Business Continuity Planning",
+      "Stakeholder Communication",
+      "ITIL Transition Processes",
+      "Training & Onboarding Programs",
+      "Operational Handover",
+      "Risk Mitigation Strategies",
+      "Cross-functional Team Management"
     ]
   },
   "Corporate Strategy Manager": {
     "skills": [
       "Strategic Planning",
+      "Business Model Innovation",
       "Competitive Analysis",
-      "Business Model Development",
+      "M&A Evaluation",
+      "Financial Forecasting",
+      "SWOT and PESTLE Analysis",
+      "Executive Reporting",
+      "Cross-Departmental Collaboration",
       "Market Entry Strategy",
-      "Growth Strategy"
+      "KPI Design and Monitoring"
     ]
   },
   "Strategic Planning Manager": {
     "skills": [
-      "SWOT Analysis",
+      "Strategic Roadmapping",
       "Scenario Planning",
-      "Performance Metrics (Strategic)",
-      "Resource Allocation",
-      "Vision & Mission Development"
-    ]
-  },
-  "Business Analyst": {
-    "skills": [
-      "Requirements Gathering",
-      "Process Modeling (BPMN)",
-      "Data Analysis",
-      "Stakeholder Analysis",
-      "System Analysis"
+      "Market Intelligence",
+      "Budget Forecasting",
+      "Cross-functional Alignment",
+      "Balanced Scorecard Implementation",
+      "Business Analysis",
+      "Project Prioritization",
+      "Risk Assessment",
+      "Strategy Communication"
     ]
   },
   "Mergers and Acquisitions Manager": {
     "skills": [
       "Due Diligence",
-      "Valuation (M&A)",
-      "Deal Negotiation",
-      "Integration Planning",
-      "Financial Modeling (M&A)"
+      "Valuation Techniques",
+      "Deal Structuring",
+      "Post-Merger Integration",
+      "Risk Assessment",
+      "Financial Modeling",
+      "Negotiation",
+      "Legal & Regulatory Compliance",
+      "Stakeholder Management",
+      "Corporate Finance Strategy"
     ]
   },
   "Training and Development Manager": {
     "skills": [
-      "Curriculum Development",
+      "Training Needs Analysis",
       "Instructional Design",
-      "Training Delivery",
+      "eLearning Development Tools",
       "Learning Management Systems (LMS)",
-      "Needs Assessment"
-    ]
-  },
-  "Learning and Development Specialist": {
-    "skills": [
-      "Adult Learning Principles",
-      "E-learning Development",
-      "Coaching",
-      "Performance Consulting",
-      "Assessment Design"
+      "Employee Development Programs",
+      "Facilitation and Coaching",
+      "Training Evaluation Metrics",
+      "Blended Learning Techniques",
+      "Succession Planning",
+      "Compliance Training"
     ]
   },
   "Employee Engagement Manager": {
     "skills": [
-      "Engagement Survey Design",
-      "Recognition Programs",
-      "Internal Communications",
+      "Employee Satisfaction Analysis",
       "Culture Building",
-      "Employee Wellbeing"
+      "Survey Design & Analysis",
+      "Communication Strategy",
+      "Feedback Systems",
+      "Recognition Programs",
+      "Leadership Alignment",
+      "Engagement KPI Monitoring",
+      "Event Planning",
+      "Wellness Initiatives"
     ]
   },
   "Leadership Development Manager": {
     "skills": [
-      "Leadership Training Programs",
-      "Executive Coaching",
+      "Leadership Competency Modeling",
+      "High-Potential Identification",
+      "Coaching & Mentoring Programs",
       "Succession Planning",
-      "Talent Review",
-      "Mentorship Programs"
+      "Executive Training Design",
+      "360-Degree Feedback",
+      "Performance Management",
+      "Emotional Intelligence Training",
+      "Learning Pathway Design",
+      "Organizational Strategy Alignment"
     ]
   },
   "Facility Manager": {
     "skills": [
-      "Building Management",
-      "Preventive Maintenance",
-      "Safety Regulations (Facilities)",
+      "Facility Maintenance Planning",
+      "Vendor Management",
       "Space Utilization",
-      "Energy Efficiency"
+      "Health & Safety Compliance",
+      "Energy Efficiency Initiatives",
+      "Preventive Maintenance",
+      "Budget Management",
+      "Security Oversight",
+      "Emergency Preparedness",
+      "Building Automation Systems"
     ]
   },
   "Building Operations Manager": {
     "skills": [
-      "HVAC Systems Management",
-      "Electrical Systems (Building)",
-      "Plumbing Systems",
-      "Fire Safety Systems",
-      "Building Automation Systems (BAS)"
+      "Building System Maintenance",
+      "HVAC & Electrical Oversight",
+      "Preventive Maintenance Scheduling",
+      "Budgeting and Procurement",
+      "Work Order Management",
+      "Facility Compliance",
+      "Vendor Negotiation",
+      "Space Optimization",
+      "Technical Team Supervision",
+      "Sustainability Practices"
     ]
   },
   "Maintenance Manager": {
     "skills": [
-      "CMMS (Computerized Maintenance Management Systems)",
-      "Preventive Maintenance",
-      "Repair & Troubleshooting",
-      "Spare Parts Management",
-      "Maintenance Scheduling"
+      "Maintenance Planning",
+      "CMMS Software Proficiency",
+      "Work Order Scheduling",
+      "Asset Management",
+      "Root Cause Analysis",
+      "Downtime Reduction",
+      "Spare Parts Inventory",
+      "Safety Compliance",
+      "Vendor Coordination",
+      "Equipment Life Cycle Management"
     ]
   },
-   "Space Planner": {
+  "Event Manager": {
     "skills": [
-      "Workplace Strategy",
-      "Space Utilization Analysis",
-      "CAD (Space Planning)",
-      "Ergonomics",
-      "Move Management"
+      "Event Planning",
+      "Budget Management",
+      "Vendor Negotiation",
+      "Venue Management",
+      "Guest Coordination",
+      "Marketing and Promotion",
+      "Risk Management",
+      "Team Leadership",
+      "Logistics Coordination",
+      "Post-Event Evaluation"
+    ]
+  },
+  "Sports Team Manager": {
+    "skills": [
+      "Team Leadership",
+      "Game Strategy Coordination",
+      "Scheduling & Logistics",
+      "Athlete Performance Oversight",
+      "Training Plan Management",
+      "Conflict Resolution",
+      "Team Budgeting",
+      "Compliance with League Regulations",
+      "Communication Skills",
+      "Recruitment and Scouting"
+    ]
+  },
+  "Venue Manager": {
+    "skills": [
+      "Facility Operations",
+      "Event Scheduling",
+      "Staff Management",
+      "Security Coordination",
+      "Customer Service",
+      "Ticketing Systems",
+      "Maintenance Oversight",
+      "Vendor Management",
+      "Health & Safety Compliance",
+      "Budget Management"
+    ]
+  },
+  "Sponsorship Manager": {
+    "skills": [
+      "Sponsorship Acquisition",
+      "Proposal Writing",
+      "Brand Partnership Strategy",
+      "Event Coordination",
+      "Marketing Alignment",
+      "Contract Negotiation",
+      "Performance Metrics Reporting",
+      "Stakeholder Management",
+      "Budget Management",
+      "Media Relations"
+    ]
+  },
+  "Program Manager": {
+    "skills": [
+      "Program Lifecycle Management",
+      "Cross-Project Coordination",
+      "Budget Control",
+      "Stakeholder Engagement",
+      "Risk Management",
+      "Agile and Waterfall Methodologies",
+      "Resource Allocation",
+      "Performance Reporting",
+      "Strategic Alignment",
+      "Benefits Realization Management"
+    ]
+  },
+  "Innovation Manager": {
+    "skills": [
+      "Innovation Strategy",
+      "Idea Management Systems",
+      "R&D Oversight",
+      "Technology Scouting",
+      "Design Thinking",
+      "Cross-functional Collaboration",
+      "Market Trend Analysis",
+      "Innovation Metrics",
+      "Prototyping",
+      "Change Facilitation"
+    ]
+  },
+  "Customer Success Manager": {
+    "skills": [
+      "Client Onboarding",
+      "Customer Retention Strategies",
+      "CRM Tools (e.g., Salesforce, HubSpot)",
+      "Account Management",
+      "Churn Analysis",
+      "Customer Journey Mapping",
+      "Feedback Collection & Implementation",
+      "Team Collaboration",
+      "Renewal and Upsell Coordination",
+      "Support Escalation Handling"
+    ]
+  },
+  "Community Manager": {
+    "skills": [
+      "Online Community Building",
+      "Social Media Management",
+      "Content Moderation",
+      "Engagement Strategy",
+      "Analytics & Reporting",
+      "Conflict Resolution",
+      "Event Planning",
+      "Brand Advocacy Programs",
+      "Platform Management",
+      "Influencer Collaboration"
+    ]
+  },
+  "Crisis Manager": {
+    "skills": [
+      "Crisis Communication Planning",
+      "Emergency Response Coordination",
+      "Risk Assessment",
+      "Business Continuity Planning",
+      "Stakeholder Messaging",
+      "Media Handling",
+      "Policy Development",
+      "Scenario Planning",
+      "Rapid Decision-Making",
+      "Post-Crisis Analysis"
+    ]
+  },
+  "Digital Marketing Manager": {
+    "skills": [
+      "SEO/SEM Strategy",
+      "Content Marketing",
+      "PPC Campaigns (Google Ads, Facebook Ads)",
+      "Web Analytics (Google Analytics)",
+      "Email Marketing",
+      "Conversion Rate Optimization (CRO)",
+      "Marketing Automation Tools",
+      "Social Media Advertising",
+      "Influencer Marketing",
+      "Marketing KPIs & ROI Tracking"
+    ]
+  },
+  "Sustainability Manager": {
+    "skills": [
+      "Sustainability Strategy Development",
+      "Environmental Impact Assessment",
+      "Corporate Social Responsibility (CSR)",
+      "Carbon Footprint Reduction",
+      "Regulatory Compliance",
+      "Stakeholder Engagement",
+      "Sustainability Reporting (e.g., GRI)",
+      "Green Supply Chain Management",
+      "ESG Metrics",
+      "Sustainable Procurement"
+    ]
+  },
+
+  "Business Analyst": {
+    "skills": [
+      "Requirements Gathering",
+      "Process Modeling (BPMN, UML)",
+      "Stakeholder Analysis",
+      "SWOT Analysis",
+      "Use Case Development",
+      "Gap Analysis",
+      "Data Interpretation",
+      "Wireframing & Prototyping",
+      "Agile/Scrum Methodology",
+      "Business Documentation"
+    ]
+  },
+  "Operations Research Analyst": {
+    "skills": [
+      "Optimization Techniques",
+      "Linear Programming",
+      "Statistical Modeling",
+      "Simulation Modeling (e.g., Arena, AnyLogic)",
+      "Decision Trees & Forecasting",
+      "Quantitative Analysis",
+      "Data Visualization",
+      "Python/R for Analytics",
+      "Supply Chain Optimization",
+      "Mathematical Modeling"
+    ]
+  },
+  "Systems Analyst": {
+    "skills": [
+      "Systems Design & Architecture",
+      "Requirements Analysis",
+      "Data Flow Diagrams (DFD)",
+      "Feasibility Studies",
+      "Technical Specifications Writing",
+      "Database Design Basics",
+      "Enterprise Systems Understanding",
+      "Testing & Validation",
+      "UML Modeling",
+      "Stakeholder Liaison"
+    ]
+  },
+  "Financial Analyst": {
+    "skills": [
+      "Financial Modeling",
+      "Ratio Analysis",
+      "Forecasting & Budgeting",
+      "Excel & Spreadsheet Proficiency",
+      "Valuation Techniques (DCF, Comparable Analysis)",
+      "Financial Reporting",
+      "Risk Assessment",
+      "Data Visualization (Tableau, Power BI)",
+      "ERP Systems (SAP, Oracle)",
+      "Market Trend Analysis"
+    ]
+  },
+  "Market Research Analyst": {
+    "skills": [
+      "Survey Design & Analysis",
+      "Consumer Behavior Analysis",
+      "Competitive Benchmarking",
+      "Quantitative & Qualitative Research",
+      "SPSS/R/Python for Research",
+      "Market Segmentation",
+      "SWOT & PESTLE Analysis",
+      "Data Cleaning & Processing",
+      "Trend Forecasting",
+      "Report Writing"
+    ]
+  },
+  "Policy Analyst": {
+    "skills": [
+      "Policy Evaluation Techniques",
+      "Legislative Research",
+      "Data Collection & Interpretation",
+      "Impact Assessment",
+      "Statistical Tools (STATA, R)",
+      "Public Speaking & Presentation",
+      "Stakeholder Engagement",
+      "Regulatory Analysis",
+      "Cost-Benefit Analysis",
+      "White Paper Writing"
+    ]
+  },
+  "Supply Chain Analyst": {
+    "skills": [
+      "Logistics Performance Analysis",
+      "Demand Forecasting",
+      "Inventory Optimization",
+      "ERP/MRP Systems",
+      "KPI Reporting",
+      "Cost Analysis",
+      "Supplier Evaluation",
+      "Data Cleaning & SQL",
+      "Dashboarding (Power BI, Tableau)",
+      "Network Optimization"
+    ]
+  },
+  "IT Business Analyst": {
+    "skills": [
+      "Technical Requirements Gathering",
+      "System Integration Knowledge",
+      "Agile/Scrum Framework",
+      "Process Reengineering",
+      "Data Analysis (SQL, Excel)",
+      "Stakeholder Communication",
+      "Wireframing Tools (Balsamiq, Figma)",
+      "Use Case/Story Writing",
+      "UAT Testing",
+      "Documentation & Reporting"
     ]
   }
 }
+
+
 
 //     {
 //         "jobTitle": "Testing Engineer",

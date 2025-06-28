@@ -29,7 +29,7 @@ const ExternalCl = () => {
     setParagraphs(updated);
   };
 
-  const handleDownloadAndNavigate = () => {
+  const handleDownload = () => {
     if (!personalInfo.name || !personalInfo.title || paragraphs.length === 0) {
       alert("Please fill in all fields before downloading.");
       return;
@@ -47,9 +47,8 @@ const ExternalCl = () => {
       jsPDF: { unit: 'px', format: [794, 1123], orientation: 'portrait' },
     };
 
-    html2pdf().set(opt).from(previewRef.current).save().then(() => {
-      navigate(-1); // 👈 navigate after download finishes
-    });
+    html2pdf().set(opt).from(previewRef.current).save();
+
   };
 
   const handleUpdateCoverLetter = async () => {
@@ -96,12 +95,12 @@ const ExternalCl = () => {
   };
 
   if (isLoading) {
-  return (
-    <div className="flex justify-center items-center h-screen">
-      <p className="text-lg font-medium text-gray-600 animate-pulse"> Loading your cover letter </p>
-    </div>
-  );
-}
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-lg font-medium text-gray-600 animate-pulse"> Loading your cover letter </p>
+      </div>
+    );
+  }
 
 
 
@@ -194,12 +193,15 @@ const ExternalCl = () => {
           <button
             className="bg-[#2c6472] text-white mt-4 px-8 py-1.5 rounded-lg"
             onClick={async () => {
-              await handleUpdateCoverLetter();  // First update
-              handleDownloadAndNavigate();     // Then download and navigate
+              await handleUpdateCoverLetter();   // ✨ First update the data in DB
+              handleDownload();                  // 🧾 Then download PDF
+              setActiveSection(null);            // 🎨 Optional cleanup
+              navigate(-1);                      // ⬅️ Go back
             }}
           >
             Download & Finish Editing
           </button>
+
 
         </div>
 

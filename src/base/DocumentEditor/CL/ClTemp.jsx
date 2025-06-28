@@ -6,7 +6,7 @@ const ClPreview = () => {
   const { personalInfo, paragraphs } = useCl();
 
   return (
-    <div
+    <div 
       ref={previewRef}
       id="cl-pdf-preview"
       className="bg-white text-black"

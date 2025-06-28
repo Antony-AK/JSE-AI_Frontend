@@ -42,13 +42,17 @@ const DocumentEditor = () => {
         const element = clPreviewRef.current;
         if (!element) return;
 
-        const opt = {
-            margin: 0,
-            filename: 'CL.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-        };
+       const opt = {
+      margin: 0,
+      filename: 'cover_letter.pdf',
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: {
+        scale: 2.5,
+        useCORS: true,
+        scrollY: 0,
+      },
+      jsPDF: { unit: 'px', format: [794, 1123], orientation: 'portrait' },
+    };
 
         html2pdf().set(opt).from(element).save();
     };
@@ -112,7 +116,7 @@ const DocumentEditor = () => {
                         </div>
                     </div>
 
-                    <div ref={cvPreviewRef} className="h-full w-[710px] flex bg-white mx-auto overflow-hidden overflow-y-auto scrollbar-custom">
+                    <div ref={cvPreviewRef} className="h-[1123px] w-[710px] flex bg-white mx-auto overflow-hidden overflow-y-auto scrollbar-custom">
 
                         <ExternalModernDeedy
                             personalInfo={cvPersonalInfo}
@@ -130,7 +134,7 @@ const DocumentEditor = () => {
                 </div>
 
 
-                <div className="flex flex-col gap-5 justify-center mx-auto">
+                <div className="flex flex-col gap-5 justify-center -mt-10 mx-auto">
 
                     <div className="flex justify-between px-5 max-w-[710px]">
                         <div onClick={() => navigate('/user/external-cl')} className="flex-1 flex -mt-2 gap-2 items-center cursor-pointer">
@@ -146,7 +150,7 @@ const DocumentEditor = () => {
                         </div>
                     </div>
 
-                    <div ref={clPreviewRef} className="h-full w-[710px] bg-white mx-auto overflow-hidden overflow-y-auto scrollbar-custom">
+                    <div ref={clPreviewRef} className="h-[1123px] w-[794px] bg-white mx-auto -mt-10 scrollbar-custom">
 
                         <ExternalClTemp
                             data={{
@@ -175,11 +179,11 @@ const DocumentEditor = () => {
                     <p className='text-[#2c6472] text-sm font-semibold max-w-[600px]'>To locate them, check your device's Downloads folder — the files are saved with the company name and designation for easy access.</p>
                 </div>
 
-                <div className="">
+                {/* <div className="">
                     <button className="bg-[#2c6472] text-white px-8 py-1.5 rounded-2xl">
                         Finish Editing
                     </button>
-                </div>
+                </div> */}
 
             </div>
 

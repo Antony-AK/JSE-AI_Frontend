@@ -10,12 +10,14 @@ import link_icon from '../../assets/link-icon.svg'
 import { Link } from "react-router-dom";
 import { BASE_URL } from "../../utils/api.js";
 import { useNavigate } from "react-router-dom";
+import animationgif from '../../assets/Animations.gif'
 
 
 
 const MyApplication = () => {
   const navigate = useNavigate();
   const [selectedJobs, setSelectedJobs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -236,73 +238,83 @@ const MyApplication = () => {
 
 
   const handleGenerateCV = async () => {
-  const jobId = selectedJob?.id;
-  if (!jobId) return console.warn("No selected job!");
+    const jobId = selectedJob?.id;
+    if (!jobId) return console.warn("No selected job!");
 
-  try {
-    const token = sessionStorage.getItem("authToken");
+    setIsLoading(true); // 🔥 Show loader
 
-    const response = await axios.post(
-      `${BASE_URL}/internal/generate-resume`,
-      { job_id: jobId },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
 
-    console.log("✅ CV generated:", response.data);
+    try {
+      const token = sessionStorage.getItem("authToken");
 
-    // 👉 Store only job_id
-    sessionStorage.setItem("generatedCV", JSON.stringify({ job_id: jobId }));
+      const response = await axios.post(
+        `${BASE_URL}/internal/generate-resume`,
+        { job_id: jobId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    navigate("/user/cv", { state: { jobId } });
+      console.log("✅ CV generated:", response.data);
 
-  } catch (error) {
-    console.error("❌ CV generation failed:", error);
-    sessionStorage.setItem("generatedCV", JSON.stringify({ error: true }));
-  }
-};
+      // 👉 Store only job_id
+      sessionStorage.setItem("generatedCV", JSON.stringify({ job_id: jobId }));
 
-const handleGenerateCoverLetter = async () => {
-  const jobId = selectedJob?.id;
-  if (!jobId) return console.warn("⚠️ No selected job!");
+      navigate("/user/cv", { state: { jobId } });
 
-  try {
-    const token = sessionStorage.getItem("authToken");
-
-    const response = await axios.post(
-      `${BASE_URL}/internal/generate-cover-letter`,
-      { job_id: jobId },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    console.log("📨 Posting to:", `${BASE_URL}/internal/generate-cover-letter`);
-    console.log("📦 Payload:", { job_id: jobId });
-    console.log("✅ Response:", response.data);
-
-    if (response.status === 200 && response.data) {
-      // ✅ Only store job_id for fetching later
-      sessionStorage.setItem("generatedCL", JSON.stringify({ job_id: jobId }));
-
-      navigate("/user/cl", { state: { jobId } });
-    } else {
-      console.warn("⚠️ Unexpected response:", response.status);
+    } catch (error) {
+      console.error("❌ CV generation failed:", error);
+      sessionStorage.setItem("generatedCV", JSON.stringify({ error: true }));
+    } finally {
+      setIsLoading(false); // Optional: for fallback error cases
     }
-  } catch (error) {
-    console.error("❌ CL generation failed:");
-    console.error("Status:", error.response?.status);
-    console.error("Data:", error.response?.data);
-    console.error("URL:", error.config?.url);
-  }
-};
+  };
+
+  const handleGenerateCoverLetter = async () => {
+    const jobId = selectedJob?.id;
+    if (!jobId) return console.warn("⚠️ No selected job!");
+
+    setIsLoading(true); // 🔥 Show loader
+
+
+    try {
+      const token = sessionStorage.getItem("authToken");
+
+      const response = await axios.post(
+        `${BASE_URL}/internal/generate-cover-letter`,
+        { job_id: jobId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("📨 Posting to:", `${BASE_URL}/internal/generate-cover-letter`);
+      console.log("📦 Payload:", { job_id: jobId });
+      console.log("✅ Response:", response.data);
+
+      if (response.status === 200 && response.data) {
+        // ✅ Only store job_id for fetching later
+        sessionStorage.setItem("generatedCL", JSON.stringify({ job_id: jobId }));
+
+        navigate("/user/cl", { state: { jobId } });
+      } else {
+        console.warn("⚠️ Unexpected response:", response.status);
+      }
+    } catch (error) {
+      console.error("❌ CL generation failed:");
+      console.error("Status:", error.response?.status);
+      console.error("Data:", error.response?.data);
+      console.error("URL:", error.config?.url);
+    } finally {
+      setIsLoading(false); // Optional
+    }
+  };
 
 
   const handleJobTitleClick = (title) => {
@@ -431,18 +443,18 @@ const handleGenerateCoverLetter = async () => {
                     <div
                       key={index}
                       onClick={() => setSelectedJob(job)}
-                      className={`flex items-start h-44 bg-white  relative justify-between border-y rounded-s-xl border-gray-400/20 px-4  py-5  transition-transform ease-in-out duration-200 cursor-pointer ${selectedJob === job ? " border-l-4 border-teal-700 bg-[#2c6472]/10 transition-transform ease-in-out duration-200" : ""
+                      className={`flex items-start h-48 bg-white  relative justify-between border-y rounded-s-xl border-gray-400/20 px-4  py-5  transition-transform ease-in-out duration-200 cursor-pointer ${selectedJob === job ? " border-l-4 border-teal-700 bg-[#2c6472]/10 transition-transform ease-in-out duration-200" : ""
                         }`}
                     >
-                      <div className="flex flex-col min-w-[400px] items-start space-x-10 justify-center ms-3 ">
+                      <div className="flex flex-col min-w-[400px] items-start space-x-10 justify-center ms-3 mb-2">
                         <div className="space-y-2">
-                          <h3 className="text-base font-semibold text-[#2C6472]">{job.jobTitle}</h3>
-                          <p className="text-sm text-gray-600">{job.companyName}</p>
-                          <p className="text-sm text-gray-500">{job.location}</p>
+                          <h3 className="text-base w-96 font-semibold text-[#2C6472]">{job.jobTitle}</h3>
+                          <p className="text-sm   text-gray-600">{job.companyName}</p>
+                          <p className="text-sm mb-5 text-gray-500">{job.location}</p>
 
                         </div>
 
-                        <div className="flex absolute  flex-col gap-2 mt-36 -left-3 ">
+                        <div className="flex absolute  flex-col gap-2 mt-40 -left-3 ">
                           {selectedJob?.skillData?.slice(0, 2).map((item, index) => (
                             <div
                               key={index}
@@ -710,6 +722,20 @@ const handleGenerateCoverLetter = async () => {
 
         )}
       </div>
+
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-10 backdrop-blur-sm">
+          <div className="flex flex-col items-center">
+            <img
+              src={animationgif}
+              alt="Loading..."
+              className="w-52 h-52 mb-4"
+            />
+            <p className="text-white text-xl font-semibold">Generating, please wait...</p>
+          </div>
+        </div>
+       )} 
+
 
 
     </div >

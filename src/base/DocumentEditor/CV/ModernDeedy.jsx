@@ -46,7 +46,7 @@ const ModernDeedy = ({ personalInfo, professionalSummary, workExperience, educat
         {workExperience.content.some(exp =>
           exp.Company || exp.Role || exp.Duration || exp.Description
         ) && (
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1.5 avoid-page-break ">
             <div className="flex items-center gap-3">
               <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>WORK EXPERIENCE</h2>
               <div className="w-full border border-t-gray-400"></div>
@@ -80,7 +80,7 @@ const ModernDeedy = ({ personalInfo, professionalSummary, workExperience, educat
 
         {/* Education */}
         {education?.content?.length > 0 && education.content.some(entry => entry.degree?.trim()) && (
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 avoid-page-break ">
             <div className="flex items-center gap-3">
               <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>EDUCATION</h2>
               <div className="w-full border border-t-gray-400"></div>
@@ -97,7 +97,7 @@ const ModernDeedy = ({ personalInfo, professionalSummary, workExperience, educat
         {projects.content.some(
             proj => proj.Name || proj.Company || proj.Duration || proj.Skills || proj.Description
             ) && (
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-1.5 avoid-page-break ">
             <div className="flex items-center gap-3">
             <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>PROJECTS</h2>
             <div className="w-full border border-t-gray-400"></div>
@@ -129,7 +129,7 @@ const ModernDeedy = ({ personalInfo, professionalSummary, workExperience, educat
 
         {/* Skills */}
         {skills.content.filter(skill => skill.trim() !== '').length > 0 && (
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 avoid-page-break ">
             <div className="flex items-center gap-3">
               <h2 className='font-semibold text-lg text-purple-500 whitespace-nowrap'>SKILLS</h2>
               <div className="w-full border border-t-gray-400"></div>
@@ -149,7 +149,7 @@ const ModernDeedy = ({ personalInfo, professionalSummary, workExperience, educat
 
         {/* Languages */}
         {languages.content.length > 0 && (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 avoid-page-break ">
             <div className="flex items-center gap-3">
             <h2 className='font-semibold text-lg whitespace-nowrap text-purple-500'>LANGUAGES</h2>
             <div className="w-full border border-t-gray-400"></div>
@@ -164,7 +164,7 @@ const ModernDeedy = ({ personalInfo, professionalSummary, workExperience, educat
 
         {/* Certificates */}
         {certificates.content.filter(cert => cert.Name?.trim() !== '').length > 0 && (
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 avoid-page-break ">
             <div className="flex items-center gap-3">
               <h2 className='font-semibold text-lg whitespace-nowrap text-purple-500'>CERTIFICATES</h2>
               <div className="w-full border border-t-gray-400"></div>

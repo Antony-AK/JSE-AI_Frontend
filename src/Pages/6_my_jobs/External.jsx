@@ -2,11 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/api';
+import animationgif from '../../assets/Animations.gif' 
 
 const External = () => {
 
+  const [loading, setLoading] = useState(false);
+
+
   const handleSubmit = async (e) => {
   e.preventDefault();
+    setLoading(true); // ⏳ Start loading
+
 
   const job_id = `job_${Date.now()}${Math.floor(Math.random() * 1000)}`;
 
@@ -39,11 +45,15 @@ const External = () => {
     sessionStorage.setItem("externalJobId", job_id);
 
     // 🚀 Navigate to document editor
-    navigate('/user/document-editor');
+ setTimeout(() => {
+      navigate('/user/document-editor');
+    }, 5000);
 
   } catch (error) {
     console.error("❌ Failed to generate external resume:", error);
     alert("Something went wrong. Please try again.");
+    setLoading(false); // Stop loader on failure
+
   }
 };
 
@@ -66,8 +76,19 @@ const External = () => {
   };
 
 
-  return (
-    <div className="max-w-lg mx-auto mt-10 px-4">
+ return (
+  <div className="w-full h-screen mx-auto  px-4">
+    {loading ? (
+      <div className="flex flex-col justify-center mt-32 items-center h-[300px]">
+        <img
+          src={animationgif}
+          alt="Generating..."
+          className="w-52 h-52"
+        />
+        <p className="ml-4 text-gray-600 text-lg">Generating your cv and cl...</p>
+      </div>
+     ) : ( 
+       <div className="max-w-lg mx-auto mt-10 px-4">
       <form onSubmit={handleSubmit} className="space-y-6 ">
 
         <Input
@@ -116,8 +137,10 @@ const External = () => {
         </div>
       </form>
     </div>
-  );
-};
+     )} 
+  </div>
+);
+}
 
 // Optional: Extract input field component
 const Input = ({ label, name, value, onChange, placeholder }) => (
