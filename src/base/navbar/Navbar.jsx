@@ -86,6 +86,7 @@ const Navbar = () => {
               <div>
                 <Link
                   to="/user/settings"
+                  onClick={() => setMenuOpen(false)} 
                   className="flex items-center gap-4 px-4 py-2 rounded-md transition "
                 >
                   <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">Settings</span>
