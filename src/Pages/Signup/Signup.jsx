@@ -14,6 +14,9 @@ import { BASE_URL } from "../../utils/api"
 const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [showVerificationPopup, setShowVerificationPopup] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
+  const [shakePassword, setShakePassword] = useState(false);
+
   const [formData, setFormData] = useState({
     email: '',
     phoneNumber: '',
@@ -31,7 +34,22 @@ const Signup = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+
+    // Real-time password validation
+    if (name === 'password') {
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+      const hasNumber = /\d/.test(value);
+      const isLongEnough = value.length >= 8;
+
+      if (!isLongEnough || !hasSpecialChar || !hasNumber) {
+        setPasswordError('(Min 8 chars, with number & symbol.)');
+      } else {
+        setPasswordError('');
+      }
+    }
+
   };
+
 
   const toggleShowPassword = (field) => {
     setShowPassword(prev => ({
@@ -44,6 +62,12 @@ const Signup = () => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords don't match!");
+      return;
+    }
+
+    if (!formData.password || passwordError) {
+      setShakePassword(true);
+      setTimeout(() => setShakePassword(false), 400);
       return;
     }
 
@@ -95,7 +119,7 @@ const Signup = () => {
     } catch (error) {
       console.error('Error during signup:', error.response?.data || error.message);
       setLoading(false);
-      toast.error(error.response?.data?.message || 'Signup failed, please try again.');
+      toast.error(error.response?.data?.issue || 'Signup failed, please try again.');
     }
   };
   return (
@@ -120,7 +144,7 @@ const Signup = () => {
           </div><br /> */}
 
           {/* Signup Form */}
-          <form onSubmit={handleSignUp} className='-space-y-1'>
+          <form onSubmit={handleSignUp} className='space-y-1'>
             {/* email Field */}
             <div className="relative -mt-5">
               <label className="mb-1 ms-3 block  text-gray-500 text-sm">
@@ -134,7 +158,7 @@ const Signup = () => {
                 className="w-full h-[52px] px-4 py-4 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer"
                 value={formData.email}
                 onChange={handleChange}
-                required
+
               />
 
             </div><br />
@@ -144,30 +168,28 @@ const Signup = () => {
               <label className="mb-1 ms-3 block  text-gray-500 text-sm">
                 Phone Number
               </label>
-              <span className="absolute left-3 top-1/2 text-base">+49</span>
+              <span className="absolute left-3 top-[64%] transform -translate-y-1/2 text-base">+49</span>
               <input
                 id='phoneNumber'
                 type="tel"
                 name="phoneNumber"
                 placeholder=" "
-                className="w-full pl-14 h-[52px]  px-4 py-3.5 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer"
+                className="w-full pl-14 h-[52px]   px-4 py-3.5 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-
-                required
               />
 
-              {formData.phoneNumber && (formData.phoneNumber.length < 10 || formData.phoneNumber.length > 11) && (
-                <p className="text-[10px] text-red-500 mt-1">(Phone number must be 10 to 11 digits)</p>
-              )}
 
-            </div><br />
+            </div>
+            {formData.phoneNumber && (formData.phoneNumber.length < 10 || formData.phoneNumber.length > 11) && (
+              <p className="text-[10px] text-red-500 mt-1 ">(Phone number must be 10 to 11 digits)</p>
+            )}
 
             {/* Password Fields */}
-            <div className="flex space-x-2 ">
+            <div className="flex space-x-2">
               {/* Create Password */}
               <div className="relative w-1/2">
-                <label className="mb-1 ms-3 block  text-gray-500 text-sm">
+                <label className="mb-1 ms-3 mt-3 block text-gray-500 text-sm">
                   Create Password
                 </label>
                 <input
@@ -175,24 +197,28 @@ const Signup = () => {
                   type={showPassword.password ? "text" : "password"}
                   name="password"
                   placeholder=" "
-                  className="w-full h-[52px] px-4 py-4 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer"
+                  className={`w-full h-[52px] px-4 py-4 border ${passwordError ? '' : 'border-gray-300'
+                    } rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer ${shakePassword ? 'shake' : ''
+                    }`}
                   value={formData.password}
                   onChange={handleChange}
-                  required
-                />
 
+                />
                 <span
-                  className="absolute right-3 top-1/2 transform -translate-y-1/3 text-gray-600 cursor-pointer"
+                  className="absolute right-3 top-[56%] text-gray-600 cursor-pointer"
                   onClick={() => toggleShowPassword('password')}
                 >
                   {showPassword.password ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                 </span>
-                <p className='text-[10px] mt-1'>( password should contain atleast 8 characters )</p>
-              </div>
+
+               
+              </div> 
+
+            
 
               {/* Confirm Password */}
               <div className="relative w-1/2">
-                <label className="mb-1 ms-3 block  text-gray-500 text-sm">
+                <label className="mb-1 ms-3 mt-3 block  text-gray-500 text-sm">
                   Confirm Password
                 </label>
                 <input
@@ -200,25 +226,29 @@ const Signup = () => {
                   type={showPassword.confirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   placeholder=" "
-                  className="w-full h-[52px] px-4 py-4 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer"
+                  className="w-full h-[52px] px-4 py-4 border  border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  required
+
                 />
 
                 <span
-                  className="absolute right-3 top-1/2 transform -translate-y-1/3 text-gray-600 cursor-pointer"
+                  className="absolute right-3 top-[56%] text-gray-600 cursor-pointer"
                   onClick={() => toggleShowPassword('confirmPassword')}
                 >
                   {showPassword.confirmPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                 </span>
               </div><br />
-            </div><br />
+            </div> 
+             {passwordError && (
+                  <p className="text-[10px] text-red-500 ">{passwordError}</p>
+                )}<br/>
 
             {/* Submit Button */}
+            
             <button
               type="submit"
-              className="teal-button w-full h-[50px] bg-[#2c6472] hover:bg-[#24525f] text-white py-3  rounded-md"
+              className="teal-button w-full h-[50px] bg-[#2c6472]  hover:bg-[#24525f] text-white py-3  rounded-md"
             >
               Sign Up
             </button>

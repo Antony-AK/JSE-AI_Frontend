@@ -25,10 +25,16 @@ const PersonalInfo = () => {
     country: 'Germany',
     state: '',
     city: '',
-    portfolio: '',
-    resume: '',
-    blog: ''
   });
+
+  const [externalLinks, setExternalLinks] = useState([
+    { type: 'website', url: '' },
+    { type: 'github', url: '' },
+    { type: 'blog', url: '' },
+    { type: 'social media', url: '' }
+
+  ]);
+
 
   const [errors, setErrors] = useState({});
   const [showSavePopup, setShowSavePopup] = useState(false);
@@ -79,6 +85,15 @@ const PersonalInfo = () => {
         info = res.data;
       }
 
+      if (Array.isArray(info.external_links)) {
+        const updatedLinks = ['portfolio', 'resume', 'blog'].map(type => {
+          const match = info.external_links.find(link => link.type === type);
+          return { type, url: match?.url || '' };
+        });
+        setExternalLinks(updatedLinks);
+      }
+
+
       setFormData({
         first_name: (info.first_name || ''),
         second_name: (info.second_name || ''),
@@ -101,7 +116,7 @@ const PersonalInfo = () => {
     } catch (err) {
       console.error("❌ Failed to fetch personal info", err);
     }
-  };  
+  };
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -119,6 +134,13 @@ const PersonalInfo = () => {
       [id]: ''
     }));
   };
+
+  const handleExternalLinkChange = (index, value) => {
+    const updatedLinks = [...externalLinks];
+    updatedLinks[index].url = value;
+    setExternalLinks(updatedLinks);
+  };
+
 
   const validate = () => {
     const newErrors = {};
@@ -144,6 +166,7 @@ const PersonalInfo = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const newErrors = validate();
     setErrors(newErrors);
 
@@ -155,7 +178,10 @@ const PersonalInfo = () => {
           return;
         }
 
-        const response = await axios.post(apiUrl, formData, {
+        const response = await axios.post(apiUrl, {
+          ...formData,
+          external_links: externalLinks
+        }, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -165,7 +191,7 @@ const PersonalInfo = () => {
         sessionStorage.setItem("hasSubmittedPersonalInfo", "true");
 
         navigate('/user/onboarding/work-experience');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
         setShowSavePopup(true);
         setTimeout(() => {
@@ -271,92 +297,21 @@ const PersonalInfo = () => {
           <div className='flex flex-col gap-5'>
             {/* Portfolio */}
 
-            <div className="flex justify-start gap-10 text-lg w-full">
-              <div className="flex flex-col gap-2 w-[50%]">
-                <label className='font-medium' htmlFor="portfolio_label">Portfolio</label>
-                <input
-                  className={`px-5 py-3 rounded-lg border ${errors.portfolio_label ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]  placeholder-black`}
-                  value={formData.portfolio_label}
-                  onChange={handleChange}
-                  type="text"
-                  id='portfolio_label'
-                  disabled
-                  placeholder='Portfolio'
-                />
-                {errors.portfolio_label && <span className="text-red-500 text-sm">{errors.portfolio_label}</span>}
-              </div>
-              <div className="flex flex-col gap-2 w-[50%]">
-                <label className='font-medium' htmlFor="portfolio">Link</label>
-                <input
-                  className={`px-5 py-3 rounded-lg border ${errors.portfolio ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-                  value={formData.portfolio}
-                  onChange={handleChange}
-                  type="text"
-                  id='portfolio'
-                />
-                {errors.portfolio && <span className="text-red-500 text-sm">{errors.portfolio}</span>}
-              </div>
+              {externalLinks.map((link, index) => (
+                <div className="flex flex-col gap-2 w-[95%] mx-auto" key={index}>
+                  <label className='font-medium'>{link.type.charAt(0).toUpperCase() + link.type.slice(1)} Link</label>
+                  <input
+                    className="px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]"
+                    type="text"
+                    placeholder={`Enter your ${link.type} URL`}
+                    value={link.url}
+                    onChange={(e) => handleExternalLinkChange(index, e.target.value)}
+                  />
+                </div>
+              ))}
+
             </div>
 
-            {/* Resume */}
-            
-            <div className="flex justify-start gap-10 text-lg w-full">
-              <div className="flex flex-col gap-2 w-[50%]">
-                <label className='font-medium' htmlFor="resume_label">Resume</label>
-                <input
-                  className={`px-5 py-3 rounded-lg border ${errors.resume_label ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]  placeholder-black`}
-                  value={formData.resume_label}
-                  onChange={handleChange}
-                  type="text"
-                  id='resume_label'
-                  disabled
-                  placeholder='Resume'
-                />
-                {errors.resume_label && <span className="text-red-500 text-sm">{errors.resume_label}</span>}
-              </div>
-              <div className="flex flex-col gap-2 w-[50%]">
-                <label className='font-medium' htmlFor="resume">Link</label>
-                <input
-                  className={`px-5 py-3 rounded-lg border ${errors.resume ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-                  value={formData.resume}
-                  onChange={handleChange}
-                  type="text"
-                  id='resume'
-                />
-                {errors.resume && <span className="text-red-500 text-sm">{errors.resume}</span>}
-              </div>
-            </div>
-
-            {/* Resume */}
-            
-            <div className="flex justify-start gap-10 text-lg w-full">
-              <div className="flex flex-col gap-2 w-[50%]">
-                <label className='font-medium' htmlFor="blog_label">Blog</label>
-                <input
-                  className={`px-5 py-3 rounded-lg border ${errors.blog_label ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]  placeholder-black`}
-                  value={formData.blog_label}
-                  onChange={handleChange}
-                  type="text"
-                  id='blog_label'
-                  disabled
-                  placeholder='Blog'
-                />
-                {errors.blog_label && <span className="text-red-500 text-sm">{errors.blog_label}</span>}
-              </div>
-              <div className="flex flex-col gap-2 w-[50%]">
-                <label className='font-medium' htmlFor="resume">Link</label>
-                <input
-                  className={`px-5 py-3 rounded-lg border ${errors.blog ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-                  value={formData.blog}
-                  onChange={handleChange}
-                  type="text"
-                  id='blog'
-                />
-                {errors.blog && <span className="text-red-500 text-sm">{errors.blog}</span>}
-              </div>
-            </div>
-
-          </div>
         )}
 
         {/* Country */}
@@ -368,8 +323,8 @@ const PersonalInfo = () => {
             onChange={handleChange}
             type="text"
             id='country'
-              name="country"
-              disabled
+            name="country"
+            disabled
           />
         </div>
 
