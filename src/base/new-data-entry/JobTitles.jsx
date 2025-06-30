@@ -16,6 +16,10 @@ const JobTitles = () => {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const sortedJobTitles = Object.keys(jobskills).sort();
+  const firstMatchRef = useRef(null);
+  const [pendingTitleToAdd, setPendingTitleToAdd] = useState(null);
+
+
 
   const [formData, setFormData] = useState({
     primary_title: '',
@@ -35,9 +39,16 @@ const JobTitles = () => {
 
   const handleSearchChange = (e, fieldName) => {
     const { value } = e.target;
-    setSearchTerms((prev) => ({ ...prev, [fieldName]: value }));
+
+    setSearchTerms((prev) => ({
+      ...prev,
+      [fieldName]: value, // ✅ Let the user type freely
+    }));
+
     setShowDropdowns((prev) => ({ ...prev, [fieldName]: true }));
   };
+
+
 
   const getFilteredTitles = (searchTerm) =>
     sortedJobTitles.filter((title) =>
@@ -54,7 +65,11 @@ const JobTitles = () => {
   };
 
   const addSkill = () => {
-    const jobtitle = searchTerms.primary_title.trim();
+    const jobtitle = searchTerms.primary_title?.trim();
+    if (!jobtitle || !sortedJobTitles.includes(jobtitle)) {
+      toast.error("Please select a valid job title.");
+      return;
+    }
     if (!jobtitle) return;
 
     if (isDuplicate(jobtitle)) {
@@ -115,6 +130,25 @@ const JobTitles = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  useEffect(() => {
+  if (pendingTitleToAdd) {
+    const lower = pendingTitleToAdd.toLowerCase();
+    const isValid = sortedJobTitles.some(title => title.toLowerCase() === lower);
+
+    if (isValid) {
+      setSearchTerms({ primary_title: pendingTitleToAdd }); // Just to be safe
+      setTimeout(() => {
+        addSkill();
+        setPendingTitleToAdd(null); // Clear after use
+      }, 0);
+    } else {
+      toast.error("Not a valid job title.");
+      setPendingTitleToAdd(null);
+    }
+  }
+}, [pendingTitleToAdd]);
+
+
   const handleNext = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -150,9 +184,9 @@ const JobTitles = () => {
       if (!response.ok) {
         const errorData = await response.json();
         console.error('❌ Failed to upload job titles:', errorData);
-        toast.error('❌ Failed to upload job titles:', errorData)
+        toast.error('❌ Failed to upload job titles:', errorData.issue)
       } else {
-          navigate('/user/onboarding/skills');
+        navigate('/user/onboarding/skills');
       }
     } catch (error) {
       console.error('❌ Error while posting job titles:', error);
@@ -180,10 +214,6 @@ const JobTitles = () => {
   return (
     <div className='w-full p-5 ml-5 text-black'>
       <div className='flex flex-col'>
-        <div className='flex items-center mb-5 cursor-pointer'>
-          <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt='' />
-          <p className='ml-2 text-lg font-medium' onClick={() => navigate(-1)}>Back</p>
-        </div>
 
         <p className='flex font-semibold text-[#2c6472]'>STEP 7 OF 8</p>
 
@@ -204,30 +234,51 @@ const JobTitles = () => {
             <input
               ref={inputRef}
               type='text'
-              className={`w-[60%] h-[64px] px-4 py-3 border ${errors.primary_title ? 'border-red-500' : 'border-gray-300'} rounded-lg text-lg text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]`}
+              className={`w-[70%] h-[64px] px-4 py-3 border ${errors.primary_title ? 'border-red-500' : 'border-gray-300'} rounded-lg text-lg text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]`}
               value={searchTerms.primary_title}
               onChange={(e) => handleSearchChange(e, 'primary_title')}
               onFocus={() => setShowDropdowns({ primary_title: true })}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
-                  if (selectedTitles.length < 3 && searchTerms.primary_title.trim() !== '') {
-                    addSkill(); // Trigger the same as the "+ Add" button
-                    inputRef.current?.blur();
+
+                  const inputValue = searchTerms.primary_title.trim();
+                  const firstMatch = getFilteredTitles(inputValue)[0];
+
+                  if (!firstMatch) {
+                    toast.error("Job title not found.");
+                    return;
                   }
+
+                  const isExactMatch = sortedJobTitles.some(
+                    (title) => title.toLowerCase() === inputValue.toLowerCase()
+                  );
+
+                  if (!isExactMatch) {
+                    setSearchTerms((prev) => ({ ...prev, primary_title: firstMatch }));
+                    setPendingTitleToAdd(firstMatch); // 👈 Save it
+                  } else {
+                    setPendingTitleToAdd(inputValue); // 👈 Exact match, use it
+                  }
+
+                  setTimeout(() => {
+                    inputRef.current?.blur();
+                  }, 0);
                 }
               }}
+
               placeholder='Search or select job title...'
             />
 
 
             {showDropdowns.primary_title && (
-              <ul className='absolute z-10 w-[60%] max-h-48 overflow-y-auto mt-14 bg-white border border-gray-300 rounded shadow-md'>
+              <ul className='absolute z-10 w-[70%] max-h-48 overflow-y-auto mt-14 bg-white border border-gray-300 rounded shadow-md'>
                 {getFilteredTitles(searchTerms.primary_title).map((title, index) => (
                   <li
                     key={index}
                     onClick={() => handleSelect('primary_title', title)}
-                    className='px-4 py-2 cursor-pointer text-gray-500 hover:bg-[#2c6472] hover:text-white'
+                    className={`px-4 py-2 cursor-pointer ${index === 0 ? 'bg-[#2c6472] text-white' : 'text-gray-500 hover:bg-[#2c6472] hover:text-white'
+                      }`}
                   >
                     {title}
                   </li>
@@ -238,14 +289,14 @@ const JobTitles = () => {
               </ul>
             )}
 
-            <button
+            {/* <button
               type='button'
               onClick={addSkill}
               disabled={selectedTitles.length >= 3}
               className='w-24 mt-2 ms-5 px-2 py-2 border-2 border-[#2c6472] text-[#2c6472] h-[44px] text-sm font-medium bg-white hover:scale-95 transition-transform ease-linear duration-200 ml-2'
             >
               + Add 
-            </button>
+            </button> */}
           </div>
 
           {errors.primary_title && (
@@ -295,7 +346,7 @@ const JobTitles = () => {
           </div>
         </form>
       </div>
-      
+
       {showSavePopup && (
         <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 bg-white border-b-4 border-[#2C6472] text-black rounded-md shadow-lg transform transition-all duration-500 ease-in-out animate-toast-in`}>
           <div className="relative px-3 py-1">

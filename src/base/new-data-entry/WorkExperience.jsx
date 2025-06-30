@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { data, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/api'
 import right_arrow from '../../assets/left-arrow.png'
+import Calendar from '../Calender/Calender';
+import { format } from 'date-fns';
+
 
 const WorkExperience = () => {
 
@@ -75,26 +78,26 @@ const WorkExperience = () => {
       newErrors.enddate = 'End date is required if not currently working';
     }
 
-    const start = new Date(formData.start_date);
-      const end = new Date(formData.enddate);
-      const today = new Date();
+    const start = formData.start_date ? new Date(formData.start_date) : null;
+    const end = new Date(formData.enddate);
+    const today = new Date();
 
-      if (!formData.start_date) {
-        newErrors.start_date = "Start date is required.";
-      }
+    if (!formData.start_date) {
+      newErrors.start_date = "Start date is required.";
+    }
 
-      if (!formData.currentwork) {
-        if (!formData.enddate) {
-          newErrors.enddate = "End date is required.";
-        } else if (start > end) {
-          newErrors.enddate = "End date cannot be before start date.";
-        }
-      } else {
-        // If currently working, ensure start date is not in the future
-        if (start > today) {
-          newErrors.start_date = "Start date cannot be after current date";
-        }
+    if (!formData.currentwork) {
+      if (!formData.enddate) {
+        newErrors.enddate = "End date is required.";
+      } else if (start > end) {
+        newErrors.enddate = "End date cannot be before start date.";
       }
+    } else {
+      // If currently working, ensure start date is not in the future
+      if (start > today) {
+        newErrors.start_date = "Start date cannot be after current date";
+      }
+    }
 
     return newErrors;
   };
@@ -155,39 +158,40 @@ const WorkExperience = () => {
 
       } catch (error) {
         console.error("❌ API Error:", error.response?.data || error.message);
-        toast.error("Submission failed. Please try again.");
+        toast.error(error.response?.data.issue || "Submission failed. Please try again.");
       }
     }
   };
 
   return (
     <div className='p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen overflow-y-auto'>
-      <div className="flex justify-between items-center w-[95%]">
-        <div className="flex items-center cursor-pointer" onClick={() => navigate(-1)}>
-          <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
-          <p className='ml-2 text-lg font-medium'>Back</p>
-        </div>
-
-        <div className="flex items-center cursor-pointer" onClick={() => navigate('/user/onboarding/education')}>
-          <p className='ml-2 text-lg font-medium text-[#00000057]'>Skip</p>
+      <div
+        className="flex items-center justify-end w-[95%] mt-2"
+      >
+        <div
+          className="cursor-pointer px-4 py-2 rounded transition"
+          onClick={() => navigate('/user/onboarding/education')}
+        >
+          <p className="text-lg font-medium text-[#00000057]">Skip</p>
         </div>
       </div>
 
-      <p className='text-[#2c6472] font-semibold'>STEP 2 OF 8</p>
+
+      <p className='text-[#2c6472] font-semibold -mt-10'>STEP 2 OF 8</p>
 
       <h2 className='font-bold text-xl'>Highlight your Work Experience.</h2>
 
       {addedCompanies.length > 0 && (
-        <div className=" px-6 py-4 -m-3 flex gap-3 rounded-lg">
-          <ul className="flex gap-3 overflow-x-auto scrollbar-hide">
+        <div className=" px-6 py-4 -m-3 w-[90%] flex gap-3 rounded-lg overflow-x-auto hide-scrollbar">
+          <ul className="flex gap-3 ">
             {addedCompanies.map((company, index) => (
-              <li className='bg-gray-500/30 px-4 py-2 rounded-lg min-w-32 text-center font-semibold text-[#2c6472]' key={index}>{company}</li>
+              <li className='bg-gray-500/30 px-4 py-2 rounded-lg h-10 text-center flex items-center justify-center font-semibold text-[#2c6472] whitespace-nowrap flex-shrink-0' key={index}>{company}</li>
             ))}
           </ul>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
+      <form onSubmit={(e) => e.preventDefault()} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
 
         {/* Role */}
         <div className="flex flex-col gap-2 text-lg">
@@ -231,16 +235,24 @@ const WorkExperience = () => {
         {/* Start & End Date */}
         <div className="flex justify-start gap-10 text-lg w-full">
           <div className="flex flex-col gap-2 w-[50%]">
-            <label className='font-medium' htmlFor="start_date">Start Date <span className='text-red-500'>*</span></label>
-            <input
-              className={`px-5 py-3 rounded-lg border ${errors.start_date ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-              type="date"
-              id='start_date'
-              value={formData.start_date}
-              onChange={handleChange}
+            <p className="font-medium">
+              Start Date <span className="text-red-500">*</span>
+            </p>
+            <Calendar
+              selectedDate={formData.start_date ? new Date(formData.start_date) : null}
+              onDateChange={(date) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  start_date: format(date, 'yyyy-MM-dd'),
+                }))
+              }
             />
-            {errors.start_date && <p className='text-red-500 text-sm'>{errors.start_date}</p>}
+            {errors.start_date && (
+              <p className="text-red-500 text-sm">{errors.start_date}</p>
+            )}
           </div>
+
+
           <div className="flex flex-col gap-2 w-[50%]">
             <label className='font-medium' htmlFor="enddate">End Date {!formData.currentwork && <span className='text-red-500'>*</span>}</label>
             <input

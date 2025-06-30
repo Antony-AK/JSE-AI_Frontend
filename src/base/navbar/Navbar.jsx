@@ -19,7 +19,7 @@ const Navbar = () => {
     }
 
     try {
-      const response = await fetch(`${BASE_URL}/profile`, {
+      const response = await fetch(`${BASE_URL}/jobprofile`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -28,7 +28,7 @@ const Navbar = () => {
       const data = await response.json();
 
       // ✅ Now accessing from nested "profile" object
-      const name = data?.profile?.first_name;
+const name = data?.seeker?.personal_info?.first_name;
 
       if (name) {
         setFirstName(name);

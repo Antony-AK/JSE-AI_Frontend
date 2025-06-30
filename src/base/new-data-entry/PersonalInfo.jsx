@@ -86,7 +86,7 @@ const PersonalInfo = () => {
       }
 
       if (Array.isArray(info.external_links)) {
-        const updatedLinks = ['portfolio', 'resume', 'blog'].map(type => {
+        const updatedLinks = ['website', 'github', 'blog', 'social media'].map(type => {
           const match = info.external_links.find(link => link.type === type);
           return { type, url: match?.url || '' };
         });
@@ -103,15 +103,13 @@ const PersonalInfo = () => {
         country: (info.country || ''),
         state: (info.state || ''),
         city: (info.city || ''),
-        title: (info.title || ''),
-        portfolio: (info.portfolio || ''),
-        resume: (info.resume || ''),
-        blog: (info.blog || '')
+
       });
 
-      if (info.portfolio || info.resume || info.blog) {
+      if (info.external_links?.some(link => link.url)) {
         setShowOthers(true);
       }
+
 
     } catch (err) {
       console.error("❌ Failed to fetch personal info", err);
@@ -193,14 +191,11 @@ const PersonalInfo = () => {
         navigate('/user/onboarding/work-experience');
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        setShowSavePopup(true);
-        setTimeout(() => {
-          setShowSavePopup(false);
-        }, 1000);
+
 
       } catch (error) {
         console.error("❌ Error submitting form:", JSON.stringify(error.response?.data, null, 2));
-        toast.error("Failed to submit. Please try again.");
+        toast.error(error.response?.data.issue || "Failed to submit. Please try again.");
       }
     }
   };
@@ -209,16 +204,16 @@ const PersonalInfo = () => {
   return (
     <div className='p-10 pt-14 flex flex-col gap-5 w-[100%] min-h-screen overflow-y-auto'>
 
-      <div className="flex items-center -mt-10 cursor-pointer">
+      {/* <div className="flex items-center -mt-10 cursor-pointer">
         <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
         <p className='ml-2 text-lg font-medium' onClick={() => navigate('/user/dataonboarding')}>Back</p>
-      </div>
+      </div> */}
 
-      <p className='text-[#2c6472] font-semibold'>STEP 1 OF 8</p>
+      <p className='text-[#2c6472] font-semibold -mt-10'>STEP 1 OF 8</p>
 
-      <h2 className='font-bold text-xl'>Let's start with your personal information.</h2>
+      <h2 className='font-bold text-xl '>Let's start with your personal information.</h2>
 
-      <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
+      <form onSubmit={handleSubmit} className="p-5 pt-2  flex flex-col gap-5 w-[80%]">
 
         {/* Name */}
         <div className="flex justify-start gap-10 text-lg w-full">
@@ -297,20 +292,20 @@ const PersonalInfo = () => {
           <div className='flex flex-col gap-5'>
             {/* Portfolio */}
 
-              {externalLinks.map((link, index) => (
-                <div className="flex flex-col gap-2 w-[95%] mx-auto" key={index}>
-                  <label className='font-medium'>{link.type.charAt(0).toUpperCase() + link.type.slice(1)} Link</label>
-                  <input
-                    className="px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]"
-                    type="text"
-                    placeholder={`Enter your ${link.type} URL`}
-                    value={link.url}
-                    onChange={(e) => handleExternalLinkChange(index, e.target.value)}
-                  />
-                </div>
-              ))}
+            {externalLinks.map((link, index) => (
+              <div className="flex flex-col gap-2 w-[95%] mx-auto" key={index}>
+                <label className='font-medium'>{link.type.charAt(0).toUpperCase() + link.type.slice(1)} Link</label>
+                <input
+                  className="px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]"
+                  type="text"
+                  placeholder={`Enter your ${link.type} URL`}
+                  value={link.url}
+                  onChange={(e) => handleExternalLinkChange(index, e.target.value)}
+                />
+              </div>
+            ))}
 
-            </div>
+          </div>
 
         )}
 

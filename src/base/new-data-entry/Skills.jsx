@@ -21,7 +21,10 @@ const Skills = () => {
     const [jobSearchTerm, setJobSearchTerm] = useState('');
     const [errors, setErrors] = useState({});
     const [accepted, setAccepted] = useState(false);
-    const [showSavePopup, setShowSavePopup] = useState(false);
+    const [triggerAddSkill, setTriggerAddSkill] = useState(false);
+    const [highlightIndex, setHighlightIndex] = useState(0);
+
+
 
 
     const generalInputRef = useRef(null);
@@ -166,6 +169,8 @@ const Skills = () => {
         const term = dropdownType === "general" ? generalSearchTerm.trim() : jobSearchTerm.trim();
         if (!term) return;
 
+
+
         const alreadyExists =
             dropdownType === "general"
                 ? formData.generalSkills.includes(term)
@@ -198,6 +203,15 @@ const Skills = () => {
             [type]: prev[type].filter((_, i) => i !== index),
         }));
     };
+
+    useEffect(() => {
+        if (triggerAddSkill) {
+            addSkill();
+            generalInputRef.current?.blur();
+            setTriggerAddSkill(false);
+        }
+    }, [generalSearchTerm, triggerAddSkill]);
+
 
     // ✅ Validates that both lists have at least one skill
     const validateForm = () => {
@@ -261,7 +275,7 @@ const Skills = () => {
             if (!response.ok) {
                 console.error("❌ Error uploading data:", data);
             } else {
-                    navigate('/user/dashboard');
+                navigate('/user/dashboard');
             }
         } catch (error) {
             console.error("❌ Network or server error:", error);
@@ -313,22 +327,47 @@ const Skills = () => {
                                 <input
                                     ref={generalInputRef}
                                     type="text"
-                                    className="peer w-[60%] h-[64px] rounded-lg text-lg scrollbar-custom px-4 py-2 border border-gray-300  text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]"
+                                    className="peer w-[70%] h-[64px] rounded-lg text-lg scrollbar-custom px-4 py-2 border border-gray-300  text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]"
                                     value={generalSearchTerm}
                                     onChange={(e) => {
                                         setGeneralSearchTerm(e.target.value);
                                         setShowDropdown(true);
                                         setDropdownType("general");
                                         setErrors((prev) => ({ ...prev, generalSkills: null }));
+                                        setHighlightIndex(0); // reset highlight to first
+
 
                                     }}
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter') {
-                                        e.preventDefault();
-                                        addSkill();
-                                        generalInputRef.current?.blur();
+                                            e.preventDefault();
+
+                                            const inputVal = generalSearchTerm.trim();
+                                            const firstMatch = filteredSkills[0];
+
+                                            if (!firstMatch) {
+                                                toast.error("❌ Skill not found.");
+                                                return;
+                                            }
+
+                                            const isExactMatch = allSkills.some(
+                                                (skill) => skill.toLowerCase() === inputVal.toLowerCase()
+                                            );
+
+                                            if (!isExactMatch) {
+                                                // Fill the input with top match
+                                                setGeneralSearchTerm(firstMatch);
+                                                setTriggerAddSkill(true);
+
+                                                // ⏳ Small delay to allow input to update before adding
+
+                                            } else {
+                                                addSkill();
+                                                generalInputRef.current?.blur();
+                                            }
                                         }
                                     }}
+
                                     onFocus={() => {
                                         setShowDropdown(true);
                                         setDropdownType("general");
@@ -336,16 +375,20 @@ const Skills = () => {
 
                                 />
                                 {showDropdown && dropdownType === "general" && (
-                                    <ul className="absolute top-16 z-10 w-[60%] max-h-48 overflow-y-auto text-gray-600 bg-white border border-gray-300 shadow-md">
+                                    <ul className="absolute top-16 z-10 w-[70%] max-h-48 overflow-y-auto text-gray-600 bg-white border border-gray-300 shadow-md">
                                         {filteredSkills.length > 0 ? (
                                             filteredSkills.map((skill, index) => (
                                                 <li
                                                     key={index}
-                                                    className="px-4 py-2 cursor-pointer hover:bg-[#2c6472] hover:text-white"
+                                                    className={`px-4 py-2 cursor-pointer ${index === highlightIndex
+                                                            ? 'bg-[#2c6472] text-white'
+                                                            : 'hover:bg-[#2c6472] hover:text-white text-gray-600'
+                                                        }`}
                                                     onMouseDown={(e) => {
-                                                        e.preventDefault(); // prevent input from losing focus
+                                                        e.preventDefault();
                                                         handleSelect(skill);
-                                                    }}                                                >
+                                                    }}
+                                                >
                                                     {skill}
                                                 </li>
                                             ))
@@ -354,13 +397,7 @@ const Skills = () => {
                                         )}
                                     </ul>
                                 )}
-                                <button
-                                    type="button"
-                                    onClick={addSkill}
-                                    className=" w-24 mt-2 ms-5 px-2 py-2 border-2 border-[#2c6472] text-[#2c6472] h-[44px] text-sm font-medium bg-white hover:scale-95 transition-transform ease-linear  duration-200 ml-2"
-                                >
-                                    +Add Skill
-                                </button>
+
                             </div>
                         </div>
 
@@ -368,7 +405,7 @@ const Skills = () => {
                             <div className="text-red-500 text-sm mt-1">{errors.generalSkills}</div>
                         )}
 
-                        <div className="flex flex-wrap gap-2 h-[80px] w-[60%] scrollbar-custom overflow-y-auto p-2 rounded ">
+                        <div className="flex flex-wrap gap-2 h-[80px] w-[70%] scrollbar-custom overflow-y-auto p-2 rounded ">
                             {formData.generalSkills.map((skill, index) => (
                                 <div
                                     key={index}
@@ -419,7 +456,7 @@ const Skills = () => {
                             <input
                                 ref={jobInputRef}
                                 type="text"
-                                className="peer w-[60%] h-[64px] rounded-lg text-lg scrollbar-custom px-4 py-2 border border-gray-300  text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]"
+                                className="peer w-[70%] h-[64px] rounded-lg text-lg scrollbar-custom px-4 py-2 border border-gray-300  text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]"
                                 value={jobSearchTerm}
                                 onChange={(e) => {
                                     setJobSearchTerm(e.target.value);
@@ -430,9 +467,9 @@ const Skills = () => {
                                 }}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
-                                    e.preventDefault();
-                                    addSkill();
-                                    jobInputRef.current?.blur();
+                                        e.preventDefault();
+                                        addSkill();
+                                        jobInputRef.current?.blur();
                                     }
                                 }}
                                 onFocus={() => {
@@ -441,7 +478,7 @@ const Skills = () => {
                                 }}
                             />
                             {selectedTitle && showDropdown && dropdownType === "job" && (
-                                <ul className="absolute top-16 z-10 w-[60%] max-h-48 overflow-y-auto text-gray-600 bg-white border border-gray-300 shadow-md">
+                                <ul className="absolute top-16 z-10 w-[70%] max-h-48 overflow-y-auto text-gray-600 bg-white border border-gray-300 shadow-md">
                                     {filteredSkills.length > 0 ? (
                                         filteredSkills.map((skill, index) => (
                                             <li
@@ -459,13 +496,7 @@ const Skills = () => {
                                     )}
                                 </ul>
                             )}
-                            <button
-                                type="button"
-                                onClick={addSkill}
-                                className=" w-24 mt-2 ms-5 px-2 py-2 border-2 border-[#2c6472] text-[#2c6472] h-[44px] text-sm font-medium bg-white hover:scale-95 transition-transform ease-linear  duration-200 ml-2"
-                            >
-                                +Add Skill
-                            </button>
+
                         </div>
                     </div>
 
@@ -474,7 +505,7 @@ const Skills = () => {
                     )}
 
 
-                    <div className="flex flex-wrap gap-2 h-[80px] w-[60%] mt-3 mb-12 scrollbar-custom overflow-y-auto p-2 rounded ">
+                    <div className="flex flex-wrap gap-2 h-[80px] w-[70%] mt-3 mb-12 scrollbar-custom overflow-y-auto p-2 rounded ">
                         {formData.jobSpecificSkills.map((skill, index) => (
                             <div
                                 key={index}
@@ -490,9 +521,7 @@ const Skills = () => {
                                 </button>
                             </div>
                         ))}
-
                     </div>
-
 
 
                     <div className="flex gap-3 mt-5">
@@ -522,14 +551,7 @@ const Skills = () => {
             </div>
 
 
-            {showSavePopup && (
-                <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 bg-white border-b-4 border-[#2C6472] text-black rounded-md shadow-lg transform transition-all duration-500 ease-in-out animate-toast-in`}>
-                    <div className="relative px-3 py-1">
-                        <span>✅ Skills saved successfully!</span>
-                        <div className="absolute bottom-0 left-0 h-[3px] bg-white animate-progress w-full" />
-                    </div>
-                </div>
-            )}
+
         </div>
     )
 }

@@ -141,7 +141,7 @@ const Projects = () => {
         }
       } catch (error) {
         console.error("❌ API Error:", error.response?.data || error.message);
-        toast.error("Submission failed. Please try again.");
+        toast.error(error.response?.data.issue || "Submission failed. Please try again.");
       }
     }
   };
@@ -149,26 +149,26 @@ const Projects = () => {
   return (
     <div className='p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen '>
 
-      <div className="flex justify-between items-center w-[95%]">
-        <div className="flex items-center cursor-pointer" onClick={() => navigate(-1)}>
+      <div className="flex justify-end items-center w-[95%]">
+        {/* <div className="flex items-center cursor-pointer" onClick={() => navigate(-1)}>
           <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
           <p className='ml-2 text-lg font-medium'>Back</p>
-        </div>
+        </div> */}
 
         <div className="flex items-center cursor-pointer" onClick={() => navigate('/user/onboarding/languages')}>
           <p className='ml-2 text-lg font-medium text-[#00000057]'>Skip</p>
         </div>
       </div>
 
-      <p className='text-[#2c6472] font-semibold'>STEP 4 OF 8</p>
+      <p className='text-[#2c6472] font-semibold -mt-10'>STEP 4 OF 8</p>
 
       <h2 className='font-bold text-xl'>Share your past project experience.</h2>
 
           {addedCompanies.length > 0 && (
-                <div className=" px-6 py-4 -m-3 flex gap-3 rounded-lg">
-                    <ul className="flex gap-3 overflow-x-auto scrollbar-hide">
+                <div className=" px-6 py-4 -m-3 flex gap-3 w-[90%] rounded-lg overflow-x-auto scrollbar-hide">
+                    <ul className="flex gap-3 ">
                         {addedCompanies.map((company, index) => (
-                            <li className='bg-gray-500/30 px-4 py-2 rounded-lg min-w-32 text-center font-semibold text-[#2c6472]' key={index}>{company}</li>
+                            <li className='bg-gray-500/30 px-4 py-2 rounded-lg h-10 flex items-center justify-center text-center font-semibold text-[#2c6472] whitespace-nowrap flex-shrink-0' key={index}>{company}</li>
                         ))}
                     </ul>
                 </div>

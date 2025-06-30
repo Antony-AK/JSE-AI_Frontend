@@ -36,7 +36,7 @@ const Dashboard = () => {
     }
 
     axios
-      .get(`${BASE_URL}/profile`, {
+      .get(`${BASE_URL}/dashboard`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then((res) => {

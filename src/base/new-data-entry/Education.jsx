@@ -87,14 +87,14 @@ const Education = () => {
         // Validate end date
         if (!formData.currentstudy) {
             if (!formData.enddate) {
-            newErrors.enddate = "End date is required.";
+                newErrors.enddate = "End date is required.";
             } else if (start > end) {
-            newErrors.enddate = "End date cannot be before start date.";
+                newErrors.enddate = "End date cannot be before start date.";
             }
         } else {
             // Optional: prevent selecting future start date for ongoing studies
             if (start > today) {
-            newErrors.start_date = "Start date cannot be after current date.";
+                newErrors.start_date = "Start date cannot be after current date.";
             }
         }
 
@@ -108,7 +108,7 @@ const Education = () => {
         if (Object.keys(validationErrors).length === 0) {
             try {
                 if (!token) {
-                    navigate('/user/login');                    
+                    navigate('/user/login');
                     toast.error("No User found. Please log in.");
                     return;
                 }
@@ -161,7 +161,7 @@ const Education = () => {
                 }
             } catch (error) {
                 console.error("❌ API Error:", error.response?.data || error.message);
-                toast.error("Submission failed. Please try again.");
+                toast.error(error.response?.data.issue || "Submission failed. Please try again.");
             }
         }
     };
@@ -169,26 +169,36 @@ const Education = () => {
     return (
         <div className='p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen overflow-y-auto'>
 
-            <div className="flex justify-between items-center w-[95%]">
-                <div className="flex items-center cursor-pointer" onClick={() => navigate(-1)}>
-                    <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
-                    <p className='ml-2 text-lg font-medium'>Back</p>
+            {addedCompanies.length > 0 && (
+                <div className="flex justify-end items-center w-[95%]">
+                    <div className="flex items-center cursor-pointer" onClick={() => navigate('/user/onboarding/projects')}>
+                        <p className='ml-2 text-lg font-medium text-[#00000057]'>Skip</p>
+                    </div>
                 </div>
-            </div>
+            )}
 
-            <p className='text-[#2c6472] font-semibold'>STEP 3 OF 8</p>
+
+
+
+            <p className='text-[#2c6472] font-semibold '>STEP 3 OF 8</p>
 
             <h2 className='font-bold text-xl'>Add your academic story.</h2>
 
             {addedCompanies.length > 0 && (
-                <div className=" px-6 py-4 -m-3 flex gap-3 rounded-lg">
-                    <ul className="flex gap-3 overflow-x-auto scrollbar-hide">
+                <div className="px-6 py-4 -m-3 w-[90%] rounded-lg overflow-x-auto hide-scrollbar">
+                    <ul className="flex gap-3">
                         {addedCompanies.map((company, index) => (
-                            <li className='bg-gray-500/30 px-4 py-2 rounded-lg min-w-32 text-center font-semibold text-[#2c6472]' key={index}>{company}</li>
+                            <li
+                                key={index}
+                                className="bg-gray-500/30 px-4 py-2 rounded-lg h-10 flex items-center justify-center font-semibold text-[#2c6472] whitespace-nowrap flex-shrink-0"
+                            >
+                                {company}
+                            </li>
                         ))}
                     </ul>
                 </div>
             )}
+
 
             <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
 
@@ -238,7 +248,7 @@ const Education = () => {
                         className={`px-5 py-3 rounded-lg border ${errors.field_of_study ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
                         type="text"
                         id='field_of_study'
-                        value={formData.field}
+                        value={formData.field_of_study}
                         onChange={handleChange}
                     />
                     {errors.field_of_study && <span className="text-red-500 text-sm">{errors.field_of_study}</span>}

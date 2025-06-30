@@ -9,10 +9,11 @@ const Certificates = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         certificate_name: '',
-        platform: '',
-        start_date: '',
-        end_date: '',
+        certificate_type: '',
+        provider: '',
+        completion_date: '',
     });
+
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [showSavePopup, setShowSavePopup] = useState(false);
@@ -30,34 +31,12 @@ const Certificates = () => {
 
     const validateForm = () => {
         const newErrors = {};
-        if (!formData.certificate_name.trim()) {
-            newErrors.certificate_name = 'Certificate name is required';
-        }
-        if (!formData.start_date.trim()) {
-            newErrors.start_date = 'Start date is required';
-        }
-        if (!formData.end_date.trim()) {
-            newErrors.end_date = 'End date is required';
-        }
-
-        if (formData.start_date && formData.end_date) {
-            const start = new Date(formData.start_date);
-            const end = new Date(formData.end_date);
-
-            if (start > end) {
-            newErrors.end_date = 'End date cannot be before start date';
-            }
-        }
-
+        if (!formData.certificate_name.trim()) newErrors.certificate_name = 'Certificate name is required';
+        if (!formData.certificate_type.trim()) newErrors.certificate_type = 'Certificate type is required';
+        if (!formData.completion_date.trim()) newErrors.completion_date = 'Completion date is required';
         setErrors(newErrors);
-
-        if (Object.keys(newErrors).length > 0) {
-            return false;
-        }
-
-        return true;
-    };    // same here
-
+        return Object.keys(newErrors).length === 0;
+    };
 
 
 
@@ -67,29 +46,24 @@ const Certificates = () => {
 
         const token = sessionStorage.getItem('authToken');
         if (!token) {
-            navigate('/user/login');            
+            navigate('/user/login');
             toast.error("User not found. Please log in.");
             return;
         }
 
 
-        const formatToISOWithoutMs = (dateStr) => {
-            const date = new Date(dateStr);
-            return date.toISOString().split('.')[0] + "Z";
-        };
+        completion_date: new Date(formData.completion_date).toISOString(),
 
-        const isoStart = formatToISOWithoutMs(formData.start_date); // ✅ No .000
-        const isoEnd = formatToISOWithoutMs(formData.end_date);     // ✅ No .000
-
-
-        setLoading(true);
+            setLoading(true);
         try {
             const payload = {
                 certificate_name: formData.certificate_name,
-                platform: formData.platform,
-                start_date: isoStart,
-                end_date: isoEnd,
+                certificate_type: formData.certificate_type,
+                provider: formData.provider,
+                completion_date: new Date(formData.completion_date).toISOString(),
             };
+
+
 
 
 
@@ -109,10 +83,11 @@ const Certificates = () => {
 
             setFormData({
                 certificate_name: '',
-                platform: '',
-                start_date: '',
-                end_date: '',
+                certificate_type: '',
+                provider: '',
+                completion_date: '',
             });
+
 
             setAddedCompanies((prev) => [...prev, formData.certificate_name]);
 
@@ -137,23 +112,18 @@ const Certificates = () => {
         }
 
 
-        const formatToISOWithoutMs = (dateStr) => {
-            const date = new Date(dateStr);
-            return date.toISOString().split('.')[0] + "Z";
-        };
-
-        const isoStart = formatToISOWithoutMs(formData.start_date); // ✅ No .000
-        const isoEnd = formatToISOWithoutMs(formData.end_date);     // ✅ No .000
+        completion_date: new Date(formData.completion_date).toISOString()
 
 
         setLoading(true);
         try {
             const payload = {
                 certificate_name: formData.certificate_name,
-                platform: formData.platform,
-                start_date: isoStart,
-                end_date: isoEnd,
+                certificate_type: formData.certificate_type,
+                provider: formData.provider,
+                completion_date: new Date(formData.completion_date).toISOString(),
             };
+
 
 
 
@@ -173,17 +143,18 @@ const Certificates = () => {
 
             setFormData({
                 certificate_name: '',
-                platform: '',
-                start_date: '',
-                end_date: '',
+                certificate_type: '',
+                provider: '',
+                completion_date: '',
             });
 
 
-                navigate('/user/onboarding/jobtitles');
+
+            navigate('/user/onboarding/jobtitles');
 
         } catch (error) {
             console.error("Error uploading certificate:", error);
-            toast.error("Failed to upload certificate. \n\n" + error.message);
+            toast.error("Failed to upload certificate. \n\n" + error.issue);
         } finally {
             setLoading(false);
         }
@@ -194,23 +165,20 @@ const Certificates = () => {
     return (
         <div className='w-full  p-5 ml-5  text-black'>
             <div className="flex flex-col">
-                <div className='flex w-full justify-between items-center'>
-                    <div className="flex items-center mb-5 cursor-pointer hover:scale-95 transition-transform duration-200 ease-in-out">
-                        <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
-                        <p className='ml-2 text-lg font-medium ' onClick={() => navigate(-1)}>Back</p>
-                    </div>
+                <div className='flex w-full justify-end items-center'>
+
 
                     <div className="flex items-center cursor-pointer hover:scale-95 transition-transform duration-200 ease-in-out" onClick={() => navigate('/user/onboarding/jobtitles')}>
-                        <p className='me-5 -mt-5 text-lg font-medium text-[#00000057]'>Skip</p>
+                        <p className='me-10  text-lg font-medium text-[#00000057]'>Skip</p>
                     </div>
                 </div>
 
                 <div>
-                    <p className=' flex font-semibold text-[#2c6472]'>STEP 6 OF 8</p>
+                    <p className=' flex font-semibold text-[#2c6472] -mt-8'>STEP 6 OF 8</p>
                 </div>
 
                 <div>
-                    <h1 className='text-2xl font-semibold mt-7'>List your certificates / Awards.</h1>
+                    <h1 className='text-2xl font-semibold mt-3'>List your certificates / Awards.</h1>
                 </div>
 
                 {addedCompanies.length > 0 && (
@@ -223,86 +191,72 @@ const Certificates = () => {
                     </div>
                 )}
 
-                <form className="flex flex-col mt-5 ms-6" onSubmit={handleAddCertificate}>
-                    <div className="relative ">
-                        <label className="mb-3 block font-medium text-lg ">
-                            Certificate /Award Name <span className='text-red-500 ms-1'>*</span>
-                        </label>
+                <form className="flex flex-col gap-3 mt-5 ms-6" onSubmit={handleAddCertificate}>
+                    {/* Certificate Name */}
+                    <div className="mb-4">
+                        <label className="block font-medium text-lg">Certificate Name <span className="text-red-500">*</span></label>
                         <input
-                            id='certificate_name'
                             type="text"
-                            name="certificate_name" // Fixed name attribute
-                            placeholder=" "
+                            name="certificate_name"
                             value={formData.certificate_name}
                             onChange={handleChange}
-
-                            className={`w-[70%] h-14 flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
-                          ${errors.certificate_name ? 'border-red-500 animate-shake' : 'border-gray-300 focus:ring-[#2c6472]'}`}
+                            className={`w-[70%] px-4 py-4 flex border rounded-lg ${errors.certificate_name ? 'border-red-500 animate-shake' : 'border-gray-300'}`}
                         />
-                        {errors.certificate_name && (
-                            <span className="text-red-500 text-sm mt-1">{errors.certificate_name}</span>
-                        )}
-                    </div><br />
-
-                    <div className="relative">
-                        <label className="mb-3 block font-medium text-lg ">
-                            Platform
-                        </label>
-                        <input
-                            id='platform'
-                            type="text"
-                            name="platform" // Fixed name attribute
-                            placeholder=" "
-                            value={formData.platform}
-                            onChange={handleChange}
-
-                            className="w-[70%] h-14 flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 border-gray-300 focus:ring-[#2c6472]"
-                        />
-
-                    </div><br />
-
-                    <div className="flex -space-x-24">
-
-                        <div className="relative w-[47%] mb-2">
-                            <label className="mb-3 block font-medium text-lg ">
-                                Start Date <span className='text-red-500 ms-1'>*</span>
-                            </label>
-                            <input
-                                id='start_date'
-                                type="date"
-                                name="start_date" // Fixed name attribute
-                                placeholder=" "
-                                value={formData.start_date}
-                                onChange={handleChange}
-
-                                className={`w-[70%] h-14 flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
-                             ${errors.start_date ? 'border-red-500 animate-shake' : 'border-gray-300 focus:ring-[#2c6472]'}`}
-                            />
-                            {errors.start_date && (
-                                <span className="text-red-500 text-sm mt-1">{errors.start_date}</span>
-                            )}
-                        </div>
-
-                        <div className="relative w-[47%] mb-2">
-                            <label className="mb-3 block font-medium text-lg ">
-                                End Date <span className='text-red-500 ms-1'>*</span>
-                            </label>
-                            <input
-                                id='end_date'
-                                type="date"
-                                name="end_date" // Fixed name attribute
-                                placeholder=" "
-                                value={formData.end_date}
-                                onChange={handleChange}
-
-                                className={`w-[70%] h-14 flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
-                              ${errors.end_date ? 'border-red-500 animate-shake' : 'border-gray-300 focus:ring-[#2c6472]'}`}
-                            />
-                            {errors.end_date && (
-                                <span className="text-red-500 text-sm mt-1">{errors.end_date}</span>
-                            )}
-                        </div>
+                        {errors.certificate_name && <span className="text-red-500 text-sm">{errors.certificate_name}</span>}
                     </div>
+
+                    {/* Certificate Type Dropdown */}
+                    <div className="mb-4">
+                        <label className="block font-medium text-lg">Certificate Type <span className="text-red-500">*</span></label>
+                        <select
+                            name="certificate_type"
+                            value={formData.certificate_type}
+                            onChange={handleChange}
+                            className={`
+                             w-[70%] px-4 py-4 border rounded-lg text-gray-700
+                             transition-all duration-200 ease-in-out z-10 flex
+                             ${errors.certificate_type ? 'border-red-500 animate-shake' : 'border-gray-300 focus:border-[#2c6472]'}
+                            bg-white  
+                             cursor-pointer outline-none
+                           `}
+                        >
+                            <option value="" disabled className="text-gray-400 bg-white">Select Type</option>
+                            <option value="certification" className="bg-white">Certification</option>
+                            <option value="participation" className="bg-white">Participation</option>
+                            <option value="completion" className="bg-white">Completion</option>
+                            <option value="intern" className="bg-white">Intern</option>
+                            <option value="work" className="bg-white">Work</option>
+                        </select>
+
+                        {errors.certificate_type && <span className="text-red-500 text-sm">{errors.certificate_type}</span>}
+                    </div>
+
+                    {/* Provider */}
+                    <div className="mb-4">
+                        <label className="block font-medium text-lg">Company</label>
+                        <input
+                            type="text"
+                            name="provider"
+                            value={formData.provider}
+                            onChange={handleChange}
+                            className={`w-[70%] px-4 py-4 border rounded-lg ${errors.provider ? 'border-red-500 animate-shake' : 'border-gray-300'}`}
+                        />
+                        {errors.provider && <span className="text-red-500 text-sm">{errors.provider}</span>}
+                    </div>
+
+                    {/* Completion Date */}
+                    <div className="mb-4">
+                        <label className="block font-medium text-lg">Completion Date <span className="text-red-500">*</span></label>
+                        <input
+                            type="date"
+                            name="completion_date"
+                            value={formData.completion_date}
+                            onChange={handleChange}
+                            className={`w-[70%] px-4 py-4 flex border rounded-lg ${errors.completion_date ? 'border-red-500 animate-shake' : 'border-gray-300'}`}
+                        />
+                        {errors.completion_date && <span className="text-red-500 text-sm">{errors.completion_date}</span>}
+                    </div>
+
 
                     {/* Buttons */}
                     <div className="flex w-[70%]  justify-between items-center gap-4 mt-4">

@@ -8,6 +8,7 @@ import html2pdf from 'html2pdf.js';
 import { useCv } from '../Context/CvContext';
 import axios from 'axios';
 import { BASE_URL } from '../../../utils/api';
+import PlushCV from './PlushCV';
 
 const Cv = () => {
 
@@ -743,7 +744,18 @@ const Cv = () => {
 
                     <div ref={previewRef} className="min-h-[1123px] w-[794px] flex bg-white">
 
-                        <ModernDeedy
+                        {/* <ModernDeedy
+                            personalInfo={personalInfo}
+                            professionalSummary={professionalSummary}
+                            workExperience={workExperience}
+                            education={education}
+                            projects={projects}
+                            skills={skills}
+                            languages={languages}
+                            certificates={certificates}
+                        /> */}
+
+                         <PlushCV
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}

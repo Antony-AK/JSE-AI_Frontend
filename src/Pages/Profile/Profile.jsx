@@ -9,6 +9,7 @@ import CertificatesUpdateForm from '../../UpdateProfile/CertificatesUpdateForm';
 import LanguageUpdateForm from '../../UpdateProfile/LanguageUpdateForm';
 import PersonalnfoUpdateForm from '../../UpdateProfile/PersonalnfoUpdateForm';
 import ProfessionalSumUpdateForm from '../../UpdateProfile/ProfessionalSumUpdateForm';
+import { BASE_URL } from '../../utils/api';
 
 const Profile = () => {
 
@@ -33,7 +34,7 @@ const Profile = () => {
     const fetchProfile = async () => {
       try {
         const headers = { Authorization: `Bearer ${token}` };
-        const res = await axios.get("https://jse.arshan.digital/b1/seeker", { headers });
+        const res = await axios.get(`${BASE_URL}/jobprofile`, { headers });
         console.log("Fetched Profile Data:", res.data);
 
         if (isMounted) {
@@ -67,7 +68,7 @@ const Profile = () => {
     if (!profileData?.profile_completion) return;
 
     let start = 0;
-    const end = profileData.profile_completion;
+    const end = profileData?.profile_completion;
     const duration = 500;
     const frameRate = 10;
     const increment = (end / duration) * frameRate;
@@ -91,7 +92,7 @@ const Profile = () => {
   const fullName = `${profileData?.seeker?.personal_info?.first_name || ""} ${profileData?.seeker?.personal_info?.second_name || ""}`.trim();
 
   // Address
-  const address = profileData?.seeker?.personal_info?.address || "";
+  const address = profileData?.seeker?.personal_info?.city || "";
 
   // Date of Birth
   const dateOfBirth = profileData?.seeker?.personal_info?.date_of_birth || "";
@@ -101,14 +102,15 @@ const Profile = () => {
 
   // Professional Summary
   const about = profileData?.seeker?.professional_summary?.about || "";
-  const annualIncome = profileData?.professional_summary?.annual_income || 0;
-  const skills = profileData?.professional_summary?.skills || [];
+  const annualIncome = profileData?.seeker?.professional_summary?.annual_income || 0;
+  const skills = profileData?.seeker?.professional_summary?.skills || [];
+
 
   // Work Experiences
   const workExperiences = profileData?.seeker?.work_experiences || [];
 
   // Education
-  const education = profileData?.seeker?.education || [];
+  const education = profileData?.seeker?.academics || [];
 
   // Certificates
   const certificates = profileData?.seeker?.certificates || [];
@@ -118,6 +120,12 @@ const Profile = () => {
 
   // Titles
   const primaryTitle = profileData?.seeker?.primary_title || "";
+
+  const tier = profileData?.seeker?.subscription_tier ?? 'Basic';
+  const internal = profileData?.seeker?.internal_application_count ?? 0;
+  const external = profileData?.seeker?.external_application_count ?? 0;
+  const proficiency = profileData?.seeker?.proficicency_test ?? 0;
+
 
 
   const handleClose = () => {
@@ -140,7 +148,117 @@ const Profile = () => {
 
   return (
     <div className='flex flex-col gap-3 bg-gray-100 px-6 py-4'>
-      <div className="flex justify-between py-3 px-5 mb-3 w-full bg-white rounded-md">
+      {/* 💠 Dashboard Summary Section */}
+      <div className="bg-[#215D69] rounded-md text-white p-6 mb-2 flex flex-col gap-5">
+
+        {/* 🔹 Package Info */}
+        <div className="flex  gap-2">
+          <p className="text-sm font-semibold">Package : </p>
+          <h2 className="text-lg font-bold -mt-1 capitalize">
+            {profileData?.seeker?.subscription_tier ?? 'Basic'}
+          </h2>
+        </div>
+
+        <div className='flex w-full h-[180px] rounded-md p-4 justify-between items-center'>
+          {/* 🔹 Internal Applications */}
+          <div className="flex flex-col w-96  justify-center items-center gap-2">
+            <p className="text-sm font-medium">Internal Applications</p>
+            <p className="text-sm font-semibold">
+              {profileData?.seeker?.internal_application_count ?? 0}/15
+            </p>
+            <div className="relative w-20 h-20">
+              <svg className="absolute top-0 left-0 w-full h-full">
+                <circle cx="40" cy="40" r="36" stroke="#ffffff70" strokeWidth="4" fill="none" />
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="36"
+                  stroke="#fff"
+                  strokeWidth="4"
+                  fill="none"
+                  strokeDasharray="226.2"
+                  strokeDashoffset={
+                    226.2 -
+                    (226.2 *
+                      ((profileData?.seeker?.internal_application_count ?? 0) / 15) *
+                      100) /
+                    100
+                  }
+                  strokeLinecap="round"
+                  transform="rotate(-90 40 40)"
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">
+                {Math.round(((profileData?.seeker?.internal_application_count ?? 0) / 15) * 100)}%
+              </div>
+            </div>
+          </div>
+
+          {/* 🔹 External Applications */}
+          <div className="flex flex-col justify-center items-center gap-2 w-96">
+            <p className="text-sm font-medium text-white">External Applications</p>
+            <p className="text-sm font-semibold text-white">
+              {profileData?.seeker?.external_application_count ?? 0}/15
+            </p>
+            <div className="relative w-20 h-20">
+              <svg className="absolute top-0 left-0 w-full h-full">
+                <circle cx="40" cy="40" r="36" stroke="#ffffff70" strokeWidth="4" fill="none" />
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="36"
+                  stroke="#fff"
+                  strokeWidth="4"
+                  fill="none"
+                  strokeDasharray="226.2"
+                  strokeDashoffset={
+                    226.2 -
+                    (226.2 * ((profileData?.seeker?.external_application_count ?? 0) / 15))
+                  }
+                  strokeLinecap="round"
+                  transform="rotate(-90 40 40)"
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center text-sm font-bold text-white">
+                {Math.round(((profileData?.seeker?.external_application_count ?? 0) / 15) * 100)}%
+              </div>
+            </div>
+          </div>
+
+          {/* 🔹 Proficiency Test */}
+          <div className="flex flex-col justify-center items-center gap-2 w-96">
+            <p className="text-sm font-medium text-white">Proficiency Test</p>
+            <p className="text-sm font-semibold text-white">
+              {profileData?.seeker?.proficicency_test ?? 0}/15
+            </p>
+            <div className="relative w-20 h-20">
+              <svg className="absolute top-0 left-0 w-full h-full">
+                <circle cx="40" cy="40" r="36" stroke="#ffffff70" strokeWidth="4" fill="none" />
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="36"
+                  stroke="#fff"
+                  strokeWidth="4"
+                  fill="none"
+                  strokeDasharray="226.2"
+                  strokeDashoffset={
+                    226.2 -
+                    (226.2 * ((profileData?.seeker?.proficicency_test ?? 0) / 15))
+                  }
+                  strokeLinecap="round"
+                  transform="rotate(-90 40 40)"
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center text-sm font-bold text-white">
+                {Math.round(((profileData?.seeker?.proficicency_test ?? 0) / 15) * 100)}%
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-between py-3 px-5  w-full bg-white rounded-md">
         <div className="flex items-center gap-6">
           <img src={profile} className="w-14 h-14 rounded-full object-cover" alt="Profile" />
           <div>
@@ -187,17 +305,6 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Professional Summary */}
-      <div className="flex justify-between items-center py-5 px-6 w-full bg-white rounded-md">
-        <div className='flex flex-col gap-3 w-11/12'>
-          <h2 className="text-sm font-bold">Professional Summary</h2>
-          <p className='text-sm font-medium text-gray-500'>{about}</p>
-        </div>
-        <div onClick={handleProfessionalSummaryPopup} className="flex justify-center items-center h-fit p-3 rounded-full hover:bg-slate-300 cursor-pointer">
-          <img src={edit} alt="" />
-        </div>
-      </div>
-
       {/* Education */}
       <div className=" flex  justify-between items-center py-5 px-6 w-full bg-white rounded-md  ">
         <div className=' flex flex-col h-[200px] overflow-y-auto hide-scrollbar'>
@@ -217,9 +324,9 @@ const Profile = () => {
                 <p className='text-sm font-medium text-gray-500'>{edu.field_of_study}</p>
               </div>
               <div className='flex gap-2 mt-1'>
-                <p className='text-sm font-medium text-gray-500'>{new Date(edu.start_date.time).toLocaleDateString()}</p>
+                <p className='text-sm font-medium text-gray-500'>{new Date(edu.start_date).toLocaleDateString()}</p>
                 <span className='-mt-1 text-gray-500'>-</span>
-                <p className='text-sm font-medium text-gray-500'> {new Date(edu.end_date.time).toLocaleDateString()}</p>
+                <p className='text-sm font-medium text-gray-500'> {new Date(edu.end_date).toLocaleDateString()}</p>
               </div>
               <hr className='my-1' />
             </div>
@@ -241,7 +348,7 @@ const Profile = () => {
               <p className='text-sm font-semibold mb-1 text-gray-500'>{work.job_title}</p>
               <div className='flex gap-16 '>
                 <p className='text-sm font-medium w-20 text-gray-500'>{work.company_name}</p>
-                <p className='text-sm font-medium text-gray-500'>{new Date(work.start_date.time).toLocaleDateString()} - {new Date(work.end_date.time).toLocaleDateString()}</p>
+                <p className='text-sm font-medium text-gray-500'>{new Date(work.start_date).toLocaleDateString()} - {new Date(work.end_date).toLocaleDateString()}</p>
               </div>
               <hr className='my-2' />
 
@@ -253,9 +360,31 @@ const Profile = () => {
         </div>
       </div>
 
+      {/* Projects */}
+      <div className="flex justify-between items-center py-5 px-6 w-full bg-white rounded-md">
+        <div className='flex flex-col gap-2 h-[180px] overflow-y-auto hide-scrollbar'>
+          <h2 className="text-sm font-bold">Projects</h2>
+          {profileData?.seeker?.past_projects?.map((project, index) => (
+            <div key={index}>
+              <p className='text-sm font-semibold text-[#2c6472]'>{project.project_name}</p>
+              <p className='text-sm font-medium text-gray-500'>{project.institution}</p>
+              <p className='text-sm font-medium text-gray-500'>
+                {new Date(project.start_date).toLocaleDateString()} -{" "}
+                {project.end_date ? new Date(project.end_date).toLocaleDateString() : "Present"}
+              </p>
+              <hr className='my-2' />
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-center items-center h-fit p-3 rounded-full hover:bg-slate-300 cursor-pointer">
+          <img src={edit} alt="Edit" />
+        </div>
+      </div>
+
+
       {/* Certificates and Courses */}
       <div className="flex justify-between items-center py-5 px-6 w-full bg-white rounded-md">
-        <div className='flex flex-col h-24 gap-3 overflow-y-auto hide-scrollbar'>
+        <div className='flex flex-col h-24 gap-2 overflow-y-auto hide-scrollbar'>
           <h2 className="text-sm font-bold">Certificates & Courses</h2>
           {certificates.map((cert, index) => (
             <p key={index} className='text-sm font-medium text-gray-500'>• {cert.certificate_name}</p>
@@ -265,6 +394,29 @@ const Profile = () => {
           <img src={edit} alt="Edit" />
         </div>
       </div>
+
+
+      {/* Designations */}
+      <div className="flex justify-between items-center py-5 px-6 w-full bg-white rounded-md">
+        <div className='flex flex-col gap-2 h-[100px] overflow-y-auto hide-scrollbar'>
+          <h2 className="text-sm font-bold">Designations</h2>
+          {profileData?.seeker?.primary_title && (
+            <p className='text-sm font-medium text-gray-500'>• {profileData.seeker.primary_title}</p>
+          )}
+          {profileData?.seeker?.secondary_title && (
+            <p className='text-sm font-medium text-gray-500'>• {profileData.seeker.secondary_title}</p>
+          )}
+          {profileData?.seeker?.tertiary_title && (
+            <p className='text-sm font-medium text-gray-500'>• {profileData.seeker.tertiary_title}</p>
+          )}
+        </div>
+        <div className="flex justify-center items-center h-fit p-3 rounded-full hover:bg-slate-300 cursor-pointer">
+          <img src={edit} alt="Edit" />
+        </div>
+      </div>
+
+
+
 
       {/* Languages */}
       <div className="flex justify-between items-center py-5 px-6 w-full bg-white rounded-md">

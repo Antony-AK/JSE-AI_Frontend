@@ -37,7 +37,7 @@ const Login = () => {
         sessionStorage.setItem('authToken', data.token);
         fetchEntryProgressAndRedirect(data.token);
       } else {
-        toast.error(data.message || 'Error occurred. Try again.');
+        toast.error(data.issue || 'Error occurred. Try again.');
       }
     } catch (err) {
         toast.error('Network error: ' + err.message);

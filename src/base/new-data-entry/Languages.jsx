@@ -44,7 +44,7 @@ const Languages = () => {
     }
     if (!formData.proficiency) {
       newErrors.proficiency = 'Proficiency level is required';
-      toast.error('Please select a proficiency level');
+      toast.error(errors.response?.data.issue || 'Please select a proficiency level');
     }
 
     setErrors(newErrors);
@@ -103,7 +103,7 @@ const Languages = () => {
 
     } catch (err) {
       console.error('Error uploading language:', err);
-      toast.error(err.message);
+      toast.error(err.issue);
     } finally {
       setLoading(false);
     }
@@ -151,7 +151,7 @@ const Languages = () => {
 
     } catch (err) {
       console.error('Error uploading language:', err);
-      toast.error('Failed to upload language.');
+      toast.error(errors.response?.data.issue || 'Failed to upload language.');
     } finally {
       setLoading(false);
     }
@@ -163,10 +163,6 @@ const Languages = () => {
   return (
     <div className='w-full  p-5 ml-5  text-black'>
       <div className="flex flex-col">
-        <div className="flex items-center mb-5 cursor-pointer">
-          <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
-          <p className='ml-2 text-lg font-medium' onClick={() => navigate(-1)}>Back</p>
-        </div>
 
         <div>
           <p className=' flex font-semibold text-[#2c6472]'>STEP 5 OF 8</p>
