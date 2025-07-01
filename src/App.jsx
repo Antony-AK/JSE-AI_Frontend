@@ -40,6 +40,7 @@ import ExternalCv from './base/DocumentEditor/CV/ExternalCv.jsx';
 import ExternalCl from './base/DocumentEditor/CL/ExternalCl.jsx';
 import Settings from './Pages/Settings/Settings.jsx';
 
+
 const AppRoutes = () => {
     const location = useLocation();
 
