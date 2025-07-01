@@ -68,6 +68,8 @@ const Signup = () => {
     if (!formData.password || passwordError) {
       setShakePassword(true);
       setTimeout(() => setShakePassword(false), 400);
+      toast.error("Password must be atleast 8 characters with a number & a special symbol! 🔐");
+
       return;
     }
 
@@ -211,10 +213,10 @@ const Signup = () => {
                   {showPassword.password ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                 </span>
 
-               
-              </div> 
 
-            
+              </div>
+
+
 
               {/* Confirm Password */}
               <div className="relative w-1/2">
@@ -239,13 +241,13 @@ const Signup = () => {
                   {showPassword.confirmPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                 </span>
               </div><br />
-            </div> 
-             {passwordError && (
-                  <p className="text-[10px] text-red-500 ">{passwordError}</p>
-                )}<br/>
+            </div>
+            {passwordError && (
+              <p className="text-[10px] text-red-500 ">{passwordError}</p>
+            )}<br />
 
             {/* Submit Button */}
-            
+
             <button
               type="submit"
               className="teal-button w-full h-[50px] bg-[#2c6472]  hover:bg-[#24525f] text-white py-3  rounded-md"

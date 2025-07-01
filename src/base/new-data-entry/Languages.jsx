@@ -158,8 +158,6 @@ const Languages = () => {
   };
 
 
-
-
   return (
     <div className='w-full  p-5 ml-5  text-black'>
       <div className="flex flex-col">
@@ -247,11 +245,6 @@ const Languages = () => {
           </div>
         </form>
       </div>
-
-     
-
-
-
 
     </div>
   )

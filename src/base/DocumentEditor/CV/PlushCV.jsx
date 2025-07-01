@@ -11,121 +11,173 @@ const PlushCV = ({
   certificates
 }) => {
   return (
-    <div className="flex w-full h-full font-sans text-[13px] text-gray-800">
-      {/* Sidebar */}
-      <div className="w-[30%] bg-[#f2f2f2] px-5 py-6 flex flex-col gap-4">
-        {/* Name + Title */}
-        <div>
-          <h1 className="text-2xl font-bold text-[#2c6472]">{personalInfo.Name}</h1>
-          {personalInfo.Title && <p className="text-sm mt-1">{personalInfo.Title}</p>}
+    <div className="flex w-full  flex-col font-sans text-[14px] text-black bg-white m-5">
+      {/* Left Column */}
+      {/* Name + Title */}
+      <div className='mx-5  flex flex-col gap-2 mb-1'>
+        <div className="">
+          <h1 className="text-[44px] font-bold text-[#0078d4] leading-tight">
+            {personalInfo.Name?.split(' ')[0]}{' '}
+            <span className="text-[#0078d4] font-light">{personalInfo.Name?.split(' ').slice(1).join(' ')}</span>
+          </h1>
+          {personalInfo.Title && <p className="text-sm mt-2">{personalInfo.Title}</p>}
         </div>
 
-        {/* Contact Info */}
-        <div>
-          <h3 className="text-[13px] font-semibold text-[#2c6472] mb-1">CONTACT</h3>
-          <div className="text-[12px] flex flex-col gap-1">
-            {personalInfo.Phone && <p>{personalInfo.Phone}</p>}
-            {personalInfo.Mail && <p>{personalInfo.Mail}</p>}
-            {personalInfo.LinkedIn && <p>{personalInfo.LinkedIn}</p>}
-            {personalInfo.Website && <p>{personalInfo.Website}</p>}
-          </div>
+        {/* Contact */}
+        <div className="flex items-center gap-4 flex-wrap text-[11px] text-[#333]">
+          {personalInfo.Address && <p>📍 {personalInfo.Address}</p>}
+
+          {personalInfo.LinkedIn && (
+            <p>
+              🔗{' '}
+              <a
+                href={personalInfo.LinkedIn.startsWith('http') ? personalInfo.LinkedIn : `https://${personalInfo.LinkedIn}`}
+                className="text-[#0078d4] underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {personalInfo.LinkedIn}
+              </a>
+            </p>
+          )}
+
+          {personalInfo.Mail && (
+            <p>
+              ✉️{' '}
+              <a
+                href={`mailto:${personalInfo.Mail}`}
+                className="text-[#0078d4] underline"
+              >
+                {personalInfo.Mail}
+              </a>
+            </p>
+          )}
+
+          {personalInfo.Phone && <p>📞 +49 {personalInfo.Phone}</p>}
+
+          {/* 🌐 External Links (Portfolio, GitHub, Blog...) */}
+          {personalInfo.external_links?.length > 0 &&
+            personalInfo.external_links.map((link, idx) => (
+              <p key={idx}>
+                🌐{' '}
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#0078d4] underline"
+                >
+                  {link.type}
+                </a>
+              </p>
+            ))}
         </div>
 
-        {/* Skills */}
-        {skills.content.length > 0 && (
-          <div>
-            <h3 className="text-[13px] font-semibold text-[#2c6472] mb-1">SKILLS</h3>
-            <ul className="list-disc ml-5 text-[12px]">
-              {skills.content.filter(skill => skill.trim()).map((skill, idx) => (
-                <li key={idx}>{skill}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Languages */}
-        {languages.content.length > 0 && (
-          <div>
-            <h3 className="text-[13px] font-semibold text-[#2c6472] mb-1">LANGUAGES</h3>
-            <ul className="list-disc ml-5 text-[12px]">
-              {languages.content.map((lang, idx) => <li key={idx}>{lang}</li>)}
-            </ul>
-          </div>
-        )}
       </div>
 
-      {/* Main Content */}
-      <div className="w-[70%] px-6 py-6 flex flex-col gap-4">
-        {/* Summary */}
-        {professionalSummary.content && (
-          <div>
-            <h2 className="text-[14px] font-semibold text-[#2c6472] mb-1">SUMMARY</h2>
-            <p className="text-[12px]">{professionalSummary.content}</p>
-          </div>
-        )}
+      <div className='flex w-full   gap-4'>
 
-        {/* Work Experience */}
-        {workExperience.content.some(exp => exp.Company || exp.Role || exp.Description) && (
-          <div>
-            <h2 className="text-[14px] font-semibold text-[#2c6472] mb-1">WORK EXPERIENCE</h2>
-            <div className="flex flex-col gap-2">
-              {workExperience.content.map((exp, idx) => {
-                if (!exp.Company && !exp.Role && !exp.Description) return null;
-                return (
-                  <div key={idx}>
-                    <p className="text-[13px] font-bold">{exp.Company} {exp.Role && `| ${exp.Role}`}</p>
-                    {exp.Duration && <p className="text-[11px] text-gray-500">{exp.Duration}</p>}
-                    {exp.Description && <p className="text-[12px] mt-1">{exp.Description}</p>}
+        <div className="w-[70%] px-6 py-4 flex flex-col gap-4">
+
+
+          {/* EXPERIENCE */}
+          {workExperience.content.some(exp => exp.Company || exp.Role || exp.Description) && (
+            <div>
+              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1">Experience</h2>
+              {workExperience.content.map((exp, idx) => (
+                <div key={idx} className="mb-3">
+                  <div className="flex justify-between text-[14px] font-bold">
+                    <span>{exp.Company}</span>
+                    {exp.Duration && <span className="text-[12px] text-gray-500">{exp.Duration}</span>}
                   </div>
-                );
-              })}
+                  <p className="text-[12px]  mb-1">{exp.Role}</p>
+                  {exp.Description && (
+                    <ul className="list-disc ml-5 text-[12px] text-gray-700">
+                      {exp.Description.split('\n').map((line, i) => (
+                        <li key={i}>{line}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Education */}
-        {education?.content?.length > 0 && education.content.some(entry => entry.degree?.trim()) && (
-          <div>
-            <h2 className="text-[14px] font-semibold text-[#2c6472] mb-1">EDUCATION</h2>
-            {education.content.map((entry, idx) =>
-              entry.degree?.trim() && (
-                <p key={idx} className="text-[12px]">{entry.degree}</p>
-              )
-            )}
-          </div>
-        )}
+          {/* PROJECTS */}
+          {projects.content.length > 0 && (
+            <div>
+              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1">Projects</h2>
+              {projects.content.map((proj, idx) => (
+                <div key={idx} className="mb-3">
+                  <div className="flex justify-between text-[14px] font-bold">
+                    <span>{proj.Name}</span>
+                    {proj.Duration && <span className="text-[12px] text-gray-500">{proj.Duration}</span>}
+                  </div>
+                  <p className="text-[12px] ">{proj.Skills}</p>
+                  {proj.Description && (
+                    <ul className="list-disc ml-5 text-[12px] text-gray-700">
+                      {proj.Description.split('\n').map((line, i) => (
+                        <li key={i}>{line}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
-        {/* Projects */}
-        {projects.content.some(proj => proj.Name || proj.Description) && (
-          <div>
-            <h2 className="text-[14px] font-semibold text-[#2c6472] mb-1">PROJECTS</h2>
-            {projects.content.map((proj, idx) => (
-              <div key={idx} className="mb-2">
-                <p className="text-[13px] font-bold">
-                  {proj.Name}
-                  {proj.Company && ` | ${proj.Company}`}
-                </p>
-                {proj.Duration && <p className="text-[11px] text-gray-500">{proj.Duration}</p>}
-                {proj.Skills && <p className="text-[12px] italic">Skills: {proj.Skills}</p>}
-                {proj.Description && <p className="text-[12px]">{proj.Description}</p>}
-              </div>
-            ))}
-          </div>
-        )}
+        {/* Right Column */}
+        <div className="w-[30%] bg-white px-5 py-4 flex flex-col gap-4">
+          {/* Skills */}
+          {skills?.content?.length > 0 && (
+            <div>
+              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1">Skills</h2>
+              <ul className="list-disc ml-4 text-[12px]">
+                {skills.content.filter(Boolean).map((skill, idx) => (
+                  <li key={idx}>{skill}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
-        {/* Certificates */}
-        {certificates.content.filter(cert => cert.Name?.trim() !== '').length > 0 && (
-          <div>
-            <h2 className="text-[14px] font-semibold text-[#2c6472] mb-1">CERTIFICATES</h2>
-            <ul className="list-disc ml-5 text-[12px]">
-              {certificates.content
-                .filter(cert => cert.Name?.trim() !== '')
-                .map((cert, idx) => (
+          {/* Education */}
+          {education.content.length > 0 && (
+            <div>
+              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1">Education</h2>
+              {education.content.map((edu, idx) => (
+                <div key={idx} className="mb-2">
+                  <p className=" text-[12px]">{edu.degree}</p>
+                  <p className="text-[12px]  text-gray-700">{edu.institution}</p>
+                  <p className="text-[12px] text-gray-500">{edu.year}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Languages */}
+          {languages?.content?.length > 0 && (
+            <div>
+              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1">Languages</h2>
+              <ul className="list-disc ml-4 text-[12px]">
+                {languages.content.map((lang, idx) => (
+                  <li key={idx}>{lang}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Certificates */}
+          {certificates.content.length > 0 && (
+            <div>
+              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1">Certifications</h2>
+              <ul className="list-disc ml-4 text-[12px]">
+                {certificates.content.map((cert, idx) => (
                   <li key={idx}>{cert.Name}</li>
                 ))}
-            </ul>
-          </div>
-        )}
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

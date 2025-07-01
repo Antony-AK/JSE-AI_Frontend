@@ -224,8 +224,6 @@ const Certificates = () => {
                             <option value="certification" className="bg-white">Certification</option>
                             <option value="participation" className="bg-white">Participation</option>
                             <option value="completion" className="bg-white">Completion</option>
-                            <option value="intern" className="bg-white">Intern</option>
-                            <option value="work" className="bg-white">Work</option>
                         </select>
 
                         {errors.certificate_type && <span className="text-red-500 text-sm">{errors.certificate_type}</span>}

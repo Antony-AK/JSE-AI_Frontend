@@ -10,6 +10,8 @@ import LanguageUpdateForm from '../../UpdateProfile/LanguageUpdateForm';
 import PersonalnfoUpdateForm from '../../UpdateProfile/PersonalnfoUpdateForm';
 import ProfessionalSumUpdateForm from '../../UpdateProfile/ProfessionalSumUpdateForm';
 import { BASE_URL } from '../../utils/api';
+import JobTitleUpdateForm from '../../UpdateProfile/JobTitleUpdateForm';
+import ProjectUpdateForm from '../../UpdateProfile/ProjectsUpdateForm';
 
 const Profile = () => {
 
@@ -21,6 +23,8 @@ const Profile = () => {
   const [certificatesPopup, setCertificatesPopup] = useState(false);
   const [languagesPopup, setLanguagesPopup] = useState(false);
   const [personalinfoPopup, setPersonalInfoPopup] = useState(false);
+  const [showProjectUpdateForm, setShowProjectUpdateForm] = useState(false);
+  const [showJobTitleUpdateForm, setShowJobTitleUpdateForm] = useState(false);
   const [professionalSummaryPopup, setProfessionalSummaryPopup] = useState(false);
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -135,6 +139,8 @@ const Profile = () => {
     setLanguagesPopup(false);
     setPersonalInfoPopup(false);
     setProfessionalSummaryPopup(false);
+    setShowJobTitleUpdateForm(false);
+    setShowProjectUpdateForm(false);
     setRefreshTrigger(prev => !prev); // 🔄 this will re-fetch the profile data
 
   };
@@ -144,7 +150,8 @@ const Profile = () => {
   const handleCertificatesPopup = () => setCertificatesPopup(true);
   const handleLanguagesPopup = () => setLanguagesPopup(true);
   const handlePersonalInfoPopup = () => setPersonalInfoPopup(true);
-  const handleProfessionalSummaryPopup = () => setProfessionalSummaryPopup(true);
+  const handleJobTitleUpdateForm = () => setShowJobTitleUpdateForm(true);
+  const handleProjectUpdateForm = () => setShowProjectUpdateForm(true);
 
   return (
     <div className='flex flex-col gap-3 bg-gray-100 px-6 py-4'>
@@ -159,7 +166,7 @@ const Profile = () => {
           </h2>
         </div>
 
-        <div className='flex w-full h-[180px] rounded-md p-4 justify-between items-center'>
+        <div className='flex w-full h-[150px] rounded-md p-4 justify-between items-center'>
           {/* 🔹 Internal Applications */}
           <div className="flex flex-col w-96  justify-center items-center gap-2">
             <p className="text-sm font-medium">Internal Applications</p>
@@ -365,8 +372,8 @@ const Profile = () => {
         <div className='flex flex-col gap-2 h-[180px] overflow-y-auto hide-scrollbar'>
           <h2 className="text-sm font-bold">Projects</h2>
           {profileData?.seeker?.past_projects?.map((project, index) => (
-            <div key={index}>
-              <p className='text-sm font-semibold text-[#2c6472]'>{project.project_name}</p>
+            <div key={index} className='flex flex-col gap-1.5'>
+              <p className='text-sm font-semibold text-gray-500'>{project.project_name}</p>
               <p className='text-sm font-medium text-gray-500'>{project.institution}</p>
               <p className='text-sm font-medium text-gray-500'>
                 {new Date(project.start_date).toLocaleDateString()} -{" "}
@@ -376,7 +383,7 @@ const Profile = () => {
             </div>
           ))}
         </div>
-        <div className="flex justify-center items-center h-fit p-3 rounded-full hover:bg-slate-300 cursor-pointer">
+        <div onClick={handleProjectUpdateForm} className="flex justify-center items-center h-fit p-3 rounded-full hover:bg-slate-300 cursor-pointer">
           <img src={edit} alt="Edit" />
         </div>
       </div>
@@ -397,7 +404,7 @@ const Profile = () => {
 
 
       {/* Designations */}
-      <div className="flex justify-between items-center py-5 px-6 w-full bg-white rounded-md">
+      {/* <div className="flex justify-between items-center py-5 px-6 w-full bg-white rounded-md">
         <div className='flex flex-col gap-2 h-[100px] overflow-y-auto hide-scrollbar'>
           <h2 className="text-sm font-bold">Designations</h2>
           {profileData?.seeker?.primary_title && (
@@ -410,10 +417,10 @@ const Profile = () => {
             <p className='text-sm font-medium text-gray-500'>• {profileData.seeker.tertiary_title}</p>
           )}
         </div>
-        <div className="flex justify-center items-center h-fit p-3 rounded-full hover:bg-slate-300 cursor-pointer">
+        <div onClick={handleJobTitleUpdateForm} className="flex justify-center items-center h-fit p-3 rounded-full hover:bg-slate-300 cursor-pointer">
           <img src={edit} alt="Edit" />
         </div>
-      </div>
+      </div> */}
 
 
 
@@ -429,7 +436,86 @@ const Profile = () => {
         <div onClick={handleLanguagesPopup} className="flex justify-center items-center h-fit p-3 rounded-full hover:bg-slate-300 cursor-pointer">
           <img src={edit} alt="Edit" />
         </div>
-      </div>      {/* Your other section components go here with appropriate edit handlers */}
+      </div>
+
+      <div className="space-y-6">
+        {/* CV Section */}
+        <div className="border-2 bg-white  ps-7 rounded-md p-4">
+          <h3 className="text-base font-medium text-gray-800 mb-4">CV</h3>
+          <div className="flex gap-7 flex-wrap">
+            {/* Selected Template */}
+            <div className="relative w-40 h-60 bg-white border shadow-md rounded-md flex items-center justify-center">
+              <div className="absolute top-0 left-0 bg-cyan-700 w-full h-10 text-white text-center py-1.5 rounded-t-md">
+                ✅ Selected
+              </div>
+                      <img src="" alt="Selected CV Template" className="w-full h-full object-cover" />
+
+            </div>
+
+            {/* Locked Templates */}
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className="relative w-40 h-60 bg-gray-200 border rounded-md flex items-center justify-center"
+              >
+                <div className="absolute bottom-1 right-1 bg-white p-1 rounded-full shadow">
+                  <svg
+                    className="w-4 h-4 text-orange-500"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5 8V6a5 5 0 0110 0v2h1a1 1 0 011 1v9a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1h1zm2-2a3 3 0 016 0v2H7V6z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Cover Letter Section */}
+        <div className="border-2 bg-white rounded-md ps-7 p-4">
+          <h3 className="text-base font-medium text-gray-800 mb-4">Cover Letter</h3>
+          <div className="flex gap-7 flex-wrap">
+            {/* Selected Template */}
+            <div className="relative w-40 h-60 bg-white border shadow-md rounded-md flex items-center justify-center">
+              <div className="absolute top-0 left-0 bg-cyan-700 w-full h-10 text-white text-center py-1.5 rounded-t-md">
+                ✅ Selected
+              </div>
+            </div>
+
+            {/* Locked Templates */}
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className="relative w-40 h-60 bg-gray-200 border rounded-md flex items-center justify-center"
+              >
+                <div className="absolute bottom-1 right-1 bg-white p-1 rounded-full shadow">
+                  <svg
+                    className="w-4 h-4 text-orange-500"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5 8V6a5 5 0 0110 0v2h1a1 1 0 011 1v9a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1h1zm2-2a3 3 0 016 0v2H7V6z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+
+
+
+
 
       {/* Modals */}
       {workpopup && <WorkExpUpdateForm onclose={handleClose} />}
@@ -438,6 +524,9 @@ const Profile = () => {
       {languagesPopup && <LanguageUpdateForm onclose={handleClose} />}
       {personalinfoPopup && <PersonalnfoUpdateForm onclose={handleClose} />}
       {professionalSummaryPopup && <ProfessionalSumUpdateForm onclose={handleClose} />}
+      {showJobTitleUpdateForm && <JobTitleUpdateForm onclose={handleClose} />}
+      {showProjectUpdateForm && <ProjectUpdateForm onClose={handleClose} />}
+
     </div>
   );
 };

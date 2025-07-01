@@ -45,37 +45,40 @@ html {
   break-inside: avoid;
 }
 
-
-/* Scrollbar customization */
-.scrollbar-custom::-webkit-scrollbar {
-    width: 20px;
+/* ---------- CUSTOM SCROLLBAR FOR ALL BROWSERS ---------- */
+.scrollbar-custom {
+  scrollbar-width: thin;               /* Firefox */
+  scrollbar-color: #2C6472 #ffffff;    /* Firefox */
 }
-  
-  .scrollbar-custom::-webkit-scrollbar-track {
-    background: white;
-  }
-  
-  .scrollbar-custom::-webkit-scrollbar-thumb {
-    background: #2C6472;
-    border-radius: 10px;
-    min-height: 20px;
-  }
-  
-  /* Firefox */
-  .scrollbar-custom {
-    scrollbar-width: thin;
-    scrollbar-color: #2C6472 #fff;
-  }
-  
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  
-  /* For Firefox */
-  .hide-scrollbar {
-    scrollbar-width: none;
-    -ms-overflow-style: none; /* For IE and Edge */
-  }
+
+/* WebKit (Chrome, Edge, Safari) */
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px; /* Smaller, cleaner look */
+  height: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: #2C6472;
+  border-radius: 8px;
+  border: 2px solid #ffffff; /* Adds padding illusion */
+}
+
+/* Hide scrollbar for overflow areas */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;             /* Safari and Chrome */
+}
+
+
 
 
   input[type="password"]::-ms-reveal,

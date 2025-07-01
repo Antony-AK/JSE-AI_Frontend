@@ -155,11 +155,29 @@ const Skills = () => {
 
     // ✅ Handles selection from dropdown, ONLY fills input — no adding
     const handleSelect = (skill) => {
-        if (dropdownType === "general") {
-            setGeneralSearchTerm(skill);
-        } else {
-            setJobSearchTerm(skill);
+        const isGeneral = dropdownType === "general";
+
+        const alreadyExists = isGeneral
+            ? formData.generalSkills.includes(skill)
+            : formData.jobSpecificSkills.includes(skill);
+
+        if (alreadyExists) {
+            toast.error("This skill is already added.");
+            return;
         }
+
+        setFormData((prev) => ({
+            ...prev,
+            generalSkills: isGeneral
+                ? [...prev.generalSkills, skill]
+                : prev.generalSkills,
+            jobSpecificSkills: !isGeneral
+                ? [...prev.jobSpecificSkills, skill]
+                : prev.jobSpecificSkills,
+        }));
+
+        // Clear input + hide dropdown
+        isGeneral ? setGeneralSearchTerm('') : setJobSearchTerm('');
         setShowDropdown(false);
     };
 
@@ -277,8 +295,44 @@ const Skills = () => {
             } else {
                 navigate('/user/dashboard');
             }
+
+            await fetchEntryProgressAndRedirect(token);
+
         } catch (error) {
             console.error("❌ Network or server error:", error);
+        }
+    };
+
+
+    const fetchEntryProgressAndRedirect = async (token) => {
+        try {
+            const res = await fetch(`${BASE_URL}/user/entry-progress/check`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            const progress = await res.json();
+            console.log("🧠 Entry Progress Response:", progress);
+
+            if (res.ok && progress.completed === true) {
+                // ✅ Only allow access to dashboard if completed
+                navigate('/user/dashboard');
+            } else {
+                // ❌ Any incomplete, unknown, or invalid response — logout user
+                toast.error("❌ Data entry incomplete or invalid user. Logging out...");
+                sessionStorage.clear();
+                localStorage.clear();
+                navigate('/user/login');
+            }
+        } catch (err) {
+            console.error('💥 Error:', err);
+            toast.error("Something went wrong. Logging out...");
+            sessionStorage.clear();
+            localStorage.clear();
+            navigate('/user/login');
         }
     };
 
@@ -381,8 +435,8 @@ const Skills = () => {
                                                 <li
                                                     key={index}
                                                     className={`px-4 py-2 cursor-pointer ${index === highlightIndex
-                                                            ? 'bg-[#2c6472] text-white'
-                                                            : 'hover:bg-[#2c6472] hover:text-white text-gray-600'
+                                                        ? 'bg-[#2c6472] text-white'
+                                                        : 'hover:bg-[#2c6472] hover:text-white text-gray-600'
                                                         }`}
                                                     onMouseDown={(e) => {
                                                         e.preventDefault();
@@ -405,7 +459,7 @@ const Skills = () => {
                             <div className="text-red-500 text-sm mt-1">{errors.generalSkills}</div>
                         )}
 
-                        <div className="flex flex-wrap gap-2 h-[80px] w-[70%] scrollbar-custom overflow-y-auto p-2 rounded ">
+                        <div className="flex flex-wrap gap-2 h-[80px] w-[70%] scrollbar-custom border-x border-black overflow-y-auto p-2  ">
                             {formData.generalSkills.map((skill, index) => (
                                 <div
                                     key={index}
@@ -468,10 +522,32 @@ const Skills = () => {
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
                                         e.preventDefault();
-                                        addSkill();
-                                        jobInputRef.current?.blur();
+
+                                        const inputVal = jobSearchTerm.trim();
+                                        const firstMatch = filteredSkills[0];
+
+                                        if (!firstMatch) {
+                                            toast.error("❌ Skill not found.");
+                                            return;
+                                        }
+
+                                        const isExactMatch = dynamicSkills.some(
+                                            (skill) => skill.toLowerCase() === inputVal.toLowerCase()
+                                        );
+
+                                        if (!isExactMatch) {
+                                            setJobSearchTerm(firstMatch);  // 👈 auto-fill top match
+                                            setTimeout(() => {
+                                                addSkill(); // 👈 after input is filled
+                                                jobInputRef.current?.blur();
+                                            }, 100); // slight delay to allow input update
+                                        } else {
+                                            addSkill();
+                                            jobInputRef.current?.blur();
+                                        }
                                     }
                                 }}
+
                                 onFocus={() => {
                                     setShowDropdown(true);
                                     setDropdownType("job");
@@ -505,7 +581,7 @@ const Skills = () => {
                     )}
 
 
-                    <div className="flex flex-wrap gap-2 h-[80px] w-[70%] mt-3 mb-12 scrollbar-custom overflow-y-auto p-2 rounded ">
+                    <div className="flex flex-wrap gap-2 h-[80px] w-[70%] mt-3 mb-12 scrollbar-custom border-x border-black overflow-y-auto p-2  ">
                         {formData.jobSpecificSkills.map((skill, index) => (
                             <div
                                 key={index}
