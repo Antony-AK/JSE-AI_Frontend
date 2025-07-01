@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { toast } from 'react-toastify';
 import trash from "../assets/trash2.png";
 import axios from "axios";
 
 const WorkExpUpdateForm = ({ onclose }) => {
 
-    const apiUrl = "https://jse.arshan.digital/b1/work-experience";
+    const apiUrl = "https://dev.arshan.digital/b1/work-experience";
     const [experiences, setExperiences] = useState([]);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         job_title: "",
         company_name: "",
-        employment_type: "",
+        location: "",
         start_date: "",
         end_date: "",
         key_responsibilities: ""
@@ -30,9 +31,9 @@ const WorkExpUpdateForm = ({ onclose }) => {
         }
 
         const formatDateForAPI = (dateString) => {
+            if (!dateString) return null; // ⛔ avoid formatting if empty
             const date = new Date(dateString);
-            // Format to YYYY-MM-DD, or adjust to the format your backend expects
-            return date.toISOString().split('T')[0];
+            return date.toISOString(); // ✅ full ISO string with "T"
         };
 
         const requestData = {
@@ -50,7 +51,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
                     "Content-Type": "application/json",
                 },
             });
-            alert(`✅ Work Experience uploaded successfully`);
+            toast.success(`Work Experience uploaded!`);
         } catch (error) {
             console.error("Error uploading data:", error);
             if (error.response) {
@@ -62,7 +63,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
     const handleAddExperience = async (e) => {
         e.preventDefault();
         if (!isFormValid()) {
-            alert("Please fill all required fields!");
+            toast.error("Please fill all required fields!");
             return;
         }
         setLoading(true);
@@ -71,7 +72,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
         setFormData({
             job_title: "",
             company_name: "",
-            employment_type: "",
+            location: "",
             start_date: "",
             end_date: "",
             key_responsibilities: "",
@@ -79,10 +80,6 @@ const WorkExpUpdateForm = ({ onclose }) => {
         setActiveId(null);
         setLoading(false);
     };
-
-
-
-
 
     const fetchExperiences = useCallback(async () => {
         console.log("Token used:", token);
@@ -119,9 +116,9 @@ const WorkExpUpdateForm = ({ onclose }) => {
         setFormData({
             job_title: exp.job_title || "",
             company_name: exp.company_name || "",
-            employment_type: exp.employment_type || "",
-            start_date: exp.start_date?.time?.split("T")[0] || "",
-            end_date: exp.end_date?.time?.split("T")[0] || "",
+            location: exp.location || "",
+            start_date: exp.start_date?.split("T")[0] || "",
+            end_date: exp.end_date?.split("T")[0] || "",
             key_responsibilities: exp.key_responsibilities || ""
         });
         setActiveId(exp.tempId);
@@ -139,45 +136,50 @@ const WorkExpUpdateForm = ({ onclose }) => {
 
     // Save Changes
     const handleSave = async () => {
-        // Create the updated experience object from the form data
+        const toISOString = (dateStr) => dateStr ? new Date(dateStr).toISOString() : null;
+
         const updatedExperience = {
             job_title: formData.job_title,
             company_name: formData.company_name,
-            employment_type: formData.employment_type,
-            start_date: formData.start_date,
-            ...(formData.end_date && { end_date: formData.end_date }),
+            location: formData.location,
+            start_date: toISOString(formData.start_date),
+            end_date: formData.end_date ? toISOString(formData.end_date) : null,
             key_responsibilities: formData.key_responsibilities
         };
 
+        const selectedIndex = experiences.findIndex(exp => exp.tempId === activeId);
 
-        // Get the experience object that was selected (using tempId as the identifier)
-        const selectedExperience = experiences.find(exp => exp.tempId === activeId);
-
-        if (!selectedExperience) {
+        if (selectedIndex === -1) {
             return alert("Selected experience not found.");
         }
 
-        const experienceIndex = selectedExperience.tempId;  // tempId is used as the index here
+        const backendIndex = selectedIndex + 1; // because your backend expects 1-based index in URL
 
         try {
-            // Send the PUT request for the specific experience using the tempId in the URL
-            const res = await axios.put(`${apiUrl}/${experienceIndex}`, updatedExperience, {
+            const res = await axios.put(`${apiUrl}/${backendIndex}`, updatedExperience, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
-
                 },
             });
-     
 
             if (res.status === 200) {
-                // After successful update, update the local state with the updated experience
-                const updatedList = experiences.map(exp =>
-                    exp.tempId === experienceIndex ? { ...exp, ...updatedExperience } : exp
+                // Update local state
+                const updatedList = experiences.map((exp, i) =>
+                    i === selectedIndex ? { ...exp, ...updatedExperience } : exp
                 );
                 setExperiences(updatedList);
 
-                alert("✅ Work experience updated successfully!");
+                toast.success("Work experience updated!");
+                setFormData({
+                    job_title: "",
+                    company_name: "",
+                    location: "",
+                    start_date: "",
+                    end_date: "",
+                    key_responsibilities: ""
+                });
+                setActiveId(null);
             } else {
                 alert("❌ Failed to update work experience.");
             }
@@ -200,12 +202,12 @@ const WorkExpUpdateForm = ({ onclose }) => {
                 }
             });
 
-            alert("✅ Experience deleted!");
+            toast.success("Experience deleted!");
             await fetchExperiences();
             setFormData({
                 job_title: "",
                 company_name: "",
-                employment_type: "",
+                location: "",
                 start_date: "",
                 end_date: "",
                 key_responsibilities: ""
@@ -241,6 +243,23 @@ const WorkExpUpdateForm = ({ onclose }) => {
                                 {exp?.job_title}
                             </div>
                         ))}
+                        <div
+                            onClick={() => {
+                                setFormData({
+                                job_title: "",
+                                company_name: "",
+                                location: "",
+                                start_date: "",
+                                end_date: "",
+                                key_responsibilities: "",
+                                });
+                                setActiveId(null); // clear editing mode
+                            }}
+                            className="flex items-center justify-center flex-shrink-0 h-8 w-8 p-3 rounded snap-start cursor-pointer 
+                                bg-gray-500/20 text-[#2c6472] text-2xl hover:bg-gray-900/20 transition-all duration-200"
+                            >
+                            +
+                        </div>                        
                     </div>
                 )}
 
@@ -271,11 +290,11 @@ const WorkExpUpdateForm = ({ onclose }) => {
                         </div>
 
                         <div className="flex flex-col w-1/2 gap-2">
-                            <label htmlFor="employment_type" className='text-[15px] text-gray-500'>Employee Type <span className="text-red-500">*</span></label>
+                            <label htmlFor="location" className='text-[15px] text-gray-500'>Location <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
-                                name="employment_type"
-                                value={formData.employment_type}
+                                name="location"
+                                value={formData.location}
                                 onChange={handleChange}
                                 required
                                 className='border border-gray-500/30 px-4 py-2 rounded outline-none'
@@ -316,13 +335,15 @@ const WorkExpUpdateForm = ({ onclose }) => {
                             onChange={handleChange}
                             required
                             className='border border-gray-500/30 px-4 py-2 rounded outline-none'
-                        />
+                        />  
                     </div>
 
                     <div className="flex justify-between w-full mt-2">
                         <button onClick={activeId === null ? handleAddExperience : null}
                             disabled={activeId !== null}
-                            className={`text-sm ${activeId !== null ? 'text-gray-500/60 cursor-not-allowed' : 'text-[#2c6472]'} font-medium hover:scale-95`}>+ Add More Experience</button>
+                            className={`text-sm ${activeId !== null ? 'text-gray-500/60 cursor-not-allowed' : 'text-[#2c6472]'} font-medium hover:scale-95`}>
+                                + Add More Experience
+                        </button>
                         <button onClick={activeId !== null ? handleDeleteExperience : null}
                             disabled={activeId === null}
                             className={`text-sm flex ${activeId !== null ? 'text-red-500' : 'text-gray-500/60 cursor-not-allowed'} font-medium hover:scale-95`}>

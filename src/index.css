@@ -90,3 +90,26 @@ input[type="password"]::-webkit-credentials-auto-fill-button,
 input[type="password"]::-webkit-textfield-decoration-container {
   display: none !important;
 }
+
+.Toastify__toast--success .Toastify__progress-bar {
+  background: #2c6472 !important;
+}
+
+/* Hide the default icon */
+.Toastify__toast--success .Toastify__toast-icon {
+  display: none;
+  position: relative;
+}
+
+/* Inject your own custom image icon */
+.Toastify__toast--success::before {
+  content: '';
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  background-image: url('./assets/toaster-success-icon.svg'); /* ✅ Set your image path */
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 10px;
+  vertical-align: middle;
+}

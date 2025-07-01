@@ -1,18 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 // import trash from "../assets/trash2.png";
 import axios from 'axios';
+import { BASE_URL } from '../utils/api'
 
 const PersonalnfoUpdateForm = ({ onclose }) => {
     const [formData, setFormData] = useState({
         first_name: "",
         second_name: "",
-        date_of_birth: "",
-        address: "",
-        linkedin_profile: ""
+        email: "",
+        phone: "",
+        country: "",
+        state: "",
+        city: "",
+        linkedin_profile: "",
+        external_links: [
+            { type: "website", url: "" },
+            { type: "github", url: "" },
+            { type: "blog", url: "" },
+            { type: "social media", url: "" }
+        ]
     });
 
 
-    const apiUrl = "https://jse.arshan.digital/b1/personal-info";
+    const apiUrl = `${BASE_URL}/personal-info`;
     const token = sessionStorage.getItem("authToken");
 
     const fetchProfileInfo = async () => {
@@ -41,9 +52,16 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
             setFormData({
                 first_name: (info.first_name || "").trim(),
                 second_name: (info.second_name || "").trim(),
-                date_of_birth: info.date_of_birth || "",
-                address: info.address || "",
-                linkedin_profile: info.linkedin_profile || ""
+                email: info.email || "",
+                phone: info.phone || "",
+                country: info.country || "",
+                state: info.state || "",
+                city: info.city || "",
+                linkedin_profile: info.linkedin_profile || "",
+                external_links: ["website", "github", "blog", "social media"].map((type) => {
+                    const link = (info.external_links || []).find((l) => l.type === type);
+                    return { type, url: link?.url || "" };
+                })
             });
         } catch (err) {
             console.error("Failed to fetch personal info", err);
@@ -54,16 +72,16 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
         fetchProfileInfo();
     }, []);
 
-    // 🔄 Handle PUT (update)
+    // 🔄 Handle POST (update)
     const handleSubmit = async () => {
         try {
-            const res = await axios.put(`${apiUrl}`, formData, {
+            const res = await axios.post(`${apiUrl}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
-            alert("Personal info updated successfully ✅");
+            toast.success("Personal info updated successfully.");
             onclose();
         } catch (err) {
             console.error("Update failed", err);
@@ -72,30 +90,30 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
     };
 
     // 🗑️ Handle DELETE
-    const handleDelete = async () => {
-        try {
-            await axios.delete(`${apiUrl}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            alert("Personal info deleted ✅");
-            onclose();
-        } catch (err) {
-            console.error("Delete failed", err);
-            alert("Failed to delete ❌");
-        }
-    };
+    // const handleDelete = async () => {
+    //     try {
+    //         await axios.delete(`${apiUrl}`, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`,
+    //             },
+    //         });
+    //         alert("Personal info deleted ✅");
+    //         onclose();
+    //     } catch (err) {
+    //         console.error("Delete failed", err);
+    //         alert("Failed to delete ❌");
+    //     }
+    // };
 
     return (
         <div className='fixed inset-0 bg-white overflow-y-auto hide-scrollbar bg-opacity-70 z-50 flex items-center justify-center'>
-            <div className='w-[700px] mt-10 mb-10 bg-white flex flex-col shadow rounded-xl px-10 py-5'>
+            <div className='w-[700px] h-[90%] mt-10 mb-10 bg-white flex flex-col shadow rounded-xl px-10 py-5 scrollbar-custom'>
                 <div className="flex justify-between w-full mt-3">
                     <h3 className='text-lg font-semibold'>Personal Information</h3>
                     <p onClick={onclose} className='text-lg font-semibold cursor-pointer hover:scale-95'>X</p>
                 </div>
 
-                <div className="form-fields flex flex-col gap-4 mt-5">
+                <div className="form-fields overflow-auto flex flex-col gap-4 mt-5 pr-4">
                     {/* First Name */}
                     <div className="flex flex-col w-full gap-3">
                         <label className='text-[15px] text-gray-500'>First Name  <span className="text-red-500">*</span> </label>
@@ -104,6 +122,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
                             value={formData.first_name}
                             onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
                             className='border border-gray-500/30 px-4 py-2 rounded outline-none'
+                            disabled
                         />
                     </div>
 
@@ -115,27 +134,63 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
                             value={formData.second_name}
                             onChange={(e) => setFormData({ ...formData, second_name: e.target.value })}
                             className='border border-gray-500/30 px-4 py-2 rounded outline-none'
+                            disabled
                         />
                     </div>
 
-                    {/* DOB */}
+                    {/* Email */}
                     <div className="flex flex-col w-full gap-3">
-                        <label className='text-[15px] text-gray-500'>Date Of Birth  <span className="text-red-500">*</span></label>
+                        <label className='text-[15px] text-gray-500'>Email  <span className="text-red-500">*</span></label>
                         <input
-                            type="date"
-                            value={formData.date_of_birth}
-                            onChange={(e) => setFormData({ ...formData, date_of_birth: e.target.value })}
-                            className='border border-gray-500/30 px-4 py-2 text-gray-500 rounded outline-none'
+                            type="email"
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            className='border border-gray-500/30 px-4 py-2 rounded outline-none'
+                            disabled
                         />
                     </div>
 
-                    {/* Address */}
+                    {/* Phone */}
                     <div className="flex flex-col w-full gap-3">
-                        <label className='text-[15px] text-gray-500'>Current Address  <span className="text-red-500">*</span></label>
+                        <label className='text-[15px] text-gray-500'>Phone  <span className="text-red-500">*</span></label>
+                        <input
+                            type="tel"
+                            value={formData.phone}
+                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                            className='border border-gray-500/30 px-4 py-2 rounded outline-none'
+                        />
+                    </div>
+
+                    {/* Country */}
+                    <div className="flex flex-col w-full gap-3">
+                        <label className='text-[15px] text-gray-500'>Country <span className="text-red-500">*</span></label>
                         <input
                             type="text"
-                            value={formData.address}
-                            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                            value={formData.country}
+                            onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                            className='border border-gray-500/30 px-4 py-2 rounded outline-none'
+                            disabled
+                        />
+                    </div>
+
+                    {/* State */}
+                    <div className="flex flex-col w-full gap-3">
+                        <label className='text-[15px] text-gray-500'>State <span className="text-red-500">*</span></label>
+                        <input
+                            type="text"
+                            value={formData.state}
+                            onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                            className='border border-gray-500/30 px-4 py-2 rounded outline-none'
+                        />
+                    </div>
+
+                    {/* City */}
+                    <div className="flex flex-col w-full gap-3">
+                        <label className='text-[15px] text-gray-500'>City <span className="text-red-500">*</span></label>
+                        <input
+                            type="text"
+                            value={formData.city}
+                            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                             className='border border-gray-500/30 px-4 py-2 rounded outline-none'
                         />
                     </div>
@@ -147,6 +202,66 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
                             type="text"
                             value={formData.linkedin_profile}
                             onChange={(e) => setFormData({ ...formData, linkedin_profile: e.target.value })}
+                            className='border border-gray-500/30 px-4 py-2 rounded outline-none'
+                        />
+                    </div>
+
+                    {/* Website */}
+                    <div className="flex flex-col w-full gap-3">
+                        <label className='text-[15px] text-gray-500'>Website</label>
+                        <input
+                            type="text"
+                            value={formData.external_links[0]?.url || ""}
+                            onChange={(e) => {
+                                const updatedLinks = [...formData.external_links];
+                                updatedLinks[0].url = e.target.value;
+                                setFormData({ ...formData, external_links: updatedLinks });
+                            }}
+                            className='border border-gray-500/30 px-4 py-2 rounded outline-none'
+                        />
+                    </div>
+
+                    {/* Github */}
+                    <div className="flex flex-col w-full gap-3">
+                        <label className='text-[15px] text-gray-500'>Github</label>
+                        <input
+                            type="text"
+                            value={formData.external_links[1]?.url || ""}
+                            onChange={(e) => {
+                                const updatedLinks = [...formData.external_links];
+                                updatedLinks[1].url = e.target.value;
+                                setFormData({ ...formData, external_links: updatedLinks });
+                            }}
+                            className='border border-gray-500/30 px-4 py-2 rounded outline-none'
+                        />
+                    </div>
+
+                    {/* Blog */}
+                    <div className="flex flex-col w-full gap-3">
+                        <label className='text-[15px] text-gray-500'>Blog</label>
+                        <input
+                            type="text"
+                            value={formData.external_links[2]?.url || ""}
+                            onChange={(e) => {
+                                const updatedLinks = [...formData.external_links];
+                                updatedLinks[2].url = e.target.value;
+                                setFormData({ ...formData, external_links: updatedLinks });
+                            }}
+                            className='border border-gray-500/30 px-4 py-2 rounded outline-none'
+                        />
+                    </div>
+
+                    {/* Social Media */}
+                    <div className="flex flex-col w-full gap-3">
+                        <label className='text-[15px] text-gray-500'>Social Media</label>
+                        <input
+                            type="text"
+                            value={formData.external_links[3]?.url || ""}
+                            onChange={(e) => {
+                                const updatedLinks = [...formData.external_links];
+                                updatedLinks[3].url = e.target.value;
+                                setFormData({ ...formData, external_links: updatedLinks });
+                            }}
                             className='border border-gray-500/30 px-4 py-2 rounded outline-none'
                         />
                     </div>
@@ -166,7 +281,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
                     <div className='flex justify-center items-center gap-4 mt-5 mb-5'>
                         <button
                             onClick={handleSubmit}
-                            className='bg-[#2c6472] w-32 text-sm text-white px-2 py-2 rounded-xl hover:scale-95'
+                            className='bg-[#2c6472] w-32 text-sm text-white px-2 py-2 rounded-xl hover:scale-105'
                         >
                             Save Changes
                         </button>

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import trash from "../assets/trash2.png"
 import axios from 'axios';
-
+import { toast } from 'react-toastify';
 
 const EducationUpdateForm = ({ onclose }) => {
-    const apiUrl = 'https://jse.arshan.digital/b1/education';
+    const apiUrl = 'https://dev.arshan.digital/b1/academics';
     const [education, setEducation] = useState([]);
     const token = sessionStorage.getItem('authToken');
 
@@ -27,14 +27,14 @@ const EducationUpdateForm = ({ onclose }) => {
 
         const formatDateToISO = (date) => {
             const localDate = new Date(date);
-            return localDate.toISOString().split('T')[0];
-        };
+            return isNaN(localDate.getTime()) ? null : localDate.toISOString(); // Keep full ISO
+        };        
 
         const updatedFormData = {
             ...formData,
             start_date: formatDateToISO(formData.start_date),
-            end_date: formatDateToISO(formData.end_date),
-        };
+            end_date: formData.end_date ? formatDateToISO(formData.end_date) : null,
+        };        
 
         try {
             const response = await axios.post(apiUrl, updatedFormData, {
@@ -44,7 +44,7 @@ const EducationUpdateForm = ({ onclose }) => {
                 }
             });
 
-            alert(`✅ Education data uploaded successfully`);
+            toast.success(`Education data uploaded successfully`);
 
             // Clear form
             setFormData({
@@ -76,10 +76,12 @@ const EducationUpdateForm = ({ onclose }) => {
                 },
             });
             console.log("Fetched experiences response:", res.data);
+            
             const rawData = Array.isArray(res.data)
-                ? res.data : Array.isArray(res.data?.educations)
-                    ? res.data.educations
-                    : [];
+                ? res.data
+                : Array.isArray(res.data?.academics)
+                ? res.data.academics
+                : [];            
 
             const dataWithId = rawData.map((edu, index) => ({ ...edu, tempId: index + 1 }));
             setEducation(dataWithId);
@@ -101,8 +103,8 @@ const EducationUpdateForm = ({ onclose }) => {
             degree: edu.degree || "",
             institution: edu.institution || "",
             field_of_study: edu.field_of_study || "",
-            start_date: edu.start_date?.time?.split("T")[0] || "",
-            end_date: edu.end_date?.time?.split("T")[0] || "",
+            start_date: edu.start_date?.split("T")[0] || "",
+            end_date: edu.end_date?.split("T")[0] || "",
             achievements: edu.achievements || ""
         });
         setActiveId(edu.tempId);
@@ -111,13 +113,18 @@ const EducationUpdateForm = ({ onclose }) => {
 
     //Save Changes
     const handleSave = async () => {
+
+        const formatDateToFullISO = (date) => {
+            return date ? new Date(date).toISOString() : null;
+        };
+
         // Create the updated experience object from the form data
         const updatedExperience = {
             degree: formData.degree,
             institution: formData.institution,
             field_of_study: formData.field_of_study,
-            start_date: formData.start_date,
-            end_date: formData.end_date,
+            start_date: formatDateToFullISO(formData.start_date),
+            end_date: formData.end_date ? formatDateToFullISO(formData.end_date) : null,
             achievements: formData.achievements
         };
         
@@ -148,7 +155,7 @@ const EducationUpdateForm = ({ onclose }) => {
                     edu.tempId === educationIndex ? { ...edu, ...updatedExperience } : edu
                 );
                 setEducation(updatedList);
-                alert("✅ Education updated successfully!");
+                toast.success("Education updated successfully!");
             } else {
                 alert("❌ Failed to Education.");
             }
@@ -171,7 +178,7 @@ const EducationUpdateForm = ({ onclose }) => {
                 }
             });
 
-            alert("✅ Education deleted!");
+            toast.success("Education deleted!");
             await fetchEducations();
             setFormData({
                 degree: '',
@@ -206,6 +213,7 @@ const EducationUpdateForm = ({ onclose }) => {
                     <p onClick={onclose} className='text-lg font-semibold cursor-pointer transform ease-in-out duration-200 hover:scale-95'>X</p>
                 </div>
 
+                {education.length > 0 && (
                 <div className="expereince-title flex gap-4 mb-5 overflow-x-auto hide-scrollbar snap-x snap-mandatory">
                     {education.map((edu) => (
                         <div
@@ -218,7 +226,25 @@ const EducationUpdateForm = ({ onclose }) => {
                             {edu?.field_of_study}
                         </div>
                     ))}
+                    <div
+                        onClick={() => {
+                            setFormData({
+                                degree: '',
+                                institution: '',
+                                field_of_study: '',
+                                start_date: '',
+                                end_date: '',
+                                achievements: ''
+                            });
+                            setActiveId(null); // Clear selected education
+                        }}
+                        className="flex items-center justify-center flex-shrink-0 h-8 w-8 p-3 rounded snap-start cursor-pointer 
+                            bg-gray-500/20 text-[#2c6472] text-2xl hover:bg-gray-900/20 transition-all duration-200"
+                    >
+                        +
+                    </div>                    
                 </div>
+                )}
 
                 <div className="form-fields flex flex-col gap-4">
                     <div className="flex flex-col w-full gap-4">
@@ -306,7 +332,8 @@ const EducationUpdateForm = ({ onclose }) => {
                             disabled={activeId === null}
                             className={` ${activeId !== null ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 cursor-not-allowed'} w-32 text-sm px-2 py-2 rounded-xl mb-2 hover:scale-95 transition`}
                         >
-                            Save Changes</button>
+                            Save Changes
+                        </button>
                     </div>
 
                 </div>
