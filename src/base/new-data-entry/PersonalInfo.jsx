@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import drop from '../../assets/drop-icon.svg'
 import { useNavigate, useLocation } from 'react-router-dom';
-import right_arrow from "../../assets/left-arrow.png"
 import { BASE_URL } from '../../utils/api'
+import warning from "../../assets/carbon_warning.png"
 
 const PersonalInfo = () => {
 
@@ -192,14 +191,12 @@ const PersonalInfo = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
 
-
       } catch (error) {
         console.error("❌ Error submitting form:", JSON.stringify(error.response?.data, null, 2));
         toast.error(error.response?.data.issue || "Failed to submit. Please try again.");
       }
     }
   };
-
 
   return (
     <div className='p-10 pt-14 flex flex-col gap-5 w-[100%] min-h-screen overflow-y-auto'>
@@ -282,32 +279,27 @@ const PersonalInfo = () => {
           {errors.linkedin_profile && <span className="text-red-500 text-sm">{errors.linkedin_profile}</span>}
         </div>
 
-        <div onClick={() => setShowOthers(!showOthers)} className="flex items-center gap-3 cursor-pointer w-fit">
-          <p className='text-[#2c6472] font-semibold'>Others</p>
-          <img width="15px" src={drop} alt="" className={`transform transition-transform duration-300 ${showOthers ? 'rotate-180' : 'rotate-0'}`} />
-        </div>
+
 
         {/* Portfolio, Resume, Blog */}
-        {showOthers && (
-          <div className='flex flex-col gap-5'>
-            {/* Portfolio */}
+        <div className='flex flex-col gap-5'>
+          {/* Portfolio */}
 
-            {externalLinks.map((link, index) => (
-              <div className="flex flex-col gap-2 w-[95%] mx-auto" key={index}>
-                <label className='font-medium'>{link.type.charAt(0).toUpperCase() + link.type.slice(1)} Link</label>
-                <input
-                  className="px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]"
-                  type="text"
-                  placeholder={`Enter your ${link.type} URL`}
-                  value={link.url}
-                  onChange={(e) => handleExternalLinkChange(index, e.target.value)}
-                />
-              </div>
-            ))}
+          {externalLinks.map((link, index) => (
+            <div className="flex flex-col gap-2 w-[100%] mx-auto" key={index}>
+              <label className='font-medium'>{link.type.charAt(0).toUpperCase() + link.type.slice(1)} Link</label>
+              <input
+                className="px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]"
+                type="text"
+                // placeholder={`Enter your ${link.type} URL`}
+                value={link.url}
+                onChange={(e) => handleExternalLinkChange(index, e.target.value)}
+              />
+            </div>
+          ))}
 
-          </div>
+        </div>
 
-        )}
 
         {/* Country */}
         <div className="flex flex-col gap-2 text-lg">
@@ -346,11 +338,14 @@ const PersonalInfo = () => {
           />
         </div>
 
+        <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472]'> Name ,Email & Phone Number cannot be changed.</span></p></div>
+
         <div className="flex justify-end mt-7">
           <button type="submit" className='rounded-xl px-6 py-2 bg-[#2C6472] text-[#fff] mb-10'>Save & Next</button>
         </div>
-
       </form>
+
+
 
 
       {showSavePopup && (
@@ -361,6 +356,12 @@ const PersonalInfo = () => {
           </div>
         </div>
       )}
+
+      {/* Footer appears after scrolling all content */}
+      <div className="flex justify-start gap-2 text-gray-500 text-sm mt-16 ">
+        <img src={warning} className="w-5  h-5 object-cover" alt="" />
+        AI is not perfect. Make sure your data is accurate before saving.            
+          </div>
 
     </div>
   )

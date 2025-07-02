@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png'
 import { BASE_URL } from '../../utils/api';
 import { MoreVertical } from "lucide-react";
+import warning from "../../assets/carbon_warning.png"
+
 
 
 const Languages = () => {
@@ -71,7 +73,7 @@ const Languages = () => {
     }
 
     setLoading(true);
-    
+
     try {
 
       const response = await fetch(`${BASE_URL}/languages`, {
@@ -97,7 +99,7 @@ const Languages = () => {
         proficiency: ''
       });
 
-       setAddedCompanies((prev) => [...prev, formData.language]);
+      setAddedCompanies((prev) => [...prev, formData.language]);
 
 
 
@@ -147,7 +149,7 @@ const Languages = () => {
         proficiency: ''
       });
 
-        navigate('/user/onboarding/certificates');
+      navigate('/user/onboarding/certificates');
 
     } catch (err) {
       console.error('Error uploading language:', err);
@@ -170,15 +172,15 @@ const Languages = () => {
           <h1 className='text-2xl font-semibold mt-7'>Add the languages you know.</h1>
         </div>
 
-           {addedCompanies.length > 0 && (
-                <div className=" px-6 py-4 -mb-5 flex gap-3 rounded-lg">
-                    <ul className="flex gap-3 overflow-x-auto scrollbar-hide">
-                        {addedCompanies.map((company, index) => (
-                            <li className='bg-gray-500/30 px-4 py-2 rounded-lg min-w-32 text-center font-semibold text-[#2c6472]' key={index}>{company}</li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+        {addedCompanies.length > 0 && (
+          <div className=" px-6 py-4 -mb-5 flex gap-3 rounded-lg">
+            <ul className="flex gap-3 overflow-x-auto scrollbar-hide">
+              {addedCompanies.map((company, index) => (
+                <li className='bg-gray-500/30 px-4 py-2 rounded-lg min-w-32 text-center font-semibold text-[#2c6472]' key={index}>{company}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <form className="flex flex-col mt-5 ms-6 " onSubmit={handleAddCertificate}>
           {/* Language Input */}
@@ -226,6 +228,9 @@ const Languages = () => {
             </div>
           </div><br />
 
+                          <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+
+
           {/* Buttons */}
           <div className="flex w-[70%] justify-between items-center gap-4 mt-4">
             <button
@@ -245,6 +250,12 @@ const Languages = () => {
           </div>
         </form>
       </div>
+
+
+      {/* Footer appears after scrolling all content */}
+      <div className="flex justify-start gap-2 text-gray-500 text-sm mt-32 ">
+        <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
+        AI is not perfect. Make sure your data is accurate before saving.            </div>
 
     </div>
   )

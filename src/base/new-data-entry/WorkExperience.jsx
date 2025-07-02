@@ -6,6 +6,8 @@ import { BASE_URL } from '../../utils/api'
 import right_arrow from '../../assets/left-arrow.png'
 import Calendar from '../Calender/Calender';
 import { format } from 'date-fns';
+import warning from "../../assets/carbon_warning.png"
+
 
 
 const WorkExperience = () => {
@@ -252,19 +254,33 @@ const WorkExperience = () => {
             )}
           </div>
 
-
           <div className="flex flex-col gap-2 w-[50%]">
-            <label className='font-medium' htmlFor="enddate">End Date {!formData.currentwork && <span className='text-red-500'>*</span>}</label>
-            <input
-              className={`px-5 py-3 rounded-lg border ${errors.enddate ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-              type="date"
-              id='enddate'
-              value={formData.enddate}
-              onChange={handleChange}
-              disabled={formData.currentwork}
-            />
+            <label className='font-medium' htmlFor="enddate">
+              End Date {!formData.currentwork && <span className='text-red-500'>*</span>}
+            </label>
+            {formData.currentwork ? (
+              <input
+                disabled
+                type="text"
+                value=""
+                placeholder="Currently working"
+                className="w-full px-5 py-3 rounded-lg border border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed"
+              />
+            ) : (
+              <Calendar
+                selectedDate={formData.enddate ? new Date(formData.enddate) : null}
+                onDateChange={(date) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    enddate: format(date, 'yyyy-MM-dd'),
+                  }))
+                }
+              />
+            )}
+
             {errors.enddate && <p className='text-red-500 text-sm'>{errors.enddate}</p>}
           </div>
+
         </div>
 
         {/* currently working */}
@@ -276,7 +292,7 @@ const WorkExperience = () => {
             checked={formData.currentwork}
             onChange={handleChange}
           />
-          <label className='font-medium text-lg' htmlFor="currentwork">I currently work here</label>
+          <label className='font-medium text-lg' htmlFor="currentwork">I'm currently working</label>
         </div>
 
         {/* Work Description */}
@@ -290,6 +306,9 @@ const WorkExperience = () => {
             onChange={handleChange}
           ></textarea>
         </div>
+
+                <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+
 
         <div className="flex justify-between mt-7">
           <div className="cursor-pointer" onClick={() => handleSubmit(false)}>
@@ -308,6 +327,12 @@ const WorkExperience = () => {
           </div>
         </div>
       )} */}
+
+      {/* Footer appears after scrolling all content */}
+      <div className="flex justify-start gap-2 text-gray-500 text-sm mt-10 ">
+        <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
+        More experience you give the better the result of JSE Ai
+      </div>
 
     </div>
   )

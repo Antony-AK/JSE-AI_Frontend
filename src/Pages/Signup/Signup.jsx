@@ -8,7 +8,7 @@ import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import google from "./../../assets/Google.png";
 import frame from "./../../assets/Frame.png";
-import logo from "../../assets/logo.png"
+import logo from "../../assets/jsenewlogo.png"
 import { BASE_URL } from "../../utils/api"
 
 const Signup = () => {
@@ -16,6 +16,8 @@ const Signup = () => {
   const [showVerificationPopup, setShowVerificationPopup] = useState(false);
   const [passwordError, setPasswordError] = useState('');
   const [shakePassword, setShakePassword] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+
 
   const [formData, setFormData] = useState({
     email: '',
@@ -64,6 +66,12 @@ const Signup = () => {
       toast.error("Passwords don't match!");
       return;
     }
+
+    if (!agreedToTerms) {
+      toast.error("Agree to continue.");
+      return;
+    }
+
 
     if (!formData.password || passwordError) {
       setShakePassword(true);
@@ -127,8 +135,8 @@ const Signup = () => {
   return (
     <div className="flex min-h-screen ">
       {/* Left Panel */}
-      <div className="flex flex-1 justify-center items-center p-8 bg-white ">
-        <div className="max-w-lg w-full">
+      <div className="flex flex-1 flex-col justify-evenly items-center p-8 bg-white ">
+        <div className="max-w-lg w-full mt-16">
           <h2 className="text-3xl font-semibold text-center ">Create account</h2><br /><br />
 
           {/* Google Auth Button */}
@@ -246,35 +254,49 @@ const Signup = () => {
               <p className="text-[10px] text-red-500 ">{passwordError}</p>
             )}<br />
 
-            {/* Submit Button */}
+            <div className='flex gap-5 mb-5 items-start'>
+              <input
+                type="checkbox"
+                id="terms"
+                className='w-4 h-4 mt-1'
+                checked={agreedToTerms}
+                onChange={(e) => setAgreedToTerms(e.target.checked)}
+              />
+              <p className='text-xs leading-snug'>
+                By signing up, you agree to our <span className='text-[#2c6472] font-medium'>Terms & Conditions</span><br />
+                and <span className='text-[#2c6472] font-medium'>Privacy Policy.</span>
+              </p>
+            </div>
+            <br />
 
+            {/* Submit Button */}
             <button
               type="submit"
-              className="teal-button w-full h-[50px] bg-[#2c6472]  hover:bg-[#24525f] text-white py-3  rounded-md"
+              className="teal-button w-full h-[50px] bg-[#2c6472]  hover:bg-[#24525f] text-white py-3 mt-5 rounded-md"
             >
               Sign Up
             </button>
           </form><br />
 
           {/* Switch to Login */}
-          <div className=" text-center text-sm me-2 text-gray-600">
+          <div className=" text-center mb-20 text-sm me-2 text-gray-600">
             Already have an account?{' '}
             <Link to="/user/login" className="text-[#2c6472] font-semibold hover:underline">
               Login
             </Link>
           </div>
-        </div>
+        </div>          <div className='text-xs flex items-center justify-center text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472]'> Email and Phone number cannot be changed.</span></p></div>
+
       </div>
 
       {/* Right Panel */}
       <div className="hidden md:flex w-1/2 flex-col items-center justify-center bg-[#2c6472] text-white px-8">
-        <h1 className="text-xl font-medium mb-3 ms-2 text-center">Welcome to</h1>
-        <div className="flex items-center mb-4 -ms-2">
+        <h3 className="text-3xl font-medium mb-3 ms-4 text-center">Welcome to</h3>
+        <div className="flex items-center mb-2 -ms-2">
           <img
             src={logo}
-            className="h-8 w-8"
+            className="h-10 w-24"
           />
-          <h3 className="text-black text-xl font-medium">JSE AI</h3>
         </div>
         <div className='relative mb-5 flex justify-center items-center ms-4'>
           <img src={frame} alt="" className='relative object-cover ' />
@@ -285,10 +307,10 @@ const Signup = () => {
             style={{ width: '100px', height: '100px' }}
             className='absolute object-cover me-2 p-2'
           />
-        </div><br />
-        <p className=" text-center text-sm max-w-xs italic">
-          "Unlock your next opportunity — your dream job is just a click away."
-        </p>
+        </div>
+        <p className=" text-center text-sm  mt-4">
+          Unlock your next opportunity<br />
+          Your dream job is just a click away        </p>
       </div>
 
       {showVerificationPopup && (

@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png';
 import { jobskills } from '../../assets/data';
 import { BASE_URL } from '../../utils/api';
+import warning from "../../assets/carbon_warning.png"
+
 
 
 const JobTitles = () => {
@@ -131,22 +133,22 @@ const JobTitles = () => {
   };
 
   useEffect(() => {
-  if (pendingTitleToAdd) {
-    const lower = pendingTitleToAdd.toLowerCase();
-    const isValid = sortedJobTitles.some(title => title.toLowerCase() === lower);
+    if (pendingTitleToAdd) {
+      const lower = pendingTitleToAdd.toLowerCase();
+      const isValid = sortedJobTitles.some(title => title.toLowerCase() === lower);
 
-    if (isValid) {
-      setSearchTerms({ primary_title: pendingTitleToAdd }); // Just to be safe
-      setTimeout(() => {
-        addSkill();
-        setPendingTitleToAdd(null); // Clear after use
-      }, 0);
-    } else {
-      toast.error("Not a valid job title.");
-      setPendingTitleToAdd(null);
+      if (isValid) {
+        setSearchTerms({ primary_title: pendingTitleToAdd }); // Just to be safe
+        setTimeout(() => {
+          addSkill();
+          setPendingTitleToAdd(null); // Clear after use
+        }, 0);
+      } else {
+        toast.error("Not a valid job title.");
+        setPendingTitleToAdd(null);
+      }
     }
-  }
-}, [pendingTitleToAdd]);
+  }, [pendingTitleToAdd]);
 
 
   const handleNext = async (e) => {
@@ -222,11 +224,10 @@ const JobTitles = () => {
         <form className='ms-6' onSubmit={handleNext}>
           <div className='flex flex-col mt-5 mb-4'>
             <label className='mb-3 block font-medium text-lg'>
-              Positions <span className='text-red-500 ms-1'>*</span>
+              Job Search Postions <span className='text-red-500 ms-1'>*</span>
             </label>
-            <p className='text-base font-medium text-gray-500'>
-              Job titles you're interested in.<br />
-              Maximum of 3.
+            <p className='text-base font-medium text-gray-500 mb-2'>
+              Job Search titles you're interested in , Select upto 3 titles.
             </p>
           </div>
 
@@ -328,13 +329,11 @@ const JobTitles = () => {
               checked={accepted}
               onChange={(e) => setAccepted(e.target.checked)}
             />
-            <p className='text-sm text-gray-500'>
+            <p className='text-sm text-red-500'>
               Please enter your job title accurately. This cannot be changed once saved.
             </p>
           </div>
-          <p className='text-xs mt-0.5 ms-7 text-red-500'>
-            Note: You cannot change the job title after this. Please enter it carefully.
-          </p>
+
 
           <div className='flex w-[70%] justify-end items-center gap-4 mt-8'>
             <button
@@ -355,6 +354,11 @@ const JobTitles = () => {
           </div>
         </div>
       )}
+
+      {/* Footer appears after scrolling all content */}
+      <div className="flex justify-start gap-2 text-gray-500 text-sm mt-32 ">
+        <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
+        AI is not perfect. Make sure your data is accurate before saving.            </div>
     </div>
   );
 };

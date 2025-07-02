@@ -114,7 +114,7 @@ const Calendar = ({ selectedDate, onDateChange }) => {
                       ref={yearDropdownRef}
                       className="absolute top-10 left-0 z-20 bg-white border border-gray-300 rounded shadow-lg max-h-40 overflow-y-auto w-[80px]"
                     >
-                      {Array.from({ length: 60 }, (_, i) => 1980 + i).map((year) => (
+                      {Array.from({ length: 60 }, (_, i) => 2000 + i).map((year) => (
                         <div
                           key={year}
                           onClick={() => {

@@ -6,6 +6,8 @@ import axios from 'axios';
 import { jobskills } from '../../assets/data';
 import { generalskills } from '../../assets/data';
 import { BASE_URL } from '../../utils/api';
+import warning from "../../assets/carbon_warning.png"
+
 
 const Skills = () => {
     const navigate = useNavigate();
@@ -600,16 +602,18 @@ const Skills = () => {
                     </div>
 
 
-                    <div className="flex gap-3 mt-5">
+
+                    <div className="flex gap-3 items-center mt-5">
                         <input
                             type="checkbox"
-                            className='w-4 mt-2 h-4 bg-[#2c6472] text-[#2c6472]'
+                            className='w-4  h-4 bg-[#2c6472] text-[#2c6472]'
                             name="primary_title" id="primary_title"
                             checked={accepted}
                             onChange={(e) => setAccepted(e.target.checked)} />
-                        <p className='text-sm text-gray-500'>Please enter only relevant job-related skills.</p>
+                        <p className='text-sm text-gray-500'>Please enter only relevant skills. Adding unrelated may affect the quality of your profile.</p>
                     </div>
-                    <p className='text-sm  ms-7 text-gray-500'>Adding unrelated or inaccurate skills may affect the quality of your profile.</p>
+
+                                    <div className='text-xs my-5 flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
 
                     <div className="flex w-[70%]   justify-end items-center gap-4 mt-8">
                         <button
@@ -626,7 +630,10 @@ const Skills = () => {
 
             </div>
 
-
+      {/* Footer appears after scrolling all content */}
+      <div className="flex justify-start gap-2 text-gray-500 text-sm mt-5 ">
+        <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
+        AI is not perfect. Make sure your data is accurate before saving.            </div>
 
         </div>
     )

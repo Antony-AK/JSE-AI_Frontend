@@ -4,6 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../utils/api'
 import right_arrow from '../../assets/left-arrow.png'
 import { toast } from 'react-toastify';
+import Calendar from '../Calender/Calender';
+import { format } from 'date-fns';
+import warning from "../../assets/carbon_warning.png"
+
+
 
 const Projects = () => {
 
@@ -24,7 +29,7 @@ const Projects = () => {
 
   const [errors, setErrors] = useState({});
   const [showSavePopup, setShowSavePopup] = useState(false);
-  const [addedCompanies, setAddedCompanies] = useState([]); 
+  const [addedCompanies, setAddedCompanies] = useState([]);
 
 
   const handleChange = (e) => {
@@ -92,7 +97,7 @@ const Projects = () => {
     if (validate()) {
       try {
         if (!token) {
-          navigate('/user/login');          
+          navigate('/user/login');
           toast.error("User not found. Please log in.");
           return;
         }
@@ -164,15 +169,15 @@ const Projects = () => {
 
       <h2 className='font-bold text-xl'>Share your past project experience.</h2>
 
-          {addedCompanies.length > 0 && (
-                <div className=" px-6 py-4 -m-3 flex gap-3 w-[90%] rounded-lg overflow-x-auto scrollbar-hide">
-                    <ul className="flex gap-3 ">
-                        {addedCompanies.map((company, index) => (
-                            <li className='bg-gray-500/30 px-4 py-2 rounded-lg h-10 flex items-center justify-center text-center font-semibold text-[#2c6472] whitespace-nowrap flex-shrink-0' key={index}>{company}</li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+      {addedCompanies.length > 0 && (
+        <div className=" px-6 py-4 -m-3 flex gap-3 w-[90%] rounded-lg overflow-x-auto scrollbar-hide">
+          <ul className="flex gap-3 ">
+            {addedCompanies.map((company, index) => (
+              <li className='bg-gray-500/30 px-4 py-2 rounded-lg h-10 flex items-center justify-center text-center font-semibold text-[#2c6472] whitespace-nowrap flex-shrink-0' key={index}>{company}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
 
@@ -205,25 +210,39 @@ const Projects = () => {
         <div className="flex justify-start gap-10 text-lg w-full">
           <div className="flex flex-col gap-2 w-[50%]">
             <label className='font-medium' htmlFor="start_date">Start Date <span className='text-red-500'>*</span></label>
-            <input
-              className={`px-5 py-3 rounded-lg border ${errors.start_date ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-              type="date"
-              id='start_date'
-              value={formData.start_date}
-              onChange={handleChange}
+            <Calendar
+              selectedDate={formData.start_date ? new Date(formData.start_date) : null}
+              onDateChange={(date) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  start_date: format(date, 'yyyy-MM-dd'),
+                }))
+              }
             />
             {errors.start_date && <p className='text-red-500 text-sm'>{errors.start_date}</p>}
           </div>
           <div className="flex flex-col gap-2 w-[50%]">
             <label className='font-medium' htmlFor="end_date">End Date {!formData.currentdo && <span className='text-red-500'>*</span>}</label>
-            <input
-              className={`px-5 py-3 rounded-lg border ${errors.end_date ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-              type="date"
-              id='end_date'
-              value={formData.end_date}
-              onChange={handleChange}
-              disabled={formData.currentdo}
-            />
+            {formData.currentdo ? (
+              <input
+                disabled
+                type="text"
+                value=""
+                placeholder="Currently doing"
+                className="w-full px-5 py-3 rounded-lg border border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed"
+              />
+            ) : (
+              <Calendar
+                selectedDate={formData.end_date ? new Date(formData.end_date) : null}
+                onDateChange={(date) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    end_date: format(date, 'yyyy-MM-dd'),
+                  }))
+                }
+              />
+            )}
+
             {errors.end_date && <p className='text-red-500 text-sm'>{errors.end_date}</p>}
           </div>
         </div>
@@ -237,7 +256,7 @@ const Projects = () => {
             checked={formData.currentdo}
             onChange={handleChange}
           />
-          <label className='font-medium text-lg' htmlFor="currentdo">I currently doing this</label>
+          <label className='font-medium text-lg' htmlFor="currentdo">I'm currently doing</label>
         </div>
 
         {/* Project Description */}
@@ -251,6 +270,9 @@ const Projects = () => {
             onChange={handleChange}
           ></textarea>
         </div>
+
+                        <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+
 
         <div className="flex justify-between mt-7">
           <div className="cursor-pointer" onClick={() => handleSubmit(false)}>
@@ -269,6 +291,12 @@ const Projects = () => {
           </div>
         </div>
       )}
+
+      {/* Footer appears after scrolling all content */}
+      <div className="flex justify-start gap-2 text-gray-500 text-sm mt-10 ">
+        <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
+        More Projects you give the better the result of JSE Ai    
+                </div>
 
     </div>
   )

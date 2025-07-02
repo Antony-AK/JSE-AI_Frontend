@@ -12,6 +12,7 @@ import ProfessionalSumUpdateForm from '../../UpdateProfile/ProfessionalSumUpdate
 import { BASE_URL } from '../../utils/api';
 import JobTitleUpdateForm from '../../UpdateProfile/JobTitleUpdateForm';
 import ProjectUpdateForm from '../../UpdateProfile/ProjectsUpdateForm';
+import ProfileImageModal from '../../base/ProfileEditor/ProfileImageModel';
 
 const Profile = () => {
 
@@ -30,6 +31,8 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [refreshTrigger, setRefreshTrigger] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [ProfileImage, setProfileImage] = useState(null);
 
 
   useEffect(() => {
@@ -65,8 +68,10 @@ const Profile = () => {
   useEffect(() => {
     if (profileData) {
       console.log("profileData updated:", profileData);
+
     }
   }, [profileData]);
+
 
   useEffect(() => {
     if (!profileData?.profile_completion) return;
@@ -88,6 +93,30 @@ const Profile = () => {
 
     return () => clearInterval(timer);
   }, [profileData]);
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+  try {
+    const headers = { Authorization: `Bearer ${token}` };
+    const res = await axios.get(`${BASE_URL}/photo`, {
+      headers,
+      responseType: 'blob', // 👈 VERY IMPORTANT!
+    });
+
+    const imageUrl = URL.createObjectURL(res.data); // create temp URL from blob
+    setProfileImage(imageUrl); // ✅ now you can use this in <img src=...>
+
+    console.log("✅ Image blob fetched:", imageUrl);
+  } catch (error) {
+    console.error("❌ Failed to fetch image blob:", error);
+  }
+};
+
+    if (token) fetchProfileImage();
+  }, [token]);
+
+
+
 
   if (loading) return <Loader />;
   if (error) return <div className="text-red-500 text-center mt-10">{error}</div>;
@@ -267,12 +296,40 @@ const Profile = () => {
 
       <div className="flex justify-between py-3 px-5  w-full bg-white rounded-md">
         <div className="flex items-center gap-6">
-          <img src={profile} className="w-14 h-14 rounded-full object-cover" alt="Profile" />
+          <div className='w-20 h-20 rounded-full '>
+          <img
+              src={ProfileImage || defaultImage}
+            alt="Profile"
+            className="w-[95%] h-full rounded-full object-cover cursor-pointer"
+            onClick={() => setShowModal(true)}
+          /></div>
+
+
+
+
           <div>
-            <h2 className='font-bold'>{fullName}</h2>
-            <p className='font-semibold text-xs mt-2'>{primaryTitle}</p>
+            <h2 className="font-bold">{fullName}</h2>
+            <p className="font-semibold text-xs mt-2">{primaryTitle}</p>
           </div>
         </div>
+
+        {/* 🧠 Image Modal Popup */}
+        {showModal && (
+          <ProfileImageModal
+             imageUrl={ProfileImage}
+
+            onClose={() => setShowModal(false)}
+            onUpload={(photo_path) => {
+              // 🧠 the backend should return only the path like `/images/abc.jpg`
+              setProfileImage((prev) => ({
+                ...prev,
+                profile_image: photo_path, // only the relative path
+              }));
+            }}
+
+          />
+        )}
+
         <div className="flex flex-col items-center">
           <div className="relative w-14 h-14">
             <svg className="absolute top-0 left-0 w-full h-full">
@@ -448,7 +505,7 @@ const Profile = () => {
               <div className="absolute top-0 left-0 bg-cyan-700 w-full h-10 text-white text-center py-1.5 rounded-t-md">
                 ✅ Selected
               </div>
-                      <img src="" alt="Selected CV Template" className="w-full h-full object-cover" />
+              <img src="" alt="Selected CV Template" className="w-full h-full object-cover" />
 
             </div>
 

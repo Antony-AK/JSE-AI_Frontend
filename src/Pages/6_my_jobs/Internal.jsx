@@ -448,7 +448,7 @@ const MyApplication = () => {
                     >
                       <div className="flex flex-col min-w-[400px] items-start space-x-10 justify-center ms-3 mb-2">
                         <div className="space-y-2">
-                          <h3 className="text-base w-96 font-semibold text-[#2C6472]">{job.jobTitle}</h3>
+                          <h3 className="text-base w-96 font-semibold text-[#2C6472] h-12 overflow-y-hidden">{job.jobTitle}</h3>
                           <p className="text-sm   text-gray-600">{job.companyName}</p>
                           <p className="text-sm mb-5 text-gray-500">{job.location}</p>
 
@@ -553,6 +553,9 @@ const MyApplication = () => {
                     Next
                   </button>
                 </div>
+
+                                <br />
+
 
 
 

@@ -39,15 +39,16 @@ import DocumentEditor from './base/DocumentEditor/DocumentEditor.jsx';
 import ExternalCv from './base/DocumentEditor/CV/ExternalCv.jsx';
 import ExternalCl from './base/DocumentEditor/CL/ExternalCl.jsx';
 import Settings from './Pages/Settings/Settings.jsx';
+import ForgetPassword from './base/Forget_Passwrd/ForgetPassword.jsx';
 
 
 const AppRoutes = () => {
     const location = useLocation();
 
-    const hideLayout = location.pathname === '/user/cv' || location.pathname === '/user/cl' || location.pathname === '/user/document-editor' || location.pathname === '/user/external-cv' || location.pathname === '/user/external-cl';
+    const hideLayout = location.pathname === '/user/cv' || location.pathname === '/user/cl' || location.pathname === '/user/document-editor' || location.pathname === '/user/external-cv' || location.pathname === '/user/external-cl' || location.pathname === '/user/forgot-password';
 
     // Define routes that are data-entry only
-    const isDataEntryPage = location.pathname.startsWith('/user/onboarding') || location.pathname.startsWith('/user/dataonboarding') || location.pathname.startsWith('/user/linkedin') || location.pathname.startsWith('/user/resume') || ['/', '/user/login', '/user/signup'].includes(location.pathname);
+    const isDataEntryPage = location.pathname.startsWith('/user/onboarding') || location.pathname.startsWith('/user/dataonboarding') || location.pathname.startsWith('/user/linkedin') || location.pathname.startsWith('/user/resume') || ['/', '/user/login', '/user/signup'].includes(location.pathname) || location.pathname.startsWith('/user/forgot-password');
 
     return (
         <div className='App'>
@@ -56,6 +57,7 @@ const AppRoutes = () => {
                     <Routes>
                         <Route path="/" element={<Landing />} />
                         <Route path="/user/login" element={<Login />} />
+                        <Route path="/user/forgot-password" element={<ForgetPassword />} />
                         <Route path="/user/signup" element={<Signup />} />
                         <Route path="/user/dataonboarding" element={<DataOnboarding />} />
                         <Route path="/user/onboarding/*" element={<DataEntryPages />} />

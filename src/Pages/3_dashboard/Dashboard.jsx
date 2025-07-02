@@ -198,7 +198,7 @@ const statusList = [
         <div onClick={handleCardClick}
           className="relative flex bg-gradient-to-br from-[#FFC2B0] to-[#FF9AA2] h-[120px] w-[250px] text-black p-4 rounded-xl">
           <div className="flex flex-col justify-start items-start gap-5">
-            <p className="font-bold">Total Applications</p>
+            <p className="font-bold">Total Applied</p>
             <h3 className="font-bold text-lg">{infoBlock.totalApplications}</h3>
           </div>
           <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm w-fit h-fit">
@@ -209,7 +209,7 @@ const statusList = [
         {/* ✅ Weekly Applied Jobs (You can update this from another API if available) */}
         <div className="relative flex bg-gradient-to-br from-[#FDA67B] to-[#FF9D6B] h-[120px] w-[250px] text-black p-4 rounded-xl">
           <div className="flex flex-col justify-start items-start gap-5">
-            <p className="font-bold">Weekly Applied Jobs</p>
+            <p className="font-bold">Weekly Applied</p>
             <h3 className="font-bold text-lg">{infoBlock.dailyJobLimit}</h3> {/* Just an example fallback */}
           </div>
           <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm w-fit h-fit">
@@ -220,7 +220,7 @@ const statusList = [
         {/* ✅ Top Jobs For You */}
         <div className="relative flex bg-gradient-to-br from-[#BDE4FB] to-[#A3C7FD] h-[120px] w-[250px] text-black p-4 rounded-xl">
           <div className="flex flex-col justify-start items-start gap-5">
-            <p className="font-bold">Top Jobs For You</p>
+            <p className="font-bold">Recommeded Jobs</p>
             <h3 className="font-bold text-lg">{infoBlock.totalJobs}</h3>
           </div>
           <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm w-fit h-fit">
@@ -231,12 +231,12 @@ const statusList = [
         {/* ✅ Remaining Applications (based on limits) */}
         <div className="relative flex bg-gradient-to-br from-[#6FE297] to-[#48D77A] h-[120px] w-[250px] text-black p-4 rounded-xl">
           <div className="flex flex-col justify-start items-start">
-            <p className="font-bold">Remaining Applications</p>
+            <p className="font-bold">Package</p>
             <p className='font-semibold'>
               {Math.max(infoBlock.dailyJobLimit - infoBlock.totalApplications, 0)} / {infoBlock.dailyJobLimit}
             </p>
             <h3 className="font-semibold">
-              {infoBlock.tier.charAt(0).toUpperCase() + infoBlock.tier.slice(1)} Package
+              {infoBlock.tier.charAt(0).toUpperCase() + infoBlock.tier.slice(1)} 
             </h3>
           </div>
           <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm w-fit h-fit">
@@ -423,7 +423,7 @@ const statusList = [
           {/* Box - 3 */}
           <div className="flex flex-col gap-2.5 border rounded-xl p-5 bg-white space-y-3">
             <div className="flex justify-between">
-              <h2 className='font-bold text-[15px]'>New Jobs for you</h2>
+              <h2 className='font-bold text-[15px]'>New Jobs </h2>
               <a className='text-[#2c6472] font-medium' href="#">View All</a>
             </div>
 

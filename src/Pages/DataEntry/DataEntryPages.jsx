@@ -20,7 +20,7 @@ const DataEntryPages = () => {
       </div>
 
       {/* Main content on the right */}
-      <div className="ml-[30%] flex flex-col p-5 w-[73%] text-black relative z-0">
+      <div className="ml-[30%] flex flex-col bg-white p-5 w-[73%] text-black relative z-0">
         <div className="flex-grow">
           <Routes>
             <Route path="languages" element={<Languages />} />
@@ -34,11 +34,7 @@ const DataEntryPages = () => {
           </Routes>
         </div>
 
-        {/* Footer appears after scrolling all content */}
-        <div className="flex text-gray-500 text-sm mt-15 mb-5">
-          <img src={warning} className="w-5 ms-16 h-5 object-cover" alt="" />
-          AI helps, but it’s not perfect. Make sure your data is accurate before saving.
-        </div>
+      
       </div>
     </div>
   );

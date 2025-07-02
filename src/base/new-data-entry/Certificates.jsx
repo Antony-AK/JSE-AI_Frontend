@@ -3,6 +3,11 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png'
 import { BASE_URL } from '../../utils/api';
+import Calendar from '../Calender/Calender';
+import { format } from 'date-fns';
+import warning from "../../assets/carbon_warning.png"
+
+
 
 const Certificates = () => {
 
@@ -243,17 +248,29 @@ const Certificates = () => {
                     </div>
 
                     {/* Completion Date */}
-                    <div className="mb-4">
-                        <label className="block font-medium text-lg">Completion Date <span className="text-red-500">*</span></label>
-                        <input
-                            type="date"
-                            name="completion_date"
-                            value={formData.completion_date}
-                            onChange={handleChange}
-                            className={`w-[70%] px-4 py-4 flex border rounded-lg ${errors.completion_date ? 'border-red-500 animate-shake' : 'border-gray-300'}`}
+                    <div className="mb-4 w-[70%]">
+                        <label className="block font-medium text-lg">
+                            Completion Date <span className="text-red-500">*</span>
+                        </label>
+
+                        <Calendar
+                            selectedDate={formData.completion_date ? new Date(formData.completion_date) : null}
+                            onDateChange={(date) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    completion_date: format(date, 'yyyy-MM-dd'),
+                                }))
+                            }
                         />
-                        {errors.completion_date && <span className="text-red-500 text-sm">{errors.completion_date}</span>}
+
+                        {errors.completion_date && (
+                            <span className="text-red-500 text-sm">{errors.completion_date}</span>
+                        )}
                     </div>
+
+                                    <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+
+
 
 
                     {/* Buttons */}
@@ -287,6 +304,10 @@ const Certificates = () => {
                     </div>
                 </div>
             )}
+
+            <div className="flex justify-start gap-2 text-gray-500 text-sm mt-16 ">
+                    <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
+                    AI is not perfect. Make sure your data is accurate before saving.            </div>
         </div>
     )
 }

@@ -3,7 +3,10 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../utils/api'
-import right_arrow from '../../assets/left-arrow.png'
+import Calendar from '../Calender/Calender';
+import { format } from 'date-fns';
+import warning from "../../assets/carbon_warning.png"
+
 
 const Education = () => {
 
@@ -258,27 +261,46 @@ const Education = () => {
                 <div className="flex justify-start gap-10 text-lg w-full">
                     <div className="flex flex-col gap-2 w-[50%]">
                         <label className='font-medium' htmlFor="start_date">Start Date <span className='text-red-500'>*</span></label>
-                        <input
-                            className={`px-5 py-3 rounded-lg border ${errors.start_date ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-                            type="date"
-                            id='start_date'
-                            value={formData.start_date}
-                            onChange={handleChange}
+                        <Calendar
+                            selectedDate={formData.start_date ? new Date(formData.start_date) : null}
+                            onDateChange={(date) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    start_date: format(date, 'yyyy-MM-dd'),
+                                }))
+                            }
                         />
+
                         {errors.start_date && <span className="text-red-500 text-sm">{errors.start_date}</span>}
                     </div>
                     <div className="flex flex-col gap-2 w-[50%]">
-                        <label className='font-medium' htmlFor="enddate">End Date {!formData.currentstudy && <span className='text-red-500'>*</span>}</label>
-                        <input
-                            className={`px-5 py-3 rounded-lg border ${errors.enddate ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
-                            type="date"
-                            id='enddate'
-                            value={formData.enddate}
-                            onChange={handleChange}
-                            disabled={formData.currentstudy}
-                        />
+                        <label className="font-medium" htmlFor="enddate">
+                            End Date {!formData.currentstudy && <span className="text-red-500">*</span>}
+                        </label>
+
+                        {formData.currentstudy ? (
+                            <input
+                                disabled
+                                type="text"
+                                value=""
+                                placeholder="Currently Studying"
+                                className="w-full px-5 py-3 rounded-lg border border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed"
+                            />
+                        ) : (
+                            <Calendar
+                                selectedDate={formData.enddate ? new Date(formData.enddate) : null}
+                                onDateChange={(date) =>
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        enddate: format(date, 'yyyy-MM-dd'),
+                                    }))
+                                }
+                            />
+                        )}
+
                         {errors.enddate && <span className="text-red-500 text-sm">{errors.enddate}</span>}
                     </div>
+
                 </div>
 
                 {/* currently Studies */}
@@ -290,7 +312,7 @@ const Education = () => {
                         checked={formData.currentstudy}
                         onChange={handleChange}
                     />
-                    <label className='font-medium text-lg' htmlFor="currentstudy">I currently study here</label>
+                    <label className='font-medium text-lg' htmlFor="currentstudy">I'm currently studying</label>
                 </div>
 
                 {/* Additional Description */}
@@ -304,6 +326,9 @@ const Education = () => {
                         onChange={handleChange}
                     ></textarea>
                 </div>
+
+                                <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+
 
                 <div className="flex justify-between mt-7">
                     <div className="cursor-pointer" onClick={() => handleSubmit(false)}>
@@ -322,6 +347,12 @@ const Education = () => {
                     </div>
                 </div>
             )}
+
+                {/* Footer appears after scrolling all content */}
+                  <div className="flex justify-start gap-2 text-gray-500 text-sm mt-10 ">
+                    <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
+                    AI is not perfect. Make sure your data is accurate before saving.            
+                      </div>
 
         </div>
     )

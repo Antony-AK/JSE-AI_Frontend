@@ -1,18 +1,17 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import logo from '../../assets/logo.png'
+import logo from '../../assets/jsenewlogo.png'
 import linkedinLogo from '../../assets/linkedin-full-logo.png'
 
 const Linkedin = () => {
-      const navigate = useNavigate();
+    const navigate = useNavigate();
     const loading = false; // Simulating loading state, replace with actual state management if 
     return (
         <div className="flex h-screen p-5 bg-white">
             {/* Left Sidebar */}
             <div className="w-[30%] h-[99.5%] p-5 pl-7 bg-gradient-to-b from-[#2E8095] to-[#2C6472] text-white">
                 <div className="flex items-center mb-10">
-                    <img className='w-10 h-10 object-fill' src={logo} alt="JobFusion Logo" />
-                    <p className="text-white ml-2 text-lg font-semibold">JSE AI</p>
+                    <img className='w-24 h-10 object-fill' src={logo} alt="JobFusion Logo" />
                 </div>
                 <div className=" items-center mt-40">
                     <p className='font-semibold text-3xl'>Just a few steps away from landing your dream job</p>
@@ -43,7 +42,7 @@ const Linkedin = () => {
                     <button
                         type="button"
                         className=" teal-button px-6 py-2 bg-[#2c6472] text-white w-[130px] h-[44px]  rounded-full focus:outline-none transition-transform duration-200 ease-in-out"
-                  onClick={() => navigate(-1)}
+                        onClick={() => navigate(-1)}
                     >
                         Cancel
                     </button>

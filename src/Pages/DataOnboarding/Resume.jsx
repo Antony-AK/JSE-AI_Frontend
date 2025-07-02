@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';import logo from '../../assets/logo.png'
+import React, { useState, useRef } from 'react';
+import logo from '../../assets/jsenewlogo.png'
 import resume_upload from '../../assets/resume_upload.png'
 import { useNavigate } from 'react-router-dom'
 
@@ -65,8 +66,7 @@ const Resume = () => {
       {/* Left Sidebar */}
       <div className="w-[30%] h-[99.5%] p-5 pl-7 bg-gradient-to-b from-[#2E8095] to-[#2C6472] text-white">
         <div className="flex items-center mb-10">
-          <img className='w-10 h-10 object-fill' src={logo} alt="JobFusion Logo" />
-          <p className="text-white ml-2 text-lg font-semibold">JSE AI</p>
+        <img className='w-24 h-10 object-fill' src={logo} alt="JobFusion Logo" />
         </div>
         <div className=" items-center mt-40">
           <p className='font-semibold text-3xl'>Just a few steps away from landing your dream job</p>

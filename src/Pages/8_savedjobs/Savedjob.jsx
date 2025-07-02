@@ -6,6 +6,7 @@ import filter_icon from '../../assets/filter-icon.svg'
 import arrow_down from '../../assets/arrow-down-drop.png'
 import download_icon from '../../assets/downloadicon.png'
 import link_icon from '../../assets/link-icon.svg'
+import PackagePopup from "../../base/PackagePopup/PackagePopup.jsx";
 
 const Savedjob = () => {
   const [selectedJobs, setSelectedJobs] = useState([]);
@@ -224,6 +225,8 @@ const Savedjob = () => {
   return (
 
    <div className="flex flex-col h-screen bg-gray-50 px-6 ms-2">
+
+    <PackagePopup/>
          <div className="flex items-center w-[60%]  py-4 mt-3 relative">
            {/* Recommended Jobs Button (Always Visible) */}
            <button

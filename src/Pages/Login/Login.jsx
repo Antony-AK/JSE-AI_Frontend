@@ -7,7 +7,7 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import google from "./../../assets/Google.png";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import frame from "./../../assets/Frame.png";
-import logo from "../../assets/logo.png"
+import logo from "../../assets/jsenewlogo.png"
 import { BASE_URL } from '../../utils/api';
 
 
@@ -40,65 +40,71 @@ const Login = () => {
         toast.error(data.issue || 'Error occurred. Try again.');
       }
     } catch (err) {
-        toast.error('Network error: ' + err.message);
+      toast.error('Network error: ' + err.message);
     }
   };
 
 
 
- const fetchEntryProgressAndRedirect = async (token) => {
-  try {
-
-    const res = await fetch(`${BASE_URL}/user/entry-progress/check`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    });
-
-    const progress = await res.json();
-
-    console.log("🧠 Entry Progress Response:", progress);
-
-    if (res.ok) {
-      if (progress.completed) {
-        navigate('/user/dashboard');
-      } else {
-        const stepToPath = {
-          personal_infos: '/user/onboarding/personal-information',
-          work_experiences: '/user/onboarding/work-experience',
-          educations: '/user/onboarding/education',
-          projects: '/user/onboarding/projects',
-          languages: '/user/onboarding/languages',
-          certificates: '/user/onboarding/certificates',
-          preferred_job_titles: '/user/onboarding/jobtitles',
-          Skills: '/user/onboarding/skills',
-        };
-
-        const nextStep = progress.next_step;
-
-        // 👇 Check if it's the FIRST login after signup
-        const isFirstLogin = localStorage.getItem('firstLogin') === 'true';
-
-        if (isFirstLogin) {
-          localStorage.removeItem('firstLogin'); // ✅ Clear after using
-          navigate('/user/dataonboarding'); // 🚀 Force to onboarding method chooser
-        } else if (nextStep && stepToPath[nextStep]) {
-          navigate(stepToPath[nextStep]); // Go to next step
-        } else {
-          navigate('/user/dataonboarding'); // Fallback if no step info
+  const fetchEntryProgressAndRedirect = async (token) => {
+    try {
+      setLoading(true); // Turn on loading
+      const res = await fetch(`${BASE_URL}/user/entry-progress/check`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         }
+      });
+
+      const progress = await res.json();
+
+      console.log("🧠 Entry Progress Response:", progress);
+
+      if (res.ok) {
+        if (progress.completed) {
+          navigate('/user/dashboard');
+        } else {
+          const stepToPath = {
+            personal_infos: '/user/onboarding/personal-information',
+            work_experiences: '/user/onboarding/work-experience',
+            educations: '/user/onboarding/education',
+            projects: '/user/onboarding/projects',
+            languages: '/user/onboarding/languages',
+            certificates: '/user/onboarding/certificates',
+            preferred_job_titles: '/user/onboarding/jobtitles',
+            Skills: '/user/onboarding/skills',
+          };
+
+          const nextStep = progress.next_step;
+
+          // 👇 Check if it's the FIRST login after signup
+          const isFirstLogin = localStorage.getItem('firstLogin') === 'true';
+
+          setTimeout(() => {
+            navigate(nextRoute);
+            setLoading(false); // Turn off loading *after* navigating
+          }, 1000); // slight delay for smoother UX (optional)
+
+
+          if (isFirstLogin) {
+            localStorage.removeItem('firstLogin'); // ✅ Clear after using
+            navigate('/user/dataonboarding'); // 🚀 Force to onboarding method chooser
+          } else if (nextStep && stepToPath[nextStep]) {
+            navigate(stepToPath[nextStep]); // Go to next step
+          } else {
+            navigate('/user/dataonboarding'); // Fallback if no step info
+          }
+        }
+      } else {
+        navigate('/user/dashboard'); // Fallback
       }
-    } else {
-      navigate('/user/dashboard'); // Fallback
+    } catch (err) {
+      console.error('💥 Error:', err);
+      navigate('/user/dashboard');
+    } finally {
     }
-  } catch (err) {
-    console.error('💥 Error:', err);
-    navigate('/user/dashboard');
-  } finally {
-  }
-};
+  };
 
 
 
@@ -166,7 +172,7 @@ const Login = () => {
               </div>
 
               <div className="text-right text-sm text-[#2c6472]">
-                <Link to="/forgot-password" className="hover:underline font-semibold">
+                <Link to="/user/forgot-password" className="hover:underline font-semibold">
                   Forgot password?
                 </Link>
               </div>
@@ -191,14 +197,13 @@ const Login = () => {
 
         {/* Right Panel */}
         <div className="flex flex-1 flex-col justify-center items-center bg-[#2c6472] text-white p-8">
-          <div className="flex items-center mb-2">
+          <div className="flex flex-col  items-center mb-4">
+            <h3 className="text-center mb-2 text-2xl ms-4 font-medium">Welcome Back!</h3>
             <img
               src={logo}
-              className="h-8 w-8"
+              className="h-10 w-24"
             />
-            <h3 className="text-black font-medium text-xl">JSE AI</h3>
           </div>
-          <h3 className="text-center text-xl ms-4 font-medium mb-6">Welcome Back!</h3>
           <div className='relative mb-5 flex justify-center items-center ms-4'>
             <img src={frame} alt="" className='relative object-cover ' />
             <DotLottieReact
@@ -209,8 +214,15 @@ const Login = () => {
               className='absolute object-cover me-2 p-2'
             />
           </div>
+          <div> <p className=" text-center items-center text-sm  mt-4">
+            Unlock your next opportunity<br />
+            Your dream job is just a click away        </p>
+          </div>
         </div>
+
+
       </div>
+
 
 
 
