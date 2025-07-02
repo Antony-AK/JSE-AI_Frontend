@@ -68,8 +68,15 @@ const ExternalModernDeedy = ({ personalInfo, professionalSummary, workExperience
                       )}
                     </div>
                   )}
-                  {exp.Description && (
-                    <p className='text-[13px] ml-2 text-gray-800'>{exp.Description}</p>
+                  {Array.isArray(exp.Description) && exp.Description.length > 0 && (
+                    <ul className="list-none ml-3 text-[13px] text-gray-800 space-y-1">
+                      {exp.Description.map((point, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <span className="text-sm text-purple-500">●</span>
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </div>
               );
@@ -118,8 +125,15 @@ const ExternalModernDeedy = ({ personalInfo, professionalSummary, workExperience
                     <p className='text-sm italic text-gray-500 ml-2'>Skills: {proj.Skills}</p>
                 )}
                 
-                {proj.Description && (
-                    <p className='text-[13px] text-gray-800 ml-2'>{proj.Description}</p>
+                {Array.isArray(proj.Description) && proj.Description.length > 0 && (
+                  <ul className="list-none ml-3 text-[13px] text-gray-800 space-y-1">
+                    {proj.Description.map((point, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <span className="text-purple-500 text-sm">●</span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
                 )}
             </div>
             ))}
