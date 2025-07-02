@@ -90,10 +90,13 @@ const PlushCV = ({
                     {exp.Duration && <span className="text-[12px] text-gray-500">{exp.Duration}</span>}
                   </div>
                   <p className="text-[12px]  mb-1">{exp.Role}</p>
-                  {exp.Description && (
-                    <ul className="list-disc ml-5 text-[12px] text-gray-700">
-                      {exp.Description.split('\n').map((line, i) => (
-                        <li key={i}>{line}</li>
+                  {Array.isArray(exp.Description) && exp.Description.length > 0 && (
+                    <ul className="list-none ml-3 mt-2 text-[12px] text-gray-700 space-y-1">
+                      {exp.Description.map((line, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <span className="text-blue-600 text-sm">●</span>
+                          <span>{line}</span>
+                        </li>
                       ))}
                     </ul>
                   )}
@@ -113,10 +116,13 @@ const PlushCV = ({
                     {proj.Duration && <span className="text-[12px] text-gray-500">{proj.Duration}</span>}
                   </div>
                   <p className="text-[12px] ">{proj.Skills}</p>
-                  {proj.Description && (
-                    <ul className="list-disc ml-5 text-[12px] text-gray-700">
-                      {proj.Description.split('\n').map((line, i) => (
-                        <li key={i}>{line}</li>
+                  {Array.isArray(proj.Description) && proj.Description.length > 0 && (
+                    <ul className="list-none ml-3 mt-2 text-[12px] text-gray-700 space-y-1">
+                      {proj.Description.map((line, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <span className="text-[#0078d4] text-sm">●</span>
+                          <span>{line}</span>
+                        </li>
                       ))}
                     </ul>
                   )}

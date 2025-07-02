@@ -82,7 +82,7 @@ export const CvProvider = ({ children }) => {
             Role: item.position || "",
             Company: item.company_name || "",
             Duration: item.period || "",
-            Description: item.description || ""
+            Description: Array.isArray(item.description) ? item.description : [item.description || ""]
           }))
         });
 
@@ -100,7 +100,7 @@ export const CvProvider = ({ children }) => {
             Company: item.company_name || "",
             Duration: item.period || "",
             Skills: item.skills_used || "",
-            Description: item.description || ""
+            Description: Array.isArray(item.description) ? item.description : [item.description || ""]
           }))
         });
 
