@@ -82,7 +82,7 @@ const PlushCV = ({
           {/* EXPERIENCE */}
           {workExperience.content.some(exp => exp.Company || exp.Role || exp.Description) && (
             <div>
-              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1">Experience</h2>
+              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">Experience</h2>
               {workExperience.content.map((exp, idx) => (
                 <div key={idx} className="mb-3">
                   <div className="flex justify-between text-[14px] font-bold">
@@ -108,7 +108,7 @@ const PlushCV = ({
           {/* PROJECTS */}
           {projects.content.length > 0 && (
             <div>
-              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1">Projects</h2>
+              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">Projects</h2>
               {projects.content.map((proj, idx) => (
                 <div key={idx} className="mb-3">
                   <div className="flex justify-between text-[14px] font-bold">
@@ -137,7 +137,7 @@ const PlushCV = ({
           {/* Skills */}
           {skills?.content?.length > 0 && (
             <div>
-              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1">Skills</h2>
+              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">Skills</h2>
               <ul className="list-disc ml-4 text-[12px]">
                 {skills.content.filter(Boolean).map((skill, idx) => (
                   <li key={idx}>{skill}</li>
@@ -149,7 +149,7 @@ const PlushCV = ({
           {/* Education */}
           {education.content.length > 0 && (
             <div>
-              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1">Education</h2>
+              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">Education</h2>
               {education.content.map((edu, idx) => (
                 <div key={idx} className="mb-2">
                   <p className=" text-[12px]">{edu.degree}</p>
@@ -163,7 +163,7 @@ const PlushCV = ({
           {/* Languages */}
           {languages?.content?.length > 0 && (
             <div>
-              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1">Languages</h2>
+              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">Languages</h2>
               <ul className="list-disc ml-4 text-[12px]">
                 {languages.content.map((lang, idx) => (
                   <li key={idx}>{lang}</li>
@@ -175,7 +175,7 @@ const PlushCV = ({
           {/* Certificates */}
           {certificates.content.length > 0 && (
             <div>
-              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1">Certifications</h2>
+              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">Certifications</h2>
               <ul className="list-disc ml-4 text-[12px]">
                 {certificates.content.map((cert, idx) => (
                   <li key={idx}>{cert.Name}</li>

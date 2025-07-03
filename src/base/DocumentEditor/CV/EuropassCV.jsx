@@ -73,7 +73,7 @@ const EuropassCV = ({
         {/* Summary */}
         {professionalSummary.content &&
           professionalSummary.content.trim() !== "" && (
-            <div className="w-full px-4 pt-6">
+            <div className="w-full px-4 pt-6 avoid-page-break">
               <div className="flex justify-start items-start gap-12">
                 <div className="min-w-[130px]">
                   <h2 className="text-[13px] text-[#2c6472] font-bold tracking-widest uppercase">
@@ -95,8 +95,8 @@ const EuropassCV = ({
         {/* Education */}
         {education.content &&
           education.content.filter((entry) => entry.degree?.trim() !== "")
-            .length > 0 && (
-            <div className="w-full px-4 pt-6">
+            .length > 0 && ( 
+            <div className="w-full px-4 pt-6 avoid-page-break">
               <div className="flex justify-start items-start gap-12">
                 <div className="min-w-[130px]">
                   <h2 className="text-[13px] text-[#2c6472] font-bold tracking-widest uppercase">
@@ -124,7 +124,7 @@ const EuropassCV = ({
         {workExperience.content.some(
           (exp) => exp.Company || exp.Role || exp.Duration || exp.Description
         ) && (
-          <div className="w-full px-4 pt-6">
+          <div className="w-full px-4 pt-6 avoid-page-break">
             <div className="flex gap-12 mb-5">
               <div className="min-w-[130px]">
                 <h2 className="text-[13px] text-[#2c6472] font-bold tracking-widest uppercase">
@@ -184,7 +184,7 @@ const EuropassCV = ({
             proj.Company?.trim() ||
             proj.Duration?.trim()
         ).length > 0 && (
-          <div className="w-full px-4 pt-6">
+          <div className="w-full px-4 pt-6 avoid-page-break">
             {/* Section Title */}
             <div className="flex gap-12 mb-5">
               <div className="">
@@ -257,7 +257,7 @@ const EuropassCV = ({
       {certificates.content &&
         certificates.content.filter((cert) => cert.Name?.trim()).length > 0 && (
           <div className="">
-            <div className="w-full px-4 pt-6">
+            <div className="w-full px-4 pt-6 avoid-page-break">
               <h2 className="text-[13px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
                 {certificates.title || "Certificates"}
               </h2>
@@ -272,7 +272,7 @@ const EuropassCV = ({
           </div>
         )}
 
-      <div className="flex gap-10 text-sm px-4 pt-6">
+      <div className="flex gap-10 text-sm px-4 pt-6 avoid-page-break">
         {/* Languages - Left Side */}
         {languages.content &&
           languages.content.filter((lang) => lang?.trim()).length > 0 && (

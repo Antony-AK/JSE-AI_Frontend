@@ -778,7 +778,18 @@ const Cv = () => {
                             certificates={certificates}
                         /> */}
 
-                        <ModernClassic 
+                        {/* <ModernClassic 
+                            personalInfo={personalInfo}
+                            professionalSummary={professionalSummary}
+                            workExperience={workExperience}
+                            education={education}
+                            projects={projects}
+                            skills={skills}
+                            languages={languages}
+                            certificates={certificates}
+                        /> */}
+
+                        <ThirdCV 
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -788,7 +799,6 @@ const Cv = () => {
                             languages={languages}
                             certificates={certificates}
                         />
-
 
                     </div>
 

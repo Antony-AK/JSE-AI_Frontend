@@ -31,7 +31,7 @@ const ModernClassic = ({
       {/* Summary */}
       {professionalSummary.content &&
         professionalSummary.content.trim() !== "" && (
-          <div className="w-full px-10 pt-6">
+          <div className="w-full px-10 pt-6 avoid-page-break">
             <div className="flex justify-start items-start gap-12">
               <div className="min-w-[130px]">
                 <h2 className="text-[#4F6D61] font-bold">Summary</h2>
@@ -50,7 +50,7 @@ const ModernClassic = ({
 
       {/* Skills */}
       {skills.content && skills.content.length > 0 && (
-        <div className="w-full px-10 pt-6">
+        <div className="w-full px-10 pt-6 avoid-page-break">
           <div className="flex justify-start items-start gap-12">
             <div className="min-w-[130px]">
               <h2 className="text-[#4F6D61] font-bold">Skills</h2>
@@ -78,7 +78,7 @@ const ModernClassic = ({
       {workExperience.content.some(
         (exp) => exp.Company || exp.Role || exp.Duration || exp.Description
       ) && (
-        <div className="w-full px-10 pt-6">
+        <div className="w-full px-10 pt-6 avoid-page-break">
           <div className="flex gap-12 items-start">
             {/* Left Side: Single Experience Label */}
             <div className="min-w-[130px]">
@@ -134,7 +134,7 @@ const ModernClassic = ({
       {education.content &&
         education.content.filter((entry) => entry.degree?.trim() !== "")
           .length > 0 && (
-          <div className="w-full px-10 pt-6">
+          <div className="w-full px-10 pt-6 avoid-page-break">
             <div className="flex justify-start items-start gap-12">
               <div className="min-w-[130px]">
                 <h2 className="text-[#4F6D61] font-bold">Education</h2>
@@ -165,7 +165,7 @@ const ModernClassic = ({
             proj.Company?.trim() ||
             proj.Duration?.trim()
         ).length > 0 && (
-          <div className="w-full px-10 pt-6">
+          <div className="w-full px-10 pt-6 avoid-page-break">
             <div className="flex gap-12 items-start">
               {/* Left Side: Section Title */}
               <div className="min-w-[130px]">
@@ -240,7 +240,7 @@ const ModernClassic = ({
       {/* Languages */}
       {languages.content &&
         languages.content.filter((lang) => lang?.trim()).length > 0 && (
-          <div className="w-full px-10 pt-6">
+          <div className="w-full px-10 pt-6 avoid-page-break">
             <div className="flex gap-12 items-start">
               {/* Left Side: Title */}
               <div className="min-w-[130px]">
@@ -264,7 +264,7 @@ const ModernClassic = ({
       {/* Certificates */}
       {certificates.content &&
         certificates.content.filter((cert) => cert.Name?.trim()).length > 0 && (
-          <div className="w-full px-10 pt-6">
+          <div className="w-full px-10 pt-6 avoid-page-break">
             <div className="flex gap-12 items-start">
               {/* Left Side: Title */}
               <div className="min-w-[130px]">
@@ -281,7 +281,6 @@ const ModernClassic = ({
               </div>
             </div>
 
-            <div className="mt-3 border-b border-gray-300 w-full"></div>
           </div>
         )}
     </div>
