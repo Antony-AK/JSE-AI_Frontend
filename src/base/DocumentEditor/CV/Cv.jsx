@@ -10,6 +10,8 @@ import axios from 'axios';
 import { BASE_URL } from '../../../utils/api';
 import PlushCV from './PlushCV';
 import ThirdCV from './CV-Third-Template';
+import EuropassCV from './EuropassCV'
+import ModernClassic from './ModernClassic';
 
 const Cv = () => {
 
@@ -423,22 +425,28 @@ const Cv = () => {
                             {/* Description */}
                             <div className="flex flex-col">
                                 <label className="text-sm font-semibold text-gray-700 mb-1">Description: </label>
+
                                 {activeSection === 'workExperience' ? (
                                     <textarea
-                                        value={workExperience.content[selectedCompanyIdx].Description}
-                                        onChange={(e) => {
-                                            const updated = [...workExperience.content];
-                                            updated[selectedCompanyIdx].Description = e.target.value;
-                                            setWorkExperience((prev) => ({ ...prev, content: updated }));
-                                        }}
-                                        className="w-full min-h-[150px] resize-y rounded px-2 py-1 outline-none text-[#00000082] font-medium"
+                                    value={workExperience.content[selectedCompanyIdx].Description.join('\n')}
+                                    onChange={(e) => {
+                                        const updated = [...workExperience.content];
+                                        updated[selectedCompanyIdx].Description = e.target.value.split('\n');
+                                        setWorkExperience((prev) => ({ ...prev, content: updated }));
+                                    }}
+                                    className="w-full min-h-[150px] resize-y rounded px-2 py-1 outline-none text-[#00000082] font-medium"
                                     />
                                 ) : (
-                                    <p className="text-[#00000082] font-medium whitespace-pre-line">
-                                        {workExperience?.content?.[selectedCompanyIdx]?.Description || ''}
-                                    </p>
+                                    <ul className="list-disc ml-5 text-gray-700 space-y-0.5">
+                                    {workExperience?.content?.[selectedCompanyIdx]?.Description
+                                        .filter((line) => line.trim() !== '') // remove empty or whitespace lines
+                                        .map((line, i) => (
+                                        <li key={i}>{line}</li>
+                                        ))}
+                                    </ul>
                                 )}
                             </div>
+
                         </div>
                     </div>
 
@@ -565,22 +573,26 @@ const Cv = () => {
 
                                     {/* Description */}
                                     <div className="flex flex-col">
-                                        <label className="text-sm font-semibold text-gray-700 mb-1">Description:</label>
+                                        <label className="text-sm font-semibold text-gray-700 mb-1">Description: </label>
+
                                         {activeSection === 'projects' ? (
                                             <textarea
-                                                rows={4}
-                                                value={projects.content[selectedProjectIdx].Description}
-                                                onChange={(e) => {
-                                                    const updated = [...projects.content];
-                                                    updated[selectedProjectIdx].Description = e.target.value;
-                                                    setProjects((prev) => ({ ...prev, content: updated }));
-                                                }}
-                                                className="w-full min-h-[120px] rounded px-2 py-1 text-[#00000082] font-medium outline-none resize-y"
+                                            value={projects.content[selectedProjectIdx].Description.join('\n')}
+                                            onChange={(e) => {
+                                                const updated = [...projects.content];
+                                                updated[selectedProjectIdx].Description = e.target.value.split('\n');
+                                                setProjects((prev) => ({ ...prev, content: updated }));
+                                            }}
+                                            className="w-full min-h-[150px] resize-y rounded px-2 py-1 outline-none text-[#00000082] font-medium"
                                             />
                                         ) : (
-                                            <p className="text-[#00000082] font-medium whitespace-pre-wrap">
-                                                {projects.content[selectedProjectIdx].Description}
-                                            </p>
+                                            <ul className="list-disc ml-5 text-gray-700 space-y-0.5">
+                                            {projects?.content?.[selectedProjectIdx]?.Description
+                                                .filter((line) => line.trim() !== '') // Skip empty lines
+                                                .map((line, i) => (
+                                                <li key={i}>{line}</li>
+                                                ))}
+                                            </ul>
                                         )}
                                     </div>
                                 </div>
@@ -755,7 +767,29 @@ const Cv = () => {
                             certificates={certificates}
                         /> */}
 
-                         <ThirdCV
+                        {/* <EuropassCV 
+                            personalInfo={personalInfo}
+                            professionalSummary={professionalSummary}
+                            workExperience={workExperience}
+                            education={education}
+                            projects={projects}
+                            skills={skills}
+                            languages={languages}
+                            certificates={certificates}
+                        /> */}
+
+                        {/* <ModernClassic 
+                            personalInfo={personalInfo}
+                            professionalSummary={professionalSummary}
+                            workExperience={workExperience}
+                            education={education}
+                            projects={projects}
+                            skills={skills}
+                            languages={languages}
+                            certificates={certificates}
+                        /> */}
+
+                        <ThirdCV 
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -765,6 +799,7 @@ const Cv = () => {
                             languages={languages}
                             certificates={certificates}
                         />
+
                     </div>
 
                     <div className="flex w-[794px] justify-end">
