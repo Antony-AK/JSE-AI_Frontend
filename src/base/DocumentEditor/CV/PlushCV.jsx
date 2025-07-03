@@ -11,7 +11,7 @@ const PlushCV = ({
   certificates
 }) => {
   return (
-    <div className="flex w-full  flex-col font-sans text-[14px] text-black bg-white m-5">
+    <div className="flex w-full flex-col font-sans text-[14px] text-black bg-white m-5">
       {/* Left Column */}
       {/* Name + Title */}
       <div className='mx-5  flex flex-col gap-2 mb-1'>

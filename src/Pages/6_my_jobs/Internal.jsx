@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
+import { FaChevronDown } from "react-icons/fa"; // dropdown arrow icon
 import axios from "axios";
 import Loader from "../../base/loader/Loader.jsx";
 import filter_icon from '../../assets/filter-icon.svg'
@@ -327,87 +328,114 @@ const MyApplication = () => {
 
   return (
     <div className="flex flex-col h-screen bg-gray-50 px-6 ms-2">
-      <div className="flex items-center w-[60%]  py-4  relative">
-        {/* Recommended Jobs Button (Always Visible) */}
+      <div className="flex items-center w-full gap-5  py-4  relative">
+        <div className="w-[40%]"><input type="text" className="px-4 py-2 w-full border border-gray-300 rounded-md outline-none" placeholder="Search jobs,company" /></div>
         <button
           className="px-6 py-1.5 font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105"
         >
-          Designation
+          Job Search Titles
         </button>
-        {/* Filter Button */}
-        <button
-          onClick={toggleDropdownfilter}
-          className="flex ms-5 items-center gap-x-2 px-4 py-1.5 bg-white font-medium text-[13px] rounded text-black hover:scale-105 shadow-md"
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          transition={{ duration: 0.3 }}
+          className="px-6 py-1.5 flex flex-col items-start font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black relative"
         >
-          <img src={filter_icon} alt="" />
-          Filter
-        </button>
+          {/* Dropdown Trigger */}
+          <button
+            onClick={toggleLanguageDropdown}
+            className="w-full flex justify-between items-center"
+          >
+            Languages
+            <motion.img
+              src={arrow_down}
+              alt=""
+              className="ms-1 w-5"
+              animate={{ rotate: showLanguageDropdown ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+            />
+          </button>
 
-        {/* Animated Filter Buttons */}
-        <AnimatePresence>
-          {showFilters && (
-            <>
-              {/* <motion.button
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ duration: 0.3 }}
-                className="absolute left-[260px] px-6 py-1.5 flex justify-center items-center font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105"
-              >
-                Recommended Jobs <img src={arrow_down} className="ms-0.5" alt="" />
-              </motion.button> */}
-
+          {/* Language Options with Slide Animation */}
+          <AnimatePresence>
+            {showLanguageDropdown && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ duration: 0.3 }}
-                className="absolute left-[260px] px-6 py-1.5 flex flex-col items-start font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="absolute left-0 mt-7 bg-white p-3 z-10 w-[150px] rounded-md shadow-lg border border-gray-200 overflow-hidden flex flex-col gap-2"
               >
                 <button
-                  onClick={toggleLanguageDropdown}
-                  className="w-full flex justify-between items-center"
+                  onClick={() => {
+                    setSelectedLanguage("en");
+                    setShowLanguageDropdown(false);
+                  }}
+                  className="px-3 py-1 hover:bg-gray-100 text-left w-full"
                 >
-                  Languages <img src={arrow_down} className="ms-1" alt="" />
+                  English
                 </button>
-
-                {showLanguageDropdown && (
-                  <div className="flex flex-col absolute bg-white p-3 z-10 mt-8 -left-0 gap-2 w-full">
-                    <button
-                      onClick={() => {
-                        setSelectedLanguage("en");
-                        setShowLanguageDropdown(false);
-                      }}
-                      className="px-3 py-1 hover:bg-gray-100 text-left w-full"
-                    >
-                      English
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedLanguage("de");
-                        setShowLanguageDropdown(false);
-                      }}
-                      className="px-3 py-1 hover:bg-gray-100 text-left w-full"
-                    >
-                      German
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedLanguage("both");
-                        setShowLanguageDropdown(false);
-                      }}
-                      className="px-3 py-1 hover:bg-gray-100 text-left w-full"
-                    >
-                      Both
-                    </button>
-
-                  </div>
-                )}
+                <button
+                  onClick={() => {
+                    setSelectedLanguage("de");
+                    setShowLanguageDropdown(false);
+                  }}
+                  className="px-3 py-1 hover:bg-gray-100 text-left w-full"
+                >
+                  German
+                </button>
+                <button
+                  onClick={() => {
+                    setSelectedLanguage("both");
+                    setShowLanguageDropdown(false);
+                  }}
+                  className="px-3 py-1 hover:bg-gray-100 text-left w-full"
+                >
+                  Both
+                </button>
               </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
 
-            </>
-          )}
-        </AnimatePresence>
+        <div className="relative inline-block text-left">
+          {/* Filter Button */}
+          <button
+            onClick={toggleDropdownfilter}
+            className="flex items-center gap-x-2 px-4 py-1.5 bg-white font-medium text-[13px] rounded text-black hover:scale-105 shadow-md"
+          >
+            <img src={filter_icon} alt="" />
+            Filter
+            {/* Dropdown Arrow Icon (rotates when open) */}
+            <motion.span
+              animate={{ rotate: showFilters ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="ml-1"
+            >
+              <FaChevronDown className="text-[12px] text-gray-600" />
+            </motion.span>
+          </button>
+
+          {/* Dropdown Content */}
+          <AnimatePresence>
+            {showFilters && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="origin-top absolute left-0 mt-2 w-52 bg-white border border-gray-200 rounded-md shadow-lg z-10 overflow-hidden"
+              >
+                <button className="px-4 py-2 text-[13px] text-black font-medium hover:bg-gray-100 text-left">
+                  Recommended Jobs
+                </button>
+                {/* Add more items below if you want */}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
       </div>
 
@@ -554,7 +582,7 @@ const MyApplication = () => {
                   </button>
                 </div>
 
-                                <br />
+                <br />
 
 
 
@@ -737,7 +765,7 @@ const MyApplication = () => {
             <p className="text-white text-xl font-semibold">Generating, please wait...</p>
           </div>
         </div>
-       )} 
+      )}
 
 
 

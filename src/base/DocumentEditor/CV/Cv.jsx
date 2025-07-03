@@ -9,6 +9,7 @@ import { useCv } from '../Context/CvContext';
 import axios from 'axios';
 import { BASE_URL } from '../../../utils/api';
 import PlushCV from './PlushCV';
+import ThirdCV from './CV-Third-Template';
 
 const Cv = () => {
 
@@ -743,7 +744,18 @@ const Cv = () => {
                             certificates={certificates}
                         /> */}
 
-                        <PlushCV
+                        {/* <PlushCV
+                            personalInfo={personalInfo}
+                            professionalSummary={professionalSummary}
+                            workExperience={workExperience}
+                            education={education}
+                            projects={projects}
+                            skills={skills}
+                            languages={languages}
+                            certificates={certificates}
+                        /> */}
+
+                         <ThirdCV
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}

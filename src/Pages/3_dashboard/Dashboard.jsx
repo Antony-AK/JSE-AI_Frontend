@@ -162,24 +162,6 @@ const statusList = [
     };
   }, [jobs]);
 
-   const handleCardClick = () => {
-    setChartTitle("Applications Submitted Per Month");
-    setChartData([
-      { month: 'Jan', applications: 26 },
-      { month: 'Feb', applications: 20 },
-      { month: 'Mar', applications: 14 },
-      { month: 'Apr', applications: 35 },
-      { month: 'May', applications: 15 },
-      { month: 'Jun', applications: 58 },
-      { month: 'Jul', applications: 32 },
-      { month: 'Aug', applications: 29 },
-      { month: 'Sep', applications: 10 },
-      { month: 'Oct', applications: 95 },
-      { month: 'Nov', applications: 92 },
-      { month: 'Dec', applications: 87 }
-    ]);
-    setShowChart(true);
-  };
 
 
   if (loading) return <div className='flex justify-center items-center w-full h-full '><Loader /></div>;
@@ -195,7 +177,7 @@ const statusList = [
       <div className="flex justify-between items-center w-full pl-5 pr-5">
 
         {/* ✅ Total Applications */}
-        <div onClick={handleCardClick}
+        <div 
           className="relative flex bg-gradient-to-br from-[#FFC2B0] to-[#FF9AA2] h-[120px] w-[250px] text-black p-4 rounded-xl">
           <div className="flex flex-col justify-start items-start gap-5">
             <p className="font-bold">Total Applied</p>
@@ -247,16 +229,7 @@ const statusList = [
       </div>
 
 
-      {showChart && (
-        <div className='absolute top-0 left-0 w-full min-h-screen z-40 bg-black/10'>
-        <ApplicationsChart
-          title={chartTitle}
-          data={chartData}
-          onClose={() => setShowChart(false)}
-        />
-        </div>
-      )}
-
+  
 
 
       {/* Grid Layout */}
@@ -322,7 +295,7 @@ const statusList = [
 
             {/* Designation */}
             <div className="flex flex-col h-[100px] overflow-y-auto scrollbar-custom gap-2">
-              <h2 className='font-bold  text-[15px]'>Designation</h2>
+              <h2 className='font-bold  text-[15px]'>Job Search Titles:</h2>
 
               <div className="flex flex-wrap gap-2">
                 {jobTitles.map((title, index) => (
@@ -338,7 +311,7 @@ const statusList = [
 
             {/* Status */}
             <div className="flex flex-col gap-2">
-              <h2 className='font-bold text-[15px]'>Complete every section to make JSE AI work</h2>
+              <h2 className='font-bold text-[15px]'>To do List:</h2>
 
               <div className="flex flex-col gap-2 px-3 py-3 h-[98px] rounded-lg bg-[#F8F8F8] overflow-y-auto scrollbar-custom">
                 {statusList.map((item, index) => (

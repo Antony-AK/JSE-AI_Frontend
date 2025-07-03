@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ChevronDown, ChevronUp, Settings as SettingsIcon } from "lucide-react";
-import logo from '../../assets/logo.png';
+import logo from '../../assets/jsenewlogoblack.png';
 import lock_icon from "../../assets/lock_icon.png"
 
 import dashboard_icon from '../../assets/dashboard-icon.svg';
@@ -93,10 +93,7 @@ const Sidebar = () => {
   return (
     <aside className="fixed top-0 w-[264px] h-screen bg-white border-r flex flex-col">
       <div className="flex justify-center items-center mt-[12px] mr-5">
-        <img className="w-9 h-9" src={logo} alt="" />
-        <span className="text-[18px] font-bold text-stone-600]">
-          <Link to="/user/dashboard">JSE AI</Link>
-        </span>
+       <Link to="/user/dashboard"><img className="w-20 h-9 object-cover" src={logo} alt="" /></Link>
       </div><br /><br />
 
       <hr className="transform -translate-y-[34px] border-gray-200" />
