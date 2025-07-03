@@ -17,7 +17,6 @@ import ProfileImageModal from '../../base/ProfileEditor/ProfileImageModel';
 const Profile = () => {
 
   const token = sessionStorage.getItem("authToken");
-
   const [animatedScore, setAnimatedScore] = useState(0);
   const [workpopup, setWorkPopup] = useState(false);
   const [educationpopup, setEducationPopup] = useState(false);

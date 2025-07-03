@@ -8,6 +8,7 @@ import { BASE_URL } from '../../../utils/api';
 import { useCl } from '../Context/ClContext';
 import { useNavigate } from 'react-router-dom';
 import html2pdf from 'html2pdf.js';
+import CoverLetterPlush from './CoverLetterPlush';
 
 const Cl = () => {
 
@@ -220,7 +221,8 @@ const Cl = () => {
 
         {/* RIGHT */}
         <div ref={previewRef} className="w-[794px] h-[1123px] flex flex-col gap-5">
-          <ClPreview />
+          {/* <ClPreview /> */}
+          <CoverLetterPlush/>
         </div>
       </div>
     </div>
