@@ -19,6 +19,16 @@ const Cl = () => {
 
   const [activeSection, setActiveSection] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedClTemplate, setSelectedClTemplate] = useState("ModernCL");
+
+  const clTemplates = {
+    "ModernCL": CoverLetterModern,
+    "PlushCL": CoverLetterPlush,
+    "ClassisCL": ClPreview,
+  };
+
+
+
 
   const { personalInfo, setPersonalInfo, paragraphs, setParagraphs } = useCl();
 
@@ -53,6 +63,10 @@ const Cl = () => {
     html2pdf().set(opt).from(previewRef.current).save();
 
   };
+
+  const ActiveCLTemplate = clTemplates[selectedClTemplate];
+  <ActiveCLTemplate personalInfo={personalInfo} paragraphs={paragraphs} />;
+
 
 
   useEffect(() => {
@@ -207,8 +221,58 @@ const Cl = () => {
             </div>
           </div>
 
-          <button
-            className="bg-[#2c6472] text-white mt-4 px-8 py-1.5 rounded-lg"
+          {/* 🔄 CL Template Switcher */}
+          <div className='bg-white rounded p-5 border border-gray-300'>
+            <h1 className='text-lg font-medium'>Templates</h1>
+
+          
+          <h3 className="text-lg font-semibold mt-6 mb-2 text-center">Choose a Cover Letter Template</h3>
+          <div className="flex flex-wrap gap-4 mt-4 justify-center">
+            {Object.entries(clTemplates).map(([name, Template]) => {
+              if (name === selectedClTemplate) return null;
+
+              return (
+                <div
+                  key={name}
+                  className="cursor-pointer border rounded hover:shadow-lg hover:border-[#2C6472] transition duration-200 bg-white w-[200px] overflow-hidden"
+                  onClick={() => setSelectedClTemplate(name)}
+                >
+                  <div className="w-full h-[280px] overflow-hidden relative bg-white">
+                    <div
+                      className="absolute top-0 left-0"
+                      style={{
+                        transform: "scale(0.25)",
+                        transformOrigin: "top left",
+                        width: "794px",
+                        height: "1123px",
+                      }}
+                    >
+                      <div className="bg-white w-[794px] h-[1123px] shadow">
+                        <Template personalInfo={personalInfo} paragraphs={paragraphs} />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-center text-sm py-2 bg-[#3f6068] text-white font-semibold">
+                    {name}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          </div>
+
+
+
+        </div>
+
+
+        {/* RIGHT */}
+        <div ref={previewRef} className="w-[794px] h-[1123px] flex flex-col gap-14 bg-white">
+          <ActiveCLTemplate personalInfo={personalInfo} paragraphs={paragraphs} />
+          
+          <div className='flex justify-end items-end '>
+            <button
+            className="bg-[#2c6472] text-white mt-4 flex justify-end items-end px-8  py-1.5 rounded-lg"
             onClick={async () => {
               await handleUpdateCoverLetter();   // ✨ First update the data in DB
               handleDownload();                  // 🧾 Then download PDF
@@ -218,15 +282,10 @@ const Cl = () => {
           >
             Download & Finish Editing
           </button>
-        </div>
+          </div>
+           </div>
 
-        {/* RIGHT */}
-        <div ref={previewRef} className="w-[794px] h-[1123px] flex flex-col gap-5">
-          {/* <ClPreview /> */}
-          {/* <CoverLetterPlush/> */}
-          <CoverLetterModern/>
 
-        </div>
       </div>
     </div>
   );
