@@ -96,11 +96,14 @@ const ThirdCV = ({
         </TwoColumnSection>
       )}
 
-      {/* Work Experience */}
       {workExperience?.content?.length > 0 && (
         <TwoColumnSection className="avoid-page-break" title="WORK EXPERIENCE">
           {workExperience.content.map((job, idx) => (
-            <div key={idx} className="">
+            <div
+              key={idx}
+              className="avoid-page-break"
+              style={{ breakInside: "avoid" }}
+            >
               <p className="text-gray-600 italic text-[12px]">{job.Duration}</p>
               <p className="text-blue-700 font-bold">{job.Role}</p>
               <p className="font-semibold italic">{job.Company}</p>
@@ -123,11 +126,14 @@ const ThirdCV = ({
         </TwoColumnSection>
       )}
 
-      {/* Projects */}
       {projects?.content?.length > 0 && (
         <TwoColumnSection className="avoid-page-break" title="PROJECTS">
           {projects.content.map((proj, idx) => (
-            <div key={idx} className="">
+            <div
+              key={idx}
+              className="avoid-page-break"
+              style={{ breakInside: "avoid" }}
+            >
               <p className="text-gray-600 italic text-[12px]">
                 {proj.Duration}
               </p>
@@ -156,11 +162,14 @@ const ThirdCV = ({
         </TwoColumnSection>
       )}
 
-      {/* Education */}
       {education?.content?.length > 0 && (
         <TwoColumnSection className="avoid-page-break" title="EDUCATION">
           {education.content.map((edu, idx) => (
-            <p key={idx} className="mb-2">
+            <p
+              key={idx}
+              className="mb-2 avoid-page-break"
+              style={{ breakInside: "avoid" }}
+            >
               {edu.degree}
             </p>
           ))}
@@ -170,7 +179,11 @@ const ThirdCV = ({
       {skills?.content?.length > 0 && (
         <TwoColumnSection className="avoid-page-break" title="SKILLS">
           {skills.content.map((skill, idx) => (
-            <p key={idx} className="flex items-center gap-1">
+            <p
+              key={idx}
+              className="flex items-center gap-1 avoid-page-break"
+              style={{ breakInside: "avoid" }}
+            >
               <span className="text-blue-600 text-2xl">•</span> {skill}
             </p>
           ))}
@@ -180,7 +193,11 @@ const ThirdCV = ({
       {languages?.content?.length > 0 && (
         <TwoColumnSection className="avoid-page-break" title="LANGUAGES">
           {languages.content.map((lang, idx) => (
-            <p key={idx} className="flex items-center gap-1">
+            <p
+              key={idx}
+              className="flex items-center gap-1 avoid-page-break"
+              style={{ breakInside: "avoid" }}
+            >
               <span className="text-blue-600 text-2xl">•</span> {lang}
             </p>
           ))}
@@ -190,7 +207,11 @@ const ThirdCV = ({
       {certificates?.content?.length > 0 && (
         <TwoColumnSection className="avoid-page-break" title="CERTIFICATES">
           {certificates.content.map((cert, idx) => (
-            <p key={idx} className="flex items-center gap-1">
+            <p
+              key={idx}
+              className="flex items-center gap-1 avoid-page-break"
+              style={{ breakInside: "avoid" }}
+            >
               <span className="text-blue-600 text-2xl">•</span>{" "}
               {cert?.Name || cert}
             </p>
