@@ -754,9 +754,9 @@ const Cv = () => {
                             skills={skills}
                             languages={languages}
                             certificates={certificates}
-                        /> 
+                        /> */}
 
-                         {/* <PlushCV
+                         <PlushCV
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -765,7 +765,7 @@ const Cv = () => {
                             skills={skills}
                             languages={languages}
                             certificates={certificates}
-                        />  */}
+                        />  
 
                         {/* <EuropassCV 
                             personalInfo={personalInfo}
@@ -778,7 +778,7 @@ const Cv = () => {
                             certificates={certificates}
                         /> */}
 
-                        <ModernClassic 
+                        {/* <ModernClassic 
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -787,7 +787,7 @@ const Cv = () => {
                             skills={skills}
                             languages={languages}
                             certificates={certificates}
-                        />
+                        /> */}
 
                         {/* <ThirdCV 
                             personalInfo={personalInfo}

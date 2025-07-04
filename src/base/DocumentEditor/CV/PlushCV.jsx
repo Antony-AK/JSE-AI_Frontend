@@ -11,7 +11,7 @@ const PlushCV = ({
   certificates,
 }) => {
   return (
-    <div className="flex w-full flex-col font-sans text-[14px] text-black bg-white mx-5 my-2">
+    <div className="flex w-full flex-col font-sans text-[14px] text-black bg-white mx-7 my-5">
       {/* Left Column */}
       {/* Name + Title */}
       <div className="mx-5 flex flex-col gap-2 mb-1">
@@ -190,7 +190,7 @@ const PlushCV = ({
               {education.content.map((edu, idx) => (
                 <div
                   key={idx}
-                  className="mb-2 avoid-page-break"
+                  className="mb-2 ms-2 avoid-page-break"
                   style={{ breakInside: "avoid" }}
                 >
                   <p className="text-[12px]">{edu.degree}</p>
