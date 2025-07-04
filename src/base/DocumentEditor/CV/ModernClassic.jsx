@@ -290,27 +290,23 @@ const ModernClassic = ({
           </div>
         )}
 
-      {/* Certificates */}
       {certificates.content &&
         certificates.content.filter((cert) => cert.Name?.trim()).length > 0 && (
-          <div className="w-full px-10 pt-5">
+          <div
+            className="w-full px-10 pt-5 avoid-page-break"
+            style={{ breakInside: "avoid" }} // 👈 This ensures title + list stay together
+          >
             <div className="flex gap-12 items-start">
-              {/* Left Side: Title */}
               <div className="min-w-[130px]">
                 <h2 className="text-[#2c6472] font-bold">Certificates</h2>
               </div>
 
-              {/* Right Side: Certificate Names */}
               <div className="flex-1">
                 <ul className="list-disc text-sm ml-5 text-gray-700 space-y-0.5">
                   {certificates.content.map(
                     (cert, index) =>
                       cert.Name?.trim() && (
-                        <li
-                          key={index}
-                          className="avoid-page-break"
-                          style={{ breakInside: "avoid" }}
-                        >
+                        <li key={index} className="avoid-page-break">
                           {cert.Name}
                         </li>
                       )

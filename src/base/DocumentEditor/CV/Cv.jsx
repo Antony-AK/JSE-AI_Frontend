@@ -39,7 +39,7 @@ const Cv = () => {
         if (!element) return;
 
         const opt = {
-            margin: [20,0,0,0],
+            margin: [20,0,20,0],
             filename: 'CV.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true },
@@ -744,8 +744,8 @@ const Cv = () => {
                 <div className="w-[60%] flex flex-col gap-8">
 
                     <div ref={previewRef} className="min-h-[1123px] w-[794px] flex bg-white">
-{/* 
-                        <ModernDeedy
+
+                        {/* <ModernDeedy
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -767,18 +767,7 @@ const Cv = () => {
                             certificates={certificates}
                         /> */}
 
-                        <EuropassCV 
-                            personalInfo={personalInfo}
-                            professionalSummary={professionalSummary}
-                            workExperience={workExperience}
-                            education={education}
-                            projects={projects}
-                            skills={skills}
-                            languages={languages}
-                            certificates={certificates}
-                        />   */}
-
-                        {/* <ModernClassic 
+                        {/* <EuropassCV 
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -788,6 +777,17 @@ const Cv = () => {
                             languages={languages}
                             certificates={certificates}
                         /> */}
+
+                        <ModernClassic 
+                            personalInfo={personalInfo}
+                            professionalSummary={professionalSummary}
+                            workExperience={workExperience}
+                            education={education}
+                            projects={projects}
+                            skills={skills}
+                            languages={languages}
+                            certificates={certificates}
+                        />
 
                         {/* <ThirdCV 
                             personalInfo={personalInfo}

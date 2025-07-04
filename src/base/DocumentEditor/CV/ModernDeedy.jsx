@@ -154,7 +154,7 @@ const ModernDeedy = ({
           proj.Skills ||
           proj.Description
       ) && (
-        <div className="flex flex-col gap-1.5 avoid-page-break">
+        <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-3">
             <h2 className="font-semibold text-lg text-purple-500 whitespace-nowrap">
               PROJECTS
