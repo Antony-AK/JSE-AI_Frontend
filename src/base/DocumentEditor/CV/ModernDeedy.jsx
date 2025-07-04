@@ -15,7 +15,7 @@ const ModernDeedy = ({
       {/* Header */}
       <div className="text-center">
         {/* Name */}
-        <h1 className="text-3xl font-bold tracking-wide text-purple-500">
+        <h1 className="text-3xl font-bold tracking-wide text-blue-500">
           {personalInfo.Name}
         </h1>
 
@@ -44,14 +44,14 @@ const ModernDeedy = ({
 
       {/* Summary */}
       {professionalSummary.content && (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 mt-5">
           <div className="flex items-center gap-3">
-            <h2 className="font-semibold text-lg text-purple-500 whitespace-nowrap">
+            <h2 className="font-semibold text-lg text-blue-500 whitespace-nowrap">
               SUMMARY
             </h2>
             <div className="w-full border border-t-gray-400"></div>
           </div>
-          <p className="ml-2 text-[13px] text-gray-600">
+          <p className="ml-2 text-[13px] text-gray-600 leading-6">
             {professionalSummary.content}
           </p>
         </div>
@@ -61,9 +61,9 @@ const ModernDeedy = ({
       {workExperience.content.some(
         (exp) => exp.Company || exp.Role || exp.Duration || exp.Description
       ) && (
-        <div className="flex flex-col gap-1.5 avoid-page-break">
+        <div className="flex flex-col gap-1.5 avoid-page-break mt-5">
           <div className="flex items-center gap-3">
-            <h2 className="font-semibold text-lg text-purple-500 whitespace-nowrap">
+            <h2 className="font-semibold text-lg text-blue-500 whitespace-nowrap">
               WORK EXPERIENCE
             </h2>
             <div className="w-full border border-t-gray-400"></div>
@@ -77,7 +77,7 @@ const ModernDeedy = ({
             return (
               <div
                 key={idx}
-                className="flex flex-col gap-1 avoid-page-break"
+                className="flex flex-col gap-2.5 avoid-page-break mt-2"
                 style={{ breakInside: "avoid" }}
               >
                 {(exp.Company || exp.Role || exp.Duration) && (
@@ -101,14 +101,14 @@ const ModernDeedy = ({
                 )}
                 {Array.isArray(exp.Description) &&
                   exp.Description.length > 0 && (
-                    <ul className="list-none ml-3 text-[13px] text-gray-800 space-y-1">
+                    <ul className="list-none ml-3 mt-3 text-[13px] text-gray-800 space-y-1">
                       {exp.Description.map((point, i) => (
                         <li
                           key={i}
-                          className="flex items-start gap-2"
+                          className="flex items-start gap-2 leading-6"
                           style={{ breakInside: "avoid" }}
                         >
-                          <span className="text-sm text-purple-500">●</span>
+                          <span className="text-sm text-blue-500">●</span>
                           <span>{point}</span>
                         </li>
                       ))}
@@ -123,9 +123,9 @@ const ModernDeedy = ({
       {/* Education */}
       {education?.content?.length > 0 &&
         education.content.some((entry) => entry.degree?.trim()) && (
-          <div className="flex flex-col gap-1 avoid-page-break">
+          <div className="flex flex-col gap-1 avoid-page-break mt-5">
             <div className="flex items-center gap-3">
-              <h2 className="font-semibold text-lg text-purple-500 whitespace-nowrap">
+              <h2 className="font-semibold text-lg text-blue-500 whitespace-nowrap">
                 EDUCATION
               </h2>
               <div className="w-full border border-t-gray-400"></div>
@@ -135,7 +135,7 @@ const ModernDeedy = ({
                 entry.degree?.trim() && (
                   <p
                     key={idx}
-                    className="text-sm ml-2 text-gray-700"
+                    className="text-sm ml-2 text-gray-700 mt-3"
                     style={{ breakInside: "avoid" }}
                   >
                     {entry.degree}
@@ -145,7 +145,6 @@ const ModernDeedy = ({
           </div>
         )}
 
-      {/* Projects */}
       {projects.content.some(
         (proj) =>
           proj.Name ||
@@ -154,21 +153,30 @@ const ModernDeedy = ({
           proj.Skills ||
           proj.Description
       ) && (
-        <div className="flex flex-col gap-1.5">
+        <div
+          className="flex flex-col gap-3 mt-5 avoid-page-break"
+        >
+          {/* Header + line */}
           <div className="flex items-center gap-3">
-            <h2 className="font-semibold text-lg text-purple-500 whitespace-nowrap">
+            <h2 className="font-semibold text-lg text-blue-500 whitespace-nowrap">
               PROJECTS
             </h2>
             <div className="w-full border border-t-gray-400"></div>
           </div>
 
+          {/* Projects list */}
           {projects.content.map((proj, idx) => (
             <div
               key={idx}
-              className="mb-1 flex flex-col gap-1 avoid-page-break"
-              style={{ breakInside: "avoid" }}
+              className="mb-2"
+              style={{
+                breakInside: "avoid",
+                pageBreakInside: "avoid",
+                WebkitColumnBreakInside: "avoid",
+              }}
             >
-              <div className="ml-2 flex justify-between w-full">
+              {/* Project details */}
+              <div className="ml-2 mt-5 flex justify-between w-full">
                 <p className="text-sm font-bold text-[#2c6472]">
                   {proj.Name}
                   {proj.Company && (
@@ -187,21 +195,17 @@ const ModernDeedy = ({
               </div>
 
               {proj.Skills && (
-                <p className="text-sm italic text-gray-500 ml-2">
+                <p className="text-sm italic text-gray-500 ml-2 mt-1.5">
                   Skills: {proj.Skills}
                 </p>
               )}
 
               {Array.isArray(proj.Description) &&
                 proj.Description.length > 0 && (
-                  <ul className="list-none ml-3 text-[13px] text-gray-800 space-y-1">
+                  <ul className="list-none ml-3 mt-3 text-[13px] text-gray-800 space-y-1 leading-6">
                     {proj.Description.map((point, i) => (
-                      <li
-                        key={i}
-                        className="flex items-start gap-2"
-                        style={{ breakInside: "avoid" }}
-                      >
-                        <span className="text-purple-600 text-sm">●</span>
+                      <li key={i} className="flex items-start gap-2">
+                        <span className="text-blue-600 text-sm">●</span>
                         <span>{point}</span>
                       </li>
                     ))}
@@ -214,15 +218,15 @@ const ModernDeedy = ({
 
       {/* Skills */}
       {skills.content.filter((skill) => skill.trim() !== "").length > 0 && (
-        <div className="flex flex-col gap-1 avoid-page-break">
+        <div className="flex flex-col gap-1 avoid-page-break mt-5">
           <div className="flex items-center gap-3">
-            <h2 className="font-semibold text-lg text-purple-500 whitespace-nowrap">
+            <h2 className="font-semibold text-lg text-blue-500 whitespace-nowrap">
               SKILLS
             </h2>
             <div className="w-full border border-t-gray-400"></div>
           </div>
           <div
-            className="text-[13px] ml-2 text-gray-800"
+            className="text-[13px] ml-2 mt-2 text-gray-800 flex gap-2"
             style={{ breakInside: "avoid" }}
           >
             {skills.content
@@ -230,7 +234,7 @@ const ModernDeedy = ({
               .map((skill, idx, arr) => (
                 <span key={idx}>
                   {skill}
-                  {idx !== arr.length - 1 ? ", " : ""}
+                  {idx !== arr.length - 1 ? " | " : ""}
                 </span>
               ))}
           </div>
@@ -239,15 +243,15 @@ const ModernDeedy = ({
 
       {/* Languages */}
       {languages.content.length > 0 && (
-        <div className="flex flex-col gap-1 avoid-page-break">
+        <div className="flex flex-col gap-1 avoid-page-break mt-5">
           <div className="flex items-center gap-3">
-            <h2 className="font-semibold text-lg whitespace-nowrap text-purple-500">
+            <h2 className="font-semibold text-lg whitespace-nowrap text-blue-500">
               LANGUAGES
             </h2>
             <div className="w-full border border-t-gray-400"></div>
           </div>
           <div
-            className="text-[13px] ml-2 text-gray-800"
+            className="text-[13px] ml-2 mt-2 text-gray-800 leading-6"
             style={{ breakInside: "avoid" }}
           >
             {languages.content.map((lang, idx) => (
@@ -260,15 +264,15 @@ const ModernDeedy = ({
       {/* Certificates */}
       {certificates.content.filter((cert) => cert.Name?.trim() !== "").length >
         0 && (
-        <div className="flex flex-col gap-1 avoid-page-break">
+        <div className="flex flex-col gap-1 avoid-page-break mt-5">
           <div className="flex items-center gap-3">
-            <h2 className="font-semibold text-lg whitespace-nowrap text-purple-500">
+            <h2 className="font-semibold text-lg whitespace-nowrap text-blue-500">
               CERTIFICATES
             </h2>
             <div className="w-full border border-t-gray-400"></div>
           </div>
           <div
-            className="text-[13px] ml-2 text-gray-800"
+            className="text-[13px] ml-2 mt-2 text-gray-800 leading-6"
             style={{ breakInside: "avoid" }}
           >
             {certificates.content

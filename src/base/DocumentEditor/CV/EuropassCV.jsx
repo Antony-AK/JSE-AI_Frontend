@@ -13,13 +13,13 @@ const EuropassCV = ({
   return (
     <div className="flex flex-col gap-2 w-full h-full">
       {/* Header */}
-      <div className="bg-[#def6fc] h-40 flex flex-col justify-center px-10">
+      <div className="bg-[#F1F6FC] h-44 flex flex-col justify-center px-10">
         <h2 className="text-[#2c6472] font-bold text-4xl">
           {personalInfo.Name}
         </h2>
-        <p className="text-[#2c6472] font-semibold text-lg">
+        {/* <p className="text-[#2c6472] font-semibold text-lg">
           {personalInfo.Title}
-        </p>
+        </p> */}
       </div>
 
       {/* Body */}
@@ -81,7 +81,7 @@ const EuropassCV = ({
                   </h2>
                 </div>
 
-                <div className="text-[13px] space-y-1 leading-5">
+                <div className="text-[13px] space-y-1 leading-6">
                   <p className="text-black font-normal">
                     {professionalSummary.content}
                   </p>
@@ -104,7 +104,7 @@ const EuropassCV = ({
                   </h2>
                 </div>
 
-                <div className="text-[13px] space-y-1 leading-5">
+                <div className="text-[13px] space-y-2.5 leading-5">
                   {education.content.map(
                     (entry, idx) =>
                       entry.degree?.trim() && (
@@ -142,7 +142,7 @@ const EuropassCV = ({
               return (
                 <div
                   key={idx}
-                  className="flex gap-4 items-start avoid-page-break"
+                  className="flex gap-4 items-start avoid-page-break pt-1"
                   style={{
                     breakInside: "avoid",
                   }}
@@ -165,7 +165,7 @@ const EuropassCV = ({
                   {/* Right: Description */}
                   <div className="flex-1 text-[13px] text-gray-800 mb-5">
                     {Array.isArray(exp.Description) ? (
-                      <ul className="list-disc space-y-1">
+                      <ul className="list-disc space-y-2.5">
                         {exp.Description.map((desc, i) => (
                           <li key={i}>{desc}</li>
                         ))}
@@ -248,7 +248,7 @@ const EuropassCV = ({
                     )}
 
                     {Array.isArray(proj.Description) ? (
-                      <ul className="list-disc ml-4 mt-2 space-y-1">
+                      <ul className="list-disc ml-4 mt-2 space-y-2.5">
                         {proj.Description.map((point, i) => (
                           <li key={i}>{point}</li>
                         ))}
@@ -333,17 +333,16 @@ const EuropassCV = ({
             <h2 className="text-[13px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
               {skills.title || "Skills"}
             </h2>
-            <ul className="list-disc ml-5 text-gray-700 space-y-0.5 text-[13px]">
-              {skills.content.map((skill, index) => (
-                <li
-                  key={index}
-                  className="avoid-page-break"
-                  style={{ breakInside: "avoid" }}
-                >
-                  {skill}
-                </li>
-              ))}
-            </ul>
+            <div className="text-gray-700 text-[13px]">
+              {skills.content
+                .filter((skill) => skill.trim() !== "")
+                .map((skill, index) => (
+                  <span key={index}>
+                    {skill}
+                    {index < skills.content.length - 1 && " | "}
+                  </span>
+                ))}
+            </div>
           </div>
         )}
       </div>

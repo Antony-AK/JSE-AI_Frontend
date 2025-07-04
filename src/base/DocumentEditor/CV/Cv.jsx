@@ -39,7 +39,7 @@ const Cv = () => {
         if (!element) return;
 
         const opt = {
-            margin: [20,0,20,0],
+            margin: 0,
             filename: 'CV.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true },
@@ -745,7 +745,7 @@ const Cv = () => {
 
                     <div ref={previewRef} className="min-h-[1123px] w-[794px] flex bg-white">
 
-                        {/* <ModernDeedy
+                        <ModernDeedy
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -754,7 +754,7 @@ const Cv = () => {
                             skills={skills}
                             languages={languages}
                             certificates={certificates}
-                        /> */}
+                        />
 
                          <PlushCV
                             personalInfo={personalInfo}

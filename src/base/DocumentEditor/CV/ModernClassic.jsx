@@ -13,10 +13,10 @@ const ModernClassic = ({
   return (
     <div className="flex flex-col gap-2 w-full h-full pb-5">
       {/* Header */}
-      <div className="bg-[#4F6D61] h-40 flex flex-col gap-2 justify-center px-10">
-        <p className="text-white font-semibold text-lg">{personalInfo.Title}</p>
-        <h2 className="text-white font-bold text-4xl">{personalInfo.Name}</h2>
-        <div className="flex flex-col gap-0.5 text-white text-xs font-light">
+      <div className="bg-[#4F6D61] h-48 flex flex-col gap-2 justify-center px-10">
+        {/* <p className="text-white font-semibold text-lg">{personalInfo.Title}</p> */}
+        <h2 className="text-white font-bold text-[45px]">{personalInfo.Name}</h2>
+        <div className="flex flex-col gap-0.5 text-white text-[13px] font-light">
           <p>
             {personalInfo.Mail} | {personalInfo.Phone}
           </p>
@@ -37,7 +37,7 @@ const ModernClassic = ({
                 <h2 className="text-[#4F6D61] font-bold">Summary</h2>
               </div>
 
-              <div className="text-[13px] space-y-1 leading-5">
+              <div className="text-[13px] space-y-2 leading-5">
                 <p className="text-gray-700 font-normal">
                   {professionalSummary.content}
                 </p>
@@ -50,7 +50,7 @@ const ModernClassic = ({
 
       {/* Skills */}
       {skills.content && skills.content.length > 0 && (
-        <div className="w-full px-10 pt-5 avoid-page-break">
+        <div className="w-full px-10 avoid-page-break">
           <div className="flex justify-start items-start gap-12">
             <div className="min-w-[130px]">
               <h2 className="text-[#4F6D61] font-bold">Skills</h2>
@@ -78,7 +78,7 @@ const ModernClassic = ({
       {workExperience.content.some(
         (exp) => exp.Company || exp.Role || exp.Duration || exp.Description
       ) && (
-        <div className="w-full px-10 pt-5">
+        <div className="w-full px-10">
           <div className="flex gap-12 items-start">
             {/* Left Side: Experience Label */}
             <div className="min-w-[130px]">
@@ -109,12 +109,12 @@ const ModernClassic = ({
                       </div>
                     )}
                     {exp.Duration && (
-                      <p className="text-xs text-[#497d8a]">{exp.Duration}</p>
+                      <p className="text-xs text-[#497d8a] mt-1">{exp.Duration}</p>
                     )}
                     {exp.Description && (
-                      <div className="text-[13px] text-gray-800 mt-1">
+                      <div className="text-[13px] text-gray-800 mt-2">
                         {Array.isArray(exp.Description) ? (
-                          <ul className="list-disc ml-5 space-y-1">
+                          <ul className="list-disc ml-5 space-y-2">
                             {exp.Description.map((desc, i) => (
                               <li
                                 key={i}
@@ -144,13 +144,13 @@ const ModernClassic = ({
       {education.content &&
         education.content.filter((entry) => entry.degree?.trim() !== "")
           .length > 0 && (
-          <div className="w-full px-10 pt-5 avoid-page-break">
+          <div className="w-full px-10 avoid-page-break">
             <div className="flex justify-start items-start gap-12">
               <div className="min-w-[130px]">
                 <h2 className="text-[#4F6D61] font-bold">Education</h2>
               </div>
 
-              <div className="text-[13px] space-y-1 leading-5">
+              <div className="text-[13px] space-y-2.5 leading-6">
                 {education.content.map(
                   (entry, idx) =>
                     entry.degree?.trim() && (
@@ -175,7 +175,7 @@ const ModernClassic = ({
             proj.Company?.trim() ||
             proj.Duration?.trim()
         ).length > 0 && (
-          <div className="w-full px-10 pt-5">
+          <div className="w-full px-10">
             <div className="flex gap-12 items-start">
               {/* Left Side: Section Title */}
               <div className="min-w-[130px]">
@@ -228,9 +228,9 @@ const ModernClassic = ({
 
                       {/* Description */}
                       {proj.Description && (
-                        <div className="text-[13px] text-gray-800 mt-1">
+                        <div className="text-[13px] text-gray-800 mt-2">
                           {Array.isArray(proj.Description) ? (
-                            <ul className="list-disc ml-5 space-y-1">
+                            <ul className="list-disc ml-5 space-y-2">
                               {proj.Description.map((point, i) => (
                                 <li
                                   key={i}
@@ -260,16 +260,16 @@ const ModernClassic = ({
       {/* Languages */}
       {languages.content &&
         languages.content.filter((lang) => lang?.trim()).length > 0 && (
-          <div className="w-full px-10 pt-5">
+          <div className="w-full px-10">
             <div className="flex gap-12 items-start">
               {/* Left Side: Title */}
-              <div className="min-w-[130px]">
+              <div className="w-[150px]">
                 <h2 className="text-[#2c6472] font-bold">Languages</h2>
               </div>
 
               {/* Right Side: Language List */}
               <div className="flex-1">
-                <ul className="list-disc ml-5 text-gray-700 text-[13px] space-y-0.5">
+                <ul className="list-disc text-gray-700 text-[13px] space-y-1.5">
                   {languages.content.map(
                     (lang, idx) =>
                       lang?.trim() && (
@@ -293,16 +293,16 @@ const ModernClassic = ({
       {certificates.content &&
         certificates.content.filter((cert) => cert.Name?.trim()).length > 0 && (
           <div
-            className="w-full px-10 pt-5 avoid-page-break"
+            className="w-full px-10 avoid-page-break"
             style={{ breakInside: "avoid" }} // 👈 This ensures title + list stay together
           >
             <div className="flex gap-12 items-start">
-              <div className="min-w-[130px]">
+              <div className="w-[150px]">
                 <h2 className="text-[#2c6472] font-bold">Certificates</h2>
               </div>
 
               <div className="flex-1">
-                <ul className="list-disc text-sm ml-5 text-gray-700 space-y-0.5">
+                <ul className="list-disc text-sm text-gray-700 space-y-1.5">
                   {certificates.content.map(
                     (cert, index) =>
                       cert.Name?.trim() && (
