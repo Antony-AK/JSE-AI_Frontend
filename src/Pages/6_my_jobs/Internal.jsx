@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { BASE_URL } from "../../utils/api.js";
 import { useNavigate } from "react-router-dom";
 import animationgif from '../../assets/Animations.gif'
+import LanguageSelectModel from "../../base/LanguageModelPopup/LanguageSelectModel.jsx";
 
 
 
@@ -27,6 +28,8 @@ const MyApplication = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("both"); // default
+  const [showLangModal, setShowLangModal] = useState(false);
+  const [actionType, setActionType] = useState(""); // "cv" or "cl"
 
 
   const [offset, setOffset] = useState(0);
@@ -238,84 +241,46 @@ const MyApplication = () => {
 
 
 
-  const handleGenerateCV = async () => {
-    const jobId = selectedJob?.id;
-    if (!jobId) return console.warn("No selected job!");
+  const handleLanguageSelect = async (lang) => {
+  setShowLangModal(false);
+  const jobId = selectedJob?.id;
+  if (!jobId) return console.warn("⚠️ No selected job!");
 
-    setIsLoading(true); // 🔥 Show loader
 
-
-    try {
-      const token = sessionStorage.getItem("authToken");
-
-      const response = await axios.post(
-        `${BASE_URL}/internal/generate-resume`,
-        { job_id: jobId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log("✅ CV generated:", response.data);
-
-      // 👉 Store only job_id
-      sessionStorage.setItem("generatedCV", JSON.stringify({ job_id: jobId }));
-
-      navigate("/user/cv", { state: { jobId } });
-
-    } catch (error) {
-      console.error("❌ CV generation failed:", error);
-      sessionStorage.setItem("generatedCV", JSON.stringify({ error: true }));
-    } finally {
-      setIsLoading(false); // Optional: for fallback error cases
-    }
+  const payload = {
+    job_id: jobId,
+    job_language: lang,
   };
 
-  const handleGenerateCoverLetter = async () => {
-    const jobId = selectedJob?.id;
-    if (!jobId) return console.warn("⚠️ No selected job!");
+  const endpoint =
+    actionType === "cv"
+      ? `${BASE_URL}/internal/generate-resume`
+      : `${BASE_URL}/internal/generate-cover-letter`;
 
-    setIsLoading(true); // 🔥 Show loader
+  const sessionKey = actionType === "cv" ? "generatedCV" : "generatedCL";
+  const navigatePath = actionType === "cv" ? "/user/cv" : "/user/cl";
 
+  try {
+    setIsLoading(true);
+    const response = await axios.post(endpoint, payload, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
-    try {
-      const token = sessionStorage.getItem("authToken");
+    console.log("✅ Generated", response.data);
 
-      const response = await axios.post(
-        `${BASE_URL}/internal/generate-cover-letter`,
-        { job_id: jobId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+    sessionStorage.setItem(sessionKey, JSON.stringify({ job_id: jobId }));
+    navigate(navigatePath, { state: { jobId } });
+  } catch (error) {
+    console.error(`❌ Failed to generate ${actionType}:`, error);
+    sessionStorage.setItem(sessionKey, JSON.stringify({ error: true }));
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-      console.log("📨 Posting to:", `${BASE_URL}/internal/generate-cover-letter`);
-      console.log("📦 Payload:", { job_id: jobId });
-      console.log("✅ Response:", response.data);
-
-      if (response.status === 200 && response.data) {
-        // ✅ Only store job_id for fetching later
-        sessionStorage.setItem("generatedCL", JSON.stringify({ job_id: jobId }));
-
-        navigate("/user/cl", { state: { jobId } });
-      } else {
-        console.warn("⚠️ Unexpected response:", response.status);
-      }
-    } catch (error) {
-      console.error("❌ CL generation failed:");
-      console.error("Status:", error.response?.status);
-      console.error("Data:", error.response?.data);
-      console.error("URL:", error.config?.url);
-    } finally {
-      setIsLoading(false); // Optional
-    }
-  };
 
 
   const handleJobTitleClick = (title) => {
@@ -677,17 +642,25 @@ const MyApplication = () => {
 
                     <div className="flex mx-auto  gap-5 mt-4">
                       <button
-                        onClick={() => handleGenerateCV(selectedJob.id)}
+                        onClick={() => {
+                          setActionType("cv");
+                          setShowLangModal(true);
+                        }}
                         className="px-5 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[200px] h-[47px] text-white items-center justify-center rounded transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105"
                       >
                         CV
                       </button>
+
                       <button
-                        onClick={() => handleGenerateCoverLetter(selectedJob.id)}
+                        onClick={() => {
+                          setActionType("cl");
+                          setShowLangModal(true);
+                        }}
                         className="px-5 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[200px] h-[47px] text-white rounded transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105"
                       >
                         CL
                       </button>
+
                     </div>
                     <br />
 
@@ -700,6 +673,13 @@ const MyApplication = () => {
                         Go to Job Link
                         <img src={link_icon} alt="" />
                       </button>
+
+                      <LanguageSelectModel
+                        isOpen={showLangModal}
+                        onClose={() => setShowLangModal(false)}
+                        onSelect={handleLanguageSelect}
+                      />
+
 
 
                     </div><br />

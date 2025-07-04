@@ -16,7 +16,7 @@ const ModernClassic = ({
       <div className="bg-[#4F6D61] h-48 flex flex-col gap-2 justify-center px-10">
         {/* <p className="text-white font-semibold text-lg">{personalInfo.Title}</p> */}
         <h2 className="text-white font-bold text-[45px]">{personalInfo.Name}</h2>
-        <div className="flex flex-col gap-0.5 text-white text-[13px] font-light">
+        <div className="flex flex-col gap-2 text-white text-[13px] font-light">
           <p>
             {personalInfo.Mail} | {personalInfo.Phone}
           </p>
@@ -37,7 +37,7 @@ const ModernClassic = ({
                 <h2 className="text-[#4F6D61] font-bold">Summary</h2>
               </div>
 
-              <div className="text-[13px] space-y-2 leading-5">
+              <div className="text-[13px] space-y-2 leading-6">
                 <p className="text-gray-700 font-normal">
                   {professionalSummary.content}
                 </p>
@@ -56,7 +56,7 @@ const ModernClassic = ({
               <h2 className="text-[#4F6D61] font-bold">Skills</h2>
             </div>
 
-            <div className="text-[13px] leading-5">
+            <div className="text-[13px] leading-6">
               <div className="text-gray-700 text-[13px] flex flex-wrap gap-x-2">
                 {skills.content.map((skill, index) => (
                   <span key={index}>
@@ -109,7 +109,7 @@ const ModernClassic = ({
                       </div>
                     )}
                     {exp.Duration && (
-                      <p className="text-xs text-[#497d8a] mt-1">{exp.Duration}</p>
+                      <p className="text-xs text-[#497d8a] mt-2">{exp.Duration}</p>
                     )}
                     {exp.Description && (
                       <div className="text-[13px] text-gray-800 mt-2">
@@ -154,7 +154,7 @@ const ModernClassic = ({
                 {education.content.map(
                   (entry, idx) =>
                     entry.degree?.trim() && (
-                      <p key={idx} className="text-sm text-gray-700">
+                      <p key={idx} className="text-[13px] text-gray-700">
                         {entry.degree}
                       </p>
                     )
@@ -213,7 +213,7 @@ const ModernClassic = ({
 
                       {/* Duration */}
                       {proj.Duration && (
-                        <p className="text-xs text-[#497d8a]">
+                        <p className="text-xs text-[#497d8a] my-2">
                           {proj.Duration}
                         </p>
                       )}

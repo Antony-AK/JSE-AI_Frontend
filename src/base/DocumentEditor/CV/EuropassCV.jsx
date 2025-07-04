@@ -108,7 +108,7 @@ const EuropassCV = ({
                   {education.content.map(
                     (entry, idx) =>
                       entry.degree?.trim() && (
-                        <p key={idx} className="text-sm text-black">
+                        <p key={idx} className="text-[13px] text-black">
                           {entry.degree}
                         </p>
                       )
@@ -142,7 +142,7 @@ const EuropassCV = ({
               return (
                 <div
                   key={idx}
-                  className="flex gap-4 items-start avoid-page-break pt-1"
+                  className="flex gap-4 items-start  pt-1"
                   style={{
                     breakInside: "avoid",
                   }}
@@ -216,7 +216,7 @@ const EuropassCV = ({
               return (
                 <div
                   key={idx}
-                  className="flex mb-6 min-w-[130px] items-start avoid-page-break"
+                  className="flex mb-6 min-w-[130px] items-start "
                   style={{ breakInside: "avoid" }}
                 >
                   {/* Left Column */}
@@ -269,9 +269,9 @@ const EuropassCV = ({
       {/* Certificates */}
       {certificates.content &&
         certificates.content.filter((cert) => cert.Name?.trim()).length > 0 && (
-          <div className="px-10 pt-6">
-            <div className="w-full">
-              <h2 className="text-[13px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
+          <div className="px-10 pt-6 ">
+            <div className="w-full flex">
+              <h2 className="text-[13px] w-[160px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
                 {certificates.title || "Certificates"}
               </h2>
 
@@ -296,18 +296,18 @@ const EuropassCV = ({
           </div>
         )}
 
-      <div className="flex gap-10 text-sm px-10 pt-6 pb-5 flex-wrap">
+      <div className="flex gap-10 text-sm px-10 pt-6 pb-5 flex-col">
         {/* Languages - Left Side */}
         {languages.content &&
           languages.content.filter((lang) => lang?.trim()).length > 0 && (
             <div
-              className="min-w-[130px] avoid-page-break"
+              className="w-full flex "
               style={{ breakInside: "avoid" }}
             >
-              <h2 className="text-[13px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
+              <h2 className="text-[13px] mb-3 w-[160px] text-[#2c6472] font-bold tracking-widest uppercase">
                 {languages.title || "Languages"}
               </h2>
-              <ul className="list-disc ml-5 text-gray-700 text-[13px] space-y-0.5">
+              <ul className="list-disc ml-5  text-gray-700 text-sm space-y-0.5">
                 {languages.content.map(
                   (lang, idx) =>
                     lang?.trim() && (
@@ -327,10 +327,10 @@ const EuropassCV = ({
         {/* Skills - Right Side */}
         {skills.content && skills.content.length > 0 && (
           <div
-            className="pb-5 avoid-page-break"
+            className="pb-5 w-full flex "
             style={{ breakInside: "avoid" }}
           >
-            <h2 className="text-[13px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
+            <h2 className="text-[13px] w-[640px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
               {skills.title || "Skills"}
             </h2>
             <div className="text-gray-700 text-[13px]">

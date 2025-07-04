@@ -32,6 +32,18 @@ const Cv = () => {
     const [selectedProjectIdx, setSelectedProjectIdx] = useState(0);
     const [selectedEducationIdx, setSelectedEducationIdx] = useState(0);
 
+    // 🔽 Add at the top (under hooks)
+    const templates = {
+        ModernDeedy,
+        PlushCV,
+        ThirdCV,
+        EuropassCV,
+        ModernClassic
+    };
+    const [selectedTemplate, setSelectedTemplate] = useState("ModernClassic");
+    const SelectedTemplate = templates[selectedTemplate];
+
+
     const previewRef = useRef();
 
     const handleDownload = () => {
@@ -428,21 +440,21 @@ const Cv = () => {
 
                                 {activeSection === 'workExperience' ? (
                                     <textarea
-                                    value={workExperience.content[selectedCompanyIdx].Description.join('\n')}
-                                    onChange={(e) => {
-                                        const updated = [...workExperience.content];
-                                        updated[selectedCompanyIdx].Description = e.target.value.split('\n');
-                                        setWorkExperience((prev) => ({ ...prev, content: updated }));
-                                    }}
-                                    className="w-full min-h-[150px] resize-y rounded px-2 py-1 outline-none text-[#00000082] font-medium"
+                                        value={workExperience.content[selectedCompanyIdx].Description.join('\n')}
+                                        onChange={(e) => {
+                                            const updated = [...workExperience.content];
+                                            updated[selectedCompanyIdx].Description = e.target.value.split('\n');
+                                            setWorkExperience((prev) => ({ ...prev, content: updated }));
+                                        }}
+                                        className="w-full min-h-[150px] resize-y rounded px-2 py-1 outline-none text-[#00000082] font-medium"
                                     />
                                 ) : (
                                     <ul className="list-disc ml-5 text-gray-700 space-y-0.5">
-                                    {workExperience?.content?.[selectedCompanyIdx]?.Description
-                                        .filter((line) => line.trim() !== '') // remove empty or whitespace lines
-                                        .map((line, i) => (
-                                        <li key={i}>{line}</li>
-                                        ))}
+                                        {workExperience?.content?.[selectedCompanyIdx]?.Description
+                                            .filter((line) => line.trim() !== '') // remove empty or whitespace lines
+                                            .map((line, i) => (
+                                                <li key={i}>{line}</li>
+                                            ))}
                                     </ul>
                                 )}
                             </div>
@@ -577,21 +589,21 @@ const Cv = () => {
 
                                         {activeSection === 'projects' ? (
                                             <textarea
-                                            value={projects.content[selectedProjectIdx].Description.join('\n')}
-                                            onChange={(e) => {
-                                                const updated = [...projects.content];
-                                                updated[selectedProjectIdx].Description = e.target.value.split('\n');
-                                                setProjects((prev) => ({ ...prev, content: updated }));
-                                            }}
-                                            className="w-full min-h-[150px] resize-y rounded px-2 py-1 outline-none text-[#00000082] font-medium"
+                                                value={projects.content[selectedProjectIdx].Description.join('\n')}
+                                                onChange={(e) => {
+                                                    const updated = [...projects.content];
+                                                    updated[selectedProjectIdx].Description = e.target.value.split('\n');
+                                                    setProjects((prev) => ({ ...prev, content: updated }));
+                                                }}
+                                                className="w-full min-h-[150px] resize-y rounded px-2 py-1 outline-none text-[#00000082] font-medium"
                                             />
                                         ) : (
                                             <ul className="list-disc ml-5 text-gray-700 space-y-0.5">
-                                            {projects?.content?.[selectedProjectIdx]?.Description
-                                                .filter((line) => line.trim() !== '') // Skip empty lines
-                                                .map((line, i) => (
-                                                <li key={i}>{line}</li>
-                                                ))}
+                                                {projects?.content?.[selectedProjectIdx]?.Description
+                                                    .filter((line) => line.trim() !== '') // Skip empty lines
+                                                    .map((line, i) => (
+                                                        <li key={i}>{line}</li>
+                                                    ))}
                                             </ul>
                                         )}
                                     </div>
@@ -739,13 +751,70 @@ const Cv = () => {
                         </div>
                     </div>
 
+                    <div className='bg-white p-5 border border-gray-300 rounded-lg'>
+                        <h1 className='flex font-medium text-lg'>Templates</h1>
+
+                        <p className='text-center font-medium my-2'>Pick your favourite CV Template</p>
+                    
+
+                    <div className="flex flex-wrap gap-4 mt-5 justify-center">
+                        {Object.entries(templates).map(([name, Template]) => {
+                            if (name === selectedTemplate) return null;
+
+                            return (
+                                
+                                <div
+                                    key={name}
+                                    className="cursor-pointer border rounded hover:shadow-lg hover:border-[#2C6472] transition duration-200 bg-white w-[200px]   overflow-hidden"
+                                    onClick={() => setSelectedTemplate(name)}
+                                >
+                                    {/* 🔍 Container for scaled template */}
+                                    <div className="w-full h-[280px] overflow-hidden relative bg-white">
+                                        {/* Template scaled and positioned */}
+                                        <div
+                                            className="absolute top-0 left-0"
+                                            style={{
+                                                transform: "scale(0.25)",
+                                                transformOrigin: "top left",
+                                                width: "794px",
+                                                height: "1123px",
+                                            }}
+                                        >
+                                            <div className="bg-white w-[794px] h-[1123px] shadow">
+                                                <Template
+                                                    personalInfo={personalInfo}
+                                                    professionalSummary={professionalSummary}
+                                                    workExperience={workExperience}
+                                                    education={education}
+                                                    projects={projects}
+                                                    skills={skills}
+                                                    languages={languages}
+                                                    certificates={certificates}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* 👇 Template name below */}
+                                    <div className="text-center text-sm py-2 bg-[#3f6068] text-white font-semibold">
+                                        {name}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    </div>
+
+
+
                 </div>
 
                 <div className="w-[60%] flex flex-col gap-8">
 
-                    <div ref={previewRef} className="min-h-[1123px] w-[794px] flex bg-white">
-
-                        <ModernDeedy
+                    {/* 🖥️ MAIN BIG CV PREVIEW */}
+                    <div ref={previewRef} className="min-h-[1123px] w-[794px] bg-white shadow border">
+                        <SelectedTemplate
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -755,68 +824,25 @@ const Cv = () => {
                             languages={languages}
                             certificates={certificates}
                         />
-
-                         <PlushCV
-                            personalInfo={personalInfo}
-                            professionalSummary={professionalSummary}
-                            workExperience={workExperience}
-                            education={education}
-                            projects={projects}
-                            skills={skills}
-                            languages={languages}
-                            certificates={certificates}
-                        />  
-
-                        {/* <EuropassCV 
-                            personalInfo={personalInfo}
-                            professionalSummary={professionalSummary}
-                            workExperience={workExperience}
-                            education={education}
-                            projects={projects}
-                            skills={skills}
-                            languages={languages}
-                            certificates={certificates}
-                        /> */}
-
-                        {/* <ModernClassic 
-                            personalInfo={personalInfo}
-                            professionalSummary={professionalSummary}
-                            workExperience={workExperience}
-                            education={education}
-                            projects={projects}
-                            skills={skills}
-                            languages={languages}
-                            certificates={certificates}
-                        /> */}
-
-                        {/* <ThirdCV 
-                            personalInfo={personalInfo}
-                            professionalSummary={professionalSummary}
-                            workExperience={workExperience}
-                            education={education}
-                            projects={projects}
-                            skills={skills}
-                            languages={languages}
-                            certificates={certificates}
-                        /> */}
-
                     </div>
 
+
+
+                    {/* 🎯 Download Button */}
                     <div className="flex w-[794px] justify-end">
                         <button
                             onClick={() => {
                                 handleDownload();
-                                // setActiveSection(null);
-                                // Delay navigation to ensure download starts first
-                                // setTimeout(() => navigate(-1), 800);
+                                setActiveSection(null);
+                                setTimeout(() => navigate(-1), 800);
                             }}
                             className="bg-[#2c6472] text-white px-8 py-1.5 rounded-lg"
                         >
                             Download & Finish Editing
                         </button>
                     </div>
-
                 </div>
+
 
 
             </div>
