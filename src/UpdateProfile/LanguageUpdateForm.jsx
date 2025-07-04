@@ -3,7 +3,7 @@ import trash from "../assets/trash2.png";
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify'; // ✅ FIXED toast issue
-import { BASE_URL } from '../utils/api'; 
+import { BASE_URL } from '../utils/api';
 
 const LanguageUpdateForm = ({ onclose }) => {
   const [languages, setLanguages] = useState([]);
@@ -43,57 +43,59 @@ const LanguageUpdateForm = ({ onclose }) => {
     return true;
   };
 
-   const handleAddLanguage = async (e) => {
-      e.preventDefault();
-      if (!validateForm()) return;
-  
-      const token = sessionStorage.getItem('authToken');
-  
-  
-      if (!token) {
-        navigate('/user/login');
-        toast.error('User not found. Please log in');
-        return;
-      }
-  
-      setLoading(true);
-      
-      try {
-  
-        const response = await fetch(`${BASE_URL}/languages`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json', // Add this
-          },
-          body: JSON.stringify({
-            language: formData.language,
-            proficiency: formData.proficiency,
-          }),
-        });
-  
-        if (!response.ok) {
-          const errData = await response.json().catch(() => ({}));
-          throw new Error(errData.message || 'Upload failed');
-  
-        }
-  
-        setFormData({
-          language: '',
-          proficiency: ''
-        });  
+  const handleAddLanguage = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
 
-            await fetchLanguages();
+    const token = sessionStorage.getItem('authToken');
 
-  
-  
-      } catch (err) {
-        console.error('Error uploading language:', err);
-        toast.error(err.issue);
-      } finally {
-        setLoading(false);
+
+    if (!token) {
+      navigate('/user/login');
+      toast.error('User not found. Please log in');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+
+      const response = await fetch(`${BASE_URL}/languages`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json', // Add this
+        },
+        body: JSON.stringify({
+          language: formData.language,
+          proficiency: formData.proficiency,
+        }),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.message || 'Upload failed');
+
       }
-    };
+
+      setFormData({
+        language: '',
+        proficiency: ''
+      });
+      toast.success(" Language added successfully");
+
+
+      await fetchLanguages();
+
+
+
+    } catch (err) {
+      console.error('Error uploading language:', err);
+      toast.error(err.issue);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleUpdateLanguage = async () => {
     if (!activeId) return alert("Please select a language to update!");
@@ -108,11 +110,11 @@ const LanguageUpdateForm = ({ onclose }) => {
         },
       });
 
-      alert("✅ Language updated successfully");
+      toast.success(" Language updated successfully");
       await fetchLanguages();
     } catch (err) {
       console.error("Update failed", err);
-      alert("❌ Failed to update language.");
+      toast.error(" Failed to update language.");
     }
   };
 
@@ -126,13 +128,13 @@ const LanguageUpdateForm = ({ onclose }) => {
         },
       });
 
-      alert("✅ Language deleted");
+      toast.success(" Language deleted");
       setFormData({ language: '', proficiency: '' });
       setActiveId(null);
       await fetchLanguages();
     } catch (err) {
       console.error("Delete failed", err);
-      alert("❌ Failed to delete language.");
+      toast.error(" Failed to delete language.");
     }
   };
 
@@ -147,8 +149,8 @@ const LanguageUpdateForm = ({ onclose }) => {
       const rawData = Array.isArray(res.data)
         ? res.data
         : Array.isArray(res.data.languages)
-        ? res.data.languages
-        : [];
+          ? res.data.languages
+          : [];
 
       const dataWithId = rawData.map((lan, index) => ({
         ...lan,

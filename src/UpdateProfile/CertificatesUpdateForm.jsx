@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import trash from "../assets/trash2.png";
 import axios from 'axios';
 import { BASE_URL } from '../utils/api';
+import { toast } from 'react-toastify';
 
 const CertificatesUpdateForm = ({ onclose }) => {
   const [certificates, setCertificates] = useState([]);
@@ -65,12 +66,12 @@ const CertificatesUpdateForm = ({ onclose }) => {
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      alert("✅ Certificate added!");
+      toast.success("Certificate added!");
       setFormData({ certificate_name: '', certificate_type: '', provider: '', completion_date: '' });
       await fetchCertificates();
     } catch (err) {
       console.error("Add failed", err);
-      alert("❌ Failed to add certificate.");
+      toast.error("❌ Failed to add certificate.");
     }
   };
 
@@ -85,11 +86,11 @@ const CertificatesUpdateForm = ({ onclose }) => {
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      alert("✅ Certificate updated!");
+      toast.success(" Certificate updated!");
       await fetchCertificates();
     } catch (err) {
       console.error("Update failed", err);
-      alert("❌ Failed to update certificate.");
+      toast.error(" Failed to update certificate.");
     }
   };
 
@@ -99,13 +100,13 @@ const CertificatesUpdateForm = ({ onclose }) => {
       await axios.delete(`${apiUrl}/${activeId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      alert("✅ Certificate deleted");
+      toast.setCertificates(" Certificate deleted");
       setFormData({ certificate_name: '', certificate_type: '', provider: '', completion_date: '' });
       setActiveId(null);
       await fetchCertificates();
     } catch (err) {
       console.error("Delete failed", err);
-      alert("❌ Failed to delete certificate.");
+      toast.error(" Failed to delete certificate.");
     }
   };
 

@@ -39,32 +39,61 @@ const EuropassCV = ({
               <h2 className="font-bold">
                 Email:{" "}
                 <span className="text-black font-normal">
-                  {personalInfo.Mail}
+                  <a
+                    href={`mailto:${personalInfo.Mail}`}
+                    className="underline text-[#2c6472]"
+                  >
+                    {personalInfo.Mail}
+                  </a>
                 </span>
               </h2>
+
               <h2 className="font-bold">
                 Phone:{" "}
-                <span className="text-black font-normal">
-                  {personalInfo.Phone}
-                </span>
+                <span className="text-black font-normal">{personalInfo.Phone}</span>
               </h2>
+
               {personalInfo.LinkedIn && personalInfo.LinkedIn.trim() !== "" && (
                 <h2 className="font-bold">
                   LinkedIn:{" "}
                   <span className="text-black font-normal">
-                    {personalInfo.LinkedIn}
+                    <a
+                      href={
+                        personalInfo.LinkedIn.startsWith("http")
+                          ? personalInfo.LinkedIn
+                          : `https://${personalInfo.LinkedIn}`
+                      }
+                      className="underline text-[#2c6472]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {personalInfo.LinkedIn}
+                    </a>
                   </span>
                 </h2>
               )}
+
               {personalInfo.Website && personalInfo.Website.trim() !== "" && (
                 <h2 className="font-bold">
                   Website:{" "}
                   <span className="text-black font-normal">
-                    {personalInfo.Website}
+                    <a
+                      href={
+                        personalInfo.Website.startsWith("http")
+                          ? personalInfo.Website
+                          : `https://${personalInfo.Website}`
+                      }
+                      className="underline text-[#2c6472]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {personalInfo.Website}
+                    </a>
                   </span>
                 </h2>
               )}
             </div>
+
           </div>
 
           <div className="mt-5 border-b border-gray-300 w-full"></div>
@@ -123,65 +152,65 @@ const EuropassCV = ({
         {workExperience.content.some(
           (exp) => exp.Company || exp.Role || exp.Duration || exp.Description
         ) && (
-          <div className="w-full px-10 pt-6">
-            {/* Section Title */}
-            <div className="flex gap-12 mb-5">
-              <div className="min-w-[130px]">
-                <h2 className="text-[13px] text-[#2c6472] font-bold tracking-widest uppercase">
-                  Experience
-                </h2>
-              </div>
-            </div>
-
-            {/* Experience Entries */}
-            {workExperience.content.map((exp, idx) => {
-              const hasContent =
-                exp.Company || exp.Role || exp.Duration || exp.Description;
-              if (!hasContent) return null;
-
-              return (
-                <div
-                  key={idx}
-                  className="flex gap-4 items-start  pt-1"
-                  style={{
-                    breakInside: "avoid",
-                  }}
-                >
-                  {/* Left: Company Info */}
-                  <div className="w-[180px] flex flex-col gap-0.5">
-                    {exp.Company && (
-                      <p className="text-sm font-bold text-[#2c6472]">
-                        {exp.Company}
-                      </p>
-                    )}
-                    {exp.Role && (
-                      <p className="text-xs text-[#497d8a]">{exp.Role}</p>
-                    )}
-                    {exp.Duration && (
-                      <p className="text-xs text-[#497d8a]">{exp.Duration}</p>
-                    )}
-                  </div>
-
-                  {/* Right: Description */}
-                  <div className="flex-1 text-[13px] text-gray-800 mb-5">
-                    {Array.isArray(exp.Description) ? (
-                      <ul className="list-disc space-y-2.5">
-                        {exp.Description.map((desc, i) => (
-                          <li key={i}>{desc}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p>{exp.Description}</p>
-                    )}
-                  </div>
+            <div className="w-full px-10 pt-6">
+              {/* Section Title */}
+              <div className="flex gap-12 mb-5">
+                <div className="min-w-[130px]">
+                  <h2 className="text-[13px] text-[#2c6472] font-bold tracking-widest uppercase">
+                    Experience
+                  </h2>
                 </div>
-              );
-            })}
+              </div>
 
-            {/* Bottom border */}
-            <div className="mt-3 border-b border-gray-300 w-full"></div>
-          </div>
-        )}
+              {/* Experience Entries */}
+              {workExperience.content.map((exp, idx) => {
+                const hasContent =
+                  exp.Company || exp.Role || exp.Duration || exp.Description;
+                if (!hasContent) return null;
+
+                return (
+                  <div
+                    key={idx}
+                    className="flex gap-4 items-start  pt-1"
+                    style={{
+                      breakInside: "avoid",
+                    }}
+                  >
+                    {/* Left: Company Info */}
+                    <div className="w-[180px] flex flex-col gap-0.5">
+                      {exp.Company && (
+                        <p className="text-sm font-bold text-[#2c6472]">
+                          {exp.Company}
+                        </p>
+                      )}
+                      {exp.Role && (
+                        <p className="text-xs text-[#497d8a]">{exp.Role}</p>
+                      )}
+                      {exp.Duration && (
+                        <p className="text-xs text-[#497d8a]">{exp.Duration}</p>
+                      )}
+                    </div>
+
+                    {/* Right: Description */}
+                    <div className="flex-1 text-[13px] text-gray-800 mb-5">
+                      {Array.isArray(exp.Description) ? (
+                        <ul className="list-disc space-y-2.5">
+                          {exp.Description.map((desc, i) => (
+                            <li key={i}>{desc}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>{exp.Description}</p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Bottom border */}
+              <div className="mt-3 border-b border-gray-300 w-full"></div>
+            </div>
+          )}
       </div>
 
       {/* Projects Section */}
@@ -330,16 +359,16 @@ const EuropassCV = ({
             className="pb-5 w-full flex "
             style={{ breakInside: "avoid" }}
           >
-            <h2 className="text-[13px] w-[640px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
+            <h2 className="text-[13px] w-[180px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
               {skills.title || "Skills"}
             </h2>
-            <div className="text-gray-700 text-[13px]">
+            <div className="text-gray-700 space-x-2 leading-5 text-[13px] w-3/4 ">
               {skills.content
                 .filter((skill) => skill.trim() !== "")
                 .map((skill, index) => (
                   <span key={index}>
                     {skill}
-                    {index < skills.content.length - 1 && " | "}
+                    {index < skills.content.length - 1 && "  |  "}
                   </span>
                 ))}
             </div>

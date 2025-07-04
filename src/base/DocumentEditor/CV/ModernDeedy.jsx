@@ -11,7 +11,7 @@ const ModernDeedy = ({
   certificates,
 }) => {
   return (
-    <div className="flex flex-col gap-2 px-6 py-3 w-full h-full">
+    <div className="flex flex-col gap-2 px-6 py-4 w-full h-full">
       {/* Header */}
       <div className="text-center">
         {/* Name */}
@@ -218,7 +218,7 @@ const ModernDeedy = ({
 
       {/* Skills */}
       {skills.content.filter((skill) => skill.trim() !== "").length > 0 && (
-        <div className="flex flex-col gap-1 avoid-page-break mt-5">
+        <div className="flex  gap-1 avoid-page-break mt-5">
           <div className="flex items-center gap-3">
             <h2 className="font-semibold text-lg text-blue-500 whitespace-nowrap">
               SKILLS
@@ -226,7 +226,7 @@ const ModernDeedy = ({
             <div className="w-full border border-t-gray-400"></div>
           </div>
           <div
-            className="text-[13px] ml-2 mt-2 text-gray-800 flex gap-2"
+            className="text-[13px] ml-2 mt-2 text-gray-800 flex flex-wrap gap-2"
             style={{ breakInside: "avoid" }}
           >
             {skills.content

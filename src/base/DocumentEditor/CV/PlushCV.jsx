@@ -11,7 +11,7 @@ const PlushCV = ({
   certificates,
 }) => {
   return (
-    <div className="flex w-full flex-col font-sans text-[14px] text-black bg-white mx-7 my-5">
+    <div className="flex w-full flex-col font-sans text-[14px] text-black bg-white px-5 my-5">
       {/* Left Column */}
       {/* Name + Title */}
       <div className="mx-5 flex flex-col gap-2 mb-1">
@@ -167,11 +167,11 @@ const PlushCV = ({
               <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">
                 Skills
               </h2>
-              <ul className="list-disc ml-4 text-[12px]">
+              <ul className="list-disc ml-2 text-[12px] space-y-1">
                 {skills.content.map((skill, idx) => (
                   <li
                     key={idx}
-                    className="avoid-page-break"
+                    className="avoid-page-break "
                     style={{ breakInside: "avoid" }}
                   >
                     {skill}
@@ -190,7 +190,7 @@ const PlushCV = ({
               {education.content.map((edu, idx) => (
                 <div
                   key={idx}
-                  className="mb-2 ms-2 avoid-page-break"
+                  className="mb-2 ms-2 avoid-page-break "
                   style={{ breakInside: "avoid" }}
                 >
                   <p className="text-[12px]">{edu.degree}</p>
@@ -227,7 +227,7 @@ const PlushCV = ({
               <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">
                 Certifications
               </h2>
-              <ul className="list-disc ml-4 text-[12px]">
+              <ul className="list-disc ml-4 text-[12px] space-y-1">
                 {certificates.content.map((cert, idx) => (
                   <li
                     key={idx}

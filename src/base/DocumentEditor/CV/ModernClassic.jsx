@@ -17,15 +17,55 @@ const ModernClassic = ({
         {/* <p className="text-white font-semibold text-lg">{personalInfo.Title}</p> */}
         <h2 className="text-white font-bold text-[45px]">{personalInfo.Name}</h2>
         <div className="flex flex-col gap-2 text-white text-[13px] font-light">
+          {/* ✉️ Email and 📞 Phone */}
           <p>
-            {personalInfo.Mail} | {personalInfo.Phone}
+            <a
+              href={`mailto:${personalInfo.Mail}`}
+              className="underline text-[#a6c8ff]"
+            >
+              {personalInfo.Mail}
+            </a>{" "}
+            | (+49) {personalInfo.Phone}
           </p>
+
+          {/* 🔗 LinkedIn and 🌍 Website */}
           <p>
-            {personalInfo.LinkedIn}{" "}
-            {personalInfo.LinkedIn && personalInfo.Website && ` | `}{" "}
-            {personalInfo.Website}
+            {personalInfo.LinkedIn && (
+              <>
+                <a
+                  href={
+                    personalInfo.LinkedIn.startsWith("http")
+                      ? personalInfo.LinkedIn
+                      : `https://${personalInfo.LinkedIn}`
+                  }
+                  className="underline text-[#a6c8ff]"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {personalInfo.LinkedIn}
+                </a>
+              </>
+            )}
+            {personalInfo.LinkedIn && personalInfo.Website && ` | `}
+            {personalInfo.Website && (
+              <>
+                <a
+                  href={
+                    personalInfo.Website.startsWith("http")
+                      ? personalInfo.Website
+                      : `https://${personalInfo.Website}`
+                  }
+                  className="underline text-[#a6c8ff]"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {personalInfo.Website}
+                </a>
+              </>
+            )}
           </p>
         </div>
+
       </div>
 
       {/* Summary */}
@@ -78,67 +118,67 @@ const ModernClassic = ({
       {workExperience.content.some(
         (exp) => exp.Company || exp.Role || exp.Duration || exp.Description
       ) && (
-        <div className="w-full px-10">
-          <div className="flex gap-12 items-start">
-            {/* Left Side: Experience Label */}
-            <div className="min-w-[130px]">
-              <h2 className="text-[#2c6472] font-bold">Experience</h2>
+          <div className="w-full px-10">
+            <div className="flex gap-12 items-start">
+              {/* Left Side: Experience Label */}
+              <div className="min-w-[130px]">
+                <h2 className="text-[#2c6472] font-bold">Experience</h2>
+              </div>
+
+              {/* Right Side: Experience Entries */}
+              <div className="flex-1 flex flex-col gap-5">
+                {workExperience.content.map((exp, idx) => {
+                  const hasContent =
+                    exp.Company || exp.Role || exp.Duration || exp.Description;
+                  if (!hasContent) return null;
+
+                  return (
+                    <div
+                      key={idx}
+                      className="avoid-page-break"
+                      style={{ breakInside: "avoid" }}
+                    >
+                      {(exp.Company || exp.Role) && (
+                        <div className="flex flex-wrap items-center gap-2 text-sm text-[#2c6472]">
+                          {exp.Company && (
+                            <span className="font-bold">{exp.Company}</span>
+                          )}
+                          {exp.Role && (
+                            <span className="font-medium">| {exp.Role}</span>
+                          )}
+                        </div>
+                      )}
+                      {exp.Duration && (
+                        <p className="text-xs text-[#497d8a] mt-2">{exp.Duration}</p>
+                      )}
+                      {exp.Description && (
+                        <div className="text-[13px] text-gray-800 mt-2">
+                          {Array.isArray(exp.Description) ? (
+                            <ul className="list-disc ml-5 space-y-2">
+                              {exp.Description.map((desc, i) => (
+                                <li
+                                  key={i}
+                                  className="avoid-page-break"
+                                  style={{ breakInside: "avoid" }}
+                                >
+                                  {desc}
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p>{exp.Description}</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
-            {/* Right Side: Experience Entries */}
-            <div className="flex-1 flex flex-col gap-5">
-              {workExperience.content.map((exp, idx) => {
-                const hasContent =
-                  exp.Company || exp.Role || exp.Duration || exp.Description;
-                if (!hasContent) return null;
-
-                return (
-                  <div
-                    key={idx}
-                    className="avoid-page-break"
-                    style={{ breakInside: "avoid" }}
-                  >
-                    {(exp.Company || exp.Role) && (
-                      <div className="flex flex-wrap items-center gap-2 text-sm text-[#2c6472]">
-                        {exp.Company && (
-                          <span className="font-bold">{exp.Company}</span>
-                        )}
-                        {exp.Role && (
-                          <span className="font-medium">| {exp.Role}</span>
-                        )}
-                      </div>
-                    )}
-                    {exp.Duration && (
-                      <p className="text-xs text-[#497d8a] mt-2">{exp.Duration}</p>
-                    )}
-                    {exp.Description && (
-                      <div className="text-[13px] text-gray-800 mt-2">
-                        {Array.isArray(exp.Description) ? (
-                          <ul className="list-disc ml-5 space-y-2">
-                            {exp.Description.map((desc, i) => (
-                              <li
-                                key={i}
-                                className="avoid-page-break"
-                                style={{ breakInside: "avoid" }}
-                              >
-                                {desc}
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <p>{exp.Description}</p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            <div className="mt-5 border-b border-gray-300 w-full"></div>
           </div>
-
-          <div className="mt-5 border-b border-gray-300 w-full"></div>
-        </div>
-      )}
+        )}
 
       {/* Education */}
       {education.content &&

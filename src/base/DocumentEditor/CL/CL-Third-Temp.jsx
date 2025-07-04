@@ -22,9 +22,9 @@ const CoverLetterModern = () => {
         <h1 className="text-[18px] font-bold uppercase">{personalInfo?.name}</h1>
         <p>{personalInfo?.title}</p>
         <p className="mt-1">{personalInfo?.address}</p>
-        <div className='flex gap-3'> 
-        <p className="text-blue-600 pb-1 underline">{personalInfo?.mail}</p><hr className='w-[0.5px] h-6 bg-black'/>
-        <p>(+49) {personalInfo?.contact}</p>
+        <div className='flex gap-3'>
+          <p className="text-blue-600 pb-1 underline">{personalInfo?.mail}</p><hr className='w-[0.5px] h-6 bg-black' />
+          <p>(+49) {personalInfo?.contact}</p>
         </div>
         {personalInfo?.website && (
           <p className="text-blue-600 underline">{personalInfo.website}</p>
@@ -45,12 +45,15 @@ const CoverLetterModern = () => {
       </div>
 
       {/* Body */}
-      <div className="space-y-5 text-justify">
-        <p>Dear {recipient?.name?.split(' ')[0] || 'Recruiter'},</p>
-        {paragraphs?.map((para, idx) => (
-          <p key={idx}>{para}</p>
-        ))}
+      <div className="mt-5">
+        <p className='my-5'>Dear {recipient?.name?.split(' ')[0] || 'Recruiter'},</p>
+        <div className="text-justify space-y-4">
+          {paragraphs?.map((para, idx) => (
+            <p key={idx}>{para}</p>
+          ))}
+        </div>
       </div>
+
 
       {/* Footer */}
       <div className="mt-16 space-y-5">
