@@ -304,7 +304,7 @@ const Profile = () => {
         <div className="flex items-center gap-6">
           <div className='w-20 h-20 rounded-full'>
             <img
-              src={ProfileImage || defaultImage}
+              src={ProfileImage || profile}
               alt="Profile"
               className="w-[95%] h-full rounded-full object-cover cursor-pointer"
               onClick={() => setShowModal(true)}
@@ -361,7 +361,6 @@ const Profile = () => {
         <div className='flex flex-col gap-3'>
           <h2 className="text-sm font-bold">Personal Information</h2>
           <p className='text-sm font-medium text-gray-500'>Name: {fullName}</p>
-          <p className='text-sm font-medium text-gray-500'>Date of Birth: {dateOfBirth}</p>
           <p className='text-sm font-medium text-gray-500'>Address: {address}</p>
           <p className='text-sm font-medium text-gray-500'>LinkedIn: <span className='underline cursor-pointer'>{linkedin}</span></p>
         </div>

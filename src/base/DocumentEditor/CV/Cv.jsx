@@ -744,7 +744,7 @@ const Cv = () => {
                 <div className="w-[60%] flex flex-col gap-8">
 
                     <div ref={previewRef} className="min-h-[1123px] w-[794px] flex bg-white">
-{/* 
+
                         <ModernDeedy
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
@@ -754,9 +754,20 @@ const Cv = () => {
                             skills={skills}
                             languages={languages}
                             certificates={certificates}
-                        /> */}
+                        /> 
 
-                        {/* <PlushCV
+                         {/* <PlushCV
+                            personalInfo={personalInfo}
+                            professionalSummary={professionalSummary}
+                            workExperience={workExperience}
+                            education={education}
+                            projects={projects}
+                            skills={skills}
+                            languages={languages}
+                            certificates={certificates}
+                        />  */}
+
+                        {/* <EuropassCV 
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -766,17 +777,6 @@ const Cv = () => {
                             languages={languages}
                             certificates={certificates}
                         /> */}
-
-                        <EuropassCV 
-                            personalInfo={personalInfo}
-                            professionalSummary={professionalSummary}
-                            workExperience={workExperience}
-                            education={education}
-                            projects={projects}
-                            skills={skills}
-                            languages={languages}
-                            certificates={certificates}
-                        />
 
                         {/* <ModernClassic 
                             personalInfo={personalInfo}
