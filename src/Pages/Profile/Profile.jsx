@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import profile from '../../assets/profile1.png'
+import defaultImage from '../../assets/profile1.png'
 import edit from '../../assets/edit-icon.svg'
 import Loader from '../../base/loader/Loader';
 import WorkExpUpdateForm from '../../UpdateProfile/WorkExpUpdateForm';
