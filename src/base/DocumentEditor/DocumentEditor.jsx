@@ -8,6 +8,9 @@ import { useExternalCv } from './Context/ExternalCvContext';
 import { useExternalCl } from './Context/ExternalClContext';
 import ExternalClTemp from './CL/ExternalClTemp';
 import ExternalModernDeedy from './CV/ExternalModernDeedy';
+import ExternalEuropass from './CV/ExternalEuropassCV';
+import ExternalModernClassic from './CV/ExternalModernClassic'
+import ExternalPlushCV from './CV/ExternalPlushCV'
 
 const DocumentEditor = () => {
 
@@ -116,7 +119,7 @@ const DocumentEditor = () => {
                         </div>
                     </div>
 
-                    <div ref={cvPreviewRef} className="h-[1123px] w-[710px] flex bg-white mx-auto overflow-hidden overflow-y-auto scrollbar-custom">
+                    <div ref={cvPreviewRef} className="h-full w-[794px] py-5 flex bg-white mx-auto overflow-hidden scrollbar-custom">
 
                         <ExternalModernDeedy
                             personalInfo={cvPersonalInfo}
@@ -129,12 +132,56 @@ const DocumentEditor = () => {
                             certificates={certificates}
                         />
 
+                        {/* <ExternalEuropass 
+                            personalInfo={cvPersonalInfo}
+                            professionalSummary={professionalSummary}
+                            workExperience={workExperience}
+                            education={education}
+                            projects={projects}
+                            skills={skills}
+                            languages={languages}
+                            certificates={certificates}
+                        /> */}
+
+                        {/* <ExternalModernClassic 
+                            personalInfo={cvPersonalInfo}
+                            professionalSummary={professionalSummary}
+                            workExperience={workExperience}
+                            education={education}
+                            projects={projects}
+                            skills={skills}
+                            languages={languages}
+                            certificates={certificates}
+                        /> */}
+
+                        {/* <ExternalPlushCV 
+                            personalInfo={cvPersonalInfo}
+                            professionalSummary={professionalSummary}
+                            workExperience={workExperience}
+                            education={education}
+                            projects={projects}
+                            skills={skills}
+                            languages={languages}
+                            certificates={certificates}
+                        /> */}
+
+                        {/* <ThirdCV 
+                            personalInfo={personalInfo}
+                            professionalSummary={professionalSummary}
+                            workExperience={workExperience}
+                            education={education}
+                            projects={projects}
+                            skills={skills}
+                            languages={languages}
+                            certificates={certificates}
+                        /> */}
+
                     </div>
 
                 </div>
 
 
-                <div className="flex flex-col gap-5 justify-center -mt-10 mx-auto">
+                <div className="flex flex-col gap-5 justify-start mx-auto">
 
                     <div className="flex justify-between px-5 max-w-[710px]">
                         <div onClick={() => navigate('/user/external-cl')} className="flex-1 flex -mt-2 gap-2 items-center cursor-pointer">

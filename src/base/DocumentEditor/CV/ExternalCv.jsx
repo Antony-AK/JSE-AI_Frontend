@@ -8,6 +8,10 @@ import { useExternalCv } from '../Context/ExternalCvContext';
 import ExternalModernDeedy from './ExternalModernDeedy';
 import axios from 'axios';
 import { BASE_URL } from '../../../utils/api';
+import ExternalPlushCV from './ExternalPlushCV';
+import ExternalThirdCV from './CV-Third-Template';
+import ExternalEuropassCV from './ExternalEuropassCV';
+import ExternalModernClassic from './ExternalModernClassic';
 
 const ExternalCv = () => {
 
@@ -27,6 +31,17 @@ const ExternalCv = () => {
     const [selectedCompanyIdx, setSelectedCompanyIdx] = useState(0);
     const [selectedProjectIdx, setSelectedProjectIdx] = useState(0);
     const [selectedEducationIdx, setSelectedEducationIdx] = useState(0);
+    
+    // 🔽 Add at the top (under hooks)
+    const templates = {
+        ExternalModernDeedy,
+        ExternalPlushCV,
+        ExternalThirdCV,
+        ExternalEuropassCV,
+        ExternalModernClassic
+    };
+    const [selectedTemplate, setSelectedTemplate] = useState("ExternalModernDeedy");
+    const SelectedTemplate = templates[selectedTemplate];    
 
     const previewRef = useRef();
 
@@ -654,13 +669,67 @@ const ExternalCv = () => {
                         </div>
                     </div>
 
+                    <div className='bg-white p-5 border border-gray-300 rounded-lg'>
+                        <h1 className='flex font-medium text-lg'>Templates</h1>
+
+                        <p className='text-center font-medium my-2'>Pick your favourite CV Template</p>
+                    
+
+                    <div className="flex flex-wrap gap-4 mt-5 justify-center">
+                        {Object.entries(templates).map(([name, Template]) => {
+                            if (name === selectedTemplate) return null;
+
+                            return (
+                                
+                                <div
+                                    key={name}
+                                    className="cursor-pointer border rounded hover:shadow-lg hover:border-[#2C6472] transition duration-200 bg-white w-[200px]   overflow-hidden"
+                                    onClick={() => setSelectedTemplate(name)}
+                                >
+                                    {/* 🔍 Container for scaled template */}
+                                    <div className="w-full h-[280px] overflow-hidden relative bg-white">
+                                        {/* Template scaled and positioned */}
+                                        <div
+                                            className="absolute top-0 left-0"
+                                            style={{
+                                                transform: "scale(0.25)",
+                                                transformOrigin: "top left",
+                                                width: "794px",
+                                                height: "1123px",
+                                            }}
+                                        >
+                                            <div className="bg-white w-[794px] h-[1123px] shadow">
+                                                <Template
+                                                    personalInfo={personalInfo}
+                                                    professionalSummary={professionalSummary}
+                                                    workExperience={workExperience}
+                                                    education={education}
+                                                    projects={projects}
+                                                    skills={skills}
+                                                    languages={languages}
+                                                    certificates={certificates}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* 👇 Template name below */}
+                                    <div className="text-center text-sm py-2 bg-[#3f6068] text-white font-semibold">
+                                        {name}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    </div>
+
                 </div>
 
                 <div className="w-[60%] flex flex-col gap-8">
 
-                    <div ref={previewRef} className="min-h-[1123px] w-[794px] flex bg-white">
-
-                        <ExternalModernDeedy
+                    <div ref={previewRef} className="min-h-[1123px] w-[794px] bg-white shadow border">
+                        <SelectedTemplate
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -670,7 +739,6 @@ const ExternalCv = () => {
                             languages={languages}
                             certificates={certificates}
                         />
-
                     </div>
 
                     <div className="flex w-[794px] justify-end">
@@ -682,7 +750,7 @@ const ExternalCv = () => {
                             }}
                         >
                             Download & Finish Editing
-                        </button>
+                        </button>
                     </div>
 
                 </div>
