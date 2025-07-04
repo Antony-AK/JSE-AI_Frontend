@@ -39,7 +39,7 @@ const Cv = () => {
         if (!element) return;
 
         const opt = {
-            margin: 0,
+            margin: [20,0,0,0],
             filename: 'CV.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true },
@@ -776,7 +776,7 @@ const Cv = () => {
                             skills={skills}
                             languages={languages}
                             certificates={certificates}
-                        />
+                        />   */}
 
                         {/* <ModernClassic 
                             personalInfo={personalInfo}
@@ -806,9 +806,9 @@ const Cv = () => {
                         <button
                             onClick={() => {
                                 handleDownload();
-                                setActiveSection(null);
+                                // setActiveSection(null);
                                 // Delay navigation to ensure download starts first
-                                setTimeout(() => navigate(-1), 800);
+                                // setTimeout(() => navigate(-1), 800);
                             }}
                             className="bg-[#2c6472] text-white px-8 py-1.5 rounded-lg"
                         >
