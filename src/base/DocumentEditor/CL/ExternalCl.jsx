@@ -1,22 +1,30 @@
-import React, { useState } from 'react';
-import { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import download_icon from '../../../assets/download.svg';
 import html2pdf from 'html2pdf.js';
-import save_icon from '../../../assets/tick.svg'
+import save_icon from '../../../assets/tick.svg';
 import edit_icon from '../../../assets/edit-icon.svg';
-import ExternalClTemp from './ExternalClTemp';
 import { useExternalCl } from '../Context/ExternalClContext';
 import axios from 'axios';
 import { BASE_URL } from '../../../utils/api';
 
+import ExternalClPreview from './ExternalClTemp';
+import ExternalCoverLetterPlush from './ExternalCoverLetterPlush';
+import ExternalCoverLetterModern from './External-CL-Third-Temp';
+
 const ExternalCl = () => {
-
   const previewRef = useRef(null);
-
   const navigate = useNavigate();
-
   const [activeSection, setActiveSection] = useState(null);
+  const [selectedClTemplate, setSelectedClTemplate] = useState("ExternalModernCL");
+
+  const clTemplates = {
+    "ExternalModernCL": ExternalCoverLetterModern,
+    "ExternalPlushCL": ExternalCoverLetterPlush,
+    "ExternalClassicCL": ExternalClPreview,
+  };
+
+  const ActiveCLTemplate = clTemplates[selectedClTemplate];
+
   const { personalInfo, setPersonalInfo, paragraphs, setParagraphs, isLoading } = useExternalCl();
 
   const handleFieldChange = (key, value) => {
@@ -48,19 +56,16 @@ const ExternalCl = () => {
     };
 
     html2pdf().set(opt).from(previewRef.current).save();
-
   };
 
   const handleUpdateCoverLetter = async () => {
     const token = sessionStorage.getItem("authToken");
-    const jobId = sessionStorage.getItem("externalJobId"); // ✅ Make sure this is stored earlier
+    const jobId = sessionStorage.getItem("externalJobId");
 
     if (!token || !jobId) {
-      console.warn("⚠️ Missing auth token or cover letter data.");
+      console.warn("⚠️ Missing auth token or job ID.");
       return;
     }
-
-
 
     try {
       const payload = {
@@ -75,10 +80,8 @@ const ExternalCl = () => {
         }
       };
 
-      console.log("📦 Final PUT Payload:", payload);
-
       const response = await axios.put(
-        `${BASE_URL}/external/generate/cl`, // ✅ Use correct endpoint
+        `${BASE_URL}/external/generate/cl`,
         payload,
         {
           headers: {
@@ -88,7 +91,7 @@ const ExternalCl = () => {
         }
       );
 
-      console.log("✅ Cover letter updated successfully:", response.data);
+      console.log("✅ Cover letter updated:", response.data);
     } catch (error) {
       console.error("❌ Failed to update cover letter:", error.response?.data || error.message);
     }
@@ -97,15 +100,12 @@ const ExternalCl = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p className="text-lg font-medium text-gray-600 animate-pulse"> Loading your cover letter </p>
+        <p className="text-lg font-medium text-gray-600 animate-pulse">Loading your cover letter...</p>
       </div>
     );
   }
 
-
-
   return (
-
     <div className='flex flex-col justify-center items-center mx-auto'>
       <div className="flex items-center w-full px-4 mt-7">
         <div className="w-full text-center">
@@ -123,23 +123,18 @@ const ExternalCl = () => {
               <h2 className="font-semibold">Personal Information</h2>
               <img
                 width="30px"
-                className={`cursor-pointer p-2 rounded-full transition hover:bg-gray-300`}
+                className="cursor-pointer p-2 rounded-full transition hover:bg-gray-300"
                 src={activeSection === 'personalInfo' ? save_icon : edit_icon}
                 alt=""
-                onClick={() => {
-                  if (activeSection === 'personalInfo') {
-                    setActiveSection(null);
-                  } else {
-                    setActiveSection('personalInfo');
-                  }
-                }}
+                onClick={() =>
+                  setActiveSection(activeSection === 'personalInfo' ? null : 'personalInfo')
+                }
               />
             </div>
 
             <div className="pl-1 space-y-2">
               {Object.entries(personalInfo).map(([key, value]) => {
                 const isEditable = !['name', 'mail', 'contact'].includes(key);
-
                 return (
                   <div key={key} className="flex items-center gap-3">
                     <span className="font-semibold capitalize">{key}:</span>
@@ -164,17 +159,12 @@ const ExternalCl = () => {
               <h2 className="font-semibold">Content</h2>
               <img
                 width="30px"
-                className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'content' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                  }`}
+                className="cursor-pointer p-2 rounded-full transition hover:bg-gray-300"
                 src={activeSection === 'content' ? save_icon : edit_icon}
                 alt=""
-                onClick={() => {
-                  if (activeSection === 'content') {
-                    setActiveSection(null);
-                  } else {
-                    setActiveSection('content');
-                  }
-                }}
+                onClick={() =>
+                  setActiveSection(activeSection === 'content' ? null : 'content')
+                }
               />
             </div>
             <div className="pl-1 space-y-3">
@@ -183,35 +173,71 @@ const ExternalCl = () => {
                   key={index}
                   value={para}
                   onChange={(e) => handleParagraphChange(index, e.target.value)}
-                  className={`w-full min-h-[190px] max-h-[350px] text-[#000000cc] font-medium resize-y outline-none bg-white px-2 py-1 rounded-md shadow-sm ${activeSection === 'content' ? 'border-b border-[#2c6472]' : ''}`}
+                  className={`w-full min-h-[190px] max-h-[350px] text-[#000000cc] font-medium resize-y outline-none bg-white px-2 py-1 rounded-md shadow-sm 
+                  ${activeSection === 'content' ? 'border-b border-[#2c6472]' : ''}`}
                   disabled={activeSection !== 'content'}
                 />
               ))}
             </div>
           </div>
 
+          {/* Template Switcher */}
+          <div className='bg-white rounded p-5 border border-gray-300'>
+            <h3 className="text-lg font-semibold mb-2 text-center">Choose a Cover Letter Template</h3>
+            <div className="flex flex-wrap gap-4 mt-4 justify-center">
+              {Object.entries(clTemplates).map(([name, Template]) => {
+                if (name === selectedClTemplate) return null;
+
+                return (
+                  <div
+                    key={name}
+                    className="cursor-pointer border rounded hover:shadow-lg hover:border-[#2C6472] transition duration-200 bg-white w-[200px] overflow-hidden"
+                    onClick={() => setSelectedClTemplate(name)}
+                  >
+                    <div className="w-full h-[280px] overflow-hidden relative bg-white">
+                      <div
+                        className="absolute top-0 left-0"
+                        style={{
+                          transform: "scale(0.25)",
+                          transformOrigin: "top left",
+                          width: "794px",
+                          height: "1123px",
+                        }}
+                      >
+                        <div className="bg-white w-[794px] h-[1123px] shadow">
+                          <Template personalInfo={personalInfo} paragraphs={paragraphs} />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-center text-sm py-2 bg-[#3f6068] text-white font-semibold">
+                      {name.replace("External", "")}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
           <button
             className="bg-[#2c6472] text-white mt-4 px-8 py-1.5 rounded-lg"
             onClick={async () => {
-              await handleUpdateCoverLetter();   // ✨ First update the data in DB
-              handleDownload();                  // 🧾 Then download PDF
-              setActiveSection(null);            // 🎨 Optional cleanup
-              navigate(-1);                      // ⬅️ Go back
+              await handleUpdateCoverLetter();
+              handleDownload();
+              setActiveSection(null);
+              navigate(-1);
             }}
           >
             Download & Finish Editing
           </button>
-
-
         </div>
 
         {/* RIGHT */}
-        <div ref={previewRef} className="w-[794px] h-[1123px] flex flex-col gap-5">
-          <ExternalClTemp />
+        <div ref={previewRef} className="w-[794px] h-[1123px] flex flex-col gap-5 bg-white">
+          <ActiveCLTemplate personalInfo={personalInfo} paragraphs={paragraphs} />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ExternalCl
+export default ExternalCl;

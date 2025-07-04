@@ -1,42 +1,32 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { BASE_URL } from "../../../utils/api";
+import React from 'react'
 
-const ThirdCV = ({
-  personalInfo,
-  professionalSummary,
-  workExperience,
-  education,
-  skills,
-  languages,
-  certificates,
-  projects,
-}) => {
-  const [profileImage, setProfileImage] = useState(null);
-  const token = sessionStorage.getItem("authToken");
+const ExternalThirdCV = ({ personalInfo, professionalSummary, workExperience, education, skills, languages, certificates, projects }) => {
 
-  useEffect(() => {
-    const fetchProfileImage = async () => {
-      try {
-        const headers = { Authorization: `Bearer ${token}` };
-        const res = await axios.get(`${BASE_URL}/photo`, {
-          headers,
-          responseType: "blob",
-        });
-        const imageUrl = URL.createObjectURL(res.data);
-        setProfileImage(imageUrl);
-      } catch (error) {
-        console.error("❌ Failed to fetch profile image:", error);
-      }
-    };
-
-    if (token) fetchProfileImage();
-  }, [token]);
-
-  // console.log("💡 personalInfo =>", personalInfo);
-
-
-  const imageToUse = profileImage || personalInfo?.profileImage;
+    const [profileImage, setProfileImage] = useState(null);
+      const token = sessionStorage.getItem("authToken");
+    
+      useEffect(() => {
+        const fetchProfileImage = async () => {
+          try {
+            const headers = { Authorization: `Bearer ${token}` };
+            const res = await axios.get(`${BASE_URL}/photo`, {
+              headers,
+              responseType: "blob",
+            });
+            const imageUrl = URL.createObjectURL(res.data);
+            setProfileImage(imageUrl);
+          } catch (error) {
+            console.error("❌ Failed to fetch profile image:", error);
+          }
+        };
+    
+        if (token) fetchProfileImage();
+      }, [token]);
+    
+      console.log("💡 personalInfo =>", personalInfo);
+    
+    
+      const imageToUse = profileImage || personalInfo?.profileImage;
 
   return (
     <div className="w-full max-w-[794px] mx-auto bg-white text-black font-sans text-[13px] leading-normal px-12 py-6">
@@ -236,7 +226,7 @@ const ThirdCV = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ThirdCV;
+export default ExternalThirdCV
