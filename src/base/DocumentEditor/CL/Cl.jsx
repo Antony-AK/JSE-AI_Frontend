@@ -9,6 +9,7 @@ import { useCl } from '../Context/ClContext';
 import { useNavigate } from 'react-router-dom';
 import html2pdf from 'html2pdf.js';
 import CoverLetterPlush from './CoverLetterPlush';
+import CoverLetterModern from './CL-Third-Temp';
 
 const Cl = () => {
 
@@ -222,7 +223,9 @@ const Cl = () => {
         {/* RIGHT */}
         <div ref={previewRef} className="w-[794px] h-[1123px] flex flex-col gap-5">
           {/* <ClPreview /> */}
-          <CoverLetterPlush/>
+          {/* <CoverLetterPlush/> */}
+          <CoverLetterModern/>
+
         </div>
       </div>
     </div>

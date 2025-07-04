@@ -3,23 +3,51 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../utils/api';
+import imageCompression from 'browser-image-compression'; // 👈 import it
+
 
 const ProfileImageModal = ({ imageUrl, onClose, onUpload }) => {
     const [preview, setPreview] = useState(imageUrl || null);
     const [loading, setLoading] = useState(false);
-      const [refreshTrigger, setRefreshTrigger] = useState(false);
+    const [refreshTrigger, setRefreshTrigger] = useState(false);
     const fileInputRef = useRef();
 
-    const handleImageSelect = (e) => {
-        const file = e.target.files[0];
-        if (file && file.type.startsWith("image/")) {
-            const url = URL.createObjectURL(file);
-            setPreview(url);
-            uploadImage(file);
-        } else {
-            toast.error("Please select a valid image.");
-        }
+    const handleImageSelect = async (e) => {
+    const file = e.target.files[0];
+
+    if (!file) {
+        toast.error("No file selected.");
+        return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+        toast.error("Please upload a valid image file.");
+        return;
+    }
+
+    const options = {
+        maxSizeMB: 1,              // ⬅️ Target size ~1MB
+        maxWidthOrHeight: 1024,    // ⬅️ Resize to max 1024px
+        useWebWorker: true         // ✅ faster performance
     };
+
+    try {
+        // 👇 Compress the image
+        const compressedFile = await imageCompression(file, options);
+
+        console.log("Original:", file.size / 1024, "KB");
+        console.log("Compressed:", compressedFile.size / 1024, "KB");
+
+        const compressedPreview = URL.createObjectURL(compressedFile);
+        setPreview(compressedPreview);
+
+        uploadImage(compressedFile); // 👈 Upload compressed version
+    } catch (error) {
+        console.error("Compression Error:", error);
+        toast.error("Failed to compress image.");
+    }
+};
+
 
     const uploadImage = async (file) => {
         try {
@@ -50,7 +78,7 @@ const ProfileImageModal = ({ imageUrl, onClose, onUpload }) => {
             }
 
             const data = await response.json();
-            toast.success("✅ Profile image updated!");
+            toast.success("Profile image updated!");
             onUpload(data.photo_url); // update the parent
             onClose();
             setRefreshTrigger(prev => !prev); // ✅ this will re-fetch profile data

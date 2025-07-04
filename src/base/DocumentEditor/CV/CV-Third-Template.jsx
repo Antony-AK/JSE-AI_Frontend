@@ -58,7 +58,7 @@ const ThirdCV = ({
           {/* <p><strong>📍 Address:</strong> {personalInfo?.Address}</p> */}
           <p>
             <strong>✉️ Email:</strong> {personalInfo?.Mail} &nbsp;&nbsp;
-            <strong>📞 Phone:</strong> {personalInfo?.Phone}
+            <strong>📞 Phone:</strong> (+49) {personalInfo?.Phone}
           </p>
           {personalInfo?.Website && (
             <p>
@@ -98,9 +98,9 @@ const ThirdCV = ({
 
       {/* Work Experience */}
       {workExperience?.content?.length > 0 && (
-        <TwoColumnSection className="avoid-page-break" title="WORK EXPERIENCE">
+        <TwoColumnSection className="avoid-page-break " title="WORK EXPERIENCE">
           {workExperience.content.map((job, idx) => (
-            <div key={idx} className="">
+            <div key={idx} className="mb-5">
               <p className="text-gray-600 italic text-[12px]">{job.Duration}</p>
               <p className="text-blue-700 font-bold">{job.Role}</p>
               <p className="font-semibold italic">{job.Company}</p>
@@ -127,7 +127,7 @@ const ThirdCV = ({
       {projects?.content?.length > 0 && (
         <TwoColumnSection className="avoid-page-break" title="PROJECTS">
           {projects.content.map((proj, idx) => (
-            <div key={idx} className="">
+            <div key={idx} className="mb-5">
               <p className="text-gray-600 italic text-[12px]">
                 {proj.Duration}
               </p>
@@ -170,8 +170,8 @@ const ThirdCV = ({
       {skills?.content?.length > 0 && (
         <TwoColumnSection className="avoid-page-break" title="SKILLS">
           {skills.content.map((skill, idx) => (
-            <p key={idx} className="flex items-center gap-1">
-              <span className="text-blue-600 text-2xl">•</span> {skill}
+            <p key={idx} className="flex items-center  -mt-2">
+              <span className=" text-2xl me-3">•</span> {skill}
             </p>
           ))}
         </TwoColumnSection>
@@ -180,8 +180,8 @@ const ThirdCV = ({
       {languages?.content?.length > 0 && (
         <TwoColumnSection className="avoid-page-break" title="LANGUAGES">
           {languages.content.map((lang, idx) => (
-            <p key={idx} className="flex items-center gap-1">
-              <span className="text-blue-600 text-2xl">•</span> {lang}
+            <p key={idx} className="flex items-center -mt-2">
+              <span className="me-3 text-2xl">•</span> {lang}
             </p>
           ))}
         </TwoColumnSection>
@@ -190,8 +190,8 @@ const ThirdCV = ({
       {certificates?.content?.length > 0 && (
         <TwoColumnSection className="avoid-page-break" title="CERTIFICATES">
           {certificates.content.map((cert, idx) => (
-            <p key={idx} className="flex items-center gap-1">
-              <span className="text-blue-600 text-2xl">•</span>{" "}
+            <p key={idx} className="flex items-center -mt-2">
+              <span className="me-3 text-2xl">•</span>{" "}
               {cert?.Name || cert}
             </p>
           ))}

@@ -744,8 +744,8 @@ const Cv = () => {
                 <div className="w-[60%] flex flex-col gap-8">
 
                     <div ref={previewRef} className="min-h-[1123px] w-[794px] flex bg-white">
-
-                        {/* <ModernDeedy
+{/* 
+                        <ModernDeedy
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -767,7 +767,7 @@ const Cv = () => {
                             certificates={certificates}
                         /> */}
 
-                        {/* <EuropassCV 
+                        <EuropassCV 
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -776,7 +776,7 @@ const Cv = () => {
                             skills={skills}
                             languages={languages}
                             certificates={certificates}
-                        /> */}
+                        />
 
                         {/* <ModernClassic 
                             personalInfo={personalInfo}
@@ -789,7 +789,7 @@ const Cv = () => {
                             certificates={certificates}
                         /> */}
 
-                        <ThirdCV 
+                        {/* <ThirdCV 
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -798,7 +798,7 @@ const Cv = () => {
                             skills={skills}
                             languages={languages}
                             certificates={certificates}
-                        />
+                        /> */}
 
                     </div>
 

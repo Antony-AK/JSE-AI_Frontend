@@ -21,17 +21,17 @@ const DataOnboarding = () => {
 
             {/* Right Content Area */}
             <div className="ms-[27%] fixed top-10 flex flex-col items-center h-full w-[73%] text-black p-10">
-                <div className="w-full flex mx-auto items-center flex-col">
+                <div className="w-full flex mx-auto items-center mt-10 flex-col">
                     <h1 className='font-semibold text-3xl'>Build your job profile in just a few steps.</h1>
                     <p className=' mt-3  -ml-72 '>Select an option that works best for you.</p>
                 </div>
 
-                <div className="flex flex-col gap-7 mt-36  -ml-32">
-                    <Link to="/user/onboarding/personal-information"><div className="flex w-[450px] h-[72px] gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
+                <div className="flex flex-col gap-10 mt-28  -ml-32">
+                    <Link to="/user/onboarding/personal-information"><div className="flex w-[450px] h-[96px] gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
                         <img src={insert} className='w-6 h-6 -mt-1 object-cover' alt="" />
                         <p className='text-lg font-medium'>Create a Profile from Scratch</p>
                     </div></Link>
-                    <Link to="/user/resume"> <div className="flex w-[450px] h-[72px] gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
+                    <Link to="/user/resume"> <div className="flex w-[450px] h-[96px] gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
                         <img src={upload} className='w-6 h-6 -mt-1 object-cover' alt="" />
                         <p className='text-lg font-medium'>Upload Resume</p>
                     </div></Link>

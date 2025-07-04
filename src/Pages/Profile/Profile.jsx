@@ -45,7 +45,6 @@ const Profile = () => {
 
         if (isMounted) {
           setProfileData(res.data);
-          console.log(profileData);
           setLoading(false);
         }
       } catch (err) {
@@ -95,30 +94,38 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchProfileImage = async () => {
-  try {
-    const headers = { Authorization: `Bearer ${token}` };
-    const res = await axios.get(`${BASE_URL}/photo`, {
-      headers,
-      responseType: 'blob', // 👈 VERY IMPORTANT!
-    });
+      try {
+        const headers = { Authorization: `Bearer ${token}` };
+        const res = await axios.get(`${BASE_URL}/photo`, {
+          headers,
+          responseType: 'blob', // 👈 VERY IMPORTANT!
+        });
 
-    const imageUrl = URL.createObjectURL(res.data); // create temp URL from blob
-    setProfileImage(imageUrl); // ✅ now you can use this in <img src=...>
+        const imageUrl = URL.createObjectURL(res.data); // create temp URL from blob
+        setProfileImage(imageUrl); // ✅ now you can use this in <img src=...>
 
-    console.log("✅ Image blob fetched:", imageUrl);
-  } catch (error) {
-    console.error("❌ Failed to fetch image blob:", error);
-  }
-};
+        console.log("Image blob fetched:", imageUrl);
+      } catch (error) {
+        console.error("Failed to fetch image blob:", error);
+      }
+    };
 
     if (token) fetchProfileImage();
-  }, [token]);
+  }, [token, refreshTrigger]);
 
 
 
 
   if (loading) return <Loader />;
   if (error) return <div className="text-red-500 text-center mt-10">{error}</div>;
+  if (!profileData || !profileData.seeker) {
+    return (
+      <div className="p-10">
+        <p className="text-center text-gray-400 animate-pulse">Loading profile...</p>
+      </div>
+    );
+  }
+
 
   // Full Name
   const fullName = `${profileData?.seeker?.personal_info?.first_name || ""} ${profileData?.seeker?.personal_info?.second_name || ""}`.trim();
@@ -295,39 +302,34 @@ const Profile = () => {
 
       <div className="flex justify-between py-3 px-5  w-full bg-white rounded-md">
         <div className="flex items-center gap-6">
-          <div className='w-20 h-20 rounded-full '>
-          <img
+          <div className='w-20 h-20 rounded-full'>
+            <img
               src={ProfileImage || defaultImage}
-            alt="Profile"
-            className="w-[95%] h-full rounded-full object-cover cursor-pointer"
-            onClick={() => setShowModal(true)}
-          /></div>
-
-
-
+              alt="Profile"
+              className="w-[95%] h-full rounded-full object-cover cursor-pointer"
+              onClick={() => setShowModal(true)}
+            />
+          </div>
 
           <div>
             <h2 className="font-bold">{fullName}</h2>
-            <p className="font-semibold text-xs mt-2">{primaryTitle}</p>
+            <p>{profileData?.seeker?.primary_title}</p>
           </div>
         </div>
 
         {/* 🧠 Image Modal Popup */}
         {showModal && (
           <ProfileImageModal
-             imageUrl={ProfileImage}
-
+            imageUrl={ProfileImage}
             onClose={() => setShowModal(false)}
             onUpload={(photo_path) => {
-              // 🧠 the backend should return only the path like `/images/abc.jpg`
-              setProfileImage((prev) => ({
-                ...prev,
-                profile_image: photo_path, // only the relative path
-              }));
+              setProfileImage(photo_path); // ✅ fix: directly update image
+              setShowModal(false);         // ✅ close the modal
+              setRefreshTrigger(prev => !prev); // 🔁 Re-fetch image
             }}
-
           />
         )}
+
 
         <div className="flex flex-col items-center">
           <div className="relative w-14 h-14">
@@ -494,7 +496,7 @@ const Profile = () => {
         </div>
       </div>
 
-    
+
 
 
 
