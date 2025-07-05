@@ -36,7 +36,7 @@ const LanguageUpdateForm = ({ onclose }) => {
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
-      alert("Please fill all the fields before adding data");
+      toast.error("Please fill all the fields.");
       return false;
     }
 
@@ -98,10 +98,10 @@ const LanguageUpdateForm = ({ onclose }) => {
   };
 
   const handleUpdateLanguage = async () => {
-    if (!activeId) return alert("Please select a language to update!");
+    if (!activeId) return toast.error("Please select a language to update!");
 
     const selected = languages.find(lang => lang.tempId === activeId);
-    if (!selected) return alert("Selected language not found.");
+    if (!selected) return toast.error("Selected language not found.");
 
     try {
       const response = await axios.put(`${apiUrl}/${activeId}`, formData, {
@@ -110,16 +110,16 @@ const LanguageUpdateForm = ({ onclose }) => {
         },
       });
 
-      toast.success(" Language updated successfully");
+      toast.success("Language updated successfully");
       await fetchLanguages();
     } catch (err) {
       console.error("Update failed", err);
-      toast.error(" Failed to update language.");
+      toast.error("Failed to update language.");
     }
   };
 
   const handleDeleteLanguage = async () => {
-    if (!activeId) return alert("Please select a language to delete!");
+    if (!activeId) return toast.error("Please select a language to delete!");
 
     try {
       await axios.delete(`${apiUrl}/${activeId}`, {
@@ -128,13 +128,13 @@ const LanguageUpdateForm = ({ onclose }) => {
         },
       });
 
-      toast.success(" Language deleted");
+      toast.success("Language deleted.");
       setFormData({ language: '', proficiency: '' });
       setActiveId(null);
       await fetchLanguages();
     } catch (err) {
       console.error("Delete failed", err);
-      toast.error(" Failed to delete language.");
+      toast.error("Failed to delete language.");
     }
   };
 

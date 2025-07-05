@@ -51,7 +51,7 @@ const ModernDeedy = ({
             </h2>
             <div className="w-full border border-t-gray-400"></div>
           </div>
-          <p className="ml-2 text-[13px] text-gray-600 leading-6">
+          <p className="ml-2 text-sm text-gray-600 leading-6">
             {professionalSummary.content}
           </p>
         </div>
@@ -77,12 +77,12 @@ const ModernDeedy = ({
             return (
               <div
                 key={idx}
-                className="flex flex-col gap-2.5 avoid-page-break mt-2"
+                className="flex flex-col gap-2.5 avoid-page-break mt-4"
                 style={{ breakInside: "avoid" }}
               >
                 {(exp.Company || exp.Role || exp.Duration) && (
-                  <div className="ml-2 flex justify-between w-full">
-                    <p className="text-sm font-bold text-[#2c6472]">
+                  <div className="ml-3 flex justify-between w-full">
+                    <p className="text-base font-bold text-[#2c6472]">
                       {exp.Company}
                       {exp.Role && (
                         <>
@@ -95,13 +95,13 @@ const ModernDeedy = ({
                       )}
                     </p>
                     {exp.Duration && (
-                      <p className="text-xs text-gray-600">{exp.Duration}</p>
+                      <p className="text-sm text-gray-600">{exp.Duration}</p>
                     )}
                   </div>
                 )}
                 {Array.isArray(exp.Description) &&
                   exp.Description.length > 0 && (
-                    <ul className="list-none ml-3 mt-3 text-[13px] text-gray-800 space-y-1">
+                    <ul className="list-none ml-3 mt-3 text-sm text-gray-800 space-y-1">
                       {exp.Description.map((point, i) => (
                         <li
                           key={i}
@@ -121,29 +121,41 @@ const ModernDeedy = ({
       )}
 
       {/* Education */}
-      {education?.content?.length > 0 &&
-        education.content.some((entry) => entry.degree?.trim()) && (
-          <div className="flex flex-col gap-1 avoid-page-break mt-5">
-            <div className="flex items-center gap-3">
-              <h2 className="font-semibold text-lg text-blue-500 whitespace-nowrap">
-                EDUCATION
-              </h2>
-              <div className="w-full border border-t-gray-400"></div>
-            </div>
-            {education.content.map(
-              (entry, idx) =>
-                entry.degree?.trim() && (
-                  <p
-                    key={idx}
-                    className="text-sm ml-2 text-gray-700 mt-3"
-                    style={{ breakInside: "avoid" }}
-                  >
-                    {entry.degree}
-                  </p>
-                )
+{education?.content?.length > 0 &&
+  education.content.some((entry) => entry.degree?.trim()) && (
+    <div className="flex flex-col gap-1 avoid-page-break mt-5">
+      <div className="flex items-center gap-3">
+        <h2 className="font-semibold text-lg text-blue-500 whitespace-nowrap">
+          EDUCATION
+        </h2>
+        <div className="w-full border border-t-gray-400"></div>
+      </div>
+      {education.content
+        .filter((entry) => entry.degree?.trim())
+        .map((entry, idx) => (
+          <div
+            key={idx}
+            className="text-sm ml-2 text-gray-700 mt-3 space-y-0.5 leading-relaxed"
+            style={{ breakInside: "avoid" }}
+          >
+            <p className="font-semibold text-base text-[#2c6472]">
+              {entry.degree}
+              {entry.field_of_study && ` - ${entry.field_of_study}`}
+            </p>
+            {entry.school && (
+              <p>
+                {entry.school}
+                {entry.city && `, ${entry.city}`}
+              </p>
+            )}
+            {entry.end_date && <p className="italic text-gray-500">{entry.end_date}</p>}
+            {entry.achievements?.trim() && (
+              <p className="text-[13px] text-gray-600">{entry.achievements}</p>
             )}
           </div>
-        )}
+        ))}
+    </div>
+)}
 
       {projects.content.some(
         (proj) =>
@@ -226,7 +238,7 @@ const ModernDeedy = ({
             <div className="w-full border border-t-gray-400"></div>
           </div>
           <div
-            className="text-[13px] ml-2 mt-2 text-gray-800 flex flex-wrap gap-2"
+            className="text-[15px] leading-6 ml-2 mt-2 text-gray-800"
             style={{ breakInside: "avoid" }}
           >
             {skills.content
@@ -242,7 +254,7 @@ const ModernDeedy = ({
       )}
 
       {/* Languages */}
-      {languages.content.length > 0 && (
+      {languages.content.filter(lang => lang.language?.trim() !== "").length > 0 && (
         <div className="flex flex-col gap-1 avoid-page-break mt-5">
           <div className="flex items-center gap-3">
             <h2 className="font-semibold text-lg whitespace-nowrap text-blue-500">
@@ -251,19 +263,29 @@ const ModernDeedy = ({
             <div className="w-full border border-t-gray-400"></div>
           </div>
           <div
-            className="text-[13px] ml-2 mt-2 text-gray-800 leading-6"
+            className="text-[15px] font-medium ml-2 mt-2 text-gray-800 leading-6"
             style={{ breakInside: "avoid" }}
           >
-            {languages.content.map((lang, idx) => (
-              <p key={idx}>{lang}</p>
-            ))}
+            {languages.content
+              .filter(lang => lang.language?.trim() !== "")
+              .map((lang, idx) => (
+                <p key={idx}>
+                  {lang.language}
+                  {lang.proficiency && (
+                    <span className="italic font-normal text-gray-500">
+                      {" - " + lang.proficiency}
+                    </span>
+                  )}
+                </p>
+              ))}
           </div>
         </div>
       )}
 
       {/* Certificates */}
-      {certificates.content.filter((cert) => cert.Name?.trim() !== "").length >
-        0 && (
+      {certificates.content.filter(
+        (cert) => cert.certificate_name?.trim() !== ""
+      ).length > 0 && (
         <div className="flex flex-col gap-1 avoid-page-break mt-5">
           <div className="flex items-center gap-3">
             <h2 className="font-semibold text-lg whitespace-nowrap text-blue-500">
@@ -272,13 +294,18 @@ const ModernDeedy = ({
             <div className="w-full border border-t-gray-400"></div>
           </div>
           <div
-            className="text-[13px] ml-2 mt-2 text-gray-800 leading-6"
+            className="text-[15px] font-medium ml-2 mt-2 text-gray-800 leading-6"
             style={{ breakInside: "avoid" }}
           >
             {certificates.content
-              .filter((cert) => cert.Name?.trim() !== "")
+              .filter((cert) => cert.certificate_name?.trim() !== "")
               .map((cert, idx) => (
-                <p key={idx}>{cert.Name}</p>
+                <p key={idx}>
+                  {cert.certificate_name}
+                  {cert.provider && (
+                    <span className="italic font-normal text-gray-500"> - {cert.provider}</span>
+                  )}
+                </p>
               ))}
           </div>
         </div>

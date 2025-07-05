@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import trash from "../assets/trash2.png";
 import axios from "axios";
+import Calendar from '../base/Calender/Calender';
+import { format } from 'date-fns';
 
 const WorkExpUpdateForm = ({ onclose }) => {
 
@@ -150,7 +152,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
         const selectedIndex = experiences.findIndex(exp => exp.tempId === activeId);
 
         if (selectedIndex === -1) {
-            return alert("Selected experience not found.");
+            return toast.error("Selected experience not found.");
         }
 
         const backendIndex = selectedIndex + 1; // because your backend expects 1-based index in URL
@@ -181,17 +183,17 @@ const WorkExpUpdateForm = ({ onclose }) => {
                 });
                 setActiveId(null);
             } else {
-                alert("❌ Failed to update work experience.");
+                toast.error("Failed to update work experience.");
             }
 
         } catch (error) {
             console.error("Update failed:", error);
-            alert("❌ Error while updating work experience.");
+            toast.error("Error while updating work experience.");
         }
     };
 
     const handleDeleteExperience = async () => {
-        if (!activeId) return alert("Please select an experience to delete!");
+        if (!activeId) return toast.error("Please select an experience to delete!");
 
         const selectedExperience = experiences.find(exp => exp.tempId === activeId);
         if (!selectedExperience) return;
@@ -215,7 +217,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
             setActiveId(null);
         } catch (err) {
             console.error("Delete failed", err);
-            alert("❌ Failed to delete.");
+            toast.error("Failed to delete.");
         }
     };
 
@@ -305,24 +307,27 @@ const WorkExpUpdateForm = ({ onclose }) => {
                     <div className='flex gap-4'>
                         <div className="flex flex-col w-1/2 gap-2">
                             <label htmlFor="start_date" className='text-[15px] text-gray-500'>Start Date <span className="text-red-500">*</span></label>
-                            <input
-                                type="date"
-                                name="start_date"
-                                value={formData.start_date}
-                                onChange={handleChange}
-                                required
-                                className='border border-gray-500/30 px-4 py-2 rounded outline-none'
+                            <Calendar
+                                selectedDate={formData.start_date ? new Date(formData.start_date) : null}
+                                onDateChange={(date) =>
+                                    setFormData((prev) => ({
+                                    ...prev,
+                                    start_date: format(date, 'yyyy-MM-dd'),
+                                    }))
+                                }
                             />
                         </div>
 
                         <div className="flex flex-col w-1/2 gap-2">
                             <label htmlFor="end_date" className='text-[15px] text-gray-500'>End Date</label>
-                            <input
-                                type="date"
-                                name="end_date"
-                                value={formData.end_date}
-                                onChange={handleChange}
-                                className='border border-gray-500/30 px-4 py-2 rounded outline-none'
+                            <Calendar
+                                selectedDate={formData.end_date ? new Date(formData.end_date) : null}
+                                onDateChange={(date) =>
+                                    setFormData((prev) => ({
+                                    ...prev,
+                                    end_date: format(date, 'yyyy-MM-dd'),
+                                    }))
+                                }
                             />
                         </div>
                     </div>

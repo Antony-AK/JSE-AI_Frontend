@@ -85,7 +85,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
             onclose();
         } catch (err) {
             console.error("Update failed", err);
-            alert("Update failed ❌");
+            toast.error("Update failed");
         }
     };
 

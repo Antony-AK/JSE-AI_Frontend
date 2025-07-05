@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react'
 import trash from "../assets/trash2.png"
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Calendar from '../base/Calender/Calender';
+import { format } from 'date-fns';
 
 const EducationUpdateForm = ({ onclose }) => {
     const apiUrl = 'https://dev.arshan.digital/b1/academics';
@@ -133,7 +135,7 @@ const EducationUpdateForm = ({ onclose }) => {
         const selectedEducation = education.find(edu => edu.tempId === activeId);
 
         if (!selectedEducation) {
-            return alert("Selected experience not found.");
+            return toast.error("Selected experience not found.");
         }
 
         const educationIndex = selectedEducation.tempId;  // tempId is used as the index here
@@ -157,17 +159,17 @@ const EducationUpdateForm = ({ onclose }) => {
                 setEducation(updatedList);
                 toast.success("Education updated successfully!");
             } else {
-                alert("❌ Failed to Education.");
+                toast.error("Failed to Education.");
             }
 
         } catch (error) {
             console.error("Update failed:", error);
-            alert("❌ Error while updating work experience.");
+            toast.error("❌ Error while updating work experience.");
         }
     };
 
     const handleDeleteEducation = async () => {
-        if (!activeId) return alert("Please select an experience to delete!");
+        if (!activeId) return toast.error("Please select an experience to delete!");
 
         const selectedEducation = education.find(edu => edu.tempId === activeId);
         if (!selectedEducation) return;
@@ -191,7 +193,7 @@ const EducationUpdateForm = ({ onclose }) => {
             setActiveId(null);
         } catch (err) {
             console.error("Delete failed", err);
-            alert("❌ Failed to delete.");
+            toast.error("Failed to delete.");
         }
     };
 
@@ -287,22 +289,28 @@ const EducationUpdateForm = ({ onclose }) => {
                     <div className='flex gap-4'>
                         <div className="flex flex-col w-1/2 gap-3">
                             <label htmlFor="start_date" className='text-[15px] text-gray-500' >Start Date  <span className="text-red-500">*</span></label>
-                            <input
-                                type="date"
-                                name="start_date"
-                                onChange={handleChange}
-                                value={formData.start_date}
-                                className='border border-gray-500/30 px-4 py-2 rounded outline-none' />
+                            <Calendar
+                                selectedDate={formData.start_date ? new Date(formData.start_date) : null}
+                                onDateChange={(date) =>
+                                    setFormData((prev) => ({
+                                    ...prev,
+                                    start_date: format(date, 'yyyy-MM-dd'),
+                                    }))
+                                }
+                            />
                         </div>
 
                         <div className="flex flex-col w-1/2 gap-3">
                             <label htmlFor="end_date" className='text-[15px] text-gray-500'>End Date <span className="text-red-500">*</span></label>
-                            <input
-                                type="date"
-                                name="end_date"
-                                onChange={handleChange}
-                                value={formData.end_date}
-                                className='border border-gray-500/30 px-4 py-2 rounded outline-none' />
+                            <Calendar
+                                selectedDate={formData.end_date ? new Date(formData.end_date) : null}
+                                onDateChange={(date) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    end_date: format(date, 'yyyy-MM-dd'),
+                                }))
+                                }
+                            />
                         </div>
                     </div>
 
