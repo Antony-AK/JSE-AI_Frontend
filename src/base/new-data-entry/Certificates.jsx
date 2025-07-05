@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png'
@@ -23,6 +23,43 @@ const Certificates = () => {
     const [errors, setErrors] = useState({});
     const [showSavePopup, setShowSavePopup] = useState(false);
     const [addedCompanies, setAddedCompanies] = useState([]);
+    const [certificateList, setCertificateList] = useState([]);
+    const [activeId, setActiveId] = useState(null);
+
+   useEffect(() => {
+  const stored = sessionStorage.getItem("extractedResume");
+  console.log("📦 Extracted Resume:", stored);
+  if (stored) {
+    const parsed = JSON.parse(stored);
+    const certifications = parsed?.data?.certifications || []; // 💡 FIXED here!
+
+    const certificationsWithIds = certifications.map((item, idx) => ({
+      id: Date.now() + idx,
+      certificate_name: item.certificate_name || '',
+      certificate_type: '', // default to empty or infer if available
+      provider: item.platform || '', // 💡 changed from `provider` to `platform` as per your JSON
+      completion_date: item.end_date || '',
+    }));
+
+    if (certificationsWithIds.length > 0) {
+      setCertificateList(certificationsWithIds);
+      setFormData(certificationsWithIds[0]);
+      setActiveId(certificationsWithIds[0].id);
+    }
+  }
+}, []);
+
+
+
+
+    const handleSelectCertificate = (cert) => {
+        setFormData(cert);
+        setActiveId(cert.id);
+        setErrors({});
+    };
+
+
+
 
 
 
@@ -44,7 +81,6 @@ const Certificates = () => {
     };
 
 
-
     const handleAddCertificate = async (e) => {
         e.preventDefault();
         if (!validateForm()) return;
@@ -56,10 +92,8 @@ const Certificates = () => {
             return;
         }
 
+        setLoading(true);
 
-        completion_date: new Date(formData.completion_date).toISOString(),
-
-            setLoading(true);
         try {
             const payload = {
                 certificate_name: formData.certificate_name,
@@ -68,15 +102,11 @@ const Certificates = () => {
                 completion_date: new Date(formData.completion_date).toISOString(),
             };
 
-
-
-
-
             const response = await fetch(`${BASE_URL}/certificates`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`, // ✅ No need to set Content-Type for FormData
+                    "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify(payload),
             });
@@ -86,16 +116,24 @@ const Certificates = () => {
                 throw new Error(errorText || "Upload failed");
             }
 
+            const updatedList = certificateList.map((c) =>
+                c.id === activeId ? { ...c, ...formData } : c
+            );
+
+            const found = certificateList.some((c) => c.id === activeId);
+            const finalList = found
+                ? updatedList
+                : [...certificateList, { ...formData, id: Date.now() }];
+
+            setCertificateList(finalList);
             setFormData({
                 certificate_name: '',
                 certificate_type: '',
                 provider: '',
                 completion_date: '',
             });
-
-
-            setAddedCompanies((prev) => [...prev, formData.certificate_name]);
-
+            setActiveId(null);
+            setErrors({});
 
         } catch (error) {
             console.error("Error uploading certificate:", error);
@@ -104,6 +142,7 @@ const Certificates = () => {
             setLoading(false);
         }
     };
+
 
     const handleNext = async (e) => {
         e.preventDefault();
@@ -186,15 +225,25 @@ const Certificates = () => {
                     <h1 className='text-2xl font-semibold mt-3'>List your certificates / Awards.</h1>
                 </div>
 
-                {addedCompanies.length > 0 && (
-                    <div className=" px-6 py-4 -mb-5 -m-1 flex gap-3 rounded-lg">
-                        <ul className="flex gap-3 overflow-x-auto scrollbar-hide">
-                            {addedCompanies.map((company, index) => (
-                                <li className='bg-gray-500/30 px-4 py-2 rounded-lg min-w-32 text-center font-semibold text-[#2c6472]' key={index}>{company}</li>
-                            ))}
+                {certificateList.length > 0 && (
+                    <div className="px-6 py-4 -mb-4 -m-1 flex gap-3 rounded-lg">
+                        <ul className="flex gap-3 overflow-x-auto scrollbar-hide list-none">
+                            {certificateList
+                                .filter(c => c.certificate_name.trim() !== '')
+                                .map((cert) => (
+                                    <li
+                                        key={cert.id}
+                                        onClick={() => handleSelectCertificate(cert)}
+                                        className={`px-4 py-2 rounded-lg min-w-32 text-center font-semibold cursor-pointer transition-all
+              ${activeId === cert.id ? 'bg-[#2c6472] text-white' : 'bg-gray-500/30 text-[#2c6472]'}`}
+                                    >
+                                        {cert.certificate_name}
+                                    </li>
+                                ))}
                         </ul>
                     </div>
                 )}
+
 
                 <form className="flex flex-col gap-3 mt-5 ms-6" onSubmit={handleAddCertificate}>
                     {/* Certificate Name */}
@@ -268,7 +317,7 @@ const Certificates = () => {
                         )}
                     </div>
 
-                                    <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+                    <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
 
 
 
@@ -306,8 +355,8 @@ const Certificates = () => {
             )}
 
             <div className="flex justify-start gap-2 text-gray-500 text-sm mt-16 ">
-                    <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
-                    AI is not perfect. Make sure your data is accurate before saving.            </div>
+                <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
+                AI is not perfect. Make sure your data is accurate before saving.            </div>
         </div>
     )
 }

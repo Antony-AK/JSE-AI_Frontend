@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify';
 import { data, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -28,9 +28,46 @@ const WorkExperience = () => {
     key_responsibilities: ''
   });
 
+  const [experiences, setExperiences] = useState([]);
+  const [activeId, setActiveId] = useState(null);
+
+
   const [errors, setErrors] = useState({});
   // const [showSavePopup, setShowSavePopup] = useState(false);
   const [addedCompanies, setAddedCompanies] = useState([]);
+
+  useEffect(() => {
+    const stored = sessionStorage.getItem("extractedResume");
+    if (stored) {
+      const parsed = JSON.parse(stored)?.data;
+      const exp = parsed?.work_experience || [];
+
+      const expWithIds = exp.map((item, idx) => ({
+        tempId: Date.now() + idx,
+        job_title: item.job_title || '',
+        company_name: item.company_name || '',
+        location: item.location || '',
+        start_date: item.start_date || '',
+        enddate: item.currentwork === "true" ? '' : item.end_date || '',
+        currentwork: item.currentwork === "true",
+        key_responsibilities: item.key_responsibilities || ''
+      }));
+
+      if (expWithIds.length > 0) {
+        setExperiences(expWithIds);
+        setFormData(expWithIds[0]);
+        setActiveId(expWithIds[0].tempId);
+      }
+    }
+  }, []);
+
+  const handleSelectExperience = (exp) => {
+    setFormData(exp);
+    setActiveId(exp.tempId);
+  };
+
+
+
 
 
 
@@ -141,6 +178,43 @@ const WorkExperience = () => {
 
         } else {
 
+          setExperiences((prev) => {
+            const updatedList = prev.map((exp) =>
+              exp.tempId === activeId ? { ...exp, ...formData } : exp
+            );
+
+            const newTempId = Date.now();
+            const newExp = {
+              tempId: newTempId,
+              job_title: '',
+              company_name: '',
+              location: '',
+              start_date: '',
+              enddate: '',
+              currentwork: false,
+              key_responsibilities: ''
+            };
+
+            setFormData(newExp);         // Set new form
+            setActiveId(newTempId);      // Focus new card
+            setExperiences((prev) => [...updatedList, newExp]); // Add to list
+
+
+          });
+
+          setFormData({
+            job_title: '',
+            company_name: '',
+            location: '',
+            start_date: '',
+            enddate: '',
+            currentwork: false,
+            key_responsibilities: ''
+          });
+          setActiveId(Date.now()); // update to new form's ID
+
+
+
           setAddedCompanies((prev) => [...prev, formData.company_name]);
 
           // Clear form after add
@@ -183,15 +257,28 @@ const WorkExperience = () => {
 
       <h2 className='font-bold text-xl'>Highlight your Work Experience.</h2>
 
-      {addedCompanies.length > 0 && (
-        <div className=" px-6 py-4 -m-3 w-[90%] flex gap-3 rounded-lg overflow-x-auto hide-scrollbar">
-          <ul className="flex gap-3 ">
-            {addedCompanies.map((company, index) => (
-              <li className='bg-gray-500/30 px-4 py-2 rounded-lg h-10 text-center flex items-center justify-center font-semibold text-[#2c6472] whitespace-nowrap flex-shrink-0' key={index}>{company}</li>
-            ))}
-          </ul>
+      {experiences && experiences.length > 0 && (
+        <div className="flex gap-3 px-6 py-4 -m-3 w-[90%] rounded-lg overflow-x-auto hide-scrollbar snap-x snap-mandatory">
+          {experiences.map((exp) => (
+            <div
+              key={exp.tempId}
+              onClick={() => handleSelectExperience(exp)}
+              className={`flex-shrink-0 w-[200px] px-4 py-3 rounded-xl snap-start cursor-pointer 
+          text-sm flex flex-col items-start justify-center gap-1 font-semibold whitespace-nowrap transition-all duration-200
+          ${activeId === exp.tempId ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 text-[#2c6472]'}
+          hover:bg-[#2c6472] hover:text-white`}
+            >
+              <p className="text-base font-bold truncate w-full">{exp.job_title || 'Untitled'}</p>
+              <p className="text-xs font-medium opacity-90 truncate w-full">{exp.company_name || 'No Company'}</p>
+            </div>
+          ))}
+
+         
         </div>
       )}
+
+
+
 
       <form onSubmit={(e) => e.preventDefault()} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
 
@@ -307,7 +394,7 @@ const WorkExperience = () => {
           ></textarea>
         </div>
 
-                <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+        <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
 
 
         <div className="flex justify-between mt-7">

@@ -64,6 +64,38 @@ const PersonalInfo = () => {
     }
   };
 
+  useEffect(() => {
+  const stored = sessionStorage.getItem("extractedResume");
+  if (stored) {
+    const parsed = JSON.parse(stored)?.data;
+
+    console.log("📄 Prefilling data from extractedResume:", parsed);
+
+
+    setFormData((prev) => ({
+      ...prev,
+      first_name: parsed.first_name || '',
+      second_name: parsed.second_name || '',
+      city: parsed.city || '',
+      state: parsed.state || '',
+      country: parsed.country || '',
+      linkedin_profile: parsed.linkedin || '', // 💡 parsed.linkedin instead of linkedin_profile
+      phone: parsed.phone || '',
+      email: parsed.email || ''
+    }));
+
+    // 🔄 Also update external links if available
+    if (Array.isArray(parsed.links)) {
+      const updatedLinks = ['website', 'github', 'blog', 'social media'].map(type => {
+        const match = parsed.links.find(link => link.type === type);
+        return { type, url: match?.url || '' };
+      });
+      setExternalLinks(updatedLinks);
+    }
+  }
+}, []);
+
+
   const fetchProfileInfo = async () => {
     try {
       const res = await axios.get(apiUrl, {

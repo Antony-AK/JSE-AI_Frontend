@@ -164,7 +164,7 @@ const ThirdCV = ({
         </div>
       )}
 
-      {/* 🔸 Skills */}
+      {/*🔸Skills */}
       {skills?.content?.length > 0 && (
         <div className="flex flex-col pt-4 mt-3">
            <div className="w-full h-5 gap-5 flex items-center">
@@ -180,7 +180,7 @@ const ThirdCV = ({
         </div>
       )}
 
-      {/* 🔸 Languages */}
+      {/*🔸Languages */}
       {languages?.content?.length > 0 && (
         <div className="flex flex-col pt-4 mt-3">
          <div className="w-full h-5 gap-5 flex items-center">

@@ -144,6 +144,24 @@ const Skills = () => {
         console.log("jobTitle", jobTitle);
     }, [jobTitle]);
 
+    useEffect(() => {
+        const stored = sessionStorage.getItem("extractedResume");
+
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            const generalFromSession = parsed?.data?.generalSkills || [];
+            const jobFromSession = parsed?.data?.jobSpecificSkills || [];
+
+            // 🚫 No validation, no toasts — just set everything directly
+            setFormData({
+                generalSkills: generalFromSession,
+                jobSpecificSkills: jobFromSession,
+            });
+        }
+    }, []);
+
+
+
 
 
 
@@ -179,7 +197,19 @@ const Skills = () => {
         }));
 
         // Clear input + hide dropdown
-        isGeneral ? setGeneralSearchTerm('') : setJobSearchTerm('');
+        if (isGeneral) {
+            setGeneralSearchTerm('');
+            setTimeout(() => {
+                generalInputRef.current?.blur(); // 👈 force blur
+                setShowDropdown(false);
+            }, 100);
+        } else {
+            setJobSearchTerm('');
+            setTimeout(() => {
+                jobInputRef.current?.blur(); // 👈 force blur
+                setShowDropdown(false);
+            }, 100);
+        }
         setShowDropdown(false);
     };
 
@@ -188,8 +218,6 @@ const Skills = () => {
     const addSkill = () => {
         const term = dropdownType === "general" ? generalSearchTerm.trim() : jobSearchTerm.trim();
         if (!term) return;
-
-
 
         const alreadyExists =
             dropdownType === "general"
@@ -203,18 +231,31 @@ const Skills = () => {
 
         setFormData((prev) => ({
             ...prev,
-            generalSkills: dropdownType === "general"
-                ? [...prev.generalSkills, term]
-                : prev.generalSkills,
-            jobSpecificSkills: dropdownType === "job"
-                ? [...prev.jobSpecificSkills, term]
-                : prev.jobSpecificSkills,
+            generalSkills:
+                dropdownType === "general"
+                    ? [...prev.generalSkills, term]
+                    : prev.generalSkills,
+            jobSpecificSkills:
+                dropdownType === "job"
+                    ? [...prev.jobSpecificSkills, term]
+                    : prev.jobSpecificSkills,
         }));
 
-        // ✅ Clear input and close dropdown
-        dropdownType === "general" ? setGeneralSearchTerm('') : setJobSearchTerm('');
-        setShowDropdown(false);
+        if (dropdownType === "general") {
+            setGeneralSearchTerm('');
+            setTimeout(() => {
+                generalInputRef.current?.blur(); // 🧠 Blur input instead of focusing
+                setShowDropdown(false);
+            }, 100);
+        } else {
+            setJobSearchTerm('');
+            setTimeout(() => {
+                jobInputRef.current?.blur(); // 🧠 Same here
+                setShowDropdown(false);
+            }, 100);
+        }
     };
+
 
     // ✅ Removes a skill by index from the right category
     const removeSkill = (index, type) => {
@@ -227,7 +268,6 @@ const Skills = () => {
     useEffect(() => {
         if (triggerAddSkill) {
             addSkill();
-            generalInputRef.current?.blur();
             setTriggerAddSkill(false);
         }
     }, [generalSearchTerm, triggerAddSkill]);
@@ -613,7 +653,7 @@ const Skills = () => {
                         <p className='text-sm text-gray-500'>Please enter only relevant skills. Adding unrelated may affect the quality of your profile.</p>
                     </div>
 
-                                    <div className='text-xs my-5 flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+                    <div className='text-xs my-5 flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
 
                     <div className="flex w-[70%]   justify-end items-center gap-4 mt-8">
                         <button
@@ -630,10 +670,10 @@ const Skills = () => {
 
             </div>
 
-      {/* Footer appears after scrolling all content */}
-      <div className="flex justify-start gap-2 text-gray-500 text-sm mt-5 ">
-        <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
-        AI is not perfect. Make sure your data is accurate before saving.            </div>
+            {/* Footer appears after scrolling all content */}
+            <div className="flex justify-start gap-2 text-gray-500 text-sm mt-5 ">
+                <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
+                AI is not perfect. Make sure your data is accurate before saving.            </div>
 
         </div>
     )

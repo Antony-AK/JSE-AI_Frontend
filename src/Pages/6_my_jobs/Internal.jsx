@@ -470,7 +470,7 @@ const MyApplication = () => {
 
                       </div>
                       <div className="flex  flex-col justify-start  -mt-3 items-center"><br />
-                        <div className="relative w-16 h-16">
+                        <div className="relative gap-1 w-16 h-16">
                           <svg
                             viewBox="0 0 100 100"
                             className="absolute top-0 left-0 w-full h-full"
@@ -500,7 +500,7 @@ const MyApplication = () => {
                           </svg>
 
                           {/* Center text */}
-                          <div className="absolute inset-0 flex items-center justify-center  font-semibold text-gray-800">
+                          <div className="absolute inset-0 flex m-2 items-center justify-center  font-semibold text-gray-800">
                             {selectedJob.matchValue}%
                           </div>
                         </div>

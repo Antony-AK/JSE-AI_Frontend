@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +17,7 @@ const Education = () => {
     const token = sessionStorage.getItem('authToken');
 
     const [formData, setFormData] = useState({
+        tempId: Date.now(),
         institution: '',
         city: '',
         degree: '',
@@ -30,75 +31,86 @@ const Education = () => {
     const [errors, setErrors] = useState({});
     const [showSavePopup, setShowSavePopup] = useState(false);
     const [addedCompanies, setAddedCompanies] = useState([]);
+    const [educationList, setEducationList] = useState([]);
+    const [activeId, setActiveId] = useState(null);
 
 
+
+    useEffect(() => {
+        const stored = sessionStorage.getItem("extractedResume");
+        if (stored) {
+            const parsed = JSON.parse(stored)?.data;
+            const edu = parsed?.education || [];
+
+            const eduWithIds = edu.map((item, idx) => ({
+                tempId: Date.now() + idx,
+                institution: item.institution || '',
+                city: item.city || '',
+                degree: item.degree || '',
+                field_of_study: item.field_of_study || '',
+                start_date: item.start_date || '',
+                enddate: item.currentstudy === "true" ? '' : item.end_date || '',
+                currentstudy: item.currentstudy === "true",
+                description: item.description || '',
+            }));
+
+            if (eduWithIds.length > 0) {
+                setEducationList(eduWithIds);
+                setFormData(eduWithIds[0]);
+                setActiveId(eduWithIds[0].tempId);
+            }
+        }
+    }, []);
+
+    const handleSelect = (edu) => {
+        setFormData(edu);
+        setActiveId(edu.tempId);
+        setErrors({});
+    };
 
     const handleChange = (e) => {
         const { id, value, type, checked } = e.target;
 
         setFormData((prev) => {
-            const updatedForm = {
+            const updated = {
                 ...prev,
                 [id]: type === 'checkbox' ? checked : value,
             };
-
-            if (type === 'checkbox' && id === 'currentstudy' && checked) {
-                updatedForm.enddate = ''; // clear end date if currently studying
+            if (id === 'currentstudy' && checked) {
+                updated.enddate = '';
             }
-
-            return updatedForm;
+            return updated;
         });
 
-        // Clear relevant errors
-        setErrors((prevErrors) => {
-            const updatedErrors = { ...prevErrors };
-
-            // Always clear the error of the field being edited
+        setErrors((prev) => {
+            const updatedErrors = { ...prev };
             delete updatedErrors[id];
-
-            // Special case: clear enddate error if checkbox is checked
             if (id === 'currentstudy' && checked) {
-                delete updatedErrors.enddate;
+                delete updatedErrors['enddate'];
             }
-
             return updatedErrors;
         });
     };
 
     const validate = () => {
         const newErrors = {};
-        if (!formData.institution.trim()) newErrors.institution = "Institution is required";
-        if (!formData.city.trim()) newErrors.city = "City / Country is required";
-        if (!formData.degree.trim()) newErrors.degree = "Degree is required";
-        if (!formData.field_of_study.trim()) newErrors.field_of_study = "Field of Study is required";
-        if (!formData.start_date) newErrors.start_date = "Start Date is required";
+        const { institution, city, degree, field_of_study, start_date, enddate, currentstudy } = formData;
 
-        // Only validate end date if not currently studying
-        if (!formData.currentstudy && !formData.enddate) {
-            newErrors.enddate = "End Date is required";
-        }
+        if (!institution.trim()) newErrors.institution = "Institution is required";
+        if (!city.trim()) newErrors.city = "City / Country is required";
+        if (!degree.trim()) newErrors.degree = "Degree is required";
+        if (!field_of_study.trim()) newErrors.field_of_study = "Field of Study is required";
+        if (!start_date) newErrors.start_date = "Start date is required";
 
-        const start = new Date(formData.start_date);
-        const end = new Date(formData.enddate);
+        const start = new Date(start_date);
+        const end = new Date(enddate);
         const today = new Date();
 
-        // Validate start date
-        if (!formData.start_date) {
-            newErrors.start_date = "Start date is required.";
-        }
-
-        // Validate end date
-        if (!formData.currentstudy) {
-            if (!formData.enddate) {
-                newErrors.enddate = "End date is required.";
-            } else if (start > end) {
-                newErrors.enddate = "End date cannot be before start date.";
-            }
+        if (!currentstudy) {
+            if (!enddate) newErrors.enddate = "End date is required";
+            else if (start > end) newErrors.enddate = "End date cannot be before start date";
         } else {
-            // Optional: prevent selecting future start date for ongoing studies
-            if (start > today) {
-                newErrors.start_date = "Start date cannot be after current date.";
-            }
+            if (start > today) newErrors.start_date = "Start date cannot be after today";
         }
 
         return newErrors;
@@ -107,72 +119,108 @@ const Education = () => {
     const handleSubmit = async (navigateNext = false) => {
         const validationErrors = validate();
         setErrors(validationErrors);
+        if (Object.keys(validationErrors).length > 0) return;
 
-        if (Object.keys(validationErrors).length === 0) {
-            try {
-                if (!token) {
-                    navigate('/user/login');
-                    toast.error("No User found. Please log in.");
-                    return;
-                }
-
-                const toISOString = (date) => date ? new Date(date).toISOString() : null;
-
-                const payload = {
-                    institution: formData.institution,
-                    city: formData.city,
-                    degree: formData.degree,
-                    field_of_study: formData.field_of_study,
-                    start_date: toISOString(formData.start_date),
-                    end_date: formData.currentstudy ? null : toISOString(formData.enddate),
-                    currently_studying: formData.currentstudy,
-                    description: formData.description,
-                };
-
-                const response = await axios.post(apiUrl, payload, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-
-
-
-                if (navigateNext) {
-                    navigate('/user/onboarding/projects');
-                    window.scrollTo({ top: 0, behavior: 'auto' });
-
-                } else {
-
-                    setAddedCompanies((prev) => [...prev, formData.field_of_study]);
-
-                    // Reset form after adding
-                    setFormData({
-                        institution: '',
-                        city: '',
-                        degree: '',
-                        field_of_study: '',
-                        start_date: '',
-                        enddate: '',
-                        currentstudy: false,
-                        description: ''
-                    });
-                    window.scrollTo({ top: 0, behavior: 'auto' });
-
-                    setErrors({});
-                }
-            } catch (error) {
-                console.error("❌ API Error:", error.response?.data || error.message);
-                toast.error(error.response?.data.issue || "Submission failed. Please try again.");
+        try {
+            if (!token) {
+                navigate('/user/login');
+                toast.error("Please log in first.");
+                return;
             }
+
+            const toISOString = (date) => date ? new Date(date).toISOString() : null;
+
+            const payload = {
+                institution: formData.institution,
+                city: formData.city,
+                degree: formData.degree,
+                field_of_study: formData.field_of_study,
+                start_date: toISOString(formData.start_date),
+                end_date: formData.currentstudy ? null : toISOString(formData.enddate),
+                currently_studying: formData.currentstudy,
+                description: formData.description,
+            };
+
+            await axios.post(apiUrl, payload, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (navigateNext) {
+                navigate('/user/onboarding/projects');
+                window.scrollTo({ top: 0 });
+                return;
+            }
+
+            // 🧠 Update the list in-place without adding a blank entry
+            const updatedList = educationList.map((e) =>
+                e.tempId === activeId ? { ...e, ...formData } : e
+            );
+
+            // If not found (new entry), push it
+            const found = educationList.some((e) => e.tempId === activeId);
+            let finalList;
+
+            if (found) {
+                finalList = updatedList;
+            } else {
+                const newEntry = { ...formData };
+                finalList = [newEntry, ...educationList]; // 🔥 Add new one to the top!
+            }
+
+            setEducationList(finalList);
+            setActiveId(null); // We'll reset this shortly
+
+
+            // 🧼 Just clear the form
+            setFormData({
+                tempId: Date.now(),
+                institution: '',
+                city: '',
+                degree: '',
+                field_of_study: '',
+                start_date: '',
+                enddate: '',
+                currentstudy: false,
+                description: ''
+            });
+
+            const newTempId = Date.now();
+            setFormData({
+                tempId: newTempId,
+                institution: '',
+                city: '',
+                degree: '',
+                field_of_study: '',
+                start_date: '',
+                enddate: '',
+                currentstudy: false,
+                description: ''
+            });
+            setActiveId(newTempId); // 🪄 Make the new form active
+
+
+            // 🪄 Don't update activeId so it doesn't select the cleared form
+            setActiveId(null);
+
+            setErrors({});
+            window.scrollTo({ top: 0 });
+
+        } catch (err) {
+            console.error("❌ API Error:", err.response?.data || err.message);
+            toast.error(err.response?.data?.issue || "Something went wrong!");
         }
     };
+
+
 
     return (
         <div className='p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen overflow-y-auto'>
 
-            {addedCompanies.length > 0 && (
+
+            {educationList.length > 0 && (
                 <div className="flex justify-end items-center w-[95%]">
                     <div className="flex items-center cursor-pointer" onClick={() => navigate('/user/onboarding/projects')}>
                         <p className='ml-2 text-lg font-medium text-[#00000057]'>Skip</p>
@@ -180,25 +228,27 @@ const Education = () => {
                 </div>
             )}
 
-
-
-
             <p className='text-[#2c6472] font-semibold '>STEP 3 OF 8</p>
 
             <h2 className='font-bold text-xl'>Add your academic story.</h2>
 
-            {addedCompanies.length > 0 && (
-                <div className="px-6 py-4 -m-3 w-[90%] rounded-lg overflow-x-auto hide-scrollbar">
-                    <ul className="flex gap-3">
-                        {addedCompanies.map((company, index) => (
-                            <li
-                                key={index}
-                                className="bg-gray-500/30 px-4 py-2 rounded-lg h-10 flex items-center justify-center font-semibold text-[#2c6472] whitespace-nowrap flex-shrink-0"
+            {educationList.length > 0 && (
+                <div className="flex gap-3 px-6 py-4 -m-3 w-[90%] rounded-lg overflow-x-auto hide-scrollbar snap-x snap-mandatory">
+                    {educationList
+                        .filter((edu) => edu.degree.trim() !== '') // ✅ Only show filled entries
+                        .map((edu) => (
+                            <div
+                                key={edu.tempId}
+                                onClick={() => handleSelect(edu)}
+                                className={`flex-shrink-0 w-[200px] px-4 py-3 rounded-xl snap-start cursor-pointer 
+              text-sm flex flex-col items-start justify-center gap-1 font-semibold whitespace-nowrap transition-all duration-200
+              ${activeId === edu.tempId ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 text-[#2c6472]'}
+              hover:bg-[#2c6472] hover:text-white`}
                             >
-                                {company}
-                            </li>
+                                <p className="text-base font-bold truncate w-full">{edu.degree}</p>
+                                <p className="text-xs font-medium opacity-90 truncate w-full">{edu.institution || 'No Institute'}</p>
+                            </div>
                         ))}
-                    </ul>
                 </div>
             )}
 
@@ -327,7 +377,7 @@ const Education = () => {
                     ></textarea>
                 </div>
 
-                                <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+                <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
 
 
                 <div className="flex justify-between mt-7">
@@ -348,11 +398,11 @@ const Education = () => {
                 </div>
             )}
 
-                {/* Footer appears after scrolling all content */}
-                  <div className="flex justify-start gap-2 text-gray-500 text-sm mt-10 ">
-                    <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
-                    AI is not perfect. Make sure your data is accurate before saving.            
-                      </div>
+            {/* Footer appears after scrolling all content */}
+            <div className="flex justify-start gap-2 text-gray-500 text-sm mt-10 ">
+                <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
+                AI is not perfect. Make sure your data is accurate before saving.
+            </div>
 
         </div>
     )

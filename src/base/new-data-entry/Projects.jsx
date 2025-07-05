@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../utils/api'
@@ -30,6 +30,39 @@ const Projects = () => {
   const [errors, setErrors] = useState({});
   const [showSavePopup, setShowSavePopup] = useState(false);
   const [addedCompanies, setAddedCompanies] = useState([]);
+  const [projectList, setProjectList] = useState([]);
+  const [activeId, setActiveId] = useState(null);
+
+  useEffect(() => {
+    const stored = sessionStorage.getItem("extractedResume");
+    if (stored) {
+      const parsed = JSON.parse(stored)?.data;
+      const projects = parsed?.projects || [];
+
+      const projectsWithIds = projects.map((item, idx) => ({
+        id: Date.now() + idx,
+        project_name: item.project_name || '',
+        institution: item.institution || '',
+        start_date: item.start_date || '',
+        end_date: item.currently_doing === "true" ? '' : item.end_date || '',
+        currentdo: item.currently_doing === "true",
+        project_description: item.project_description || '',
+      }));
+
+      if (projectsWithIds.length > 0) {
+        setProjectList(projectsWithIds);
+        setFormData(projectsWithIds[0]);
+        setActiveId(projectsWithIds[0].id);
+      }
+    }
+  }, []);
+
+
+  const handleSelectProject = (proj) => {
+    setFormData(proj);
+    setActiveId(proj.id);
+    setErrors({});
+  };
 
 
   const handleChange = (e) => {
@@ -129,9 +162,14 @@ const Projects = () => {
 
         } else {
 
-          setAddedCompanies((prev) => [...prev, formData.project_name]);
+          const updatedList = projectList.map((p) =>
+            p.id === activeId ? { ...p, ...formData } : p
+          );
 
-          // Reset form
+          const found = projectList.some((p) => p.id === activeId);
+          const finalList = found ? updatedList : [...projectList, { ...formData, id: Date.now() }];
+
+          setProjectList(finalList);
           setFormData({
             project_name: '',
             institution: '',
@@ -140,9 +178,12 @@ const Projects = () => {
             currentdo: false,
             project_description: ''
           });
+          setActiveId(null);
+          setErrors({});
+
+
           window.scrollTo({ top: 0, behavior: 'auto' });
 
-          setErrors({});
         }
       } catch (error) {
         console.error("❌ API Error:", error.response?.data || error.message);
@@ -169,15 +210,24 @@ const Projects = () => {
 
       <h2 className='font-bold text-xl'>Share your past project experience.</h2>
 
-      {addedCompanies.length > 0 && (
-        <div className=" px-6 py-4 -m-3 flex gap-3 w-[90%] rounded-lg overflow-x-auto scrollbar-hide">
-          <ul className="flex gap-3 ">
-            {addedCompanies.map((company, index) => (
-              <li className='bg-gray-500/30 px-4 py-2 rounded-lg h-10 flex items-center justify-center text-center font-semibold text-[#2c6472] whitespace-nowrap flex-shrink-0' key={index}>{company}</li>
+      {projectList.length > 0 && (
+        <div className="px-6 py-4 -m-3 flex gap-3 w-[90%] rounded-lg overflow-x-auto scrollbar-hide">
+          {projectList
+            .filter(p => p.project_name.trim() !== '')
+            .map((proj) => (
+              <div
+                key={proj.id}
+                onClick={() => handleSelectProject(proj)}
+                className={`px-4 py-2 rounded-lg h-10 flex items-center justify-center text-center font-semibold cursor-pointer transition-all whitespace-nowrap
+            ${activeId === proj.id ? 'bg-[#2c6472] text-white' : 'bg-gray-500/30 text-[#2c6472]'}
+            hover:bg-[#2c6472] hover:text-white`}
+              >
+                {proj.project_name}
+              </div>
             ))}
-          </ul>
         </div>
       )}
+
 
       <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
 
@@ -196,7 +246,7 @@ const Projects = () => {
 
         {/* Company Name */}
         <div className="flex flex-col gap-2 text-lg">
-          <label className='font-medium' htmlFor="institution">University / Company Name</label>
+          <label className='font-medium' htmlFor="institution">University / Company Name <span className='text-red-500'>*</span></label>
           <input
             className={`px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]`}
             type="text"
@@ -211,7 +261,11 @@ const Projects = () => {
           <div className="flex flex-col gap-2 w-[50%]">
             <label className='font-medium' htmlFor="start_date">Start Date <span className='text-red-500'>*</span></label>
             <Calendar
-              selectedDate={formData.start_date ? new Date(formData.start_date) : null}
+              selectedDate={
+                formData.start_date && !isNaN(new Date(formData.start_date))
+                  ? new Date(formData.start_date)
+                  : null
+              }
               onDateChange={(date) =>
                 setFormData((prev) => ({
                   ...prev,
@@ -233,7 +287,11 @@ const Projects = () => {
               />
             ) : (
               <Calendar
-                selectedDate={formData.end_date ? new Date(formData.end_date) : null}
+                selectedDate={
+                  formData.end_date && !isNaN(new Date(formData.end_date))
+                    ? new Date(formData.end_date)
+                    : null
+                }
                 onDateChange={(date) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -271,7 +329,7 @@ const Projects = () => {
           ></textarea>
         </div>
 
-                        <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+        <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
 
 
         <div className="flex justify-between mt-7">
@@ -295,8 +353,8 @@ const Projects = () => {
       {/* Footer appears after scrolling all content */}
       <div className="flex justify-start gap-2 text-gray-500 text-sm mt-10 ">
         <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
-        More Projects you give the better the result of JSE Ai    
-                </div>
+        More Projects you give the better the result of JSE Ai
+      </div>
 
     </div>
   )

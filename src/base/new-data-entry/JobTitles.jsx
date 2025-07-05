@@ -60,11 +60,55 @@ const JobTitles = () => {
   const isDuplicate = (title) => {
     const lower = title.toLowerCase();
     return (
-      formData.primary_title.toLowerCase() === lower ||
-      formData.secondary_title.toLowerCase() === lower ||
-      formData.tertiary_title.toLowerCase() === lower
+      formData.primary_title?.toLowerCase() === lower ||
+      formData.secondary_title?.toLowerCase() === lower ||
+      formData.tertiary_title?.toLowerCase() === lower
     );
   };
+
+
+ useEffect(() => {
+  const stored = sessionStorage.getItem("extractedResume");
+  console.log("📦 Extracted Resume:", stored);
+
+  if (stored) {
+    const parsed = JSON.parse(stored);
+    const validTitles = Object.keys(jobskills).map((j) => j.toLowerCase());
+
+    const primary = parsed?.data?.primary_title || '';
+    const secondary = parsed?.data?.secondary_title || '';
+    const tertiary = parsed?.data?.tertiary_title || '';
+
+    const newFormData = {
+      primary_title: '',
+      secondary_title: '',
+      tertiary_title: '',
+    };
+
+    if (primary && validTitles.includes(primary.toLowerCase())) {
+      newFormData.primary_title = primary;
+    } else if (primary) {
+      toast.error(`Invalid job title: "${primary}"`);
+    }
+
+    if (secondary && validTitles.includes(secondary.toLowerCase())) {
+      newFormData.secondary_title = secondary;
+    } else if (secondary) {
+      toast.error(`Invalid job title: "${secondary}"`);
+    }
+
+    if (tertiary && validTitles.includes(tertiary.toLowerCase())) {
+      newFormData.tertiary_title = tertiary;
+    } else if (tertiary) {
+      toast.error(`Invalid job title: "${tertiary}"`);
+    }
+
+    setFormData(newFormData);
+    setSearchTerms({ primary_title: '' });
+  }
+}, []);
+
+
 
   const addSkill = () => {
     const jobtitle = searchTerms.primary_title?.trim();

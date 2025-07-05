@@ -33,10 +33,7 @@ const CoverLetterModern = () => {
 
       <hr className="border-gray-400 mb-4" />
 
-      {/* Recipient */}
-      <div className="mb-3">
-        <p><strong className='font-medium me-2'>To :</strong> {recipient?.name || 'Recruiter'}</p>
-      </div>
+    
 
       {/* Date + Subject */}
       <div className="mb-3">

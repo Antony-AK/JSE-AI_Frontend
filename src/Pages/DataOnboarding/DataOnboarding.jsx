@@ -26,7 +26,7 @@ const DataOnboarding = () => {
                     <p className=' mt-3  -ml-72 '>Select an option that works best for you.</p>
                 </div>
 
-                <div className="flex flex-col gap-10 mt-28  -ml-32">
+                <div className="flex flex-col gap-10 mt-20  -ml-32">
                     <Link to="/user/onboarding/personal-information"><div className="flex w-[450px] h-[96px] gap-5 pl-8 items-center border-dashed border-2 border-[#2c6472]/50 rounded-lg cursor-pointer hover:shadow-lg transition-shadow duration-300">
                         <img src={insert} className='w-6 h-6 -mt-1 object-cover' alt="" />
                         <p className='text-lg font-medium'>Create a Profile from Scratch</p>

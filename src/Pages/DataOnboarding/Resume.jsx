@@ -2,71 +2,110 @@ import React, { useState, useRef } from 'react';
 import logo from '../../assets/jsenewlogo.png'
 import resume_upload from '../../assets/resume_upload.png'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import animationgif from '../../assets/Animations.gif';
+
+
 
 
 
 const Resume = () => {
-    const navigate = useNavigate();
-    const [certificateFile, setCertificateFile] = useState(null);
-    const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const [certificateFile, setCertificateFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-      const handleFileChange = (e) => {
+  const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB in bytes
+
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setCertificateFile(file); // ✅ Save raw file directly
+      const allowedTypes = ["application/pdf", "text/plain"];
+      if (!allowedTypes.includes(file.type)) {
+        toast.error("❌ Unsupported file type. Please upload a PDF or TXT.");
+        return;
+      }
+
+      if (file.size > MAX_FILE_SIZE) {
+        toast.error("❌ File too large. Max size allowed is 4MB.");
+        return;
+      }
+
+      setCertificateFile(file); // ✅ Save file if all good
     }
   };
 
-   const handleAddCertificate = async (e) => {
-    e.preventDefault();
-
+  const handleResumeUpload = async () => {
     if (!certificateFile) {
-      alert('Please upload a certificate file.');
+      toast.warning("⚠️ Please upload a valid resume file.");
       return;
     }
 
     const token = sessionStorage.getItem('authToken');
     if (!token) {
-      alert("You are not authenticated. Please login.");
+      toast.error("❌ You're not logged in. Please login.");
       return;
     }
 
     setLoading(true);
 
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("file", certificateFile); // ✅ Raw file here
+      const formData = new FormData();
+      formData.append("file", certificateFile);
 
-      const response = await fetch("https://jse.arshan.digital/b1/certificates", {
+      const response = await fetch("https://dev.arshan.digital/b1/data-extraction/resume", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${token}`, // ✅ No need to set Content-Type for FormData
+          Authorization: `Bearer ${token}`,
         },
-        body: formDataToSend,
+        body: formData,
       });
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(errorText || "Upload failed");
+        console.error("🧨 Resume API Error:", errorText);
+        throw new Error(errorText || "Resume upload failed");
       }
 
-      alert(`✅ Certificates uploaded successfully`);
+      const extractedData = await response.json();
+      console.log("📥 Extracted Resume Data:", extractedData);
 
-    
-      setCertificateFile(null);
+      const isEmpty = Object.values(extractedData?.data || {}).every(
+        val => (Array.isArray(val) ? val.length === 0 : val === "")
+      );
+
+      if (isEmpty) {
+        toast.warning("⚠️ Resume uploaded, but no data was extracted. Try another file.");
+        return;
+      }
+
+      sessionStorage.setItem("extractedResume", JSON.stringify(extractedData));
+
+      toast.success(" Resume uploaded and data extracted!");
+      navigate("/user/onboarding/personal-information");
 
     } catch (error) {
-      console.error("Error uploading certificate:", error);
-      alert("Failed to upload certificate.");
+      console.error("Error uploading resume:", error);
+      if (error.message.includes("413") || error.message.includes("Entity Too Large")) {
+        toast.error(" File too large. Please upload a resume under 4MB.");
+      } else {
+        toast.error(" Failed to upload resume or extract data.");
+      }
     } finally {
       setLoading(false);
-    }};
+    }
+  };
+
+
+
+
+
   return (
     <div className="flex h-screen p-5 bg-white">
       {/* Left Sidebar */}
       <div className="w-[30%] h-[99.5%] p-5 pl-7 bg-gradient-to-b from-[#2E8095] to-[#2C6472] text-white">
         <div className="flex items-center mb-10">
-        <img className='w-24 h-10 object-fill' src={logo} alt="JobFusion Logo" />
+          <img className='w-24 h-10 object-fill' src={logo} alt="JobFusion Logo" />
         </div>
         <div className=" items-center mt-40">
           <p className='font-semibold text-3xl'>Just a few steps away from landing your dream job</p>
@@ -81,6 +120,7 @@ const Resume = () => {
           <div className="border-2 border-[#2c6472] border-dotted rounded-lg w-[70%] h-[350px] p-6 text-center bg-gray-100">
             <input
               type="file"
+              accept=".pdf,.txt"
               id="certificateUpload"
               onChange={handleFileChange}
               className="hidden "
@@ -101,7 +141,7 @@ const Resume = () => {
           <button
             type="button"
             className=" teal-button px-6 py-2 bg-[#2c6472] text-white w-[130px] h-[44px]  rounded-full focus:outline-none transition-transform duration-200 ease-in-out"
-                  onClick={() => navigate(-1)}
+            onClick={() => navigate(-1)}
           >
             Cancel
           </button>
@@ -109,12 +149,26 @@ const Resume = () => {
           <button
             type="button"
             className=" teal-button px-6 py-2 bg-[#2c6472] text-white w-[130px] h-[44px]  rounded-full focus:outline-none transition-transform duration-200 ease-in-out"
-          //   onClick={handleNext}
+            onClick={handleResumeUpload}
           >
             Allow
           </button>
         </div>
       </div>
+
+{loading && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-10 backdrop-blur-sm">
+    <div className="flex flex-col items-center">
+      <img
+        src={animationgif}
+        alt="Loading..."
+        className="w-52 h-52 mb-4"
+      />
+      <p className="text-white text-xl font-semibold">Extracting, please wait...</p>
+    </div>
+  </div>
+)}
+
 
 
     </div>

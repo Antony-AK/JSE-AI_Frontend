@@ -16,7 +16,7 @@ const CoverLetterPlush = () => {
     return (
         <div className="w-[794px] h-[1123px] mx-auto p-12 bg-white text-black font-[Times New Roman] text-[15px] leading-relaxed flex flex-col justify-between">
             {/* Header */}
-            <div className=" flex justify-center gap-5 w-[90%] mx-auto ">
+            <div className=" flex items-center gap-5 min-w-[60%] mx-auto ">
                 <div className='w-[60%]'>
                     {personalInfo?.name?.split(' ').length > 1 ? (
                         <h1 className="text-[20px] font-medium flex flex-col items-end justify-end ">
@@ -39,12 +39,10 @@ const CoverLetterPlush = () => {
             </div>
 
             {/* Recipient and Subject */}
-            <div className="text-left  flex flex-col -mt-20 text-[15px]">
-                <div className=" border-y mb-6 items-center border-gray-400">
-                    <p className='my-2'><strong className='me-3 font-medium'>To :</strong>Recruiter</p>
-                </div>
+            <div className="text-left  flex flex-col -mt-20 text-[15px] border-t border-gray-300 ">
+               
 
-                <p className="mb-6"><strong className='font-medium me-3'>Date :</strong> {recipient?.date || currentDate}</p>
+                <p className="mb-6 mt-5"><strong className='font-medium me-3 '>Date :</strong> {recipient?.date || currentDate}</p>
                 <p className=""><strong className='font-medium me-3'>Subject :</strong>Applying postion as {personalInfo?.title}</p>
             </div>
 

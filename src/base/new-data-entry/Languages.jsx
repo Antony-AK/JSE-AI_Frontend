@@ -16,6 +16,8 @@ const Languages = () => {
     language: '',
     proficiency: ''
   });
+  const [activeId, setActiveId] = useState(null);
+
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -24,8 +26,25 @@ const Languages = () => {
 
 
   useEffect(() => {
-    // Remove old session handling — not needed
+    const stored = sessionStorage.getItem("extractedResume");
+    if (stored) {
+      const parsed = JSON.parse(stored)?.data;
+      const langs = parsed?.languages || [];
+
+      const languagesWithId = langs.map((lang, idx) => ({
+        id: Date.now() + idx,
+        language: lang.language || '',
+        proficiency: lang.proficiency || '',
+      }));
+
+      if (languagesWithId.length > 0) {
+        setAddedCompanies(languagesWithId);
+        setFormData(languagesWithId[0]); // Pre-fill with first
+        setActiveId(languagesWithId[0].id);
+      }
+    }
   }, []);
+
 
 
 
@@ -64,8 +83,6 @@ const Languages = () => {
     if (!validateForm()) return;
 
     const token = sessionStorage.getItem('authToken');
-
-
     if (!token) {
       navigate('/user/login');
       toast.error('User not found. Please log in');
@@ -75,37 +92,41 @@ const Languages = () => {
     setLoading(true);
 
     try {
+      const payload = {
+        language: formData.language,
+        proficiency: formData.proficiency,
+      };
 
       const response = await fetch(`${BASE_URL}/languages`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json', // Add this
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          language: formData.language,
-          proficiency: formData.proficiency,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
         throw new Error(errData.message || 'Upload failed');
-
       }
 
-      setFormData({
-        language: '',
-        proficiency: ''
-      });
+      // Update list
+      const updatedList = addedCompanies.map((item) =>
+        item.id === activeId ? { ...item, ...formData } : item
+      );
+      const exists = addedCompanies.some((item) => item.id === activeId);
+      const finalList = exists
+        ? updatedList
+        : [...addedCompanies, { ...formData, id: Date.now() }];
 
-      setAddedCompanies((prev) => [...prev, formData.language]);
-
-
+      setAddedCompanies(finalList);
+      setFormData({ language: '', proficiency: '' });
+      setActiveId(null);
 
     } catch (err) {
       console.error('Error uploading language:', err);
-      toast.error(err.issue);
+      toast.error('Failed to upload language.');
     } finally {
       setLoading(false);
     }
@@ -172,15 +193,25 @@ const Languages = () => {
           <h1 className='text-2xl font-semibold mt-7'>Add the languages you know.</h1>
         </div>
 
-        {addedCompanies.length > 0 && (
-          <div className=" px-6 py-4 -mb-5 flex gap-3 rounded-lg">
-            <ul className="flex gap-3 overflow-x-auto scrollbar-hide">
-              {addedCompanies.map((company, index) => (
-                <li className='bg-gray-500/30 px-4 py-2 rounded-lg min-w-32 text-center font-semibold text-[#2c6472]' key={index}>{company}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+
+        <ul className="flex gap-3 mt-3 overflow-x-auto scrollbar-hide list-none">
+          {addedCompanies.map((langObj) => (
+            <li
+              key={langObj.id}
+              className={`px-4 py-2 rounded-lg w-32 text-center font-semibold cursor-pointer transition-all
+        ${activeId === langObj.id ? 'bg-[#2c6472] text-white' : 'bg-gray-500/30 text-[#2c6472]'}`}
+              onClick={() => {
+                setFormData(langObj);
+                setActiveId(langObj.id);
+                setErrors({});
+              }}
+            >
+              {langObj.language}
+            </li>
+          ))}
+        </ul>
+
+
 
         <form className="flex flex-col mt-5 ms-6 " onSubmit={handleAddCertificate}>
           {/* Language Input */}
@@ -228,7 +259,7 @@ const Languages = () => {
             </div>
           </div><br />
 
-                          <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+          <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
 
 
           {/* Buttons */}

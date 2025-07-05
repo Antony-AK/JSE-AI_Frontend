@@ -61,7 +61,7 @@ const Calendar = ({ selectedDate, onDateChange }) => {
         type="text"
         readOnly
         onClick={() => setShowCalendar(true)}
-        value={selectedDate ? format(selectedDate, 'dd MMM yyyy') : ''}
+        value={selectedDate ? format(selectedDate, 'yyyy-MM-dd') : ''}
         placeholder="Pick a date"
         className="w-full px-5 py-3 rounded-lg border border-gray-300 outline-none focus:ring-2 ring-[#2c6472] text-gray-600 cursor-pointer"
       />
@@ -122,8 +122,8 @@ const Calendar = ({ selectedDate, onDateChange }) => {
                             setShowYearDropdown(false); // close dropdown after select
                           }}
                           className={`px-2 py-1 cursor-pointer text-sm text-center hover:bg-[#2c6472] hover:text-white ${currentMonth.getFullYear() === year
-                              ? 'bg-[#2c6472]/10 font-semibold'
-                              : ''
+                            ? 'bg-[#2c6472]/10 font-semibold'
+                            : ''
                             }`}
                         >
                           {year}
