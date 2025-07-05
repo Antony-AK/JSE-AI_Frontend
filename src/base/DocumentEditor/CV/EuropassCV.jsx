@@ -371,7 +371,7 @@ const EuropassCV = ({
             className="pb-5 w-full flex"
             style={{ breakInside: "avoid" }}
           >
-            <h2 className="text-sm w-[640px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
+            <h2 className="text-sm w-[370px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
               {skills.title || "Skills"}
             </h2>
             <div className="text-black text-[13px] leading-6">

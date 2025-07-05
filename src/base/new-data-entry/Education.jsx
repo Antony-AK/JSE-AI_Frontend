@@ -253,7 +253,7 @@ const Education = () => {
             )}
 
 
-            <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
+            <form className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
 
                 {/* Institution */}
                 <div className="flex flex-col gap-2 text-lg">

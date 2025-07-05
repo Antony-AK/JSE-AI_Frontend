@@ -86,7 +86,7 @@ const ThirdCV = ({
           </div>
           {workExperience.content.map((job, idx) => (
             <div key={idx} className="flex gap-3 mb-5 mt-2">
-              <div className="w-[20%] text-gray-600  text-[11.7px]">[ {job.Duration} ]</div>
+              <div className="w-[20%] text-gray-600  text-[11.6px]">[ {job.Duration} ]</div>
               <div className="w-3/4">
                 <div className="text-blue-700 font-bold">{job.Role}</div>
                 <div className="font-medium my-1 italic">{job.Company}</div>
@@ -161,7 +161,7 @@ const ThirdCV = ({
               .filter((edu) => edu.degree?.trim())
               .map((edu, idx) => (
                 <div key={idx} className="flex gap-3 mb-4">
-                  <div className="w-1/5 text-gray-600 italic text-[12px]">
+                  <div className="w-1/5   text-gray-600 italic text-[12px]">
                     {edu.end_date || "—"}
                   </div>
                   <div className="w-3/4">

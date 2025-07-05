@@ -44,7 +44,7 @@ const Cv = () => {
     const [selectedTemplate, setSelectedTemplate] = useState("EuropassCV");
     const SelectedTemplate = templates[selectedTemplate];
 
-    const [profileImage, setProfileImage] = useState(profile);
+    const [profileImage, setProfileImage] = useState(null);
     const token = sessionStorage.getItem("authToken");
 
     useEffect(() => {
@@ -68,7 +68,7 @@ const Cv = () => {
     // console.log("💡 personalInfo =>", personalInfo);
 
 
-    const imageToUse = profileImage || personalInfo?.profileImage || profile;
+    const imageToUse = profileImage || personalInfo?.profileImage ;
 
 
     const previewRef = useRef();
