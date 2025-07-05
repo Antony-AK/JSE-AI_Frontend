@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import trash from "../assets/trash2.png";
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { BASE_URL } from '../utils/api';
+import Calendar from '../base/Calender/Calender';
+import { format } from 'date-fns';
 
 const CertificatesUpdateForm = ({ onclose }) => {
   const [certificates, setCertificates] = useState([]);
@@ -23,7 +26,7 @@ const CertificatesUpdateForm = ({ onclose }) => {
 
   const validateForm = () => {
     if (!formData.certificate_name || !formData.certificate_type || !formData.completion_date) {
-      alert("Please fill all required fields.");
+      toast.error("Please fill all required fields.");
       return false;
     }
     return true;
@@ -65,19 +68,19 @@ const CertificatesUpdateForm = ({ onclose }) => {
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      alert("✅ Certificate added!");
+      toast.success("Certificate added!");
       setFormData({ certificate_name: '', certificate_type: '', provider: '', completion_date: '' });
       await fetchCertificates();
     } catch (err) {
       console.error("Add failed", err);
-      alert("❌ Failed to add certificate.");
+      toast.error("Failed to add certificate.");
     }
   };
 
   const handleUpdateCertificate = async () => {
     if (!activeId) return;
     const selected = certificates.find(c => c.tempId === activeId);
-    if (!selected) return alert("Selected certificate not found");
+    if (!selected) return toast.success("Selected certificate not found");
     try {
       await axios.put(`${apiUrl}/${activeId}`, {
         ...formData,
@@ -85,11 +88,11 @@ const CertificatesUpdateForm = ({ onclose }) => {
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      alert("✅ Certificate updated!");
+      toast.success("Certificate updated!");
       await fetchCertificates();
     } catch (err) {
       console.error("Update failed", err);
-      alert("❌ Failed to update certificate.");
+      toast.error("Failed to update certificate.");
     }
   };
 
@@ -99,13 +102,13 @@ const CertificatesUpdateForm = ({ onclose }) => {
       await axios.delete(`${apiUrl}/${activeId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      alert("✅ Certificate deleted");
+      toast.success("Certificate deleted");
       setFormData({ certificate_name: '', certificate_type: '', provider: '', completion_date: '' });
       setActiveId(null);
       await fetchCertificates();
     } catch (err) {
       console.error("Delete failed", err);
-      alert("❌ Failed to delete certificate.");
+      toast.error("Failed to delete certificate.");
     }
   };
 
@@ -171,12 +174,14 @@ const CertificatesUpdateForm = ({ onclose }) => {
 
           <div className="flex flex-col">
             <label className='text-sm text-gray-600'>Completion Date <span className='text-red-500'>*</span></label>
-            <input
-              type="date"
-              name="completion_date"
-              value={formData.completion_date}
-              onChange={handleChange}
-              className='border border-gray-300 px-4 py-3 rounded-md focus:outline-none focus:ring-1 focus:ring-[#2c6472]'
+            <Calendar
+              selectedDate={formData.completion_date ? new Date(formData.completion_date) : null}
+              onDateChange={(date) =>
+                setFormData((prev) => ({
+                ...prev,
+                completion_date: format(date, 'yyyy-MM-dd'),
+                }))
+                }
             />
           </div>
 

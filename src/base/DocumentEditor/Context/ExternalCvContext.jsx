@@ -67,7 +67,11 @@ const [certificates, setCertificates] = useState({ title: "", content: [] });
         setEducation({
           title: "Education",
           content: (rawData.education || []).map(entry => ({
-            degree: entry || ""
+            degree: entry.degree || "",
+            city: entry.city || "",
+            field_of_study: entry.field_of_study || "",
+            end_date: entry.end_date || "",
+            achievements: entry.achievements || ""
           }))
         });
 
@@ -84,8 +88,9 @@ const [certificates, setCertificates] = useState({ title: "", content: [] });
 
         setCertificates({
           title: "Certificates",
-          content: (rawData.certifications || []).map(name => ({
-            Name: name || ""
+          content: (rawData.certifications || []).map(cert => ({
+            certificate_name: cert.certificate_name || "",
+            provider: cert.provider || ""
           }))
         });
 
@@ -96,7 +101,10 @@ const [certificates, setCertificates] = useState({ title: "", content: [] });
 
         setLanguages({
           title: "Languages",
-          content: rawData.languages || []
+          content: (rawData.languages || []).map(entry => ({
+            language: entry.language || "",
+            proficiency: entry.proficiency || ""
+          }))
         });
 
       } catch (error) {

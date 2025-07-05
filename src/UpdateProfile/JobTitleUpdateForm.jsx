@@ -107,18 +107,18 @@ const JobTitleUpdateForm = ({ onclose }) => {
   };
 
   const handleSaveChanges = async () => {
-    if (!formData.primary_title) return alert("Primary title is required.");
+    if (!formData.primary_title) return toast.error("Primary title is required.");
 
     try {
       await axios.put(`${apiUrl}/${activeId}`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      toast.success("✅ Titles updated!");
+      toast.success("Titles updated!");
       setActiveId(null);
       await fetchTitles();
     } catch (err) {
       console.error('Update failed:', err);
-      toast.error("❌ Update failed.");
+      toast.error("Update failed.");
     }
   };
 
@@ -127,7 +127,7 @@ const JobTitleUpdateForm = ({ onclose }) => {
       await axios.delete(`${apiUrl}/${activeId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      toast.success("✅ Deleted successfully.");
+      toast.success("Deleted successfully.");
       setFormData({
         primary_title: '',
         secondary_title: '',
@@ -137,17 +137,17 @@ const JobTitleUpdateForm = ({ onclose }) => {
       await fetchTitles();
     } catch (err) {
       console.error('Delete failed:', err);
-      toast.error("❌ Delete failed.");
+      toast.error("Delete failed.");
     }
   };
 
   const handleAdd = async () => {
-    if (!formData.primary_title) return alert("Primary title is required.");
+    if (!formData.primary_title) return toast.error("Primary title is required.");
     try {
       await axios.post(apiUrl, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      toast.success("✅ Job titles added!");
+      toast.success("Job titles added!");
       setFormData({
         primary_title: '',
         secondary_title: '',
@@ -156,7 +156,7 @@ const JobTitleUpdateForm = ({ onclose }) => {
       await fetchTitles();
     } catch (err) {
       console.error('Add failed:', err);
-      toast.error("❌ Add failed.");
+      toast.error("Add failed.");
     }
   };
 

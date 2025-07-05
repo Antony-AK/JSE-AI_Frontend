@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import trash from "../assets/trash2.png"
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const skillOptions = [
     "API Development",
@@ -213,11 +214,11 @@ const ProfessionalSumUpdateForm = ({ onclose }) => {
                     'Content-Type': 'application/json',
                 },
             });
-            alert("Personal info updated successfully ✅");
+            toast.success("Personal info updated successfully ✅");
             onclose();
         } catch (err) {
             console.error("Update failed", err);
-            alert("Update failed ❌");
+            toast.error("Update failed");
         }
     };
 
@@ -245,7 +246,7 @@ const ProfessionalSumUpdateForm = ({ onclose }) => {
         }));
         setSearchTerm('');
     } else if (isDuplicate) {
-        alert("This skill is already added!");
+        toast.error("This skill is already added!");
     }
 };
 

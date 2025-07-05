@@ -81,8 +81,22 @@ const PlushCV = ({
         </div>
       </div>
 
-      <div className="flex w-full   gap-4">
+      <div className="flex w-full gap-4">
         <div className="w-[70%] px-6 py-4 flex flex-col gap-4">
+          {/* Summary */}
+          {professionalSummary.content && (
+            <div className="flex flex-col gap-1 mt-5">
+              <div className="flex items-center gap-3">
+                <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">
+                  SUMMARY
+                </h2>
+              </div>
+              <p className="leading-5 ml-3 mt-2 text-[12px] text-gray-700 space-y-1">
+                {professionalSummary.content}
+              </p>
+            </div>
+          )}
+
           {/* EXPERIENCE */}
           {workExperience.content.some(
             (exp) => exp.Company || exp.Role || exp.Description
@@ -181,65 +195,94 @@ const PlushCV = ({
             </div>
           )}
 
-          {/* Education */}
-          {education.content.length > 0 && (
+        {/* Education */}
+        {education.content.length > 0 &&
+          education.content.some(edu => edu.degree?.trim()) && (
             <div>
               <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">
                 Education
               </h2>
-              {education.content.map((edu, idx) => (
-                <div
-                  key={idx}
-                  className="mb-2 ms-2 avoid-page-break"
-                  style={{ breakInside: "avoid" }}
-                >
-                  <p className="text-[12px]">{edu.degree}</p>
-                  <p className="text-[12px] text-gray-700">{edu.institution}</p>
-                  <p className="text-[12px] text-gray-500">{edu.year}</p>
-                </div>
-              ))}
+              {education.content.map((edu, idx) =>
+                edu.degree?.trim() ? (
+                  <div
+                    key={idx}
+                    className="mb-2 ms-2 avoid-page-break"
+                    style={{ breakInside: "avoid" }}
+                  >
+                    <p className="text-[12px] font-semibold text-gray-800">
+                      {edu.degree}
+                      {edu.field_of_study && ` - ${edu.field_of_study}`}
+                    </p>
+                    {edu.school && (
+                      <p className="text-[12px] text-gray-700">
+                        {edu.school}
+                        {edu.city && `, ${edu.city}`}
+                      </p>
+                    )}
+                    {edu.end_date && (
+                      <p className="text-[12px] text-gray-500">{edu.end_date}</p>
+                    )}
+                  </div>
+                ) : null
+              )}
             </div>
           )}
 
-          {/* Languages */}
-          {languages?.content?.length > 0 && (
+        {/* Languages */}
+        {languages?.content?.length > 0 &&
+          languages.content.some(l => l.language?.trim()) && (
             <div>
               <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">
                 Languages
               </h2>
               <ul className="list-disc ml-4 text-[12px]">
-                {languages.content.map((lang, idx) => (
-                  <li
-                    key={idx}
-                    className="avoid-page-break"
-                    style={{ breakInside: "avoid" }}
-                  >
-                    {lang}
-                  </li>
-                ))}
+                {languages.content
+                  .filter(l => l.language?.trim())
+                  .map((lang, idx) => (
+                    <li
+                      key={idx}
+                      className="avoid-page-break"
+                      style={{ breakInside: "avoid" }}
+                    >
+                      {lang.language}
+                      {lang.proficiency && (
+                        <span className="italic text-gray-500">
+                          {" - " + lang.proficiency}
+                        </span>
+                      )}
+                    </li>
+                  ))}
               </ul>
             </div>
           )}
 
           {/* Certificates */}
-          {certificates.content.length > 0 && (
-            <div>
-              <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">
-                Certifications
-              </h2>
-              <ul className="list-disc ml-4 text-[12px]">
-                {certificates.content.map((cert, idx) => (
-                  <li
-                    key={idx}
-                    className="avoid-page-break"
-                    style={{ breakInside: "avoid" }}
-                  >
-                    {cert.Name}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          {certificates.content.length > 0 &&
+            certificates.content.some(c => c.certificate_name?.trim()) && (
+              <div>
+                <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">
+                  Certifications
+                </h2>
+                <ul className="list-disc ml-4 text-[12px]">
+                  {certificates.content
+                    .filter(cert => cert.certificate_name?.trim())
+                    .map((cert, idx) => (
+                      <li
+                        key={idx}
+                        className="avoid-page-break"
+                        style={{ breakInside: "avoid" }}
+                      >
+                        {cert.certificate_name}
+                        {cert.provider && (
+                          <span className="italic text-gray-500">
+                            {" - " + cert.provider}
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            )}
         </div>
       </div>
     </div>

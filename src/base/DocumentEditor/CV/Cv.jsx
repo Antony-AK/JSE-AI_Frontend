@@ -40,7 +40,7 @@ const Cv = () => {
         EuropassCV,
         ModernClassic
     };
-    const [selectedTemplate, setSelectedTemplate] = useState("ModernClassic");
+    const [selectedTemplate, setSelectedTemplate] = useState("EuropassCV");
     const SelectedTemplate = templates[selectedTemplate];
 
 
@@ -504,25 +504,100 @@ const Cv = () => {
 
                             {/* Single Degree Field */}
                             <div className="pl-1 text-sm space-y-3">
-                                <div className="flex items-start gap-2">
-                                    <label className="text-sm font-semibold text-gray-700 min-w-[80px]">Degree:</label>
-                                    {activeSection === 'education' ? (
-                                        <input
-                                            type="text"
-                                            value={education.content[selectedEducationIdx].degree}
-                                            onChange={(e) => {
-                                                const updated = [...education.content];
-                                                updated[selectedEducationIdx].degree = e.target.value;
-                                                setEducation(prev => ({ ...prev, content: updated }));
-                                            }}
-                                            className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
-                                        />
-                                    ) : (
-                                        <p className="text-[#00000082] font-medium">
-                                            {education.content[selectedEducationIdx].degree}
-                                        </p>
-                                    )}
-                                </div>
+                            {/* Degree */}
+                            <div className="flex items-start gap-2">
+                                <label className="text-sm font-semibold text-gray-700 min-w-[110px]">Degree:</label>
+                                {activeSection === 'education' ? (
+                                <input
+                                    type="text"
+                                    value={education.content[selectedEducationIdx].degree}
+                                    onChange={(e) => {
+                                    const updated = [...education.content];
+                                    updated[selectedEducationIdx].degree = e.target.value;
+                                    setEducation(prev => ({ ...prev, content: updated }));
+                                    }}
+                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                />
+                                ) : (
+                                <p className="text-[#00000082] font-medium">{education.content[selectedEducationIdx].degree}</p>
+                                )}
+                            </div>
+
+                            {/* Field of Study */}
+                            <div className="flex items-start gap-2">
+                                <label className="text-sm font-semibold text-gray-700 min-w-[110px]">Field of Study:</label>
+                                {activeSection === 'education' ? (
+                                <input
+                                    type="text"
+                                    value={education.content[selectedEducationIdx].field_of_study}
+                                    onChange={(e) => {
+                                    const updated = [...education.content];
+                                    updated[selectedEducationIdx].field_of_study = e.target.value;
+                                    setEducation(prev => ({ ...prev, content: updated }));
+                                    }}
+                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                />
+                                ) : (
+                                <p className="text-[#00000082] font-medium">{education.content[selectedEducationIdx].field_of_study}</p>
+                                )}
+                            </div>
+
+                            {/* City */}
+                            <div className="flex items-start gap-2">
+                                <label className="text-sm font-semibold text-gray-700 min-w-[110px]">City:</label>
+                                {activeSection === 'education' ? (
+                                <input
+                                    type="text"
+                                    value={education.content[selectedEducationIdx].city}
+                                    onChange={(e) => {
+                                    const updated = [...education.content];
+                                    updated[selectedEducationIdx].city = e.target.value;
+                                    setEducation(prev => ({ ...prev, content: updated }));
+                                    }}
+                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                />
+                                ) : (
+                                <p className="text-[#00000082] font-medium">{education.content[selectedEducationIdx].city}</p>
+                                )}
+                            </div>
+
+                            {/* End Date */}
+                            <div className="flex items-start gap-2">
+                                <label className="text-sm font-semibold text-gray-700 min-w-[110px]">End Date:</label>
+                                {activeSection === 'education' ? (
+                                <input
+                                    type="text"
+                                    value={education.content[selectedEducationIdx].end_date}
+                                    onChange={(e) => {
+                                    const updated = [...education.content];
+                                    updated[selectedEducationIdx].end_date = e.target.value;
+                                    setEducation(prev => ({ ...prev, content: updated }));
+                                    }}
+                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                />
+                                ) : (
+                                <p className="text-[#00000082] font-medium">{education.content[selectedEducationIdx].end_date}</p>
+                                )}
+                            </div>
+
+                            {/* Achievements */}
+                            <div className="flex flex-col items-start gap-2">
+                                <label className="text-sm font-semibold text-gray-700 min-w-[110px] mb-1">Achievements:</label>
+                                {activeSection === 'education' ? (
+                                <textarea
+                                    value={education.content[selectedEducationIdx].achievements}
+                                    onChange={(e) => {
+                                    const updated = [...education.content];
+                                    updated[selectedEducationIdx].achievements = e.target.value;
+                                    setEducation(prev => ({ ...prev, content: updated }));
+                                    }}
+                                    className="w-full outline-none text-[#00000082] font-medium px-2 py-1 rounded-md"
+                                    rows={3}
+                                />
+                                ) : (
+                                <p className="text-[#00000082] font-medium whitespace-pre-wrap">{education.content[selectedEducationIdx].achievements}</p>
+                                )}
+                            </div>
                             </div>
                         </div>
                     )}
@@ -680,30 +755,47 @@ const Cv = () => {
                             />
                         </div>
 
-                        <div className="pl-1 text-sm space-y-2">
-                            {activeSection === 'languages' ? (
-                                languages.content.map((lang, idx) => (
-                                    <input
-                                        key={idx}
-                                        type="text"
-                                        value={lang}
-                                        onChange={(e) => {
-                                            const updated = [...languages.content];
-                                            updated[idx] = e.target.value;
-                                            setLanguages({ ...languages, content: updated });
-                                        }}
-                                        className="w-full outline-none border rounded px-2 py-1 text-[#00000082] font-medium"
-                                    />
+                        <div className="pl-1 text-sm space-y-3">
+                        {activeSection === 'languages' ? (
+                            languages.content.map((langObj, idx) => (
+                            <div key={idx} className="flex gap-5">
+                                <input
+                                type="text"
+                                placeholder="Language"
+                                value={langObj.language}
+                                onChange={(e) => {
+                                    const updated = [...languages.content];
+                                    updated[idx].language = e.target.value;
+                                    setLanguages({ ...languages, content: updated });
+                                }}
+                                className="w-[45%] outline-none border rounded px-2 py-1 text-[#00000082] font-medium"
+                                />
+                                <input
+                                type="text"
+                                placeholder="Proficiency (e.g., fluent)"
+                                value={langObj.proficiency}
+                                onChange={(e) => {
+                                    const updated = [...languages.content];
+                                    updated[idx].proficiency = e.target.value;
+                                    setLanguages({ ...languages, content: updated });
+                                }}
+                                className="w-[45%] outline-none border rounded px-2 py-1 text-[#00000082] font-medium"
+                                />
+                            </div>
+                            ))
+                        ) : (
+                            <div className="text-[#00000082] font-medium space-y-1">
+                            {languages.content.length > 0 ? (
+                                languages.content.map((langObj, idx) => (
+                                <p key={idx}>
+                                    {langObj.language} — <span className="italic">{langObj.proficiency}</span>
+                                </p>
                                 ))
                             ) : (
-                                <div className="text-[#00000082] font-medium space-y-1">
-                                    {languages.content.length > 0 ? (
-                                        languages.content.map((lang, idx) => <p key={idx}>{lang}</p>)
-                                    ) : (
-                                        <p className="italic text-gray-400">No languages added</p>
-                                    )}
-                                </div>
+                                <p className="italic text-gray-400">No languages added</p>
                             )}
+                            </div>
+                        )}
                         </div>
                     </div>
 
@@ -729,25 +821,43 @@ const Cv = () => {
                         </div>
 
                         <div className="pl-1 text-sm space-y-3">
-                            {certificates.content.map((item, index) => (
-                                <div key={index} className="flex items-center gap-2">
-
-                                    {activeSection === 'certificates' ? (
-                                        <input
-                                            type="text"
-                                            value={item.Name}
-                                            onChange={(e) => {
-                                                const updated = [...certificates.content];
-                                                updated[index].Name = e.target.value;
-                                                setCertificates((prev) => ({ ...prev, content: updated }));
-                                            }}
-                                            className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
-                                        />
-                                    ) : (
-                                        <p className="text-[#00000082] font-medium">{item.Name}</p>
-                                    )}
-                                </div>
-                            ))}
+                        {certificates.content.map((item, index) => (
+                            <div key={index} className="flex gap-5">
+                            {activeSection === 'certificates' ? (
+                                <>
+                                <input
+                                    type="text"
+                                    placeholder="Certificate Name"
+                                    value={item.certificate_name}
+                                    onChange={(e) => {
+                                    const updated = [...certificates.content];
+                                    updated[index].certificate_name = e.target.value;
+                                    setCertificates((prev) => ({ ...prev, content: updated }));
+                                    }}
+                                    className="w-[45%] border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Provider"
+                                    value={item.provider}
+                                    onChange={(e) => {
+                                    const updated = [...certificates.content];
+                                    updated[index].provider = e.target.value;
+                                    setCertificates((prev) => ({ ...prev, content: updated }));
+                                    }}
+                                    className="w-[45%] border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                />
+                                </>
+                            ) : (
+                                <p className="text-[#00000082] font-medium">
+                                {item.certificate_name}
+                                {item.provider && (
+                                    <span className="text-gray-500 italic"> — {item.provider}</span>
+                                )}
+                                </p>
+                            )}
+                            </div>
+                        ))}
                         </div>
                     </div>
 

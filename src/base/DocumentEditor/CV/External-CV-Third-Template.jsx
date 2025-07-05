@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { BASE_URL } from "../../../utils/api";
 
 const ExternalThirdCV = ({ personalInfo, professionalSummary, workExperience, education, skills, languages, certificates, projects }) => {
 
@@ -84,7 +86,7 @@ const ExternalThirdCV = ({ personalInfo, professionalSummary, workExperience, ed
       {professionalSummary?.content && (
         <div className=" flex flex-col pt-4 mt-6">
           <div className="w-full h-5 gap-5 flex items-center">
-            <h2 className="text-[14px] w-1/6  justify-end flex font-bold text-blue-700 uppercase mb-2">ABOUT MYSELF</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
+            <h2 className="text-[14px] justify-end flex font-bold text-blue-700 uppercase mb-2">ABOUT MYSELF</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
           </div>
           <div className="ms-[140px] w-3/4 mt-3 flex items-center justify-end ">
             <p className="text-gray-800 ms-3 leading-relaxed">{professionalSummary.content}</p>
@@ -96,11 +98,11 @@ const ExternalThirdCV = ({ personalInfo, professionalSummary, workExperience, ed
       {workExperience?.content?.length > 0 && (
         <div className="flex flex-col pt-4 mt-3">
           <div className="w-full h-5 gap-5 flex items-center">
-            <h2 className="text-[14px] -ml-5  font-bold text-blue-700  uppercase mb-2">WORK EXPERIENCE</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
+            <h2 className="text-[14px] font-bold text-blue-700  uppercase mb-2">WORK EXPERIENCE</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
           </div>
           {workExperience.content.map((job, idx) => (
-            <div key={idx} className="flex gap-3 mb-5">
-              <div className="w-1/5 text-gray-600  text-[12px]">[ {job.Duration} ]</div>
+            <div key={idx} className="flex gap-3 mb-5 mt-2">
+              <div className="w-[20%] text-gray-600  text-[11.7px]">[ {job.Duration} ]</div>
               <div className="w-3/4">
                 <div className="text-blue-700 font-bold">{job.Role}</div>
                 <div className="font-medium my-1 italic">{job.Company}</div>
@@ -161,33 +163,60 @@ const ExternalThirdCV = ({ personalInfo, professionalSummary, workExperience, ed
       )}
 
       {/* 🔸 Education */}
-      {education?.content?.length > 0 && (
-        <div className=" pt-4 mt-3">
- <div className="w-full h-5 gap-5 flex items-center">
-            <h2 className="text-[14px] w-1/6 flex justify-end  font-bold text-blue-700  uppercase mb-2">EDUCATION</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
-          </div>
-                    {education.content.map((edu, idx) => (
-            <div key={idx} className="flex gap-3 mb-4">
-              <div className="w-1/5 text-gray-600 italic text-[12px]">{edu.Duration}</div>
-              <div className="w-3/4">
-                <div className="text-gray-700 font-medium">{edu.degree}</div>
-                <div className="italic">{edu.institution}</div>
-              </div>
+      {education?.content?.length > 0 &&
+        education.content.some((edu) => edu.degree?.trim()) && (
+          <div className="pt-4 mt-3">
+            <div className="w-full h-5 gap-5 flex items-center">
+              <h2 className="text-[14px] flex justify-end font-bold text-blue-700 uppercase mb-2">
+                EDUCATION
+              </h2>
+              <hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
             </div>
-          ))}
-        </div>
-      )}
+
+            {education.content
+              .filter((edu) => edu.degree?.trim())
+              .map((edu, idx) => (
+                <div key={idx} className="flex gap-3 mb-4">
+                  <div className="w-1/5 text-gray-600 italic text-[12px]">
+                    {edu.end_date || "—"}
+                  </div>
+                  <div className="w-3/4">
+                    <div className="text-gray-700 font-medium">
+                      {edu.degree}
+                      {edu.field_of_study && ` - ${edu.field_of_study}`}
+                    </div>
+                    <div className="italic text-[12px] text-gray-600">
+                      {edu.school}
+                      {edu.city && `${edu.city}`}
+                    </div>
+                    {edu.achievements?.trim() && (
+                      <div className="text-[12px] text-gray-500 mt-1">
+                        {edu.achievements}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+          </div>
+        )}
 
       {/* 🔸 Skills */}
       {skills?.content?.length > 0 && (
         <div className="flex flex-col pt-4 mt-3">
-           <div className="w-full h-5 gap-5 flex items-center">
-            <h2 className="text-[14px] w-1/6 flex justify-end  font-bold text-blue-700  uppercase mb-2">SKILls</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
+          <div className="w-full h-5 gap-5 flex items-center">
+            <h2 className="text-[14px] flex justify-end font-bold text-blue-700 uppercase mb-2">
+              SKILLS
+            </h2>
+            <hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
           </div>
-          <div className="ms-[150px] flex flex-wrap gap-1 w-3/4 ">
+
+          <div className="ms-[150px] flex flex-wrap gap-1 w-3/4">
             {skills.content.map((skill, idx) => (
-              <p key={idx} className="flex items-center gap-1">{skill}
-                <span className="text-gray-500 text-lg">|</span>
+              <p key={idx} className="flex items-center gap-1">
+                {skill}
+                {idx !== skills.content.length - 1 && (
+                  <span className="text-gray-500 text-lg">|</span>
+                )}
               </p>
             ))}
           </div>
@@ -195,36 +224,68 @@ const ExternalThirdCV = ({ personalInfo, professionalSummary, workExperience, ed
       )}
 
       {/* 🔸 Languages */}
-      {languages?.content?.length > 0 && (
-        <div className="flex flex-col pt-4 mt-3">
-         <div className="w-full h-5 gap-5 flex items-center">
-            <h2 className="text-[14px] w-1/6 flex justify-end  font-bold text-blue-700  uppercase mb-2">Languages</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
+      {languages?.content?.length > 0 &&
+        languages.content.some((lang) => lang.language?.trim()) && (
+          <div className="flex flex-col pt-4 mt-3">
+            <div className="w-full h-5 gap-5 flex items-center">
+              <h2 className="text-[14px] flex justify-end font-bold text-blue-700 uppercase mb-2">
+                Languages
+              </h2>
+              <hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
+            </div>
+
+            <div className="ms-[150px] flex flex-wrap w-3/4 gap-1 text-[12px] text-gray-800">
+              {languages.content
+                .filter((lang) => lang.language?.trim())
+                .map((lang, idx, arr) => (
+                  <p key={idx} className="flex items-center gap-1 font-medium text-sm">
+                    {lang.language}
+                    {lang.proficiency && (
+                      <span className="italic text-gray-500 text-[13px]">
+                        ({lang.proficiency})
+                      </span>
+                    )}
+                    {idx !== arr.length - 1 && (
+                      <span className="text-gray-500 text-lg">|</span>
+                    )}
+                  </p>
+                ))}
+            </div>
           </div>
-          <div className=" ms-[150px] flex flex-wrap w-3/4 gap-1">
-            {languages.content.map((lang, idx) => (
-              <p key={idx} className="flex items-center gap-1">{lang}
-                <span className="text-gray-500 text-lg">|</span>
-              </p>
-            ))}
-          </div>
-        </div>
-      )}
+        )}
 
       {/* 🔸 Certificates */}
-      {certificates?.content?.length > 0 && (
-        <div className="flex flex-col pt-4 mt-3">
-         <div className="w-full h-5 gap-5 flex items-center">
-            <h2 className="text-[14px] w-1/6 flex justify-end  font-bold text-blue-700  uppercase mb-2">Certificates</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
+      {certificates?.content?.length > 0 &&
+        certificates.content.some((cert) => cert.certificate_name?.trim()) && (
+          <div className="flex flex-col pt-4 mt-3">
+            <div className="w-full h-5 gap-5 flex items-center">
+              <h2 className="text-[14px] flex justify-end font-bold text-blue-700 uppercase mb-2">
+                Certificates
+              </h2>
+              <hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
+            </div>
+
+            <div className="ms-[150px] flex flex-wrap w-3/4 gap-1 text-[12px] text-gray-800">
+              {certificates.content
+                .filter((cert) => cert.certificate_name?.trim())
+                .map((cert, idx, arr) => (
+                  <p key={idx} className="flex items-center gap-1 font-medium text-sm">
+                    {cert.certificate_name}
+                    {cert.provider && (
+                      <span className="italic text-gray-500 text-[13px]">
+                        ({cert.provider})
+                      </span>
+                    )}
+                    {idx !== arr.length - 1 && (
+                      <span className="text-gray-500 text-lg">|</span>
+                    )}
+                  </p>
+                ))}
+            </div>
           </div>
-          <div className="ms-[150px] flex flex-wrap w-3/4 gap-1">
-            {certificates.content.map((cert, idx) => (
-              <p key={idx} className="flex items-center gap-1">{cert?.Name || cert}
-                <span className="text-gray-500 text-lg">|</span>
-              </p>
-            ))}
-          </div>
-        </div>
-      )}
+        )}
+
+
     </div>
   )
 }

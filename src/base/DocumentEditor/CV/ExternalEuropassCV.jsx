@@ -19,28 +19,28 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
         <div className="w-full px-10 pt-6">
           <div className="flex justify-start items-start gap-12">
             <div className="min-w-[130px]">
-              <h2 className="text-[13px] text-[#2c6472] font-bold tracking-widest uppercase">
+              <h2 className="text-sm text-[#2c6472] font-bold tracking-widest uppercase">
                 Contact
                 <br />
                 Information
               </h2>
             </div>
 
-            <div className="text-[13px] text-[#2c6472] space-y-1 leading-5">
-              <h2 className="font-bold">
+            <div className="flex flex-col gap-1 text-sm text-[#2c6472] space-y-1 leading-5">
+              <h2 className="font-bold text-[13px]">
                 Email:{" "}
-                <span className="text-black font-normal">
+                <span className="text-black font-normal text-[13px]"> 
                   {personalInfo.Mail}
                 </span>
               </h2>
-              <h2 className="font-bold">
+              <h2 className="font-bold text-[13px]">
                 Phone:{" "}
                 <span className="text-black font-normal">
                   {personalInfo.Phone}
                 </span>
               </h2>
               {personalInfo.LinkedIn && personalInfo.LinkedIn.trim() !== "" && (
-                <h2 className="font-bold">
+                <h2 className="font-bold text-[13px]">
                   LinkedIn:{" "}
                   <span className="text-black font-normal">
                     {personalInfo.LinkedIn}
@@ -67,7 +67,7 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
             <div className="w-full px-10 pt-6">
               <div className="flex justify-start items-start gap-12">
                 <div className="min-w-[130px]">
-                  <h2 className="text-[13px] text-[#2c6472] font-bold tracking-widest uppercase">
+                  <h2 className="text-sm text-[#2c6472] font-bold tracking-widest uppercase">
                     Summary
                   </h2>
                 </div>
@@ -85,25 +85,38 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
 
         {/* Education */}
         {education.content &&
-          education.content.filter((entry) => entry.degree?.trim() !== "")
-            .length > 0 && (
+          education.content.filter((entry) => entry.degree?.trim() !== "").length > 0 && (
             <div className="w-full px-10 pt-6">
               <div className="flex justify-start items-start gap-12">
                 <div className="min-w-[130px]">
-                  <h2 className="text-[13px] text-[#2c6472] font-bold tracking-widest uppercase">
+                  <h2 className="text-sm text-[#2c6472] font-bold tracking-widest uppercase">
                     Education
                   </h2>
                 </div>
 
                 <div className="text-[13px] space-y-2.5 leading-5">
-                  {education.content.map(
-                    (entry, idx) =>
-                      entry.degree?.trim() && (
-                        <p key={idx} className="text-sm text-black">
+                  {education.content
+                    .filter((entry) => entry.degree?.trim())
+                    .map((entry, idx) => (
+                      <div key={idx} className="text-[#2c6472] space-y-0.5">
+                        <p className="font-semibold  text-sm">
                           {entry.degree}
+                          {entry.field_of_study && ` - ${entry.field_of_study}`}
                         </p>
-                      )
-                  )}
+                        {(entry.school || entry.city) && (
+                          <p className="text-gray-700 italic">
+                            {entry.school}
+                            {entry.city && `${entry.city}`}
+                          </p>
+                        )}
+                        {entry.end_date && (
+                          <p className="text-gray-500">{entry.end_date}</p>
+                        )}
+                        {entry.achievements?.trim() && (
+                          <p className="text-[12px] text-black">{entry.achievements}</p>
+                        )}
+                      </div>
+                    ))}
                 </div>
               </div>
 
@@ -118,7 +131,7 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
             {/* Section Title */}
             <div className="flex gap-12 mb-5">
               <div className="min-w-[130px]">
-                <h2 className="text-[13px] text-[#2c6472] font-bold tracking-widest uppercase">
+                <h2 className="text-sm text-[#2c6472] font-bold tracking-widest uppercase">
                   Experience
                 </h2>
               </div>
@@ -133,7 +146,7 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
               return (
                 <div
                   key={idx}
-                  className="flex gap-4 items-start avoid-page-break pt-1"
+                  className="flex gap-4 items-start  pt-1"
                   style={{
                     breakInside: "avoid",
                   }}
@@ -141,12 +154,12 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
                   {/* Left: Company Info */}
                   <div className="w-[180px] flex flex-col gap-0.5">
                     {exp.Company && (
-                      <p className="text-sm font-bold text-[#2c6472]">
+                      <p className="text-[15px] font-bold text-[#2c6472]">
                         {exp.Company}
                       </p>
                     )}
                     {exp.Role && (
-                      <p className="text-xs text-[#497d8a]">{exp.Role}</p>
+                      <p className="text-sm text-[#497d8a]">{exp.Role}</p>
                     )}
                     {exp.Duration && (
                       <p className="text-xs text-[#497d8a]">{exp.Duration}</p>
@@ -154,7 +167,7 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
                   </div>
 
                   {/* Right: Description */}
-                  <div className="flex-1 text-[13px] text-gray-800 mb-5">
+                  <div className="flex-1 text-[13px] text-black mb-5">
                     {Array.isArray(exp.Description) ? (
                       <ul className="list-disc space-y-2.5">
                         {exp.Description.map((desc, i) => (
@@ -188,7 +201,7 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
             {/* Section Title */}
             <div className="flex gap-12 mb-5">
               <div className="">
-                <h2 className="text-[13px] text-[#2c6472] font-bold tracking-widest uppercase">
+                <h2 className="text-sm text-[#2c6472] font-bold tracking-widest uppercase">
                   Projects
                 </h2>
               </div>
@@ -207,7 +220,7 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
               return (
                 <div
                   key={idx}
-                  className="flex mb-6 min-w-[130px] items-start avoid-page-break"
+                  className="flex mb-6 min-w-[130px] items-start "
                   style={{ breakInside: "avoid" }}
                 >
                   {/* Left Column */}
@@ -259,23 +272,26 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
 
       {/* Certificates */}
       {certificates.content &&
-        certificates.content.filter((cert) => cert.Name?.trim()).length > 0 && (
+        certificates.content.filter((cert) => cert.certificate_name?.trim()).length > 0 && (
           <div className="px-10 pt-6">
-            <div className="w-full">
-              <h2 className="text-[13px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
+            <div className="w-full flex">
+              <h2 className="text-sm w-[160px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
                 {certificates.title || "Certificates"}
               </h2>
 
               {/* Certificate list */}
-              <ul className="list-disc text-sm ml-5 text-gray-700 space-y-0.5">
+              <ul className="list-disc text-sm font-medium ml-5 text-gray-700 space-y-0.5">
                 {certificates.content.map((cert, index) =>
-                  cert.Name?.trim() ? (
+                  cert.certificate_name?.trim() ? (
                     <li
                       key={index}
                       className="avoid-page-break"
                       style={{ breakInside: "avoid" }}
                     >
-                      {cert.Name}
+                      {cert.certificate_name}
+                      {cert.provider && (
+                        <span className="italic font-normal text-gray-700"> - {cert.provider}</span>
+                      )}
                     </li>
                   ) : null
                 )}
@@ -287,44 +303,46 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
           </div>
         )}
 
-      <div className="flex gap-10 text-sm px-10 pt-6 pb-5 flex-wrap">
+      <div className="flex gap-5 text-sm px-10 pt-6 pb-5 flex-col">
         {/* Languages - Left Side */}
         {languages.content &&
-          languages.content.filter((lang) => lang?.trim()).length > 0 && (
-            <div
-              className="min-w-[130px] avoid-page-break"
-              style={{ breakInside: "avoid" }}
-            >
-              <h2 className="text-[13px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
-                {languages.title || "Languages"}
-              </h2>
-              <ul className="list-disc ml-5 text-gray-700 text-[13px] space-y-0.5">
-                {languages.content.map(
-                  (lang, idx) =>
-                    lang?.trim() && (
-                      <li
-                        key={idx}
-                        className="avoid-page-break"
-                        style={{ breakInside: "avoid" }}
-                      >
-                        {lang}
-                      </li>
-                    )
-                )}
-              </ul>
-            </div>
-          )}
+        languages.content.filter((lang) => lang.language?.trim()).length > 0 && (
+          <div className="w-full flex" style={{ breakInside: "avoid" }}>
+            <h2 className="text-sm mb-3 w-[160px] text-[#2c6472] font-bold tracking-widest uppercase">
+              {languages.title || "Languages"}
+            </h2>
+
+            <ul className="list-disc ml-5 text-gray-700 font-medium text-sm space-y-0.5">
+              {languages.content
+                .filter((lang) => lang.language?.trim())
+                .map((lang, idx) => (
+                  <li
+                    key={idx}
+                    className="avoid-page-break"
+                    style={{ breakInside: "avoid" }}
+                  >
+                    {lang.language}
+                    {lang.proficiency && (
+                      <span className="italic text-gray-500"> - {lang.proficiency}</span>
+                    )}
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="border-b border-gray-300 w-full"></div>
 
         {/* Skills - Right Side */}
         {skills.content && skills.content.length > 0 && (
           <div
-            className="pb-5 avoid-page-break"
+            className="pb-5 w-full flex"
             style={{ breakInside: "avoid" }}
           >
-            <h2 className="text-[13px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
+            <h2 className="text-sm w-[640px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
               {skills.title || "Skills"}
             </h2>
-            <div className="text-gray-700 text-[13px]">
+            <div className="text-black text-[13px] leading-6">
               {skills.content
                 .filter((skill) => skill.trim() !== "")
                 .map((skill, index) => (
