@@ -69,6 +69,7 @@ const CertificatesUpdateForm = ({ onclose }) => {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success("Certificate added!");
+      toast.success("Certificate added!");
       setFormData({ certificate_name: '', certificate_type: '', provider: '', completion_date: '' });
       await fetchCertificates();
     } catch (err) {

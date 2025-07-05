@@ -12,6 +12,7 @@ import PlushCV from './PlushCV';
 import ThirdCV from './CV-Third-Template';
 import EuropassCV from './EuropassCV'
 import ModernClassic from './ModernClassic';
+import profile from "../../../assets/profile1.png"
 
 const Cv = () => {
 
@@ -42,6 +43,32 @@ const Cv = () => {
     };
     const [selectedTemplate, setSelectedTemplate] = useState("EuropassCV");
     const SelectedTemplate = templates[selectedTemplate];
+
+    const [profileImage, setProfileImage] = useState(profile);
+    const token = sessionStorage.getItem("authToken");
+
+    useEffect(() => {
+        const fetchProfileImage = async () => {
+            try {
+                const headers = { Authorization: `Bearer ${token}` };
+                const res = await axios.get(`${BASE_URL}/photo`, {
+                    headers,
+                    responseType: "blob",
+                });
+                const imageUrl = URL.createObjectURL(res.data);
+                setProfileImage(imageUrl);
+            } catch (error) {
+                console.error("❌ Failed to fetch profile image:", error);
+            }
+        };
+
+        if (token) fetchProfileImage();
+    }, [token]);
+
+    // console.log("💡 personalInfo =>", personalInfo);
+
+
+    const imageToUse = profileImage || personalInfo?.profileImage || profile;
 
 
     const previewRef = useRef();
@@ -865,54 +892,54 @@ const Cv = () => {
                         <h1 className='flex font-medium text-lg'>Templates</h1>
 
                         <p className='text-center font-medium my-2'>Pick your favourite CV Template</p>
-                    
 
-                    <div className="flex flex-wrap gap-4 mt-5 justify-center">
-                        {Object.entries(templates).map(([name, Template]) => {
-                            if (name === selectedTemplate) return null;
 
-                            return (
-                                
-                                <div
-                                    key={name}
-                                    className="cursor-pointer border rounded hover:shadow-lg hover:border-[#2C6472] transition duration-200 bg-white w-[200px]   overflow-hidden"
-                                    onClick={() => setSelectedTemplate(name)}
-                                >
-                                    {/* 🔍 Container for scaled template */}
-                                    <div className="w-full h-[280px] overflow-hidden relative bg-white">
-                                        {/* Template scaled and positioned */}
-                                        <div
-                                            className="absolute top-0 left-0"
-                                            style={{
-                                                transform: "scale(0.25)",
-                                                transformOrigin: "top left",
-                                                width: "794px",
-                                                height: "1123px",
-                                            }}
-                                        >
-                                            <div className="bg-white w-[794px] h-[1123px] shadow">
-                                                <Template
-                                                    personalInfo={personalInfo}
-                                                    professionalSummary={professionalSummary}
-                                                    workExperience={workExperience}
-                                                    education={education}
-                                                    projects={projects}
-                                                    skills={skills}
-                                                    languages={languages}
-                                                    certificates={certificates}
-                                                />
+                        <div className="flex flex-wrap gap-4 mt-5 justify-center">
+                            {Object.entries(templates).map(([name, Template]) => {
+                                if (name === selectedTemplate) return null;
+
+                                return (
+
+                                    <div
+                                        key={name}
+                                        className="cursor-pointer border rounded hover:shadow-lg hover:border-[#2C6472] transition duration-200 bg-white w-[200px]   overflow-hidden"
+                                        onClick={() => setSelectedTemplate(name)}
+                                    >
+                                        {/* 🔍 Container for scaled template */}
+                                        <div className="w-full h-[280px] overflow-hidden relative bg-white">
+                                            {/* Template scaled and positioned */}
+                                            <div
+                                                className="absolute top-0 left-0"
+                                                style={{
+                                                    transform: "scale(0.25)",
+                                                    transformOrigin: "top left",
+                                                    width: "794px",
+                                                    height: "1123px",
+                                                }}
+                                            >
+                                                <div className="bg-white w-[794px] h-[1123px] shadow">
+                                                    <Template
+                                                        personalInfo={personalInfo}
+                                                        professionalSummary={professionalSummary}
+                                                        workExperience={workExperience}
+                                                        education={education}
+                                                        projects={projects}
+                                                        skills={skills}
+                                                        languages={languages}
+                                                        certificates={certificates}
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    {/* 👇 Template name below */}
-                                    <div className="text-center text-sm py-2 bg-[#3f6068] text-white font-semibold">
-                                        {name}
+                                        {/* 👇 Template name below */}
+                                        <div className="text-center text-sm py-2 bg-[#3f6068] text-white font-semibold">
+                                            {name}
+                                        </div>
                                     </div>
-                                </div>
-                            );
-                        })}
-                    </div>
+                                );
+                            })}
+                        </div>
 
                     </div>
 
@@ -925,6 +952,7 @@ const Cv = () => {
                     {/* 🖥️ MAIN BIG CV PREVIEW */}
                     <div ref={previewRef} className="min-h-[1123px] w-[794px] bg-white shadow border">
                         <SelectedTemplate
+                            imageToUse={imageToUse}
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}

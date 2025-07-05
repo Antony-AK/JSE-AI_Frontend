@@ -17,15 +17,55 @@ const ModernClassic = ({
         {/* <p className="text-white font-semibold text-lg">{personalInfo.Title}</p> */}
         <h2 className="text-white font-bold text-[45px]">{personalInfo.Name}</h2>
         <div className="flex flex-col gap-2 text-white text-[13px] font-light">
+          {/* ✉️ Email and 📞 Phone */}
           <p>
-            {personalInfo.Mail} | {personalInfo.Phone}
+            <a
+              href={`mailto:${personalInfo.Mail}`}
+              className="underline text-[#a6c8ff]"
+            >
+              {personalInfo.Mail}
+            </a>{" "}
+            | (+49) {personalInfo.Phone}
           </p>
+
+          {/* 🔗 LinkedIn and 🌍 Website */}
           <p>
-            {personalInfo.LinkedIn}{" "}
-            {personalInfo.LinkedIn && personalInfo.Website && ` | `}{" "}
-            {personalInfo.Website}
+            {personalInfo.LinkedIn && (
+              <>
+                <a
+                  href={
+                    personalInfo.LinkedIn.startsWith("http")
+                      ? personalInfo.LinkedIn
+                      : `https://${personalInfo.LinkedIn}`
+                  }
+                  className="underline text-[#a6c8ff]"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {personalInfo.LinkedIn}
+                </a>
+              </>
+            )}
+            {personalInfo.LinkedIn && personalInfo.Website && ` | `}
+            {personalInfo.Website && (
+              <>
+                <a
+                  href={
+                    personalInfo.Website.startsWith("http")
+                      ? personalInfo.Website
+                      : `https://${personalInfo.Website}`
+                  }
+                  className="underline text-[#a6c8ff]"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {personalInfo.Website}
+                </a>
+              </>
+            )}
           </p>
         </div>
+
       </div>
 
       {/* Summary */}
@@ -136,9 +176,9 @@ const ModernClassic = ({
             </div>
           </div>
 
-          <div className="mt-5 border-b border-gray-300 w-full"></div>
-        </div>
-      )}
+            <div className="mt-5 border-b border-gray-300 w-full"></div>
+          </div>
+        )}
 
       {/* Education */}
       {education.content &&

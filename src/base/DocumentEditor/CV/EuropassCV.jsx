@@ -44,27 +44,50 @@ const EuropassCV = ({
               </h2>
               <h2 className="font-bold text-[13px]">
                 Phone:{" "}
-                <span className="text-black font-normal">
-                  {personalInfo.Phone}
-                </span>
+                <span className="text-black font-normal">{personalInfo.Phone}</span>
               </h2>
+
               {personalInfo.LinkedIn && personalInfo.LinkedIn.trim() !== "" && (
                 <h2 className="font-bold text-[13px]">
                   LinkedIn:{" "}
                   <span className="text-black font-normal">
-                    {personalInfo.LinkedIn}
+                    <a
+                      href={
+                        personalInfo.LinkedIn.startsWith("http")
+                          ? personalInfo.LinkedIn
+                          : `https://${personalInfo.LinkedIn}`
+                      }
+                      className="underline text-[#2c6472]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {personalInfo.LinkedIn}
+                    </a>
                   </span>
                 </h2>
               )}
+
               {personalInfo.Website && personalInfo.Website.trim() !== "" && (
                 <h2 className="font-bold">
                   Website:{" "}
                   <span className="text-black font-normal">
-                    {personalInfo.Website}
+                    <a
+                      href={
+                        personalInfo.Website.startsWith("http")
+                          ? personalInfo.Website
+                          : `https://${personalInfo.Website}`
+                      }
+                      className="underline text-[#2c6472]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {personalInfo.Website}
+                    </a>
                   </span>
                 </h2>
               )}
             </div>
+
           </div>
 
           <div className="mt-5 border-b border-gray-300 w-full"></div>
@@ -146,11 +169,11 @@ const EuropassCV = ({
               </div>
             </div>
 
-            {/* Experience Entries */}
-            {workExperience.content.map((exp, idx) => {
-              const hasContent =
-                exp.Company || exp.Role || exp.Duration || exp.Description;
-              if (!hasContent) return null;
+              {/* Experience Entries */}
+              {workExperience.content.map((exp, idx) => {
+                const hasContent =
+                  exp.Company || exp.Role || exp.Duration || exp.Description;
+                if (!hasContent) return null;
 
               return (
                 <div
@@ -191,10 +214,10 @@ const EuropassCV = ({
               );
             })}
 
-            {/* Bottom border */}
-            <div className="mt-3 border-b border-gray-300 w-full"></div>
-          </div>
-        )}
+              {/* Bottom border */}
+              <div className="mt-3 border-b border-gray-300 w-full"></div>
+            </div>
+          )}
       </div>
 
       {/* Projects Section */}
@@ -357,7 +380,7 @@ const EuropassCV = ({
                 .map((skill, index) => (
                   <span key={index}>
                     {skill}
-                    {index < skills.content.length - 1 && " | "}
+                    {index < skills.content.length - 1 && "  |  "}
                   </span>
                 ))}
             </div>
