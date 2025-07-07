@@ -36,7 +36,9 @@ const ApplicationTracker = () => {
       {loading ? (
         <p>Loading applications...</p>
       ) : applications.length === 0 ? (
-        <p className='w-full h-screen text-center justify-center items-center '>No applications found </p>
+        <p className="w-[60%] mx-auto flex-col mt-32 flex items-center  text-center text-gray-600 text-base">
+          <span className='text-red-500 mb-5 flex flex-1'>No applications found.</span><br/> Please generate your CV and Cover Letter, then search and apply for jobs using the job link to start tracking your application progress.
+        </p>
       ) : (
         applications.map(({
           job_id,

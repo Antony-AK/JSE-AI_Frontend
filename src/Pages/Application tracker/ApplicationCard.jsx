@@ -18,6 +18,9 @@ const ApplicationCard = ({
   const [showAllYourSkills, setShowAllYourSkills] = useState(false);
   const [showAllRequiredSkills, setShowAllRequiredSkills] = useState(false);
   const statusOrder = ['Applied', 'Interview', 'Selected', 'Rejected'];
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [pendingStatus, setPendingStatus] = useState(null);
+
 
   // Helper to check if we can go to the next status
   const canUpdateTo = (targetStatus) => {
@@ -30,7 +33,7 @@ const ApplicationCard = ({
   const yourSkillList = typeof yourSkills === 'string' ? yourSkills.split(',').map(skill => skill.trim()) : [];
   const requiredSkillList = typeof requiredSkills === 'string' ? requiredSkills.split(',').map(skill => skill.trim()) : [];
 
-const isInterviewActive = activeStatus.toLowerCase() === 'interview';
+  const isInterviewActive = activeStatus.toLowerCase() === 'interview';
 
 
 
@@ -163,8 +166,12 @@ const isInterviewActive = activeStatus.toLowerCase() === 'interview';
               <button
                 key={statusOption}
                 onClick={() => {
-                  if (isNextStep) updateApplicationStatus(statusOption);
+                  if (isNextStep) {
+                    setPendingStatus(statusOption);
+                    setShowConfirmation(true);
+                  }
                 }}
+
                 disabled={!isNextStep}
                 className={`w-[140px] h-[40px] mt-2 px-4 py-1.5 rounded-md text-sm font-medium transition
           ${isCompletedOrCurrent
@@ -182,8 +189,8 @@ const isInterviewActive = activeStatus.toLowerCase() === 'interview';
           <button
             disabled={activeStatus.toLowerCase() !== 'interview'}
             className={`w-[140px] h-[40px] mt-2 px-4 py-1.5 rounded-2xl text-sm font-medium transition ${activeStatus.toLowerCase() === 'interview'
-                ? 'bg-[#2c6472] text-white hover:bg-slate-700'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              ? 'bg-[#2c6472] text-white hover:bg-slate-700'
+              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
               }`}
           >
             Job Research
@@ -223,6 +230,41 @@ const isInterviewActive = activeStatus.toLowerCase() === 'interview';
         </div>
         <span className="text-xs mt-2 w-28 font-medium text-gray-600">Profile Complete</span>
       </div>
+
+      {showConfirmation && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
+          <div className="bg-white p-6 rounded-lg shadow-xl w-[500px] text-center">
+            <h2 className="text-lg font-semibold text-gray-800 mb-3">Are you sure?</h2>
+            <p className=" text-gray-600 mb-5">
+              Once you change the status to <span className="font-semibold text-[#2c6472]">{pendingStatus}</span>, it cannot be changed again.
+            </p>
+            <div className="flex justify-center gap-4">
+            
+              <button
+                onClick={() => {
+                  setShowConfirmation(false);
+                  setPendingStatus(null);
+                }}
+                className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+
+                <button
+                onClick={() => {
+                  updateApplicationStatus(pendingStatus);
+                  setShowConfirmation(false);
+                  setPendingStatus(null);
+                }}
+                className="bg-[#2c6472] text-white px-4 py-2 rounded-md hover:bg-[#234d56]"
+              >
+                Okay
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
       <MoreVertical className="text-gray-400 absolute top-5 text-lg w-10 cursor-pointer h-10 mt-1" />
     </div>

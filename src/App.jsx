@@ -79,7 +79,7 @@ const AppRoutes = () => {
                           style={{ width: hideLayout ? '100%' : 'calc(100% - 264px)' }}
                           className={`${!hideLayout ? 'ms-64 mt-16' : ''} h-full bg-[#f5f5f5]`}
                         >
-                            <Routes>self-development
+                            <Routes>
                                 <Route path="/user/personal-tracker" element={<PersonalTracker />} />
                                 <Route path="/user/self-development" element={<SelfDevelopment />} />
                                 <Route path="/user/proficiency-test" element={<ProficiencyTest />} />

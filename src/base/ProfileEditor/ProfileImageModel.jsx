@@ -4,14 +4,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../utils/api';
 import imageCompression from 'browser-image-compression'; // 👈 import it
+import { useProfileImage } from '../../base/ProfileEditor/ProfileImageContext';
+
 
 
 const ProfileImageModal = ({ imageUrl, onClose, onUpload }) => {
     const [preview, setPreview] = useState(imageUrl || null);
     const [loading, setLoading] = useState(false);
-    const [refreshTrigger, setRefreshTrigger] = useState(false);
     const fileInputRef = useRef();
-
+      const {  fetchProfileImage } = useProfileImage(); // 👈 use context
+    
     const handleImageSelect = async (e) => {
     const file = e.target.files[0];
 
@@ -77,11 +79,14 @@ const ProfileImageModal = ({ imageUrl, onClose, onUpload }) => {
                 throw new Error(error?.issue || "Upload failed");
             }
 
+              await fetchProfileImage();
+
+
             const data = await response.json();
             toast.success("Profile image updated!");
             onUpload(data.photo_url); // update the parent
             onClose();
-            setRefreshTrigger(prev => !prev); // ✅ this will re-fetch profile data
+
 
         } catch (err) {
             console.error("Image Upload Error:", err);

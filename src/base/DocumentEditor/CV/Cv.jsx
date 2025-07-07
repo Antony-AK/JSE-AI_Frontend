@@ -931,7 +931,6 @@ const Cv = () => {
                     {/* 🖥️ MAIN BIG CV PREVIEW */}
                     <div ref={previewRef} className="min-h-[1123px] w-[794px] bg-white shadow border">
                         <SelectedTemplate
-                            imageToUse={imageToUse}
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -952,6 +951,7 @@ const Cv = () => {
                         <button
                             onClick={() => {
                                 handleDownload();
+                                handleUpdateCV();
                                 setActiveSection(null);
                                 setTimeout(() => navigate(-1), 800);
                             }}
