@@ -295,8 +295,8 @@ const MyApplication = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50 px-6 ms-2">
-      <div className="flex items-center w-full gap-5  py-4  relative">
+    <div className="flex items-center flex-col h-screen bg-gray-50 px-6 ms-2 w-full max-w-[1440px] mx-auto">
+      <div className="flex items-center w-full gap-5 py-4 relative">
         <div className="w-[40%]"><input type="text" className="px-4 py-2 w-full border border-gray-300 rounded-md outline-none" placeholder="Search jobs,company" /></div>
         <button
           className="px-6 py-1.5 font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105"
@@ -420,7 +420,7 @@ const MyApplication = () => {
           </div>
         ) : (
           <div className="flex flex-1 border-t border-gray-300 -mt-5  gap-5">
-            <div className="flex flex-col w-[55%]">
+            <div className="flex flex-col w-[54%]">
 
               <div className="p-5 flex justify-between pt-4">
                 <div>
@@ -433,7 +433,7 @@ const MyApplication = () => {
                 </div>
               </div>
 
-              <div className="w-[625px]  mb-5 -space-y-6 rounded-xl bg-white border border-gray-400/20 "><br />
+              <div className="w-full mb-5 -space-y-6 rounded-xl bg-white border border-gray-400/20 "><br />
                 <div className="h-[720px] overflow-x-hidden  overflow-y-auto scrollbar-custom">
                   {selectedJobs.map((job, index) => (
                     <div
@@ -473,7 +473,7 @@ const MyApplication = () => {
 
                       </div>
                       <div className="flex  flex-col justify-start  -mt-3 items-center"><br />
-                        <div className="relative gap-1 w-16 h-16">
+                        <div className="relative gap-1 w-24 h-16">
                           <svg
                             viewBox="0 0 100 100"
                             className="absolute top-0 left-0 w-full h-full"
@@ -510,7 +510,7 @@ const MyApplication = () => {
 
                         <span className="text-sm text-black mt-3 ">Profile Match</span>
                       </div>
-                      <div className="text-gray-500 me-5 font-medium text-xl">⋮</div>
+                      <div className="absolute top-2 right-3 text-gray-500 font-medium text-xl">⋮</div>
                     </div>
                   ))}
                 </div>
@@ -558,15 +558,15 @@ const MyApplication = () => {
               </div>
             </div>
 
-            <div className="flex mb-5 py-3 mt-5 h-[870px] bg-white border border-gray-400/20 rounded-xl"><br />
-              <div className="w-[500px] flex flex-col items-center p-6 space-y-4 overflow-y-auto  scrollbar-custom  rounded-xl bg-white">
+            <div className="flex mb-5 py-3 w-1/2 mt-5 h-[870px] bg-white border border-gray-400/20 rounded-xl"><br />
+              <div className="w-full flex flex-col items-center p-6 space-y-4 overflow-y-auto  scrollbar-custom  rounded-xl bg-white">
                 {selectedJob && (
                   <>
                     <div className="flex justify-between  items-start"><br />
                       <div className="flex gap-4  ">
                         <div>
                           <p className="text-gray-600 font-semibold text-xl">{selectedJob.companyName}</p>
-                          <h2 className="text-2xl font-semibold text-[#2C6472]">{selectedJob.jobTitle}</h2>
+                          <h2 className="text-xl 2xl:text-2xl font-semibold text-[#2C6472]">{selectedJob.jobTitle}</h2>
                           <p className="text-sm text-gray-500">{selectedJob.location}</p>
                         </div>
                       </div>
