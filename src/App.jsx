@@ -40,6 +40,11 @@ import ExternalCv from './base/DocumentEditor/CV/ExternalCv.jsx';
 import ExternalCl from './base/DocumentEditor/CL/ExternalCl.jsx';
 import Settings from './Pages/Settings/Settings.jsx';
 import ForgetPassword from './base/Forget_Passwrd/ForgetPassword.jsx';
+import InProgress from './Pages/InProgress/InProgress.jsx';
+import Upgrade from './Pages/Upgrade/Upgrade.jsx';
+import ProficiencyTest from './Pages/ProficiencyTest/ProficiencyTest.jsx';
+import SelfDevelopment from './Pages/SelfDevelopment/SelfDevelopment.jsx';
+import PersonalTracker from './Pages/PersonalTracker/PersonalTracker.jsx';
 
 
 const AppRoutes = () => {
@@ -74,7 +79,11 @@ const AppRoutes = () => {
                           style={{ width: hideLayout ? '100%' : 'calc(100% - 264px)' }}
                           className={`${!hideLayout ? 'ms-64 mt-16' : ''} h-full bg-[#f5f5f5]`}
                         >
-                            <Routes>
+                            <Routes>self-development
+                                <Route path="/user/personal-tracker" element={<PersonalTracker />} />
+                                <Route path="/user/self-development" element={<SelfDevelopment />} />
+                                <Route path="/user/proficiency-test" element={<ProficiencyTest />} />
+                                <Route path="/user/upgrade" element={<Upgrade />} />
                                 <Route path="/user/dashboard" element={<Dashboard />} />
                                 <Route path="/user/my-jobs/internal" element={<Myapplication />} />
                                 <Route path="/user/my-jobs/external" element={<External />} />

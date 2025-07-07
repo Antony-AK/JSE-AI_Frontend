@@ -185,20 +185,26 @@ const Sidebar = () => {
         {openUpcoming && (
           <ul className="flex flex-col items-center justify-center mx-auto space-y-5 font-medium text-sm text-gray-500 mt-5 ms-5">
 
-            <div className="flex items-center gap-3">
-               <img src={proficiency_test} alt="lock" className="w-4 h-4" />
-              <span className="text-[15px] text-gray-400 w-40 font-semibold text-[rgba(0, 0, 0, 0.25)]">Proficiency Test</span>   
-            </div>
+            <Link to="/user/proficiency-test" className="flex items-center gap-3">
+              <img src={proficiency_test} alt="lock" className="w-4 h-4" />
+              <span className="text-[15px] text-gray-400 w-40 font-semibold text-[rgba(0, 0, 0, 0.25)]">
+                Proficiency Test
+              </span>
+            </Link>
 
-            <div className="flex items-center gap-3">
-              <img src={self_development} alt="lock" className="w-4 h-4" />              
-              <span className="text-[15px] text-gray-400 w-40 font-semibold text-[rgba(0, 0, 0, 0.25)]">Self Development</span>   
-            </div>
+            <Link to="/user/self-development" className="flex items-center gap-3">
+              <img src={self_development} alt="lock" className="w-4 h-4" />
+              <span className="text-[15px] text-gray-400 w-40 font-semibold text-[rgba(0, 0, 0, 0.25)]">
+                Self Development
+              </span>
+            </Link>
 
-            <div className="flex items-center gap-3">
+            <Link to="/user/personal-tracker" className="flex items-center gap-3">
               <img src={personal_tracker} alt="lock" className="w-4 h-4" />
-              <span className="text-[15px] text-gray-400 w-40 font-semibold text-[rgba(0, 0, 0, 0.25)]">Personal Tracker</span>
-            </div>
+              <span className="text-[15px] text-gray-400 w-40 font-semibold text-[rgba(0, 0, 0, 0.25)]">
+                Personal Tracker
+              </span>
+            </Link>
 
           </ul>
         )}
