@@ -5,6 +5,9 @@ import axios from 'axios';
 import { BASE_URL } from '../utils/api'
 
 const PersonalnfoUpdateForm = ({ onclose }) => {
+
+    const [loading, setLoading] = useState(false);
+
     const [formData, setFormData] = useState({
         first_name: "",
         second_name: "",
@@ -54,7 +57,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
                 second_name: (info.second_name || "").trim(),
                 email: info.email || "",
                 phone: info.phone || "",
-                country: info.country || "",
+                country: info.country || "Germany",
                 state: info.state || "",
                 city: info.city || "",
                 linkedin_profile: info.linkedin_profile || "",
@@ -74,6 +77,11 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
 
     // 🔄 Handle POST (update)
     const handleSubmit = async () => {
+
+        if (loading) return;
+
+        setLoading(true);
+
         try {
             const res = await axios.post(`${apiUrl}`, formData, {
                 headers: {
@@ -86,6 +94,8 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
         } catch (err) {
             console.error("Update failed", err);
             toast.error("Update failed");
+        } finally {
+            setLoading(false); // Reset loading state
         }
     };
 
@@ -281,9 +291,14 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
                     <div className='flex justify-center items-center gap-4 mt-5 mb-5'>
                         <button
                             onClick={handleSubmit}
-                            className='bg-[#2c6472] w-32 text-sm text-white px-2 py-2 rounded-xl hover:scale-105'
+                            disabled={loading}
+                            className={`bg-[#2c6472] w-32 text-sm text-white px-2 py-2 rounded-xl hover:scale-105 flex justify-center items-center gap-2 ${loading ? 'opacity-60 cursor-not-allowed' : ''}`}
                         >
-                            Save Changes
+                            {loading ? (
+                                <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                                "Save Changes"
+                            )}
                         </button>
                     </div>
                 </div>

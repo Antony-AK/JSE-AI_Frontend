@@ -10,7 +10,9 @@ const EducationUpdateForm = ({ onclose }) => {
     const [education, setEducation] = useState([]);
     const token = sessionStorage.getItem('authToken');
 
-
+    const [loading, setLoading] = useState(false);
+    const [deleteLoading, setDeleteLoading] = useState(false);
+    const [addLoading, setAddLoading] = useState(false);
 
     const [formData, setFormData] = useState({
         degree: '',
@@ -22,49 +24,48 @@ const EducationUpdateForm = ({ onclose }) => {
     });
 
     const handleAddEducation = async () => {
-        if (!token) {
-            console.error('Error: No token found in session storage.');
-            return;
-        }
+        if (!token || addLoading) return;
+
+        setAddLoading(true);
 
         const formatDateToISO = (date) => {
             const localDate = new Date(date);
-            return isNaN(localDate.getTime()) ? null : localDate.toISOString(); // Keep full ISO
-        };        
+            return isNaN(localDate.getTime()) ? null : localDate.toISOString();
+        };
 
         const updatedFormData = {
             ...formData,
             start_date: formatDateToISO(formData.start_date),
             end_date: formData.end_date ? formatDateToISO(formData.end_date) : null,
-        };        
+        };
 
         try {
-            const response = await axios.post(apiUrl, updatedFormData, {
+            await axios.post(apiUrl, updatedFormData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+                    'Content-Type': 'application/json',
+                },
             });
 
             toast.success(`Education data uploaded successfully`);
 
-            // Clear form
             setFormData({
                 degree: '',
                 institution: '',
                 field_of_study: '',
                 start_date: '',
                 end_date: '',
-                achievements: ''
+                achievements: '',
             });
 
             await fetchEducations();
-
         } catch (error) {
             console.error('Error uploading data:', error);
             if (error.response) {
                 console.error('API Response:', error.response.data);
             }
+        } finally {
+            setAddLoading(false);
         }
     };
 
@@ -113,66 +114,69 @@ const EducationUpdateForm = ({ onclose }) => {
     };
 
 
-    //Save Changes
     const handleSave = async () => {
+        if (loading || activeId === null) return;
+
+        setLoading(true);
 
         const formatDateToFullISO = (date) => {
             return date ? new Date(date).toISOString() : null;
         };
 
-        // Create the updated experience object from the form data
         const updatedExperience = {
             degree: formData.degree,
             institution: formData.institution,
             field_of_study: formData.field_of_study,
             start_date: formatDateToFullISO(formData.start_date),
             end_date: formData.end_date ? formatDateToFullISO(formData.end_date) : null,
-            achievements: formData.achievements
+            achievements: formData.achievements,
         };
-        
 
-        // Get the experience object that was selected (using tempId as the identifier)
-        const selectedEducation = education.find(edu => edu.tempId === activeId);
-
+        const selectedEducation = education.find((edu) => edu.tempId === activeId);
         if (!selectedEducation) {
-            return toast.error("Selected experience not found.");
+            toast.error("Selected experience not found.");
+            setLoading(false);
+            return;
         }
 
-        const educationIndex = selectedEducation.tempId;  // tempId is used as the index here
+        const educationIndex = selectedEducation.tempId;
 
         try {
-            // Send the PUT request for the specific experience using the tempId in the URL
             const res = await axios.put(`${apiUrl}/${educationIndex}`, updatedExperience, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
-
                 },
             });
-     
 
             if (res.status === 200) {
-                // After successful update, update the local state with the updated experience
-                const updatedList = education.map(edu =>
+                const updatedList = education.map((edu) =>
                     edu.tempId === educationIndex ? { ...edu, ...updatedExperience } : edu
                 );
                 setEducation(updatedList);
                 toast.success("Education updated successfully!");
             } else {
-                toast.error("Failed to Education.");
+                toast.error("Failed to update education.");
             }
-
         } catch (error) {
             console.error("Update failed:", error);
-            toast.error("❌ Error while updating work experience.");
+            toast.error("❌ Error while updating education.");
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleDeleteEducation = async () => {
-        if (!activeId) return toast.error("Please select an experience to delete!");
+        if (!activeId || deleteLoading) return toast.error("Please select an experience to delete!");
+
+        setDeleteLoading(true);
 
         const selectedEducation = education.find(edu => edu.tempId === activeId);
-        if (!selectedEducation) return;
+        if (!selectedEducation) {
+            setDeleteLoading(false);
+            return;
+        }
+
         try {
             await axios.delete(`${apiUrl}/${selectedEducation.tempId}`, {
                 headers: {
@@ -194,12 +198,10 @@ const EducationUpdateForm = ({ onclose }) => {
         } catch (err) {
             console.error("Delete failed", err);
             toast.error("Failed to delete.");
+        } finally {
+            setDeleteLoading(false);
         }
     };
-
-
-
-
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -324,23 +326,54 @@ const EducationUpdateForm = ({ onclose }) => {
                     </div>
 
                     <div className="flex justify-between w-full mt-2">
-                        <button onClick={activeId === null ? handleAddEducation : null}
-                        disabled={activeId !== null}
-                         className={`text-sm ${activeId !== null ? 'text-gray-500/60 cursor-not-allowed' : 'text-[#2c6472]'} font-medium hover:scale-95`}>+ Add Education</button>
                         <button
-                            onClick={activeId !== null ? handleDeleteEducation : null}
-                            disabled={activeId === null}
-                            className={`text-sm flex ${activeId !== null ? 'text-red-500 ' : 'text-gray-500/60 cursor-not-allowed'} font-medium hover:scale-95`}>
-                            <img src={trash} alt="trash icon" className="w-4 h-3.5 mt-0.5 text-red-500 me-1 object-contain " />
-                            Remove</button>
+                          onClick={activeId === null && !addLoading ? handleAddEducation : null}
+                          disabled={activeId !== null || addLoading}
+                          className={`text-sm flex items-center ${
+                            activeId !== null || addLoading
+                            ? 'text-gray-500/60 cursor-not-allowed'
+                            : 'text-[#2c6472]'
+                        } font-medium hover:scale-95 transition`}
+                        >
+                        {addLoading ? (
+                            <div className="w-4 h-4 border-[2.5px] border-[#2c6472] border-t-transparent rounded-full animate-spin me-2" />
+                        ) : (
+                            "+ "
+                        )}
+                        Add Education
+                        </button>
+                        <button
+                          onClick={activeId !== null && !deleteLoading ? handleDeleteEducation : null}
+                          disabled={activeId === null || deleteLoading}
+                          className={`text-sm flex items-center 
+                                ${activeId !== null ? 'text-red-500' : 'text-gray-500/60 cursor-not-allowed'} 
+                                font-medium hover:scale-95 transition`}
+                        >
+                        {deleteLoading ? (
+                            <div className="w-4 h-4 border-[2.5px] border-red-500 border-t-transparent rounded-full animate-spin me-2" />
+                         ) : (
+                            <img
+                             src={trash}
+                             alt="trash icon"
+                             className="w-4 h-3.5 mt-0.5 me-1 object-contain"
+                            />
+                        )}
+                            Remove
+                        </button>
                     </div>
 
                     <div className='flex justify-center items-center gap-4 mt-3'>
-                        <button onClick={activeId !== null ? handleSave : null}
-                            disabled={activeId === null}
-                            className={` ${activeId !== null ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 cursor-not-allowed'} w-32 text-sm px-2 py-2 rounded-xl mb-2 hover:scale-95 transition`}
+                        <button
+                            onClick={activeId !== null ? handleSave : null}
+                            disabled={activeId === null || loading}
+                            className={`w-32 text-sm px-2 py-2 rounded-xl mb-2 transition hover:scale-95 flex items-center justify-center gap-2
+                                ${activeId !== null && !loading ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 cursor-not-allowed'}`}
                         >
-                            Save Changes
+                            {loading ? (
+                                <div className="w-5 h-5 border-[3px] border-[#2c6472] border-t-transparent rounded-full animate-spin"></div>
+                            ) : (
+                                "Save Changes"
+                            )}
                         </button>
                     </div>
 

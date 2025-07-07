@@ -6,6 +6,10 @@ import { toast } from 'react-toastify'; // ✅ FIXED toast issue
 import { BASE_URL } from '../utils/api';
 
 const LanguageUpdateForm = ({ onclose }) => {
+
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
+
   const [languages, setLanguages] = useState([]);
   const [formData, setFormData] = useState({
     language: '',
@@ -99,10 +103,10 @@ const LanguageUpdateForm = ({ onclose }) => {
 
   const handleUpdateLanguage = async () => {
     if (!activeId) return toast.error("Please select a language to update!");
-
     const selected = languages.find(lang => lang.tempId === activeId);
     if (!selected) return toast.error("Selected language not found.");
 
+    setSaveLoading(true);
     try {
       const response = await axios.put(`${apiUrl}/${activeId}`, formData, {
         headers: {
@@ -115,12 +119,14 @@ const LanguageUpdateForm = ({ onclose }) => {
     } catch (err) {
       console.error("Update failed", err);
       toast.error("Failed to update language.");
+    } finally {
+      setSaveLoading(false);
     }
   };
 
   const handleDeleteLanguage = async () => {
     if (!activeId) return toast.error("Please select a language to delete!");
-
+    setDeleteLoading(true);
     try {
       await axios.delete(`${apiUrl}/${activeId}`, {
         headers: {
@@ -135,6 +141,8 @@ const LanguageUpdateForm = ({ onclose }) => {
     } catch (err) {
       console.error("Delete failed", err);
       toast.error("Failed to delete language.");
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -178,28 +186,42 @@ const LanguageUpdateForm = ({ onclose }) => {
   return (
     <div className='fixed inset-0 bg-white bg-opacity-70 z-50 flex items-center justify-center'>
       <div className='w-[700px] h-[570px] bg-white flex flex-col shadow rounded-xl px-10 py-5'>
-        <div className="flex justify-between w-full mt-3">
+        <div className="flex justify-between w-full mt-3  mb-7">
           <h3 className='text-lg font-semibold'>Languages</h3>
           <p onClick={onclose} className='text-lg font-semibold cursor-pointer hover:scale-95'>X</p>
         </div>
 
         {/* Tabs */}
-        <div className="expereince-title flex gap-4 mt-7 mb-5 overflow-x-auto hide-scrollbar snap-x snap-mandatory">
-          {languages.map((lan) => (
+        {languages.length > 0 && (
+          <div className="expereince-title flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory">
+            {languages.map((lan) => (
+              <div
+                key={lan.tempId}
+                onClick={() => handleSelectLanguages(lan)}
+                className={`flex-shrink-0 h-8 px-3 py-1.5 text-sm rounded snap-start cursor-pointer 
+                ${activeId === lan.tempId ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20'} 
+                hover:bg-[#2c6472] hover:text-white transition-all duration-200`}
+              >
+                {lan?.language}
+              </div>
+            ))}
+
+            {/* + Tab */}
             <div
-              key={lan.tempId}
-              onClick={() => handleSelectLanguages(lan)}
-              className={`flex-shrink-0 h-8 px-3 py-1.5 text-sm rounded snap-start cursor-pointer 
-              ${activeId === lan.tempId ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20'} 
-              hover:bg-[#2c6472] hover:text-white transition-all duration-200`}
+              onClick={() => {
+                setFormData({ language: '', proficiency: '' });
+                setActiveId(null);
+              }}
+              className="flex items-center justify-center flex-shrink-0 h-8 w-8 p-3 rounded snap-start cursor-pointer 
+                bg-gray-500/20 text-[#2c6472] text-xl font-medium hover:bg-gray-300 transition-all duration-200"
             >
-              {lan?.language}
+              +
             </div>
-          ))}
-        </div>
+          </div>
+        )}
 
         {/* Form Fields */}
-        <div className="form-fields w-[90%] mx-auto flex flex-col gap-7">
+        <div className="form-fields w-[90%] mx-auto flex flex-col gap-7 mt-5">
 
           {/* Language Field */}
           <div className="flex flex-col w-full gap-2">
@@ -246,30 +268,49 @@ const LanguageUpdateForm = ({ onclose }) => {
           {/* Actions */}
           <div className="flex justify-between w-full mt-2">
             <button
-              onClick={activeId === null ? handleAddLanguage : null}
-              disabled={activeId !== null}
-              className={`text-sm ${activeId !== null ? 'text-gray-500/60 cursor-not-allowed' : 'text-[#2c6472]'} font-medium hover:scale-95`}
+              onClick={activeId === null && !loading ? handleAddLanguage : null}
+              disabled={activeId !== null || loading}
+              className={`text-sm flex items-center gap-2 font-medium hover:scale-105 transition ${
+                activeId !== null || loading ? 'text-gray-500/60 cursor-not-allowed' : 'text-[#2c6472]'
+              }`}
             >
-              + Add Language
+              {loading ? (
+                <div className="w-4 h-4 border-[2.5px] border-[#2c6472] border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <span className="text-lg font-bold">+</span>
+              )}
+              Add Language
             </button>
 
             <button
-              onClick={activeId !== null ? handleDeleteLanguage : null}
-              disabled={activeId === null}
-              className={`text-sm flex ${activeId !== null ? 'text-red-500' : 'text-gray-500/60 cursor-not-allowed'} font-medium hover:scale-95`}
+              onClick={activeId !== null && !deleteLoading ? handleDeleteLanguage : null}
+              disabled={activeId === null || deleteLoading}
+              className={`text-sm flex items-center gap-2 font-medium hover:scale-105 transition ${
+                activeId === null || deleteLoading ? 'text-gray-500/60 cursor-not-allowed' : 'text-red-500'
+              }`}
             >
-              <img src={trash} alt="trash icon" className="w-4 h-3.5 mt-0.5 me-1 object-contain" />
+              {deleteLoading ? (
+                <div className="w-4 h-4 border-[2.5px] border-red-500 border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <img src={trash} alt="trash icon" className="w-4 h-3.5 object-contain" />
+              )}
               Remove
             </button>
           </div>
 
           <div className='flex justify-center items-center gap-4 mt-3'>
             <button
-              onClick={activeId !== null ? handleUpdateLanguage : null}
-              disabled={activeId === null}
-              className={` ${activeId !== null ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 cursor-not-allowed'} w-32 text-sm px-2 py-2 rounded-xl mb-2 hover:scale-95 transition`}
+              onClick={activeId !== null && !saveLoading ? handleUpdateLanguage : null}
+              disabled={activeId === null || saveLoading}
+              className={`flex justify-center items-center ${
+                activeId !== null && !saveLoading ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 text-white/50 cursor-not-allowed'
+              } w-32 text-sm px-2 py-2 rounded-xl mb-2 hover:scale-105 transition`}
             >
-              Save Changes
+              {saveLoading ? (
+                <div className="w-4 h-4 border-[2.5px] border-[#2c6472] border-t-transparent rounded-full animate-spin" />
+              ) : (
+                "Save Changes"
+              )}
             </button>
           </div>
         </div>

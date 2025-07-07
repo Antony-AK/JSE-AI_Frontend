@@ -7,9 +7,13 @@ import { format } from 'date-fns';
 
 const WorkExpUpdateForm = ({ onclose }) => {
 
+    const [addLoading, setAddLoading] = useState(false);
+    const [deleteLoading, setDeleteLoading] = useState(false);
+    const [saveLoading, setSaveLoading] = useState(false);
+
     const apiUrl = "https://dev.arshan.digital/b1/work-experience";
     const [experiences, setExperiences] = useState([]);
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         job_title: "",
         company_name: "",
@@ -68,7 +72,8 @@ const WorkExpUpdateForm = ({ onclose }) => {
             toast.error("Please fill all required fields!");
             return;
         }
-        setLoading(true);
+
+        setAddLoading(true);
         await sendData();
         await fetchExperiences();
         setFormData({
@@ -80,7 +85,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
             key_responsibilities: "",
         });
         setActiveId(null);
-        setLoading(false);
+        setAddLoading(false);
     };
 
     const fetchExperiences = useCallback(async () => {
@@ -138,6 +143,10 @@ const WorkExpUpdateForm = ({ onclose }) => {
 
     // Save Changes
     const handleSave = async () => {
+        if (activeId === null) return;
+        
+        setSaveLoading(true); // Start spinner
+
         const toISOString = (dateStr) => dateStr ? new Date(dateStr).toISOString() : null;
 
         const updatedExperience = {
@@ -152,10 +161,12 @@ const WorkExpUpdateForm = ({ onclose }) => {
         const selectedIndex = experiences.findIndex(exp => exp.tempId === activeId);
 
         if (selectedIndex === -1) {
-            return toast.error("Selected experience not found.");
+            toast.error("Selected experience not found.");
+            setSaveLoading(false);
+            return;
         }
 
-        const backendIndex = selectedIndex + 1; // because your backend expects 1-based index in URL
+        const backendIndex = selectedIndex + 1; // If API uses 1-based index
 
         try {
             const res = await axios.put(`${apiUrl}/${backendIndex}`, updatedExperience, {
@@ -166,7 +177,6 @@ const WorkExpUpdateForm = ({ onclose }) => {
             });
 
             if (res.status === 200) {
-                // Update local state
                 const updatedList = experiences.map((exp, i) =>
                     i === selectedIndex ? { ...exp, ...updatedExperience } : exp
                 );
@@ -185,10 +195,11 @@ const WorkExpUpdateForm = ({ onclose }) => {
             } else {
                 toast.error("Failed to update work experience.");
             }
-
         } catch (error) {
             console.error("Update failed:", error);
             toast.error("Error while updating work experience.");
+        } finally {
+            setSaveLoading(false); // Stop spinner
         }
     };
 
@@ -197,6 +208,9 @@ const WorkExpUpdateForm = ({ onclose }) => {
 
         const selectedExperience = experiences.find(exp => exp.tempId === activeId);
         if (!selectedExperience) return;
+
+        setDeleteLoading(true);
+
         try {
             await axios.delete(`${apiUrl}/${selectedExperience.tempId}`, {
                 headers: {
@@ -218,6 +232,8 @@ const WorkExpUpdateForm = ({ onclose }) => {
         } catch (err) {
             console.error("Delete failed", err);
             toast.error("Failed to delete.");
+        } finally {
+            setDeleteLoading(false);
         }
     };
 
@@ -344,26 +360,49 @@ const WorkExpUpdateForm = ({ onclose }) => {
                     </div>
 
                     <div className="flex justify-between w-full mt-2">
-                        <button onClick={activeId === null ? handleAddExperience : null}
-                            disabled={activeId !== null}
-                            className={`text-sm ${activeId !== null ? 'text-gray-500/60 cursor-not-allowed' : 'text-[#2c6472]'} font-medium hover:scale-95`}>
-                                + Add More Experience
+                        <button
+                            onClick={activeId === null && !addLoading ? handleAddExperience : null}
+                            disabled={activeId !== null || addLoading}
+                            className={`text-sm flex items-center gap-2 font-medium hover:scale-95 transition ${
+                                activeId !== null || addLoading ? 'text-gray-500/60 cursor-not-allowed' : 'text-[#2c6472]'
+                            }`}
+                        >
+                            {addLoading ? (
+                                <div className="w-4 h-4 border-[2.5px] border-[#2c6472] border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                                "+"
+                            )}
+                            Add More Experience
                         </button>
-                        <button onClick={activeId !== null ? handleDeleteExperience : null}
-                            disabled={activeId === null}
-                            className={`text-sm flex ${activeId !== null ? 'text-red-500' : 'text-gray-500/60 cursor-not-allowed'} font-medium hover:scale-95`}>
-                            <img src={trash} alt="trash icon" className="w-4 h-3.5 mt-0.5 me-1 object-contain" />
+                        <button
+                            onClick={activeId !== null && !deleteLoading ? handleDeleteExperience : null}
+                            disabled={activeId === null || deleteLoading}
+                            className={`text-sm flex items-center gap-2 font-medium hover:scale-95 transition ${
+                                activeId === null || deleteLoading ? 'text-gray-500/60 cursor-not-allowed' : 'text-red-500'
+                            }`}
+                        >
+                            {deleteLoading ? (
+                                <div className="w-4 h-4 border-[2.5px] border-red-500 border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                                <img src={trash} alt="trash icon" className="w-4 h-3.5 object-contain" />
+                            )}
                             Remove
                         </button>
                     </div>
 
                     <div className='flex justify-center items-center gap-4 mt-3'>
                         <button
-                            className={` ${activeId !== null ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 cursor-not-allowed'} w-32 text-sm px-2 py-2 rounded-xl hover:scale-95 transition`}
-                            onClick={activeId !== null ? handleSave : null}
-                            disabled={activeId === null}
+                            className={`w-32 text-sm px-2 py-2 rounded-xl hover:scale-95 transition flex items-center justify-center gap-2 ${
+                                activeId !== null && !saveLoading ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 cursor-not-allowed'
+                            }`}
+                            onClick={activeId !== null && !saveLoading ? handleSave : null}
+                            disabled={activeId === null || saveLoading}
                         >
-                            Save Changes
+                            {saveLoading ? (
+                                <div className="w-5 h-5 border-[3px] border-[#2c6472] border-t-transparent rounded-full animate-spin"></div>
+                            ) : (
+                                "Save Changes"
+                            )}
                         </button>
                     </div>
                 </div>
