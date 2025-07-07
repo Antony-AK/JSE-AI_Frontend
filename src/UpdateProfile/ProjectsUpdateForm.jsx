@@ -7,6 +7,11 @@ import Calendar from "../base/Calender/Calender";
 import { format } from "date-fns";
 
 const ProjectUpdateForm = ({ onClose }) => {
+
+  const [loadingAdd, setLoadingAdd] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
+
   const token = sessionStorage.getItem("authToken");
   const apiUrl = `${BASE_URL}/pastprojects`;
 
@@ -72,6 +77,7 @@ const ProjectUpdateForm = ({ onClose }) => {
 
   const handleSubmit = async (navigateNext = false) => {
     if (validate()) {
+      setLoadingAdd(true);
       try {
         if (!token) {
           navigate("/user/login");
@@ -79,8 +85,7 @@ const ProjectUpdateForm = ({ onClose }) => {
           return;
         }
 
-        const toISOString = (date) =>
-          date ? new Date(date).toISOString() : null;
+        const toISOString = (date) => date ? new Date(date).toISOString() : null;
 
         const payload = {
           project_name: formData.project_name,
@@ -91,16 +96,15 @@ const ProjectUpdateForm = ({ onClose }) => {
           project_description: formData.project_description,
         };
 
-        const response = await axios.post(apiUrl, payload, {
+        await axios.post(apiUrl, payload, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
 
-        await fetchProjects(); // 👈 to refresh the tab list too
+        await fetchProjects();
 
-        // Reset form
         setFormData({
           project_name: "",
           institution: "",
@@ -109,13 +113,14 @@ const ProjectUpdateForm = ({ onClose }) => {
           currentdo: false,
           project_description: "",
         });
-        toast.success(" Project added successfully!");
+
+        toast.success("Project added successfully!");
         setErrors({});
       } catch (error) {
-        console.error(" API Error:", error.response?.data || error.message);
-        toast.error(
-          error.response?.data.issue || "Submission failed. Please try again."
-        );
+        console.error("API Error:", error.response?.data || error.message);
+        toast.error(error.response?.data.issue || "Submission failed. Please try again.");
+      } finally {
+        setLoadingAdd(false);
       }
     }
   };
@@ -157,24 +162,19 @@ const ProjectUpdateForm = ({ onClose }) => {
   };
 
   const handleUpdate = async (e) => {
-    e?.preventDefault(); // 🔒 Prevents page reload
-
+    e?.preventDefault();
     if (!validate()) return;
 
     const selected = projects.find((p) => p.tempId === activeId);
     if (!selected) return toast.error("Project not found");
 
+    setLoadingUpdate(true);
     try {
       const payload = {
         project_name: formData.project_name,
         institution: formData.institution,
-        start_date: formData.start_date
-          ? new Date(formData.start_date).toISOString()
-          : null,
-        end_date:
-          formData.currentdo || !formData.end_date
-            ? null
-            : new Date(formData.end_date).toISOString(),
+        start_date: formData.start_date ? new Date(formData.start_date).toISOString() : null,
+        end_date: formData.currentdo || !formData.end_date ? null : new Date(formData.end_date).toISOString(),
         currently_doing: formData.currentdo,
         project_description: formData.project_description,
       };
@@ -192,7 +192,7 @@ const ProjectUpdateForm = ({ onClose }) => {
         prev.map((p) => (p.tempId === activeId ? updatedProject : p))
       );
 
-      toast.success(" Project updated!");
+      toast.success("Project updated!");
       setActiveId(null);
       setFormData({
         project_name: "",
@@ -204,11 +204,16 @@ const ProjectUpdateForm = ({ onClose }) => {
       });
     } catch (error) {
       console.error("Update Error:", error);
-      toast.error(" Failed to update project");
+      toast.error("Failed to update project");
+    } finally {
+      setLoadingUpdate(false);
     }
   };
 
   const handleDelete = async () => {
+
+    setLoadingDelete(true);
+
     try {
       await axios.delete(`${apiUrl}/${activeId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -226,6 +231,8 @@ const ProjectUpdateForm = ({ onClose }) => {
       await fetchProjects();
     } catch (error) {
       toast.error(" Failed to delete project");
+    } finally {
+      setLoadingDelete(false);
     }
   };
 
@@ -243,21 +250,41 @@ const ProjectUpdateForm = ({ onClose }) => {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-5 overflow-x-auto hide-scrollbar mb-4">
-          {projects.map((proj) => (
+        {projects.length > 0 && (
+          <div className="flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory min-h-[2rem] mb-4">
+            {projects.map((proj) => (
+              <div
+                key={proj.tempId}
+                onClick={() => handleSelectProject(proj)}
+                className={`flex-shrink-0 h-8 px-3 py-1.5 text-sm rounded snap-start cursor-pointer 
+                ${activeId === proj.tempId ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20'} 
+                hover:bg-[#2c6472] hover:text-white transition-all duration-200`}
+              >
+                {proj.project_name}
+              </div>
+            ))}
+
+            {/* + Tab */}
             <div
-              key={proj.tempId}
-              onClick={() => handleSelectProject(proj)}
-              className={`text-sm px-2.5 py-2 rounded-md cursor-pointer ${
-                activeId === proj.tempId
-                  ? "bg-[#2c6472] text-white"
-                  : "bg-gray-300"
-              } hover:bg-[#2c6472] hover:text-white`}
+              onClick={() => {
+                setFormData({
+                  project_name: "",
+                  institution: "",
+                  start_date: "",
+                  end_date: "",
+                  currentdo: false,
+                  project_description: "",
+                });
+                setActiveId(null);
+                setErrors({});
+              }}
+              className="flex items-center justify-center flex-shrink-0 h-8 w-8 p-3 rounded snap-start cursor-pointer 
+                bg-gray-500/20 text-[#2c6472] text-xl font-medium hover:bg-gray-300 transition-all duration-200"
             >
-              {proj.project_name}
+              +
             </div>
-          ))}
-        </div>
+          </div>
+        )}
 
         {/* Form Fields */}
         <form className="flex flex-col gap-4">
@@ -363,22 +390,36 @@ const ProjectUpdateForm = ({ onClose }) => {
 
           {/* Action Buttons */}
           <div className="flex justify-between mt-4">
-            <button
+           <button
               type="button"
               onClick={() => handleSubmit(false)}
-              className="text-sm text-[#2C6472] font-medium hover:scale-95 disabled:text-gray-400 disabled:cursor-not-allowed"
+              disabled={loadingAdd}
+              className="text-sm text-[#2C6472] font-medium hover:scale-95 flex items-center gap-2 disabled:text-gray-400 disabled:cursor-not-allowed"
             >
-              + Add Another
+              <span
+                className={`inline-block w-4 h-4 ${
+                  loadingAdd ? "border-[3px] border-[#2C6472] border-t-transparent rounded-full animate-spin" : ""
+                }`}
+              >
+                {!loadingAdd && "+"}
+              </span>
+              Add Another
             </button>
             <button
               type="button"
               onClick={handleDelete}
-              disabled={!activeId}
-              className={`flex items-center text-sm ${
-                !activeId ? "text-gray-400 cursor-not-allowed" : "text-red-500"
+              disabled={!activeId || loadingDelete}
+              className={`flex items-center text-sm gap-2 ${
+                !activeId || loadingDelete
+                  ? "text-gray-400 cursor-not-allowed"
+                  : "text-red-500"
               } font-medium hover:scale-95`}
             >
-              <img src={trash} alt="delete" className="w-4 h-4 mr-1" />
+              {loadingDelete ? (
+                <span className="w-4 h-4 border-[3px] border-red-500 border-t-transparent rounded-full animate-spin"></span>
+              ) : (
+                <img src={trash} alt="delete" className="w-4 h-4" />
+              )}
               Remove
             </button>
           </div>
@@ -386,14 +427,18 @@ const ProjectUpdateForm = ({ onClose }) => {
           <div className="flex justify-center items-center gap-4 mt-3">
             <button
               onClick={(e) => activeId !== null && handleUpdate(e)}
-              disabled={activeId === null}
-              className={` ${
+              disabled={activeId === null || loadingUpdate}
+              className={`${
                 activeId !== null
                   ? "bg-[#2c6472] text-white"
                   : "bg-gray-500/20 cursor-not-allowed"
-              } w-32 text-sm px-2 py-2 rounded-xl mb-2 hover:scale-95 transition`}
+              } w-32 text-sm px-2 py-2 rounded-xl mb-2 hover:scale-95 transition flex justify-center items-center gap-2`}
             >
-              Save Changes
+              {loadingUpdate ? (
+                <span className="w-4 h-4 border-[3px] border-white border-t-transparent rounded-full animate-spin"></span>
+              ) : (
+                "Save Changes"
+              )}
             </button>
           </div>
         </form>

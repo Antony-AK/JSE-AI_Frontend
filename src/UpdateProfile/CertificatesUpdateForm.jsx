@@ -7,6 +7,11 @@ import Calendar from '../base/Calender/Calender';
 import { format } from 'date-fns';
 
 const CertificatesUpdateForm = ({ onclose }) => {
+
+  const [addLoading, setAddLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
+  
   const [certificates, setCertificates] = useState([]);
   const [formData, setFormData] = useState({
     certificate_name: '',
@@ -14,7 +19,7 @@ const CertificatesUpdateForm = ({ onclose }) => {
     provider: '',
     completion_date: '',
   });
-  const [loading, setLoading] = useState(false);
+
   const [activeId, setActiveId] = useState(null);
   const token = sessionStorage.getItem('authToken');
   const apiUrl = `${BASE_URL}/certificates`;
@@ -61,6 +66,7 @@ const CertificatesUpdateForm = ({ onclose }) => {
 
   const handleAddCertificate = async () => {
     if (!validateForm()) return;
+    setAddLoading(true);
     try {
       await axios.post(apiUrl, {
         ...formData,
@@ -69,19 +75,22 @@ const CertificatesUpdateForm = ({ onclose }) => {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success("Certificate added!");
-      toast.success("Certificate added!");
       setFormData({ certificate_name: '', certificate_type: '', provider: '', completion_date: '' });
       await fetchCertificates();
     } catch (err) {
       console.error("Add failed", err);
       toast.error("Failed to add certificate.");
+    } finally {
+      setAddLoading(false);
     }
   };
 
   const handleUpdateCertificate = async () => {
     if (!activeId) return;
     const selected = certificates.find(c => c.tempId === activeId);
-    if (!selected) return toast.success("Selected certificate not found");
+    if (!selected) return toast.error("Selected certificate not found");
+
+    setUpdateLoading(true);
     try {
       await axios.put(`${apiUrl}/${activeId}`, {
         ...formData,
@@ -94,11 +103,14 @@ const CertificatesUpdateForm = ({ onclose }) => {
     } catch (err) {
       console.error("Update failed", err);
       toast.error("Failed to update certificate.");
+    } finally {
+      setUpdateLoading(false);
     }
   };
 
   const handleDeleteCertificate = async () => {
     if (!activeId) return;
+    setDeleteLoading(true);
     try {
       await axios.delete(`${apiUrl}/${activeId}`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -110,32 +122,49 @@ const CertificatesUpdateForm = ({ onclose }) => {
     } catch (err) {
       console.error("Delete failed", err);
       toast.error("Failed to delete certificate.");
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
   return (
     <div className='fixed inset-0 bg-white bg-opacity-70 z-50 flex items-center justify-center'>
       <div className='w-[700px] h-[620px] bg-white flex flex-col shadow rounded-xl px-10 py-5'>
-        <div className="flex justify-between w-full mt-3">
+        <div className="flex justify-between w-full mt-3 mb-7">
           <h3 className='text-lg font-semibold'>Certificates & Courses</h3>
           <p onClick={onclose} className='text-lg font-semibold cursor-pointer hover:scale-95'>X</p>
         </div>
 
-        <div className="flex gap-4 mt-7 mb-5 overflow-x-auto hide-scrollbar snap-x snap-mandatory">
-          {certificates.map((cer) => (
-            <div
-              key={cer.tempId}
-              onClick={() => handleSelectCertificate(cer)}
-              className={`flex-shrink-0 h-8 px-3 py-1.5 text-sm rounded snap-start cursor-pointer 
-              ${activeId === cer.tempId ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20'} 
-              hover:bg-[#2c6472] hover:text-white transition-all duration-200`}
-            >
-              {cer.certificate_name}
-            </div>
-          ))}
-        </div>
+        {/* Tabs */}
+        {certificates.length > 0 && (
+          <div className="flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory min-h-[2rem]">
+            {certificates.map((cer) => (
+              <div
+                key={cer.tempId}
+                onClick={() => handleSelectCertificate(cer)}
+                className={`flex-shrink-0 h-8 px-3 py-1.5 text-sm rounded snap-start cursor-pointer 
+                ${activeId === cer.tempId ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20'} 
+                hover:bg-[#2c6472] hover:text-white transition-all duration-200`}
+              >
+                {cer.certificate_name}
+              </div>
+            ))}
 
-        <div className="flex flex-col gap-4">
+            {/* + Tab */}
+            <div
+              onClick={() => {
+                setFormData({ certificate_name: '', certificate_type: '', provider: '', completion_date: '' });
+                setActiveId(null);
+              }}
+              className="flex items-center justify-center flex-shrink-0 h-8 w-8 p-3 rounded snap-start cursor-pointer 
+                bg-gray-500/20 text-[#2c6472] text-xl font-medium hover:bg-gray-300 transition-all duration-200"
+            >
+              +
+            </div>
+          </div>
+        )}
+
+        <div className="flex flex-col gap-4 mt-5">
           <div className="flex flex-col">
             <label className='text-sm text-gray-600'>Certificate Name <span className='text-red-500'>*</span></label>
             <input
@@ -189,30 +218,49 @@ const CertificatesUpdateForm = ({ onclose }) => {
           {/* Buttons */}
           <div className="flex justify-between mt-2">
             <button
-              onClick={activeId === null ? handleAddCertificate : null}
-              disabled={activeId !== null}
-              className={`text-sm ${activeId !== null ? 'text-gray-400 cursor-not-allowed' : 'text-[#2c6472]'} font-semibold hover:scale-95`}
+              onClick={activeId === null && !addLoading ? handleAddCertificate : null}
+              disabled={activeId !== null || addLoading}
+              className={`text-sm flex items-center gap-2 font-semibold hover:scale-95 transition ${
+                activeId !== null || addLoading ? 'text-gray-400 cursor-not-allowed' : 'text-[#2c6472]'
+              }`}
             >
-              + Add Certificate
+              {addLoading ? (
+                <div className="w-4 h-4 border-[2.5px] border-[#2c6472] border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <span className="text-lg font-bold">+</span>
+              )}
+              Add Certificate
             </button>
 
             <button
-              onClick={activeId !== null ? handleDeleteCertificate : null}
-              disabled={activeId === null}
-              className={`text-sm flex items-center ${activeId !== null ? 'text-red-500' : 'text-gray-400 cursor-not-allowed'} font-semibold hover:scale-95`}
+              onClick={activeId !== null && !deleteLoading ? handleDeleteCertificate : null}
+              disabled={activeId === null || deleteLoading}
+              className={`text-sm flex items-center gap-2 font-semibold hover:scale-95 transition ${
+                activeId === null || deleteLoading ? 'text-gray-400 cursor-not-allowed' : 'text-red-500'
+              }`}
             >
-              <img src={trash} alt="trash icon" className="w-4 h-4 mr-1" />
+              {deleteLoading ? (
+                <div className="w-4 h-4 border-[2.5px] border-red-500 border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <img src={trash} alt="trash icon" className="w-4 h-4 mr-1" />
+              )}
               Remove
             </button>
           </div>
 
-          <div className='flex justify-center mt-3'>
+          <div className='flex justify-center mx-auto items-center mt-3'>
             <button
-              onClick={activeId !== null ? handleUpdateCertificate : null}
-              disabled={activeId === null}
-              className={`w-32 text-sm px-3 py-2 rounded-xl transition ${activeId !== null ? 'bg-[#2c6472] text-white' : 'bg-gray-300 cursor-not-allowed'}`}
+              onClick={activeId !== null && !updateLoading ? handleUpdateCertificate : null}
+              disabled={activeId === null || updateLoading}
+              className={`w-32 text-sm px-3 py-2 rounded-xl transition ${
+                activeId !== null && !updateLoading ? 'bg-[#2c6472] text-white' : 'bg-gray-300 cursor-not-allowed'
+              }`}
             >
-              Save Changes
+              {updateLoading ? (
+                <div className="w-4 h-4 mx-auto border-[2.5px] border-[#2c6472] border-t-transparent rounded-full animate-spin" />
+              ) : (
+                "Save Changes"
+              )}
             </button>
           </div>
         </div>
