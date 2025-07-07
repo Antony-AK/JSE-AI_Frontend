@@ -16,35 +16,11 @@ const Languages = () => {
     language: '',
     proficiency: ''
   });
-  const [activeId, setActiveId] = useState(null);
 
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [addedCompanies, setAddedCompanies] = useState([]);
-
-
-
-  useEffect(() => {
-    const stored = sessionStorage.getItem("extractedResume");
-    if (stored) {
-      const parsed = JSON.parse(stored)?.data;
-      const langs = parsed?.languages || [];
-
-      const languagesWithId = langs.map((lang, idx) => ({
-        id: Date.now() + idx,
-        language: lang.language || '',
-        proficiency: lang.proficiency || '',
-      }));
-
-      if (languagesWithId.length > 0) {
-        setAddedCompanies(languagesWithId);
-        setFormData(languagesWithId[0]); // Pre-fill with first
-        setActiveId(languagesWithId[0].id);
-      }
-    }
-  }, []);
-
 
 
 
@@ -111,18 +87,13 @@ const Languages = () => {
         throw new Error(errData.message || 'Upload failed');
       }
 
-      // Update list
-      const updatedList = addedCompanies.map((item) =>
-        item.id === activeId ? { ...item, ...formData } : item
-      );
-      const exists = addedCompanies.some((item) => item.id === activeId);
-      const finalList = exists
-        ? updatedList
-        : [...addedCompanies, { ...formData, id: Date.now() }];
+      setFormData({
+        language: '',
+        proficiency: ''
+      });
 
-      setAddedCompanies(finalList);
-      setFormData({ language: '', proficiency: '' });
-      setActiveId(null);
+      setAddedCompanies((prev) => [...prev, formData.language]);
+
 
     } catch (err) {
       console.error('Error uploading language:', err);
@@ -194,22 +165,15 @@ const Languages = () => {
         </div>
 
 
-        <ul className="flex gap-3 mt-3 overflow-x-auto scrollbar-hide list-none">
-          {addedCompanies.map((langObj) => (
-            <li
-              key={langObj.id}
-              className={`px-4 py-2 rounded-lg w-32 text-center font-semibold cursor-pointer transition-all
-        ${activeId === langObj.id ? 'bg-[#2c6472] text-white' : 'bg-gray-500/30 text-[#2c6472]'}`}
-              onClick={() => {
-                setFormData(langObj);
-                setActiveId(langObj.id);
-                setErrors({});
-              }}
-            >
-              {langObj.language}
-            </li>
-          ))}
-        </ul>
+        {addedCompanies.length > 0 && (
+          <div className=" px-6 py-4 -mb-5 flex gap-3 rounded-lg">
+            <ul className="flex gap-3 overflow-x-auto scrollbar-hide">
+              {addedCompanies.map((company, index) => (
+                <li className='bg-gray-500/30 px-4 py-2 rounded-lg min-w-32 text-center font-semibold text-[#2c6472]' key={index}>{company}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
 
 

@@ -26,28 +26,29 @@ const Certificates = () => {
     const [certificateList, setCertificateList] = useState([]);
     const [activeId, setActiveId] = useState(null);
 
-   useEffect(() => {
+    useEffect(() => {
   const stored = sessionStorage.getItem("extractedResume");
-  console.log("📦 Extracted Resume:", stored);
   if (stored) {
-    const parsed = JSON.parse(stored);
-    const certifications = parsed?.data?.certifications || []; // 💡 FIXED here!
+    const parsed = JSON.parse(stored)?.data;
+    const firstCert = parsed?.certifications?.[0]; // Only first
 
-    const certificationsWithIds = certifications.map((item, idx) => ({
-      id: Date.now() + idx,
-      certificate_name: item.certificate_name || '',
-      certificate_type: '', // default to empty or infer if available
-      provider: item.platform || '', // 💡 changed from `provider` to `platform` as per your JSON
-      completion_date: item.end_date || '',
-    }));
+    if (firstCert) {
+      const filledCert = {
+        id: Date.now(),
+        certificate_name: firstCert.certificate_name || '',
+        certificate_type: '', // default blank unless you want to auto-detect
+        provider: firstCert.platform || '',
+        completion_date: firstCert.end_date || '',
+      };
 
-    if (certificationsWithIds.length > 0) {
-      setCertificateList(certificationsWithIds);
-      setFormData(certificationsWithIds[0]);
-      setActiveId(certificationsWithIds[0].id);
+      setFormData(filledCert);       // 👈 populate only formData
+      setActiveId(filledCert.id);    // 👈 for future reference
+      setCertificateList([]);        // ❌ don't populate the card list from SS
     }
   }
 }, []);
+
+
 
 
 
@@ -222,27 +223,29 @@ const Certificates = () => {
                 </div>
 
                 <div>
-                    <h1 className='text-2xl font-semibold mt-3'>List your certificates / Awards.</h1>
+                    <h1 className='text-2xl font-semibold mt-3 mb-4'>List your certificates / Awards.</h1>
                 </div>
 
                 {certificateList.length > 0 && (
-                    <div className="px-6 py-4 -mb-4 -m-1 flex gap-3 rounded-lg">
-                        <ul className="flex gap-3 overflow-x-auto scrollbar-hide list-none">
-                            {certificateList
-                                .filter(c => c.certificate_name.trim() !== '')
-                                .map((cert) => (
-                                    <li
-                                        key={cert.id}
-                                        onClick={() => handleSelectCertificate(cert)}
-                                        className={`px-4 py-2 rounded-lg min-w-32 text-center font-semibold cursor-pointer transition-all
-              ${activeId === cert.id ? 'bg-[#2c6472] text-white' : 'bg-gray-500/30 text-[#2c6472]'}`}
-                                    >
-                                        {cert.certificate_name}
-                                    </li>
-                                ))}
-                        </ul>
+                    <div className="flex gap-3 px-6 py-4 -m-3 w-[90%] rounded-lg overflow-x-auto hide-scrollbar snap-x snap-mandatory">
+                        {certificateList
+                            .filter((cert) => cert.certificate_name.trim() !== '')
+                            .map((cert) => (
+                                <div
+                                    key={cert.id}
+                                    onClick={() => handleSelectCertificate(cert)}
+                                    className={`flex-shrink-0 w-[200px] px-4 py-3 rounded-xl snap-start cursor-pointer 
+            text-sm flex flex-col items-start justify-center gap-1 font-semibold whitespace-nowrap transition-all duration-200
+            ${activeId === cert.id ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 text-[#2c6472]'}
+            hover:bg-[#2c6472] hover:text-white`}
+                                >
+                                    <p className="text-base font-bold truncate w-full">{cert.certificate_name}</p>
+                                    <p className="text-xs font-medium opacity-90 truncate w-full">{cert.provider || 'No Company'}</p>
+                                </div>
+                            ))}
                     </div>
                 )}
+
 
 
                 <form className="flex flex-col gap-3 mt-5 ms-6" onSubmit={handleAddCertificate}>

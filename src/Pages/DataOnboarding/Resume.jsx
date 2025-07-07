@@ -4,7 +4,7 @@ import resume_upload from '../../assets/resume_upload.png'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import animationgif from '../../assets/Animations.gif';
+import animationgif from '../../assets/extraction.gif';
 
 
 
@@ -156,18 +156,18 @@ const Resume = () => {
         </div>
       </div>
 
-{loading && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-10 backdrop-blur-sm">
-    <div className="flex flex-col items-center">
-      <img
-        src={animationgif}
-        alt="Loading..."
-        className="w-52 h-52 mb-4"
-      />
-      <p className="text-white text-xl font-semibold">Extracting, please wait...</p>
-    </div>
-  </div>
-)}
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-10 backdrop-blur-sm">
+          <div className="flex flex-col items-center">
+            <img
+              src={animationgif}
+              alt="Loading..."
+              className="w-52 h-52 mb-4"
+            />
+            <p className="text-white text-xl font-semibold">Extracting, please wait...</p>
+          </div>
+        </div>
+      )}
 
 
 

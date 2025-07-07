@@ -262,6 +262,9 @@ const MyApplication = () => {
 
   try {
     setIsLoading(true);
+
+        sessionStorage.setItem("selectedLanguage", lang);
+
     const response = await axios.post(endpoint, payload, {
       headers: {
         Authorization: `Bearer ${token}`,

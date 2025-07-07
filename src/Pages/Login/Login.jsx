@@ -9,6 +9,8 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import frame from "./../../assets/Frame.png";
 import logo from "../../assets/jsenewlogo.png"
 import { BASE_URL } from '../../utils/api';
+import { useProfileImage } from '../../base/ProfileEditor/ProfileImageContext';
+
 
 
 const Login = () => {
@@ -16,6 +18,8 @@ const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
+  const { fetchProfileImage } = useProfileImage();
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,6 +30,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // ✅ Start loading immediately when login is submitted
     try {
       const response = await fetch(`${BASE_URL}/auth/login`, {
         method: 'POST',
@@ -35,12 +40,16 @@ const Login = () => {
       const data = await response.json();
       if (response.ok) {
         sessionStorage.setItem('authToken', data.token);
+        fetchProfileImage(data.token); // ✅ Pass the token explicitly
         fetchEntryProgressAndRedirect(data.token);
       } else {
         toast.error(data.issue || 'Error occurred. Try again.');
+        setLoading(false); // ✅ Stop loading on error
+
       }
     } catch (err) {
       toast.error('Network error: ' + err.message);
+      setLoading(false); // ✅ Stop loading on error
     }
   };
 
@@ -197,11 +206,11 @@ const Login = () => {
 
         {/* Right Panel */}
         <div className="flex flex-1 flex-col justify-center items-center bg-[#2c6472] text-white p-8">
-          <div className="flex flex-col  items-center mb-4">
-            <h3 className="text-center mb-2 text-2xl ms-4 font-medium">Welcome Back!</h3>
+          <div className="flex flex-col  items-center mb-3">
+            <h3 className="text-center  text-2xl ms-4 font-medium">Welcome Back!</h3>
             <img
               src={logo}
-              className="h-10 w-24"
+              className="h-12 w-28"
             />
           </div>
           <div className='relative mb-5 flex justify-center items-center ms-4'>

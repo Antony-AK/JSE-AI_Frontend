@@ -14,6 +14,8 @@ import { BASE_URL } from '../../utils/api';
 import JobTitleUpdateForm from '../../UpdateProfile/JobTitleUpdateForm';
 import ProjectUpdateForm from '../../UpdateProfile/ProjectsUpdateForm';
 import ProfileImageModal from '../../base/ProfileEditor/ProfileImageModel';
+import { useProfileImage } from '../../base/ProfileEditor/ProfileImageContext';
+
 
 const Profile = () => {
 
@@ -33,6 +35,8 @@ const Profile = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [ProfileImage, setProfileImage] = useState(null);
+  const { profileImage, fetchProfileImage } = useProfileImage();
+
 
 
   useEffect(() => {
@@ -92,28 +96,6 @@ const Profile = () => {
 
     return () => clearInterval(timer);
   }, [profileData]);
-
-  useEffect(() => {
-    const fetchProfileImage = async () => {
-      try {
-        const headers = { Authorization: `Bearer ${token}` };
-        const res = await axios.get(`${BASE_URL}/photo`, {
-          headers,
-          responseType: 'blob', // 👈 VERY IMPORTANT!
-        });
-
-        const imageUrl = URL.createObjectURL(res.data); // create temp URL from blob
-        setProfileImage(imageUrl); // ✅ now you can use this in <img src=...>
-
-        console.log("Image blob fetched:", imageUrl);
-      } catch (error) {
-        console.error("Failed to fetch image blob:", error);
-      }
-    };
-
-    if (token) fetchProfileImage();
-  }, [token, refreshTrigger]);
-
 
 
 
@@ -305,9 +287,9 @@ const Profile = () => {
         <div className="flex items-center gap-6">
           <div className='w-20 h-20 rounded-full'>
             <img
-              src={ProfileImage || profile}
+              src={profileImage || profile}
               alt="Profile"
-              className="w-[95%] h-full rounded-full object-cover cursor-pointer"
+              className="w-full h-full rounded-full object-cover cursor-pointer"
               onClick={() => setShowModal(true)}
             />
           </div>
@@ -321,12 +303,11 @@ const Profile = () => {
         {/* 🧠 Image Modal Popup */}
         {showModal && (
           <ProfileImageModal
-            imageUrl={ProfileImage}
+            imageUrl={profileImage}
             onClose={() => setShowModal(false)}
-            onUpload={(photo_path) => {
-              setProfileImage(photo_path); // ✅ fix: directly update image
+            onUpload={() => {
+              fetchProfileImage(); // 🔁 updates context globally
               setShowModal(false);         // ✅ close the modal
-              setRefreshTrigger(prev => !prev); // 🔁 Re-fetch image
             }}
           />
         )}

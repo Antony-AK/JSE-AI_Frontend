@@ -14,7 +14,8 @@ import "aos/dist/aos.css";
 import { BASE_URL } from "../../utils/api"
 import Loader from '../../base/loader/Loader'
 import { useMemo } from "react";
-import ApplicationsChart from './graph/graph'
+import { useProfileImage } from '../../base/ProfileEditor/ProfileImageContext';
+
 
 const Dashboard = () => {
   const [profileData, setProfileData] = useState(null);
@@ -25,7 +26,9 @@ const Dashboard = () => {
   const [chartData, setChartData] = useState([]);
   const navigate = useNavigate();
   const [selectedLanguageIndex, setSelectedLanguageIndex] = useState(0);
+  const { profileImage } = useProfileImage(); // 👈 use context
   const token = sessionStorage.getItem("authToken");
+
 
   useEffect(() => {
     if (!token) {
@@ -51,18 +54,18 @@ const Dashboard = () => {
   }, [token]);
 
 
-const checklist = {
-  mfa: profileData?.checklist?.checklist_mfa ?? false,
-  cvFormat: profileData?.checklist?.checklist_cv_format_fixed ?? false,
-  clFormat: profileData?.checklist?.checklist_cl_format_fixed ?? false,
-  profileImg: profileData?.checklist?.checklist_profile_img ?? false,
-  dataUsage: profileData?.checklist?.checklist_data_usage ?? false,
-  dataTraining: profileData?.checklist?.checklist_data_training ?? false,
-  numberLock: profileData?.checklist?.checklist_number_lock ?? false,
-  dataFinalization: profileData?.checklist?.checklist_data_finalization ?? false,
-  terms: profileData?.checklist?.checklist_terms ?? false,
-  profileComplete: profileData?.checklist?.checklist_complete ?? false,
-};
+  const checklist = {
+    mfa: profileData?.checklist?.checklist_mfa ?? false,
+    cvFormat: profileData?.checklist?.checklist_cv_format_fixed ?? false,
+    clFormat: profileData?.checklist?.checklist_cl_format_fixed ?? false,
+    profileImg: profileData?.checklist?.checklist_profile_img ?? false,
+    dataUsage: profileData?.checklist?.checklist_data_usage ?? false,
+    dataTraining: profileData?.checklist?.checklist_data_training ?? false,
+    numberLock: profileData?.checklist?.checklist_number_lock ?? false,
+    dataFinalization: profileData?.checklist?.checklist_data_finalization ?? false,
+    terms: profileData?.checklist?.checklist_terms ?? false,
+    profileComplete: profileData?.checklist?.checklist_complete ?? false,
+  };
 
 
   const infoBlock = {
@@ -94,18 +97,18 @@ const checklist = {
     attemptsLeft: test.remaining_attempts ?? 0
   }));
 
-const statusList = [
-  { label: "Multifactor Authentication", isComplete: checklist.mfa },
-  { label: "CV Format Fixed", isComplete: checklist.cvFormat },
-  { label: "CL Format Fixed", isComplete: checklist.clFormat },
-  { label: "Profile Image", isComplete: checklist.profileImg },
-  { label: "Data Usage", isComplete: checklist.dataUsage },
-  { label: "Data Training", isComplete: checklist.dataTraining },
-  { label: "Number Lock", isComplete: checklist.numberLock },
-  { label: "Data Finalization", isComplete: checklist.dataFinalization },
-  { label: "Terms", isComplete: checklist.terms },
-  { label: "Checklist", isComplete: checklist.profileComplete },
-];
+  const statusList = [
+    { label: "Multifactor Authentication", isComplete: checklist.mfa },
+    { label: "CV Format Fixed", isComplete: checklist.cvFormat },
+    { label: "CL Format Fixed", isComplete: checklist.clFormat },
+    { label: "Profile Image", isComplete: checklist.profileImg },
+    { label: "Data Usage", isComplete: checklist.dataUsage },
+    { label: "Data Training", isComplete: checklist.dataTraining },
+    { label: "Number Lock", isComplete: checklist.numberLock },
+    { label: "Data Finalization", isComplete: checklist.dataFinalization },
+    { label: "Terms", isComplete: checklist.terms },
+    { label: "Checklist", isComplete: checklist.profileComplete },
+  ];
 
 
 
@@ -165,7 +168,7 @@ const statusList = [
 
 
   if (loading) return <div className='flex justify-center items-center w-full h-full '><Loader /></div>;
-  if (error) return <div className="text-red-500">{error}</div>;
+  if (error) return <div className="text-red-500 flex justify-center items-center mt-64">{error}</div>;
 
   const handleStatusClick = () => {
     navigate('/user/settings');
@@ -177,7 +180,7 @@ const statusList = [
       <div className="flex justify-between items-center w-full pl-5 pr-5">
 
         {/* ✅ Total Applications */}
-        <div 
+        <div
           className="relative flex bg-gradient-to-br from-[#FFC2B0] to-[#FF9AA2] h-[120px] w-[250px] text-black p-4 rounded-xl">
           <div className="flex flex-col justify-start items-start gap-5">
             <p className="font-bold">Total Applied</p>
@@ -218,7 +221,7 @@ const statusList = [
               {Math.max(infoBlock.dailyJobLimit - infoBlock.totalApplications, 0)} / {infoBlock.dailyJobLimit}
             </p>
             <h3 className="font-semibold">
-              {infoBlock.tier.charAt(0).toUpperCase() + infoBlock.tier.slice(1)} 
+              {infoBlock.tier.charAt(0).toUpperCase() + infoBlock.tier.slice(1)}
             </h3>
           </div>
           <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm w-fit h-fit">
@@ -229,7 +232,7 @@ const statusList = [
       </div>
 
 
-  
+
 
 
       {/* Grid Layout */}
@@ -246,9 +249,9 @@ const statusList = [
               {/* Image + Name/Title */}
               <div className="flex items-center space-x-4">
                 <img
-                  src={profile}
+                  src={ profileImage || profile}
                   alt=''
-                  className="w-14 h-14 rounded-full bg-white object-cover  "
+                  className="w-14 h-14 rounded-full bg-white object-cover  border border-black"
                 />
                 <div className="flex flex-col">
                   <h3 className="text-[15px] font-bold">{fullName}</h3>
@@ -397,7 +400,7 @@ const statusList = [
           <div className="flex flex-col gap-2.5 border rounded-xl p-5 bg-white space-y-3">
             <div className="flex justify-between">
               <h2 className='font-bold text-[15px]'>New Jobs </h2>
-              <a className='text-[#2c6472] font-medium' href="#">View All</a>
+             <Link to='/user/my-jobs/internal'> <p className='text-[#2c6472] font-medium' >View All</p></Link>
             </div>
 
             {jobs.map((job, index) => (

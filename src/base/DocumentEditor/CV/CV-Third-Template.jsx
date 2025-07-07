@@ -114,7 +114,7 @@ const ThirdCV = ({
       {projects?.content?.length > 0 && (
         <div className=" pt-4 mt-3">
           <div className="w-full h-5 gap-5 flex items-center">
-            <h2 className="text-[14px] w-1/6 flex justify-end  font-bold text-blue-700  uppercase mb-2">PROJECTS</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
+            <h2 className="text-[14px] w-1/6 flex justify-start  font-bold text-blue-700  uppercase mb-2">PROJECTS</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
           </div>
           {projects.content.map((proj, idx) => (
             <div key={idx} className="flex gap-3 mb-5">

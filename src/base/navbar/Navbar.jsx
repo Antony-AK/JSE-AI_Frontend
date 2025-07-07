@@ -3,6 +3,9 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import arrow_down from "../../assets/down-arrow.svg";
 import profile from "../../assets/profile1.png";
 import { BASE_URL } from '../../utils/api';
+import axios from 'axios';
+import { useProfileImage } from '../../base/ProfileEditor/ProfileImageContext';
+
 
 const Navbar = () => {
   const [firstName, setFirstName] = useState('User');
@@ -10,9 +13,11 @@ const Navbar = () => {
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { profileImage } = useProfileImage(); // 👈 use context
+
+  const token = sessionStorage.getItem('authToken');
 
   const fetchUserInfo = async () => {
-    const token = sessionStorage.getItem('authToken');
     if (!token) {
       console.warn('No token found in sessionStorage');
       return;
@@ -28,7 +33,7 @@ const Navbar = () => {
       const data = await response.json();
 
       // ✅ Now accessing from nested "profile" object
-const name = data?.seeker?.personal_info?.first_name;
+      const name = data?.seeker?.personal_info?.first_name;
 
       if (name) {
         setFirstName(name);
@@ -45,6 +50,10 @@ const name = data?.seeker?.personal_info?.first_name;
   useEffect(() => {
     fetchUserInfo();
   }, []);
+
+ 
+
+
 
   const handleLogout = () => {
     sessionStorage.clear();
@@ -74,9 +83,9 @@ const name = data?.seeker?.personal_info?.first_name;
         <h1 className="text-xl font-bold text-gray-800">{getPageTitle()}</h1>
         <div className="flex items-center space-x-3 relative">
           <img
-            src={profile}
+            src={profileImage || profile}
             alt="Profile"
-            className="w-9 h-9 rounded-full"
+            className="w-9 h-9 rounded-full object-cover border border-black"
             onClick={() => setMenuOpen(!menuOpen)}
           />
           <span className="text-gray-800 font-bold" onClick={() => setMenuOpen(!menuOpen)} >{firstName}</span>
@@ -86,7 +95,7 @@ const name = data?.seeker?.personal_info?.first_name;
               <div>
                 <Link
                   to="/user/settings"
-                  onClick={() => setMenuOpen(false)} 
+                  onClick={() => setMenuOpen(false)}
                   className="flex items-center gap-4 px-4 py-2 rounded-md transition "
                 >
                   <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">Settings</span>

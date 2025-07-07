@@ -20,6 +20,10 @@ const JobTitles = () => {
   const sortedJobTitles = Object.keys(jobskills).sort();
   const firstMatchRef = useRef(null);
   const [pendingTitleToAdd, setPendingTitleToAdd] = useState(null);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1); // 👈 new
+  const itemRefs = useRef([]);
+
+
 
 
 
@@ -51,7 +55,6 @@ const JobTitles = () => {
   };
 
 
-
   const getFilteredTitles = (searchTerm) =>
     sortedJobTitles.filter((title) =>
       title.toLowerCase().includes((searchTerm || '').toString().toLowerCase())
@@ -67,77 +70,39 @@ const JobTitles = () => {
   };
 
 
- useEffect(() => {
-  const stored = sessionStorage.getItem("extractedResume");
-  console.log("📦 Extracted Resume:", stored);
 
-  if (stored) {
-    const parsed = JSON.parse(stored);
-    const validTitles = Object.keys(jobskills).map((j) => j.toLowerCase());
+  const filteredTitles = getFilteredTitles(searchTerms.primary_title);
 
-    const primary = parsed?.data?.primary_title || '';
-    const secondary = parsed?.data?.secondary_title || '';
-    const tertiary = parsed?.data?.tertiary_title || '';
 
-    const newFormData = {
-      primary_title: '',
-      secondary_title: '',
-      tertiary_title: '',
-    };
 
-    if (primary && validTitles.includes(primary.toLowerCase())) {
-      newFormData.primary_title = primary;
-    } else if (primary) {
-      toast.error(`Invalid job title: "${primary}"`);
-    }
-
-    if (secondary && validTitles.includes(secondary.toLowerCase())) {
-      newFormData.secondary_title = secondary;
-    } else if (secondary) {
-      toast.error(`Invalid job title: "${secondary}"`);
-    }
-
-    if (tertiary && validTitles.includes(tertiary.toLowerCase())) {
-      newFormData.tertiary_title = tertiary;
-    } else if (tertiary) {
-      toast.error(`Invalid job title: "${tertiary}"`);
-    }
-
-    setFormData(newFormData);
-    setSearchTerms({ primary_title: '' });
+ const addSkill = (jobtitle) => {
+  jobtitle = jobtitle?.trim();
+  if (!jobtitle || !sortedJobTitles.includes(jobtitle)) {
+    toast.error("Please select a valid job title.");
+    return;
   }
-}, []);
 
+  if (isDuplicate(jobtitle)) {
+    toast.error('This job title was already added!');
+    return;
+  }
 
+  if (!formData.primary_title) {
+    setFormData((prev) => ({ ...prev, primary_title: jobtitle }));
+  } else if (!formData.secondary_title) {
+    setFormData((prev) => ({ ...prev, secondary_title: jobtitle }));
+  } else if (!formData.tertiary_title) {
+    setFormData((prev) => ({ ...prev, tertiary_title: jobtitle }));
+  } else {
+    toast.error('You can only add up to 3 job titles.');
+    return;
+  }
 
-  const addSkill = () => {
-    const jobtitle = searchTerms.primary_title?.trim();
-    if (!jobtitle || !sortedJobTitles.includes(jobtitle)) {
-      toast.error("Please select a valid job title.");
-      return;
-    }
-    if (!jobtitle) return;
+  setSearchTerms({ primary_title: '' });
+  setShowDropdowns({ primary_title: false });
+  setErrors({});
+};
 
-    if (isDuplicate(jobtitle)) {
-      toast.error('This job title was already added!');
-      return;
-    }
-
-    if (!formData.primary_title) {
-      setFormData((prev) => ({ ...prev, primary_title: jobtitle }));
-    } else if (!formData.secondary_title) {
-      setFormData((prev) => ({ ...prev, secondary_title: jobtitle }));
-    } else if (!formData.tertiary_title) {
-      setFormData((prev) => ({ ...prev, tertiary_title: jobtitle }));
-    } else {
-      toast.error('You can only add up to 3 job titles.');
-      return;
-    }
-
-    setSearchTerms({ primary_title: '' });
-    setShowDropdowns({ primary_title: false });
-    setErrors({});
-  };
 
   const removeSkill = (fieldName) => {
     if (fieldName === 'primary_title') {
@@ -177,22 +142,30 @@ const JobTitles = () => {
   };
 
   useEffect(() => {
-    if (pendingTitleToAdd) {
-      const lower = pendingTitleToAdd.toLowerCase();
-      const isValid = sortedJobTitles.some(title => title.toLowerCase() === lower);
+  if (pendingTitleToAdd) {
+    const lower = pendingTitleToAdd.toLowerCase();
+    const isValid = sortedJobTitles.some(title => title.toLowerCase() === lower);
 
-      if (isValid) {
-        setSearchTerms({ primary_title: pendingTitleToAdd }); // Just to be safe
-        setTimeout(() => {
-          addSkill();
-          setPendingTitleToAdd(null); // Clear after use
-        }, 0);
-      } else {
-        toast.error("Not a valid job title.");
-        setPendingTitleToAdd(null);
-      }
+    if (isValid) {
+      addSkill(pendingTitleToAdd);
+      setPendingTitleToAdd(null);
+    } else {
+      toast.error("Not a valid job title.");
+      setPendingTitleToAdd(null);
     }
-  }, [pendingTitleToAdd]);
+  }
+}, [pendingTitleToAdd]);
+
+
+  useEffect(() => {
+    if (highlightedIndex !== -1 && itemRefs.current[highlightedIndex]) {
+      itemRefs.current[highlightedIndex].scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      });
+    }
+  }, [highlightedIndex]);
+
 
 
   const handleNext = async (e) => {
@@ -284,27 +257,33 @@ const JobTitles = () => {
               onChange={(e) => handleSearchChange(e, 'primary_title')}
               onFocus={() => setShowDropdowns({ primary_title: true })}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') {
+                const inputValue = searchTerms.primary_title.trim();
+                const currentList = getFilteredTitles(inputValue);
+
+                if (e.key === 'ArrowDown') {
                   e.preventDefault();
+                  setHighlightedIndex((prev) =>
+                    prev < currentList.length - 1 ? prev + 1 : 0
+                  );
+                } else if (e.key === 'ArrowUp') {
+                  e.preventDefault();
+                  setHighlightedIndex((prev) =>
+                    prev > 0 ? prev - 1 : currentList.length - 1
+                  );
+                } else if (e.key === 'Enter') {
+                  e.preventDefault();
+                  const selectedTitle =
+                    highlightedIndex >= 0
+                      ? currentList[highlightedIndex]
+                      : currentList[0];
 
-                  const inputValue = searchTerms.primary_title.trim();
-                  const firstMatch = getFilteredTitles(inputValue)[0];
-
-                  if (!firstMatch) {
+                  if (!selectedTitle) {
                     toast.error("Job title not found.");
                     return;
                   }
 
-                  const isExactMatch = sortedJobTitles.some(
-                    (title) => title.toLowerCase() === inputValue.toLowerCase()
-                  );
-
-                  if (!isExactMatch) {
-                    setSearchTerms((prev) => ({ ...prev, primary_title: firstMatch }));
-                    setPendingTitleToAdd(firstMatch); // 👈 Save it
-                  } else {
-                    setPendingTitleToAdd(inputValue); // 👈 Exact match, use it
-                  }
+                  setPendingTitleToAdd(selectedTitle);
+                  setHighlightedIndex(-1);
 
                   setTimeout(() => {
                     inputRef.current?.blur();
@@ -312,22 +291,26 @@ const JobTitles = () => {
                 }
               }}
 
+
               placeholder='Search or select job title...'
             />
 
 
             {showDropdowns.primary_title && (
               <ul className='absolute z-10 w-[70%] max-h-48 overflow-y-auto mt-14 bg-white border border-gray-300 rounded shadow-md'>
-                {getFilteredTitles(searchTerms.primary_title).map((title, index) => (
+                {filteredTitles.map((title, index) => (
                   <li
-                    key={index}
+                    ref={(el) => (itemRefs.current[index] = el)}
                     onClick={() => handleSelect('primary_title', title)}
-                    className={`px-4 py-2 cursor-pointer ${index === 0 ? 'bg-[#2c6472] text-white' : 'text-gray-500 hover:bg-[#2c6472] hover:text-white'
+                    className={`px-4 py-2 cursor-pointer ${index === highlightedIndex
+                      ? 'bg-[#2c6472] text-white'
+                      : 'text-gray-500 hover:bg-[#2c6472] hover:text-white'
                       }`}
                   >
                     {title}
                   </li>
                 ))}
+
                 {getFilteredTitles(searchTerms.primary_title).length === 0 && (
                   <li className='px-4 py-2 text-gray-400'>No matching titles</li>
                 )}

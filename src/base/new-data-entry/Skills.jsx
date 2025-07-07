@@ -35,6 +35,12 @@ const Skills = () => {
 
     const allSkills = Object.values(jobskills).flatMap(job => job.skills);
     const [dynamicSkills, setDynamicSkills] = useState(allSkills);
+    const generalRefs = useRef([]);
+    const jobRefs = useRef([]);
+
+    const [highlightIndexGeneral, setHighlightIndexGeneral] = useState(0);
+    const [highlightIndexJob, setHighlightIndexJob] = useState(0);
+
 
     const dropdownRef = useRef(null);
 
@@ -159,6 +165,33 @@ const Skills = () => {
             });
         }
     }, []);
+
+
+    useEffect(() => {
+        if (
+            dropdownType === "general" &&
+            highlightIndexGeneral !== -1 &&
+            generalRefs.current[highlightIndexGeneral]
+        ) {
+            generalRefs.current[highlightIndexGeneral].scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+            });
+        }
+    }, [highlightIndexGeneral, dropdownType]);
+
+    useEffect(() => {
+        if (
+            dropdownType === "job" &&
+            highlightIndexJob !== -1 &&
+            jobRefs.current[highlightIndexJob]
+        ) {
+            jobRefs.current[highlightIndexJob].scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+            });
+        }
+    }, [highlightIndexJob, dropdownType]);
 
 
 
@@ -435,34 +468,32 @@ const Skills = () => {
 
                                     }}
                                     onKeyDown={(e) => {
-                                        if (e.key === 'Enter') {
+                                        const currentList = filteredSkills;
+
+                                        if (e.key === 'ArrowDown') {
+                                            e.preventDefault();
+                                            setHighlightIndexGeneral((prev) =>
+                                                prev < currentList.length - 1 ? prev + 1 : 0
+                                            );
+                                        } else if (e.key === 'ArrowUp') {
+                                            e.preventDefault();
+                                            setHighlightIndexGeneral((prev) =>
+                                                prev > 0 ? prev - 1 : currentList.length - 1
+                                            );
+                                        } else if (e.key === 'Enter') {
                                             e.preventDefault();
 
-                                            const inputVal = generalSearchTerm.trim();
-                                            const firstMatch = filteredSkills[0];
+                                            const selectedSkill =
+                                                highlightIndexGeneral >= 0
+                                                    ? currentList[highlightIndexGeneral]
+                                                    : currentList[0];
 
-                                            if (!firstMatch) {
-                                                toast.error("❌ Skill not found.");
-                                                return;
-                                            }
-
-                                            const isExactMatch = allSkills.some(
-                                                (skill) => skill.toLowerCase() === inputVal.toLowerCase()
-                                            );
-
-                                            if (!isExactMatch) {
-                                                // Fill the input with top match
-                                                setGeneralSearchTerm(firstMatch);
-                                                setTriggerAddSkill(true);
-
-                                                // ⏳ Small delay to allow input to update before adding
-
-                                            } else {
-                                                addSkill();
-                                                generalInputRef.current?.blur();
-                                            }
+                                            if (!selectedSkill) return;
+                                            handleSelect(selectedSkill);
+                                            setHighlightIndexGeneral(0);
                                         }
                                     }}
+
 
                                     onFocus={() => {
                                         setShowDropdown(true);
@@ -472,25 +503,23 @@ const Skills = () => {
                                 />
                                 {showDropdown && dropdownType === "general" && (
                                     <ul className="absolute top-16 z-10 w-[70%] max-h-48 overflow-y-auto text-gray-600 bg-white border border-gray-300 shadow-md">
-                                        {filteredSkills.length > 0 ? (
-                                            filteredSkills.map((skill, index) => (
-                                                <li
-                                                    key={index}
-                                                    className={`px-4 py-2 cursor-pointer ${index === highlightIndex
-                                                        ? 'bg-[#2c6472] text-white'
-                                                        : 'hover:bg-[#2c6472] hover:text-white text-gray-600'
-                                                        }`}
-                                                    onMouseDown={(e) => {
-                                                        e.preventDefault();
-                                                        handleSelect(skill);
-                                                    }}
-                                                >
-                                                    {skill}
-                                                </li>
-                                            ))
-                                        ) : (
-                                            <li className="px-4 py-2 text-gray-400">No matching skills</li>
-                                        )}
+                                        {filteredSkills.map((skill, index) => (
+                                            <li
+                                                key={index}
+                                                ref={(el) => (generalRefs.current[index] = el)}
+                                                className={`px-4 py-2 cursor-pointer ${index === highlightIndexGeneral
+                                                    ? 'bg-[#2c6472] text-white'
+                                                    : 'hover:bg-[#2c6472] hover:text-white text-gray-600'
+                                                    }`}
+                                                onMouseDown={(e) => {
+                                                    e.preventDefault();
+                                                    handleSelect(skill);
+                                                }}
+                                            >
+                                                {skill}
+                                            </li>
+                                        ))}
+
                                     </ul>
                                 )}
 
@@ -562,31 +591,27 @@ const Skills = () => {
 
                                 }}
                                 onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
+                                    const currentList = filteredSkills;
+
+                                    if (e.key === 'ArrowDown') {
+                                        e.preventDefault();
+                                        setHighlightIndexJob((prev) =>
+                                            prev < currentList.length - 1 ? prev + 1 : 0
+                                        );
+                                    } else if (e.key === 'ArrowUp') {
+                                        e.preventDefault();
+                                        setHighlightIndexJob((prev) =>
+                                            prev > 0 ? prev - 1 : currentList.length - 1
+                                        );
+                                    } else if (e.key === 'Enter') {
                                         e.preventDefault();
 
-                                        const inputVal = jobSearchTerm.trim();
-                                        const firstMatch = filteredSkills[0];
+                                        const selectedSkill =
+                                            highlightIndexJob >= 0 ? currentList[highlightIndexJob] : currentList[0];
 
-                                        if (!firstMatch) {
-                                            toast.error("❌ Skill not found.");
-                                            return;
-                                        }
-
-                                        const isExactMatch = dynamicSkills.some(
-                                            (skill) => skill.toLowerCase() === inputVal.toLowerCase()
-                                        );
-
-                                        if (!isExactMatch) {
-                                            setJobSearchTerm(firstMatch);  // 👈 auto-fill top match
-                                            setTimeout(() => {
-                                                addSkill(); // 👈 after input is filled
-                                                jobInputRef.current?.blur();
-                                            }, 100); // slight delay to allow input update
-                                        } else {
-                                            addSkill();
-                                            jobInputRef.current?.blur();
-                                        }
+                                        if (!selectedSkill) return;
+                                        handleSelect(selectedSkill);
+                                        setHighlightIndexJob(0);
                                     }
                                 }}
 
@@ -597,21 +622,23 @@ const Skills = () => {
                             />
                             {selectedTitle && showDropdown && dropdownType === "job" && (
                                 <ul className="absolute top-16 z-10 w-[70%] max-h-48 overflow-y-auto text-gray-600 bg-white border border-gray-300 shadow-md">
-                                    {filteredSkills.length > 0 ? (
-                                        filteredSkills.map((skill, index) => (
-                                            <li
-                                                key={index}
-                                                className="px-4 py-2 cursor-pointer hover:bg-[#2c6472] hover:text-white"
-                                                onMouseDown={(e) => {
-                                                    e.preventDefault(); // prevent input from losing focus
-                                                    handleSelect(skill);
-                                                }}                                            >
-                                                {skill}
-                                            </li>
-                                        ))
-                                    ) : (
-                                        <li className="px-4 py-2 text-gray-400">No matching skills</li>
-                                    )}
+                                    {filteredSkills.map((skill, index) => (
+                                        <li
+                                            key={index}
+                                            ref={(el) => (jobRefs.current[index] = el)}
+                                            className={`px-4 py-2 cursor-pointer ${index === highlightIndexJob
+                                                    ? 'bg-[#2c6472] text-white'
+                                                    : 'hover:bg-[#2c6472] hover:text-white text-gray-600'
+                                                }`}
+                                            onMouseDown={(e) => {
+                                                e.preventDefault();
+                                                handleSelect(skill);
+                                            }}
+                                        >
+                                            {skill}
+                                        </li>
+                                    ))}
+
                                 </ul>
                             )}
 

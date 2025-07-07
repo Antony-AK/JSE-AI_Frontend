@@ -10,6 +10,9 @@ import google from "./../../assets/Google.png";
 import frame from "./../../assets/Frame.png";
 import logo from "../../assets/jsenewlogo.png"
 import { BASE_URL } from "../../utils/api"
+import flag from "../../assets/germanyflag.png"
+import arrow from "../../assets/downarrow.png"
+
 
 const Signup = () => {
   const [loading, setLoading] = useState(false);
@@ -178,13 +181,17 @@ const Signup = () => {
               <label className="mb-1 ms-3 block  text-gray-500 text-sm">
                 Phone Number
               </label>
-              <span className="absolute left-3 top-[64%] transform -translate-y-1/2 text-base">+49</span>
+              <div className="absolute left-3 top-[64%] w-24 h-6 flex items-center justify-center gap-1.5 p-4 rounded-md bg-gray-200 transform -translate-y-1/2 text-sm ">
+                <img src={flag} alt="" />
+                <p >+49</p>
+                <img src={arrow} alt="" className='w-3 h-1.5 object-cover'/>
+              </div>
               <input
                 id='phoneNumber'
                 type="tel"
                 name="phoneNumber"
                 placeholder=" "
-                className="w-full pl-14 h-[52px]   px-4 py-3.5 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer"
+                className="w-full pl-32 h-[52px]   px-4  py-3.5 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer"
                 value={formData.phoneNumber}
                 onChange={handleChange}
               />
@@ -291,11 +298,11 @@ const Signup = () => {
 
       {/* Right Panel */}
       <div className="hidden md:flex w-1/2 flex-col items-center justify-center bg-[#2c6472] text-white px-8">
-        <h3 className="text-3xl font-medium mb-3 ms-4 text-center">Welcome to</h3>
-        <div className="flex items-center mb-2 -ms-2">
+        <h3 className="text-3xl font-medium mb-1 ms-4 text-center">Welcome to</h3>
+        <div className="flex items-center mb-3 -ms-2">
           <img
             src={logo}
-            className="h-10 w-24"
+            className="h-12 w-28"
           />
         </div>
         <div className='relative mb-5 flex justify-center items-center ms-4'>

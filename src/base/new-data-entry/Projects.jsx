@@ -37,25 +37,25 @@ const Projects = () => {
     const stored = sessionStorage.getItem("extractedResume");
     if (stored) {
       const parsed = JSON.parse(stored)?.data;
-      const projects = parsed?.projects || [];
+      const firstProject = parsed?.projects?.[0];
 
-      const projectsWithIds = projects.map((item, idx) => ({
-        id: Date.now() + idx,
-        project_name: item.project_name || '',
-        institution: item.institution || '',
-        start_date: item.start_date || '',
-        end_date: item.currently_doing === "true" ? '' : item.end_date || '',
-        currentdo: item.currently_doing === "true",
-        project_description: item.project_description || '',
-      }));
+      if (firstProject) {
+        const filledForm = {
+          id: Date.now(),
+          project_name: firstProject.project_name || '',
+          institution: firstProject.institution || '',
+          start_date: firstProject.start_date || '',
+          end_date: firstProject.currently_doing === "true" ? '' : firstProject.end_date || '',
+          currentdo: firstProject.currently_doing === "true",
+          project_description: firstProject.project_description || '',
+        };
 
-      if (projectsWithIds.length > 0) {
-        setProjectList(projectsWithIds);
-        setFormData(projectsWithIds[0]);
-        setActiveId(projectsWithIds[0].id);
+        setFormData(filledForm);
+        setActiveId(filledForm.id);
       }
     }
   }, []);
+
 
 
   const handleSelectProject = (proj) => {
@@ -211,23 +211,24 @@ const Projects = () => {
       <h2 className='font-bold text-xl'>Share your past project experience.</h2>
 
       {projectList.length > 0 && (
-        <div className="px-6 py-4 -m-3 flex gap-3 w-[90%] rounded-lg overflow-x-auto scrollbar-hide">
+        <div className="flex gap-3 px-6 py-4 -m-3 w-[90%] rounded-lg overflow-x-auto hide-scrollbar snap-x snap-mandatory">
           {projectList
-            .filter(p => p.project_name.trim() !== '')
+            .filter((proj) => proj.project_name.trim() !== '')
             .map((proj) => (
               <div
                 key={proj.id}
                 onClick={() => handleSelectProject(proj)}
-                className={`px-4 py-2 rounded-lg h-10 flex items-center justify-center text-center font-semibold cursor-pointer transition-all whitespace-nowrap
-            ${activeId === proj.id ? 'bg-[#2c6472] text-white' : 'bg-gray-500/30 text-[#2c6472]'}
+                className={`flex-shrink-0 w-[200px] px-4 py-3 rounded-xl snap-start cursor-pointer 
+            text-sm flex flex-col items-start justify-center gap-1 font-semibold whitespace-nowrap transition-all duration-200
+            ${activeId === proj.id ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 text-[#2c6472]'}
             hover:bg-[#2c6472] hover:text-white`}
               >
-                {proj.project_name}
+                <p className="text-base font-bold truncate w-full">{proj.project_name}</p>
+                <p className="text-xs font-medium opacity-90 truncate w-full">{proj.institution || 'No Institution'}</p>
               </div>
             ))}
         </div>
       )}
-
 
       <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
 

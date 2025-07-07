@@ -45,17 +45,17 @@ const DocumentEditor = () => {
         const element = clPreviewRef.current;
         if (!element) return;
 
-       const opt = {
-      margin: 0,
-      filename: 'cover_letter.pdf',
-      image: { type: 'jpeg', quality: 1 },
-      html2canvas: {
-        scale: 2.5,
-        useCORS: true,
-        scrollY: 0,
-      },
-      jsPDF: { unit: 'px', format: [794, 1123], orientation: 'portrait' },
-    };
+        const opt = {
+            margin: 0,
+            filename: 'cover_letter.pdf',
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: {
+                scale: 2.5,
+                useCORS: true,
+                scrollY: 0,
+            },
+            jsPDF: { unit: 'px', format: [794, 1123], orientation: 'portrait' },
+        };
 
         html2pdf().set(opt).from(element).save();
     };
@@ -76,18 +76,19 @@ const DocumentEditor = () => {
     };
 
 
-     if (isCvLoading || isClLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-xl font-semibold text-gray-700 animate-pulse">
-          🛠️ Processing your CV and CL...
-        </p>
-      </div>
-    );
-  }
+    if (isCvLoading || isClLoading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <p className="text-xl font-semibold text-gray-700 animate-pulse">
+                    🛠️ Processing your CV and CL...
+                </p>
+            </div>
+        );
+    }
 
+    
     return (
-        <div className='flex flex-col gap-5 p-5 mb-14'>
+        <div className='flex flex-col gap-5 p-5 mb-14 overflow-x-hidden'>
 
             <div className="flex items-center w-full px-10 mb-5">
                 {/* Empty left space */}
@@ -101,11 +102,10 @@ const DocumentEditor = () => {
                 <div className="flex-1" />
             </div>
 
-            <div className="grid gap-5 grid-cols-2">
-
+            <div className="grid grid-cols-2 mx-auto w-full">
                 <div className="flex flex-col gap-5 justify-center mx-auto">
 
-                    <div className="flex justify-between px-5  max-w-[710px]">
+                    <div className="flex justify-between px-5  max-w-[680px]">
                         <div onClick={() => navigate('/user/external-cv')} className="flex-1 -mt-2 flex gap-2 items-center cursor-pointer">
                             <img width="12px" src={edit_icon} alt="" />
                             <p className='text-[#2c6472] text-lg  font-medium'>Edit</p>
@@ -119,31 +119,21 @@ const DocumentEditor = () => {
                         </div>
                     </div>
 
-                    <div ref={cvPreviewRef} className="h-full w-[794px] py-5 flex bg-white mx-auto overflow-hidden scrollbar-custom">
+                    <div style={{ transform: 'scale(0.85)', transformOrigin: 'top left' }}>
+                        <div ref={cvPreviewRef} className="h-full w-[794px] py-5 flex bg-white mx-auto overflow-hidden scrollbar-custom">
 
-                        <ExternalModernDeedy
-                            personalInfo={cvPersonalInfo}
-                            professionalSummary={professionalSummary}
-                            workExperience={workExperience}
-                            education={education}
-                            projects={projects}
-                            skills={skills}
-                            languages={languages}
-                            certificates={certificates}
-                        />
+                            <ExternalModernDeedy
+                                personalInfo={cvPersonalInfo}
+                                professionalSummary={professionalSummary}
+                                workExperience={workExperience}
+                                education={education}
+                                projects={projects}
+                                skills={skills}
+                                languages={languages}
+                                certificates={certificates}
+                            />
 
-                        {/* <ExternalEuropass 
-                            personalInfo={cvPersonalInfo}
-                            professionalSummary={professionalSummary}
-                            workExperience={workExperience}
-                            education={education}
-                            projects={projects}
-                            skills={skills}
-                            languages={languages}
-                            certificates={certificates}
-                        /> */}
-
-                        {/* <ExternalModernClassic 
+                            {/* <ExternalEuropass 
                             personalInfo={cvPersonalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -154,7 +144,7 @@ const DocumentEditor = () => {
                             certificates={certificates}
                         /> */}
 
-                        {/* <ExternalPlushCV 
+                            {/* <ExternalModernClassic 
                             personalInfo={cvPersonalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -165,7 +155,18 @@ const DocumentEditor = () => {
                             certificates={certificates}
                         /> */}
 
-                        {/* <ThirdCV 
+                            {/* <ExternalPlushCV 
+                            personalInfo={cvPersonalInfo}
+                            professionalSummary={professionalSummary}
+                            workExperience={workExperience}
+                            education={education}
+                            projects={projects}
+                            skills={skills}
+                            languages={languages}
+                            certificates={certificates}
+                        /> */}
+
+                            {/* <ThirdCV 
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}
                             workExperience={workExperience}
@@ -176,6 +177,7 @@ const DocumentEditor = () => {
                             certificates={certificates}
                         /> */}
 
+                        </div>
                     </div>
 
                 </div>
@@ -183,7 +185,7 @@ const DocumentEditor = () => {
 
                 <div className="flex flex-col gap-5 justify-start mx-auto">
 
-                    <div className="flex justify-between px-5 max-w-[710px]">
+                    <div className="flex justify-between px-5 max-w-[680px]">
                         <div onClick={() => navigate('/user/external-cl')} className="flex-1 flex -mt-2 gap-2 items-center cursor-pointer">
                             <img width="12px" src={edit_icon} alt="" />
                             <p className='text-[#2c6472] text-lg font-medium'>Edit</p>
@@ -197,19 +199,22 @@ const DocumentEditor = () => {
                         </div>
                     </div>
 
-                    <div ref={clPreviewRef} className="h-[1123px] w-[794px] bg-white mx-auto -mt-10 scrollbar-custom">
+                    
+                    <div style={{ transform: 'scale(0.85)', transformOrigin: 'top left' }}>
+                        <div ref={clPreviewRef} className="h-[1123px] w-[794px] bg-white mx-auto -mt-10 scrollbar-custom">
 
-                        <ExternalClTemp
-                            data={{
-                                name: clPersonalInfo.name,
-                                title: clPersonalInfo.title,
-                                mail: clPersonalInfo.mail,
-                                contact: clPersonalInfo.contact,
-                                address: clPersonalInfo.address,
-                                paragraphs,
-                            }}
-                        />
+                            <ExternalClTemp
+                                data={{
+                                    name: clPersonalInfo.name,
+                                    title: clPersonalInfo.title,
+                                    mail: clPersonalInfo.mail,
+                                    contact: clPersonalInfo.contact,
+                                    address: clPersonalInfo.address,
+                                    paragraphs,
+                                }}
+                            />
 
+                        </div>
                     </div>
 
                 </div>

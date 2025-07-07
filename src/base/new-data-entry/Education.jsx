@@ -42,25 +42,27 @@ const Education = () => {
             const parsed = JSON.parse(stored)?.data;
             const edu = parsed?.education || [];
 
-            const eduWithIds = edu.map((item, idx) => ({
-                tempId: Date.now() + idx,
-                institution: item.institution || '',
-                city: item.city || '',
-                degree: item.degree || '',
-                field_of_study: item.field_of_study || '',
-                start_date: item.start_date || '',
-                enddate: item.currentstudy === "true" ? '' : item.end_date || '',
-                currentstudy: item.currentstudy === "true",
-                description: item.description || '',
-            }));
+            if (edu.length > 0) {
+                const first = edu[0];
 
-            if (eduWithIds.length > 0) {
-                setEducationList(eduWithIds);
-                setFormData(eduWithIds[0]);
-                setActiveId(eduWithIds[0].tempId);
+                const filledForm = {
+                    tempId: Date.now(),
+                    institution: first.institution || '',
+                    city: first.city || '',
+                    degree: first.degree || '',
+                    field_of_study: first.field_of_study || '',
+                    start_date: first.start_date || '',
+                    enddate: first.currentstudy === "true" ? '' : first.end_date || '',
+                    currentstudy: first.currentstudy === "true",
+                    description: first.description || '',
+                };
+
+                setFormData(filledForm);
+                setActiveId(filledForm.tempId);
             }
         }
     }, []);
+
 
     const handleSelect = (edu) => {
         setFormData(edu);

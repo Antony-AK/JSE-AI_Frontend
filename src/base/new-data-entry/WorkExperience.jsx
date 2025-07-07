@@ -42,24 +42,21 @@ const WorkExperience = () => {
       const parsed = JSON.parse(stored)?.data;
       const exp = parsed?.work_experience || [];
 
-      const expWithIds = exp.map((item, idx) => ({
-        tempId: Date.now() + idx,
-        job_title: item.job_title || '',
-        company_name: item.company_name || '',
-        location: item.location || '',
-        start_date: item.start_date || '',
-        enddate: item.currentwork === "true" ? '' : item.end_date || '',
-        currentwork: item.currentwork === "true",
-        key_responsibilities: item.key_responsibilities || ''
-      }));
-
-      if (expWithIds.length > 0) {
-        setExperiences(expWithIds);
-        setFormData(expWithIds[0]);
-        setActiveId(expWithIds[0].tempId);
+      if (exp.length > 0) {
+        const first = exp[0];
+        setFormData({
+          job_title: first.job_title || '',
+          company_name: first.company_name || '',
+          location: first.location || '',
+          start_date: first.start_date || '',
+          enddate: first.currentwork === "true" ? '' : first.end_date || '',
+          currentwork: first.currentwork === "true",
+          key_responsibilities: first.key_responsibilities || ''
+        });
       }
     }
   }, []);
+
 
   const handleSelectExperience = (exp) => {
     setFormData(exp);
@@ -178,44 +175,10 @@ const WorkExperience = () => {
 
         } else {
 
-          setExperiences((prev) => {
-            const updatedList = prev.map((exp) =>
-              exp.tempId === activeId ? { ...exp, ...formData } : exp
-            );
-
-            const newTempId = Date.now();
-            const newExp = {
-              tempId: newTempId,
-              job_title: '',
-              company_name: '',
-              location: '',
-              start_date: '',
-              enddate: '',
-              currentwork: false,
-              key_responsibilities: ''
-            };
-
-            setFormData(newExp);         // Set new form
-            setActiveId(newTempId);      // Focus new card
-            setExperiences((prev) => [...updatedList, newExp]); // Add to list
-
-
-          });
-
-          setFormData({
-            job_title: '',
-            company_name: '',
-            location: '',
-            start_date: '',
-            enddate: '',
-            currentwork: false,
-            key_responsibilities: ''
-          });
-          setActiveId(Date.now()); // update to new form's ID
-
-
-
-          setAddedCompanies((prev) => [...prev, formData.company_name]);
+          setExperiences((prev) => [
+            ...prev,
+            { ...formData, tempId: Date.now() }
+          ]);
 
           // Clear form after add
           setFormData({
@@ -257,7 +220,7 @@ const WorkExperience = () => {
 
       <h2 className='font-bold text-xl'>Highlight your Work Experience.</h2>
 
-      {experiences && experiences.length > 0 && (
+      {experiences.length > 0 && (
         <div className="flex gap-3 px-6 py-4 -m-3 w-[90%] rounded-lg overflow-x-auto hide-scrollbar snap-x snap-mandatory">
           {experiences.map((exp) => (
             <div
@@ -272,10 +235,10 @@ const WorkExperience = () => {
               <p className="text-xs font-medium opacity-90 truncate w-full">{exp.company_name || 'No Company'}</p>
             </div>
           ))}
-
-         
         </div>
       )}
+
+
 
 
 
