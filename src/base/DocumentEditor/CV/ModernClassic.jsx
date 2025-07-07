@@ -1,5 +1,37 @@
 import React from "react";
 
+const t = (key, lang = "en") => {
+  const map = {
+    contact: { en: "Contact", de: "Kontakt" },
+    information: { en: "Information", de: "Informationen" },
+    summary: { en: "Summary", de: "Zusammenfassung" },
+    about: { en: "About Myself", de: "Über mich" },
+    education: { en: "Education", de: "Ausbildung" },
+    experience: { en: "Experience", de: "Berufserfahrung" },
+    projects: { en: "Projects", de: "Projekte" },
+    certificates: { en: "Certificates", de: "Zertifikate" },
+    languages: { en: "Languages", de: "Sprachen" },
+    skills: { en: "Skills", de: "Fähigkeiten" },
+    address: { en: "Address", de: "Adresse" },
+    email: { en: "Email", de: "E-Mail" },
+    phone: { en: "Phone", de: "Telefon" },
+    linkedin: { en: "LinkedIn", de: "LinkedIn" },
+    website: { en: "Website", de: "Webseite" },
+  };
+
+ const normalized = lang.toLowerCase();
+  const langCodeMap = {
+    english: "en",
+    german: "de",
+    en: "en",
+    de: "de",
+  };
+
+  const langCode = langCodeMap[normalized] || "en";
+
+  return map[key]?.[langCode] || key;
+};
+
 const ModernClassic = ({
   personalInfo,
   professionalSummary,
@@ -9,6 +41,8 @@ const ModernClassic = ({
   skills,
   languages,
   certificates,
+  language,
+
 }) => {
   return (
     <div className="flex flex-col gap-2 w-full h-full pb-5">
@@ -74,7 +108,8 @@ const ModernClassic = ({
           <div className="w-full px-10 pt-5 avoid-page-break">
             <div className="flex justify-start items-start gap-12">
               <div className="min-w-[130px]">
-                <h2 className="text-[#4F6D61] font-bold text-lg">Summary</h2>
+                <h2 className="text-[#4F6D61] font-bold text-lg">{t("summary", language)}
+                </h2>
               </div>
 
               <div className="text-sm space-y-2 leading-6">
@@ -93,7 +128,7 @@ const ModernClassic = ({
         <div className="w-full px-10 avoid-page-break">
           <div className="flex justify-start items-start gap-12">
             <div className="min-w-[130px]">
-              <h2 className="text-[#4F6D61] font-bold text-lg">Skills</h2>
+              <h2 className="text-[#4F6D61] font-bold text-lg">{t("skills", language)}</h2>
             </div>
 
             <div className="text-sm">
@@ -118,63 +153,64 @@ const ModernClassic = ({
       {workExperience.content.some(
         (exp) => exp.Company || exp.Role || exp.Duration || exp.Description
       ) && (
-        <div className="w-full px-10">
-          <div className="flex gap-12 items-start">
-            {/* Left Side: Experience Label */}
-            <div className="min-w-[130px]">
-              <h2 className="text-[#4F6D61] font-bold text-lg">Experience</h2>
-            </div>
+          <div className="w-full px-10">
+            <div className="flex gap-12 items-start">
+              {/* Left Side: Experience Label */}
+              <div className="w-[130px]">
+                <h2 className="text-[#4F6D61]  font-bold text-lg">{t("experience", language)}
+                </h2>
+              </div>
 
-            {/* Right Side: Experience Entries */}
-            <div className="flex-1 flex flex-col gap-5 mt-1.5">
-              {workExperience.content.map((exp, idx) => {
-                const hasContent =
-                  exp.Company || exp.Role || exp.Duration || exp.Description;
-                if (!hasContent) return null;
+              {/* Right Side: Experience Entries */}
+              <div className="flex-1 flex flex-col gap-5 mt-1.5">
+                {workExperience.content.map((exp, idx) => {
+                  const hasContent =
+                    exp.Company || exp.Role || exp.Duration || exp.Description;
+                  if (!hasContent) return null;
 
-                return (
-                  <div
-                    key={idx}
-                    className="avoid-page-break"
-                    style={{ breakInside: "avoid" }}
-                  >
-                    {(exp.Company || exp.Role) && (
-                      <div className="flex flex-wrap items-center gap-2 text-sm text-[#4F6D61]">
-                        {exp.Company && (
-                          <span className="font-bold text-[15px]">{exp.Company}</span>
-                        )}
-                        {exp.Role && (
-                          <span className="font-medium">| {exp.Role}</span>
-                        )}
-                      </div>
-                    )}
-                    {exp.Duration && (
-                      <p className="text-[13px] text-[#4F6D61] mt-2">{exp.Duration}</p>
-                    )}
-                    {exp.Description && (
-                    <div className="text-sm text-gray-800 mt-2 leading-6">
-                      {Array.isArray(exp.Description) ? (
-                        <ul className="list-disc ml-5 space-y-2">
-                          {exp.Description.filter(desc => desc?.trim()).map((desc, i) => (
-                            <li
-                              key={i}
-                              className="avoid-page-break"
-                              style={{ breakInside: "avoid" }}
-                            >
-                              • {desc.trim()}
-                            </li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <p>{exp.Description}</p>
+                  return (
+                    <div
+                      key={idx}
+                      className="avoid-page-break"
+                      style={{ breakInside: "avoid" }}
+                    >
+                      {(exp.Company || exp.Role) && (
+                        <div className="flex flex-wrap items-center gap-2 text-sm text-[#4F6D61]">
+                          {exp.Company && (
+                            <span className="font-bold text-[15px]">{exp.Company}</span>
+                          )}
+                          {exp.Role && (
+                            <span className="font-medium">| {exp.Role}</span>
+                          )}
+                        </div>
+                      )}
+                      {exp.Duration && (
+                        <p className="text-[13px] text-[#4F6D61] mt-2">{exp.Duration}</p>
+                      )}
+                      {exp.Description && (
+                        <div className="text-sm text-gray-800 mt-2 leading-6">
+                          {Array.isArray(exp.Description) ? (
+                            <ul className="list-disc ml-5 space-y-2">
+                              {exp.Description.filter(desc => desc?.trim()).map((desc, i) => (
+                                <li
+                                  key={i}
+                                  className="avoid-page-break"
+                                  style={{ breakInside: "avoid" }}
+                                >
+                                  • {desc.trim()}
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p>{exp.Description}</p>
+                          )}
+                        </div>
                       )}
                     </div>
-                  )}
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
             <div className="mt-5 border-b border-gray-300 w-full"></div>
           </div>
@@ -186,7 +222,8 @@ const ModernClassic = ({
           <div className="w-full px-10 avoid-page-break">
             <div className="flex justify-start items-start gap-12">
               <div className="min-w-[130px]">
-                <h2 className="text-[#4F6D61] font-bold text-lg">Education</h2>
+                <h2 className="text-[#4F6D61] font-bold text-lg">{t("education", language)}
+                </h2>
               </div>
 
               <div className="text-[13px] space-y-2.5 leading-6">
@@ -234,7 +271,8 @@ const ModernClassic = ({
             <div className="flex gap-12 items-start">
               {/* Left Side: Section Title */}
               <div className="min-w-[130px]">
-                <h2 className="text-[#4F6D61] font-bold text-lg">Projects</h2>
+                <h2 className="text-[#4F6D61] font-bold text-lg">{t("projects", language)}
+                </h2>
               </div>
 
               {/* Right Side: Project Entries */}
@@ -319,7 +357,8 @@ const ModernClassic = ({
             <div className="flex gap-12 items-start">
               {/* Left Side: Title */}
               <div className="w-[130px]">
-                <h2 className="text-[#4F6D61] font-bold text-lg">Languages</h2>
+                <h2 className="text-[#4F6D61] font-bold text-lg">{t("languages", language)}
+                </h2>
               </div>
 
               {/* Right Side: Language List */}
@@ -335,7 +374,7 @@ const ModernClassic = ({
                       >
                         {lang.language}
                         {lang.proficiency && (
-                          <span className="italic font-normal text-gray-500">
+                          <span className=" font-normal text-gray-500">
                             {" - " + lang.proficiency}
                           </span>
                         )}
@@ -355,7 +394,8 @@ const ModernClassic = ({
           <div className="w-full px-10 avoid-page-break" style={{ breakInside: "avoid" }}>
             <div className="flex gap-12 items-start">
               <div className="w-[130px]">
-                <h2 className="text-[#4F6D61] font-bold text-lg">Certificates</h2>
+                <h2 className="text-[#4F6D61] font-bold text-lg">{t("certificates", language)}
+                </h2>
               </div>
 
               <div className="flex-1">
@@ -366,7 +406,7 @@ const ModernClassic = ({
                       <li key={index} className="avoid-page-break">
                         {cert.certificate_name}
                         {cert.provider && (
-                          <span className="italic font-normal text-gray-700">
+                          <span className=" font-normal text-gray-700">
                             {" - " + cert.provider}
                           </span>
                         )}

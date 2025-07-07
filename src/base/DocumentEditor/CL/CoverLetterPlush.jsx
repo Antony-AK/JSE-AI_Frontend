@@ -1,7 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useCl } from '../Context/ClContext'; // Adjust the path if needed
 
-const CoverLetterPlush = () => {
+const t = (key, lang = "en") => {
+    const map = {
+        date: { en: "Date", de: "Datum" },
+        subject: { en: "Subject", de: "Betreff" },
+        dear: { en: "Dear", de: "Sehr geehrter" },
+        recruiter: { en: "Recruiter", de: "Personalverantwortlicher" },
+        regards: { en: "Kind regards", de: "Mit freundlichen Grüßen" },
+        applying: { en: "Applying position as", de: "Bewerbung für die Stelle als" },
+    };
+
+    const langMap = {
+        english: "en",
+        german: "de",
+        en: "en",
+        de: "de",
+    };
+
+    const langCode = langMap[lang?.toLowerCase()] || "en";
+    return map[key]?.[langCode] || key;
+};
+
+
+const CoverLetterPlush = ({ language }) => {
     const { personalInfo, recipient, subject, paragraphs } = useCl();
 
     const [currentDate, setCurrentDate] = useState('');
@@ -39,16 +61,21 @@ const CoverLetterPlush = () => {
             </div>
 
             {/* Recipient and Subject */}
-            <div className="text-left  flex flex-col -mt-20 text-[15px] border-t border-gray-300 ">
-               
+            <div className="text-left  flex flex-col  text-[15px] border-t border-gray-300 ">
 
-                <p className="mb-6 mt-5"><strong className='font-medium me-3 '>Date :</strong> {recipient?.date || currentDate}</p>
-                <p className=""><strong className='font-medium me-3'>Subject :</strong>Applying postion as {personalInfo?.title}</p>
+
+                <p className="mb-3 mt-5">
+                    <strong className='font-medium me-3'>{t("date", language)}:</strong> {recipient?.date || currentDate}
+                </p>
+                <p>
+                    <strong className='font-medium me-3'>{t("subject", language)}:</strong> {subject || `${t("applying", language)} ${personalInfo?.title}`}
+                </p>
+
             </div>
 
             {/* Body */}
-            <div className="space-y-4 -mt-20 text-justify">
-                <p>Dear {recipient?.name || "Recruiter"},</p>
+            <div className="space-y-4  text-justify">
+                <p className='-mt-5'>{t("dear", language)} {recipient?.name?.split(" ")[0] || t("recruiter", language)},</p>
                 {paragraphs?.map((para, idx) => (
                     <p key={idx}>{para}</p>
                 ))}
@@ -56,7 +83,7 @@ const CoverLetterPlush = () => {
 
             {/* Closing */}
             <div className="mb-5">
-                <p>Kind regards,</p>
+                <p>{t("regards", language)}</p>
                 <p className="pt-1 font-semibold">{personalInfo?.name}</p>
             </div>
         </div>

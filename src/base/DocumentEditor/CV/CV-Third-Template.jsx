@@ -1,5 +1,38 @@
 import React, { useEffect, useState } from "react";
+import { useProfileImage } from '../../../base/ProfileEditor/ProfileImageContext';
 
+
+const t = (key, lang = "en") => {
+  const map = {
+    contact: { en: "Contact", de: "Kontakt" },
+    information: { en: "Information", de: "Informationen" },
+    summary: { en: "Summary", de: "Zusammenfassung" },
+    about: { en: "About Myself", de: "Über mich" },
+    education: { en: "Education", de: "Ausbildung" },
+    experience: { en: "Work Experience", de: "Berufserfahrung" },
+    projects: { en: "Projects", de: "Projekte" },
+    certificates: { en: "Certificates", de: "Zertifikate" },
+    languages: { en: "Languages", de: "Sprachen" },
+    skills: { en: "Skills", de: "Fähigkeiten" },
+    address: { en: "Address", de: "Adresse" },
+    email: { en: "Email", de: "E-Mail" },
+    phone: { en: "Phone", de: "Telefon" },
+    linkedin: { en: "LinkedIn", de: "LinkedIn" },
+    website: { en: "Website", de: "Webseite" },
+  };
+
+  const normalized = lang.toLowerCase();
+  const langCodeMap = {
+    english: "en",
+    german: "de",
+    en: "en",
+    de: "de",
+  };
+
+  const langCode = langCodeMap[normalized] || "en";
+
+  return map[key]?.[langCode] || key;
+};
 
 const ThirdCV = ({
   imageToUse,
@@ -11,16 +44,22 @@ const ThirdCV = ({
   languages,
   certificates,
   projects,
+  language,
+
 }) => {
-  
+
+  const { profileImage } = useProfileImage(); // 👈 use context
+
+
+
 
   return (
     <div className="w-full max-w-[794px] mx-auto bg-white text-black font-sans text-[13px] leading-normal px-12 py-6">
       {/* 🔹 Header */}
       <div className="flex items-start gap-5">
-        {imageToUse && (
+        {profileImage && (
           <img
-            src={imageToUse}
+            src={profileImage}
             alt="Profile"
             className="w-[130px] h-[130px] rounded-full object-cover border"
           />
@@ -30,16 +69,17 @@ const ThirdCV = ({
             {personalInfo?.Name}
           </h1>
           {personalInfo?.address && (
-            <p><strong>📍Address: </strong> {personalInfo.Address}</p>
+            <p><strong>📍{t("address", language)}:
+            </strong> {personalInfo.Address}</p>
           )}
 
           <p>
-            <strong>✉️ Email: </strong> {personalInfo?.Mail} &nbsp;&nbsp;
-            <strong>📞 Phone: </strong> (+49) {personalInfo?.Phone}
+            <strong>✉️  {t("email", language)}: </strong> {personalInfo?.Mail} &nbsp;&nbsp;
+            <strong>📞 {t("phone", language)}: </strong> (+49) {personalInfo?.Phone}
           </p>
           {personalInfo?.Website && (
             <p>
-              <strong>🌐 Portfolio: </strong>{" "}
+              <strong>🌐 {t("website", language)}: </strong>{" "}
               <a
                 href={personalInfo?.Website}
                 className="text-blue-600 underline"
@@ -52,7 +92,7 @@ const ThirdCV = ({
           )}
           {personalInfo?.LinkedIn && (
             <p>
-              <strong>🔗 LinkedIn: </strong>{" "}
+              <strong>🔗 {t("linkedin", language)}: </strong>{" "}
               <a
                 href={personalInfo?.LinkedIn}
                 className="text-blue-600 underline"
@@ -70,7 +110,7 @@ const ThirdCV = ({
       {professionalSummary?.content && (
         <div className=" flex flex-col pt-4 mt-6">
           <div className="w-full h-5 gap-5 flex items-center">
-            <h2 className="text-[14px] justify-end flex font-bold text-blue-700 uppercase mb-2">ABOUT MYSELF</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
+            <h2 className="text-[14px] w-1/6 justify-start flex font-bold text-blue-700 uppercase mb-2">{t("about", language)}</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
           </div>
           <div className="ms-[140px] w-3/4 mt-3 flex items-center justify-end ">
             <p className="text-gray-800 ms-3 leading-relaxed">{professionalSummary.content}</p>
@@ -82,7 +122,7 @@ const ThirdCV = ({
       {workExperience?.content?.length > 0 && (
         <div className="flex flex-col pt-4 mt-3">
           <div className="w-full h-5 gap-5 flex items-center">
-            <h2 className="text-[14px] font-bold text-blue-700  uppercase mb-2">WORK EXPERIENCE</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
+            <h2 className="text-[14px] w-1/6 font-bold text-blue-700  uppercase mb-2">{t("experience", language)}</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
           </div>
           {workExperience.content.map((job, idx) => (
             <div key={idx} className="flex gap-3 mb-5 mt-2">
@@ -114,7 +154,7 @@ const ThirdCV = ({
       {projects?.content?.length > 0 && (
         <div className=" pt-4 mt-3">
           <div className="w-full h-5 gap-5 flex items-center">
-            <h2 className="text-[14px] w-1/6 flex justify-start  font-bold text-blue-700  uppercase mb-2">PROJECTS</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
+            <h2 className="text-[14px] w-1/6 flex justify-start  font-bold text-blue-700  uppercase mb-2">{t("projects", language)}</h2><hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
           </div>
           {projects.content.map((proj, idx) => (
             <div key={idx} className="flex gap-3 mb-5">
@@ -124,7 +164,8 @@ const ThirdCV = ({
                 <div className="font-medium italic my-1">{proj.Company}</div>
                 {proj.Skills && (
                   <p>
-                    <strong>Skills Used:</strong> {proj.Skills}
+                    <strong>{t("skills", language)}
+                      :</strong> {proj.Skills}
                   </p>
                 )}
                 {proj.Description && (
@@ -151,8 +192,8 @@ const ThirdCV = ({
         education.content.some((edu) => edu.degree?.trim()) && (
           <div className="pt-4 mt-3">
             <div className="w-full h-5 gap-5 flex items-center">
-              <h2 className="text-[14px] flex justify-end font-bold text-blue-700 uppercase mb-2">
-                EDUCATION
+              <h2 className="text-[14px] w-1/6 flex justify-start font-bold text-blue-700 uppercase mb-2">
+                {t("education", language)}
               </h2>
               <hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
             </div>
@@ -188,8 +229,8 @@ const ThirdCV = ({
       {skills?.content?.length > 0 && (
         <div className="flex flex-col pt-4 mt-3">
           <div className="w-full h-5 gap-5 flex items-center">
-            <h2 className="text-[14px] flex justify-end font-bold text-blue-700 uppercase mb-2">
-              SKILLS
+            <h2 className="text-[14px] w-1/6 flex justify-start font-bold text-blue-700 uppercase mb-2">
+              {t("skills", language)}
             </h2>
             <hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
           </div>
@@ -212,8 +253,8 @@ const ThirdCV = ({
         languages.content.some((lang) => lang.language?.trim()) && (
           <div className="flex flex-col pt-4 mt-3">
             <div className="w-full h-5 gap-5 flex items-center">
-              <h2 className="text-[14px] flex justify-end font-bold text-blue-700 uppercase mb-2">
-                Languages
+              <h2 className="text-[14px] w-1/6 flex justify-start font-bold text-blue-700 uppercase mb-2">
+                {t("languages", language)}
               </h2>
               <hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
             </div>
@@ -225,7 +266,7 @@ const ThirdCV = ({
                   <p key={idx} className="flex items-center gap-1 font-medium text-sm">
                     {lang.language}
                     {lang.proficiency && (
-                      <span className="italic text-gray-500 text-[13px]">
+                      <span className=" text-gray-500 text-[13px]">
                         ({lang.proficiency})
                       </span>
                     )}
@@ -243,8 +284,9 @@ const ThirdCV = ({
         certificates.content.some((cert) => cert.certificate_name?.trim()) && (
           <div className="flex flex-col pt-4 mt-3">
             <div className="w-full h-5 gap-5 flex items-center">
-              <h2 className="text-[14px] flex justify-end font-bold text-blue-700 uppercase mb-2">
-                Certificates
+              <h2 className="text-[14px] w-1/6 flex justify-start font-bold text-blue-700 uppercase mb-2">
+                {t("certificates", language)}
+
               </h2>
               <hr className="w-full flex flex-1 items-center h-0.5 bg-gray-200" />
             </div>
@@ -256,7 +298,7 @@ const ThirdCV = ({
                   <p key={idx} className="flex items-center gap-1 font-medium text-sm">
                     {cert.certificate_name}
                     {cert.provider && (
-                      <span className="italic text-gray-500 text-[13px]">
+                      <span className=" text-gray-500 text-[13px]">
                         ({cert.provider})
                       </span>
                     )}

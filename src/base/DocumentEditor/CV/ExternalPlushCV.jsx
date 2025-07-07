@@ -1,6 +1,39 @@
 import React from 'react'
 
-const ExternalPlushCV = ({ personalInfo, professionalSummary, workExperience, education, projects, skills, languages, certificates }) => {
+const t = (key, lang = "en") => {
+  const map = {
+    contact: { en: "Contact", de: "Kontakt" },
+    information: { en: "Information", de: "Informationen" },
+    summary: { en: "Summary", de: "Zusammenfassung" },
+    about: { en: "About Myself", de: "Über mich" },
+    education: { en: "Education", de: "Ausbildung" },
+    experience: { en: "Experience", de: "Berufserfahrung" },
+    projects: { en: "Projects", de: "Projekte" },
+    certificates: { en: "Certificates", de: "Zertifikate" },
+    languages: { en: "Languages", de: "Sprachen" },
+    skills: { en: "Skills", de: "Fähigkeiten" },
+    address: { en: "Address", de: "Adresse" },
+    email: { en: "Email", de: "E-Mail" },
+    phone: { en: "Phone", de: "Telefon" },
+    linkedin: { en: "LinkedIn", de: "LinkedIn" },
+    website: { en: "Website", de: "Webseite" },
+  };
+
+ const normalized = lang.toLowerCase();
+  const langCodeMap = {
+    english: "en",
+    german: "de",
+    en: "en",
+    de: "de",
+  };
+
+  const langCode = langCodeMap[normalized] || "en";
+
+  return map[key]?.[langCode] || key;
+};
+
+
+const ExternalPlushCV = ({ personalInfo, professionalSummary, workExperience, education, projects, skills, languages, certificates, language }) => {
   return (
     <div className="flex w-full flex-col font-sans text-[14px] text-black bg-white mx-7 my-5">
       {/* Left Column */}
@@ -79,7 +112,7 @@ const ExternalPlushCV = ({ personalInfo, professionalSummary, workExperience, ed
             <div className="flex flex-col gap-1 mt-5">
               <div className="flex items-center gap-3">
                 <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">
-                  SUMMARY
+                  {t("summary", language)}
                 </h2>
               </div>
               <p className="leading-5 ml-3 mt-2 text-[12px] text-gray-700 space-y-1">
@@ -94,7 +127,7 @@ const ExternalPlushCV = ({ personalInfo, professionalSummary, workExperience, ed
           ) && (
             <div>
               <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">
-                Experience
+                  {t("experience", language)}
               </h2>
               {workExperience.content.map((exp, idx) => (
                 <div
@@ -130,7 +163,7 @@ const ExternalPlushCV = ({ personalInfo, professionalSummary, workExperience, ed
           {projects.content.length > 0 && (
             <div>
               <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">
-                Projects
+                {t("projects", language)}
               </h2>
               {projects.content.map((proj, idx) => (
                 <div
@@ -165,14 +198,14 @@ const ExternalPlushCV = ({ personalInfo, professionalSummary, workExperience, ed
         </div>
 
         {/* Right Column */}
-        <div className="w-[30%] bg-white px-5 py-4 flex flex-col gap-4">
+        <div className="w-[30%] bg-white px-5 mt-5 py-4 flex flex-col gap-4">
           {/* Skills */}
           {skills?.content?.length > 0 && (
             <div>
               <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">
-                Skills
+                {t("skills", language)}
               </h2>
-              <ul className="list-disc ml-4 text-[12px]">
+              <ul className="list-disc ml-2 text-[12px]">
                 {skills.content.map((skill, idx) => (
                   <li
                     key={idx}
@@ -191,7 +224,7 @@ const ExternalPlushCV = ({ personalInfo, professionalSummary, workExperience, ed
           education.content.some(edu => edu.degree?.trim()) && (
             <div>
               <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">
-                Education
+                  {t("education", language)}
               </h2>
               {education.content.map((edu, idx) =>
                 edu.degree?.trim() ? (
@@ -224,9 +257,9 @@ const ExternalPlushCV = ({ personalInfo, professionalSummary, workExperience, ed
           languages.content.some(l => l.language?.trim()) && (
             <div>
               <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">
-                Languages
+                  {t("languages", language)}
               </h2>
-              <ul className="list-disc ml-4 text-[12px]">
+              <ul className="list-disc ml-2 text-[12px]">
                 {languages.content
                   .filter(l => l.language?.trim())
                   .map((lang, idx) => (
@@ -237,7 +270,7 @@ const ExternalPlushCV = ({ personalInfo, professionalSummary, workExperience, ed
                     >
                       {lang.language}
                       {lang.proficiency && (
-                        <span className="italic text-gray-500">
+                        <span className=" text-gray-500">
                           {" - " + lang.proficiency}
                         </span>
                       )}
@@ -252,9 +285,9 @@ const ExternalPlushCV = ({ personalInfo, professionalSummary, workExperience, ed
             certificates.content.some(c => c.certificate_name?.trim()) && (
               <div>
                 <h2 className="text-[16px] font-bold text-[#0078d4] uppercase mb-1 avoid-page-break">
-                  Certifications
+                  {t("certificates", language)}
                 </h2>
-                <ul className="list-disc ml-4 text-[12px]">
+                <ul className="list-disc ml-2 text-[12px]">
                   {certificates.content
                     .filter(cert => cert.certificate_name?.trim())
                     .map((cert, idx) => (
@@ -265,7 +298,7 @@ const ExternalPlushCV = ({ personalInfo, professionalSummary, workExperience, ed
                       >
                         {cert.certificate_name}
                         {cert.provider && (
-                          <span className="italic text-gray-500">
+                          <span className=" text-gray-500">
                             {" - " + cert.provider}
                           </span>
                         )}

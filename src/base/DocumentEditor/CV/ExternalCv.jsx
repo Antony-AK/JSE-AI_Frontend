@@ -26,12 +26,12 @@ const ExternalCv = () => {
         certificates, setCertificates,
         skills, setSkills,
         languages, setLanguages
-    } = useExternalCv();    
+    } = useExternalCv();
 
     const [selectedCompanyIdx, setSelectedCompanyIdx] = useState(0);
     const [selectedProjectIdx, setSelectedProjectIdx] = useState(0);
     const [selectedEducationIdx, setSelectedEducationIdx] = useState(0);
-    
+
     // 🔽 Add at the top (under hooks)
     const templates = {
         ExternalModernDeedy,
@@ -41,7 +41,9 @@ const ExternalCv = () => {
         ExternalModernClassic
     };
     const [selectedTemplate, setSelectedTemplate] = useState("ExternalModernDeedy");
-    const SelectedTemplate = templates[selectedTemplate];    
+    const SelectedTemplate = templates[selectedTemplate];
+    const [language, setLanguage] = useState(() => sessionStorage.getItem("selectedLanguage") || "en");
+
 
     const previewRef = useRef();
 
@@ -62,10 +64,10 @@ const ExternalCv = () => {
             .from(element)
             .save()
             .then(() => {
-            navigate(-1); // 👈 navigate after download completes
+                navigate(-1); // 👈 navigate after download completes
             });
     };
-    
+
     const [activeSection, setActiveSection] = useState(null);
 
     const handleFieldChange = (key, value) => {
@@ -73,7 +75,7 @@ const ExternalCv = () => {
             ...prev,
             [key]: value,
         }));
-    };    
+    };
 
     const handleUpdateCV = async () => {
         const token = sessionStorage.getItem("authToken");
@@ -138,11 +140,11 @@ const ExternalCv = () => {
         } catch (error) {
             console.error("❌ Failed to update CV:", error.response?.data || error.message);
         }
-    };    
+    };
 
-  return (
+    return (
 
-<div className='flex flex-col justify-center items-center mx-auto'>
+        <div className='flex flex-col justify-center items-center mx-auto'>
             <div className="flex items-center w-full px-4 mt-5 max-w-[1400px]">
                 {/* Empty left space */}
                 <div className="flex-1" />
@@ -160,53 +162,51 @@ const ExternalCv = () => {
                 <div className='w-[600px]'>
 
                     {/* Personal Info */}
-                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${
-                    activeSection === 'personalInfo' ? 'border-[#2c6472]' : 'border-gray-300'
-                    }`}>
-                    <div className="flex justify-between items-start mb-2">
-                        <h2 className="font-semibold text-gray-800">Personal Information</h2>
-                        <img
-                            width="30px"
-                            className={`cursor-pointer p-2 rounded-full transition ${
-                                activeSection === 'personalInfo' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                            }`}
-                            src={activeSection === 'personalInfo' ? save_icon : edit_icon}
-                            alt=""
-                            onClick={() => {
-                                if (activeSection === 'personalInfo') {
-                                setActiveSection(null);
-                                } else {
-                                setActiveSection('personalInfo');
-                                }
-                            }}
-                        />
-                    </div>
+                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'personalInfo' ? 'border-[#2c6472]' : 'border-gray-300'
+                        }`}>
+                        <div className="flex justify-between items-start mb-2">
+                            <h2 className="font-semibold text-gray-800">Personal Information</h2>
+                            <img
+                                width="30px"
+                                className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'personalInfo' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
+                                    }`}
+                                src={activeSection === 'personalInfo' ? save_icon : edit_icon}
+                                alt=""
+                                onClick={() => {
+                                    if (activeSection === 'personalInfo') {
+                                        setActiveSection(null);
+                                    } else {
+                                        setActiveSection('personalInfo');
+                                    }
+                                }}
+                            />
+                        </div>
 
-                    <div className="pl-1 text-sm space-y-1.5">
-                        {Object.entries(personalInfo).map(([key, value]) => {
-                        const isReadOnly = ["Name", "Mail", "Phone"].includes(key);
-                        return (
-                            <div key={key} className="flex items-center gap-2 mb-2">
-                            <span className="text-sm font-semibold text-gray-700 min-w-[80px]">{key}:</span>
-                            {activeSection === 'personalInfo' ? (
-                                isReadOnly ? (
-                                <p className="text-[#00000082] font-medium">{value}</p>
-                                ) : (
-                                <input
-                                    type="text"
-                                    value={value}
-                                    onChange={(e) => handleFieldChange(key, e.target.value)}
-                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1 flex-1"
-                                />
-                                )
-                            ) : (
-                                <p className="text-[#00000082] font-medium">{value}</p>
-                            )}
-                            </div>
-                        );
-                        })}
+                        <div className="pl-1 text-sm space-y-1.5">
+                            {Object.entries(personalInfo).map(([key, value]) => {
+                                const isReadOnly = ["Name", "Mail", "Phone"].includes(key);
+                                return (
+                                    <div key={key} className="flex items-center gap-2 mb-2">
+                                        <span className="text-sm font-semibold text-gray-700 min-w-[80px]">{key}:</span>
+                                        {activeSection === 'personalInfo' ? (
+                                            isReadOnly ? (
+                                                <p className="text-[#00000082] font-medium">{value}</p>
+                                            ) : (
+                                                <input
+                                                    type="text"
+                                                    value={value}
+                                                    onChange={(e) => handleFieldChange(key, e.target.value)}
+                                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1 flex-1"
+                                                />
+                                            )
+                                        ) : (
+                                            <p className="text-[#00000082] font-medium">{value}</p>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
-                    </div>                    
 
                     {/* Professional Summary */}
                     <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'summary' ? 'border-[#2c6472]' : 'border-gray-300'
@@ -215,16 +215,15 @@ const ExternalCv = () => {
                             <h2 className="font-semibold text-gray-800">{professionalSummary.title}</h2>
                             <img
                                 width="30px"
-                                className={`cursor-pointer p-2 rounded-full transition ${
-                                    activeSection === 'summary' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                                }`}
+                                className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'summary' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
+                                    }`}
                                 src={activeSection === 'summary' ? save_icon : edit_icon}
                                 alt=""
                                 onClick={() => {
                                     if (activeSection === 'summary') {
-                                    setActiveSection(null);
+                                        setActiveSection(null);
                                     } else {
-                                    setActiveSection('summary');
+                                        setActiveSection('summary');
                                     }
                                 }}
                             />
@@ -259,16 +258,15 @@ const ExternalCv = () => {
                             <h2 className="font-semibold text-gray-800">{workExperience.title}</h2>
                             <img
                                 width="30px"
-                                className={`cursor-pointer p-2 rounded-full transition ${
-                                    activeSection === 'workExperience' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
-                                }`}
+                                className={`cursor-pointer p-2 rounded-full transition ${activeSection === 'workExperience' ? 'hover:bg-gray-300' : 'hover:bg-gray-300'
+                                    }`}
                                 src={activeSection === 'workExperience' ? save_icon : edit_icon}
                                 alt=""
                                 onClick={() => {
                                     if (activeSection === 'workExperience') {
-                                    setActiveSection(null);
+                                        setActiveSection(null);
                                     } else {
-                                    setActiveSection('workExperience');
+                                        setActiveSection('workExperience');
                                     }
                                 }}
                             />
@@ -280,8 +278,8 @@ const ExternalCv = () => {
                                     key={idx}
                                     onClick={() => setSelectedCompanyIdx(idx)}
                                     className={`px-3.5 py-1.5 text-xs border rounded-full ${selectedCompanyIdx === idx
-                                            ? 'bg-[#2c6472] text-white border-[#2c6472]'
-                                            : 'bg-white text-gray-700 border-gray-300'
+                                        ? 'bg-[#2c6472] text-white border-[#2c6472]'
+                                        : 'bg-white text-gray-700 border-gray-300'
                                         }`}
                                 >
                                     {exp.Company && exp.Company.trim() !== '' ? exp.Company : `Work ${idx + 1}`}
@@ -307,7 +305,7 @@ const ExternalCv = () => {
                                     />
                                 ) : (
                                     <p className="text-[#00000082] font-medium">
-                                    {workExperience?.content?.[selectedCompanyIdx]?.Role || ''}
+                                        {workExperience?.content?.[selectedCompanyIdx]?.Role || ''}
                                     </p>
                                 )}
                             </div>
@@ -369,7 +367,7 @@ const ExternalCv = () => {
                                     />
                                 ) : (
                                     <p className="text-[#00000082] font-medium whitespace-pre-line">
-                                    {workExperience?.content?.[selectedCompanyIdx]?.Description || ''}
+                                        {workExperience?.content?.[selectedCompanyIdx]?.Description || ''}
                                     </p>
                                 )}
                             </div>
@@ -418,191 +416,188 @@ const ExternalCv = () => {
 
                             {/* Single Degree Field */}
                             <div className="pl-1 text-sm space-y-3">
-                            {/* Degree */}
-                            <div className="flex items-start gap-2">
-                                <label className="text-sm font-semibold text-gray-700 min-w-[110px]">Degree:</label>
-                                {activeSection === 'education' ? (
-                                <input
-                                    type="text"
-                                    value={education.content[selectedEducationIdx].degree}
-                                    onChange={(e) => {
-                                    const updated = [...education.content];
-                                    updated[selectedEducationIdx].degree = e.target.value;
-                                    setEducation(prev => ({ ...prev, content: updated }));
-                                    }}
-                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
-                                />
-                                ) : (
-                                <p className="text-[#00000082] font-medium">{education.content[selectedEducationIdx].degree}</p>
-                                )}
-                            </div>
+                                {/* Degree */}
+                                <div className="flex items-start gap-2">
+                                    <label className="text-sm font-semibold text-gray-700 min-w-[110px]">Degree:</label>
+                                    {activeSection === 'education' ? (
+                                        <input
+                                            type="text"
+                                            value={education.content[selectedEducationIdx].degree}
+                                            onChange={(e) => {
+                                                const updated = [...education.content];
+                                                updated[selectedEducationIdx].degree = e.target.value;
+                                                setEducation(prev => ({ ...prev, content: updated }));
+                                            }}
+                                            className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                        />
+                                    ) : (
+                                        <p className="text-[#00000082] font-medium">{education.content[selectedEducationIdx].degree}</p>
+                                    )}
+                                </div>
 
-                            {/* Field of Study */}
-                            <div className="flex items-start gap-2">
-                                <label className="text-sm font-semibold text-gray-700 min-w-[110px]">Field of Study:</label>
-                                {activeSection === 'education' ? (
-                                <input
-                                    type="text"
-                                    value={education.content[selectedEducationIdx].field_of_study}
-                                    onChange={(e) => {
-                                    const updated = [...education.content];
-                                    updated[selectedEducationIdx].field_of_study = e.target.value;
-                                    setEducation(prev => ({ ...prev, content: updated }));
-                                    }}
-                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
-                                />
-                                ) : (
-                                <p className="text-[#00000082] font-medium">{education.content[selectedEducationIdx].field_of_study}</p>
-                                )}
-                            </div>
+                                {/* Field of Study */}
+                                <div className="flex items-start gap-2">
+                                    <label className="text-sm font-semibold text-gray-700 min-w-[110px]">Field of Study:</label>
+                                    {activeSection === 'education' ? (
+                                        <input
+                                            type="text"
+                                            value={education.content[selectedEducationIdx].field_of_study}
+                                            onChange={(e) => {
+                                                const updated = [...education.content];
+                                                updated[selectedEducationIdx].field_of_study = e.target.value;
+                                                setEducation(prev => ({ ...prev, content: updated }));
+                                            }}
+                                            className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                        />
+                                    ) : (
+                                        <p className="text-[#00000082] font-medium">{education.content[selectedEducationIdx].field_of_study}</p>
+                                    )}
+                                </div>
 
-                            {/* City */}
-                            <div className="flex items-start gap-2">
-                                <label className="text-sm font-semibold text-gray-700 min-w-[110px]">City:</label>
-                                {activeSection === 'education' ? (
-                                <input
-                                    type="text"
-                                    value={education.content[selectedEducationIdx].city}
-                                    onChange={(e) => {
-                                    const updated = [...education.content];
-                                    updated[selectedEducationIdx].city = e.target.value;
-                                    setEducation(prev => ({ ...prev, content: updated }));
-                                    }}
-                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
-                                />
-                                ) : (
-                                <p className="text-[#00000082] font-medium">{education.content[selectedEducationIdx].city}</p>
-                                )}
-                            </div>
+                                {/* City */}
+                                <div className="flex items-start gap-2">
+                                    <label className="text-sm font-semibold text-gray-700 min-w-[110px]">City:</label>
+                                    {activeSection === 'education' ? (
+                                        <input
+                                            type="text"
+                                            value={education.content[selectedEducationIdx].city}
+                                            onChange={(e) => {
+                                                const updated = [...education.content];
+                                                updated[selectedEducationIdx].city = e.target.value;
+                                                setEducation(prev => ({ ...prev, content: updated }));
+                                            }}
+                                            className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                        />
+                                    ) : (
+                                        <p className="text-[#00000082] font-medium">{education.content[selectedEducationIdx].city}</p>
+                                    )}
+                                </div>
 
-                            {/* End Date */}
-                            <div className="flex items-start gap-2">
-                                <label className="text-sm font-semibold text-gray-700 min-w-[110px]">End Date:</label>
-                                {activeSection === 'education' ? (
-                                <input
-                                    type="text"
-                                    value={education.content[selectedEducationIdx].end_date}
-                                    onChange={(e) => {
-                                    const updated = [...education.content];
-                                    updated[selectedEducationIdx].end_date = e.target.value;
-                                    setEducation(prev => ({ ...prev, content: updated }));
-                                    }}
-                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
-                                />
-                                ) : (
-                                <p className="text-[#00000082] font-medium">{education.content[selectedEducationIdx].end_date}</p>
-                                )}
-                            </div>
+                                {/* End Date */}
+                                <div className="flex items-start gap-2">
+                                    <label className="text-sm font-semibold text-gray-700 min-w-[110px]">End Date:</label>
+                                    {activeSection === 'education' ? (
+                                        <input
+                                            type="text"
+                                            value={education.content[selectedEducationIdx].end_date}
+                                            onChange={(e) => {
+                                                const updated = [...education.content];
+                                                updated[selectedEducationIdx].end_date = e.target.value;
+                                                setEducation(prev => ({ ...prev, content: updated }));
+                                            }}
+                                            className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                        />
+                                    ) : (
+                                        <p className="text-[#00000082] font-medium">{education.content[selectedEducationIdx].end_date}</p>
+                                    )}
+                                </div>
 
-                            {/* Achievements */}
-                            <div className="flex flex-col items-start gap-2">
-                                <label className="text-sm font-semibold text-gray-700 min-w-[110px] mb-1">Achievements:</label>
-                                {activeSection === 'education' ? (
-                                <textarea
-                                    value={education.content[selectedEducationIdx].achievements}
-                                    onChange={(e) => {
-                                    const updated = [...education.content];
-                                    updated[selectedEducationIdx].achievements = e.target.value;
-                                    setEducation(prev => ({ ...prev, content: updated }));
-                                    }}
-                                    className="w-full outline-none text-[#00000082] font-medium px-2 py-1 rounded-md"
-                                    rows={3}
-                                />
-                                ) : (
-                                <p className="text-[#00000082] font-medium whitespace-pre-wrap">{education.content[selectedEducationIdx].achievements}</p>
-                                )}
-                            </div>
+                                {/* Achievements */}
+                                <div className="flex flex-col items-start gap-2">
+                                    <label className="text-sm font-semibold text-gray-700 min-w-[110px] mb-1">Achievements:</label>
+                                    {activeSection === 'education' ? (
+                                        <textarea
+                                            value={education.content[selectedEducationIdx].achievements}
+                                            onChange={(e) => {
+                                                const updated = [...education.content];
+                                                updated[selectedEducationIdx].achievements = e.target.value;
+                                                setEducation(prev => ({ ...prev, content: updated }));
+                                            }}
+                                            className="w-full outline-none text-[#00000082] font-medium px-2 py-1 rounded-md"
+                                            rows={3}
+                                        />
+                                    ) : (
+                                        <p className="text-[#00000082] font-medium whitespace-pre-wrap">{education.content[selectedEducationIdx].achievements}</p>
+                                    )}
+                                </div>
                             </div>
                         </div>
-                    )}                    
+                    )}
 
                     {/* Projects */}
                     {projects.content.length > 0 && (
-                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${
-                        activeSection === 'projects' ? 'border-[#2c6472]' : 'border-gray-300'
-                    }`}>
-                        <div className="flex justify-between items-start mb-2">
-                        <h2 className="font-semibold text-gray-800">{projects.title}</h2>
-                        <img
-                            width="30px"
-                            className="cursor-pointer p-2 rounded-full hover:bg-gray-300 transition"
-                            src={activeSection === 'projects' ? save_icon : edit_icon}
-                            alt=""
-                            onClick={() =>
-                            setActiveSection(activeSection === 'projects' ? null : 'projects')
-                            }
-                        />
-                        </div>
-
-                        {/* Project Tabs */}
-                        <div className="flex gap-2 flex-wrap my-3">
-                        {projects.content.map((proj, idx) => (
-                            <button
-                            key={idx}
-                            onClick={() => setSelectedProjectIdx(idx)}
-                            className={`px-3.5 py-1.5 text-xs border rounded-full ${
-                                selectedProjectIdx === idx
-                                ? 'bg-[#2c6472] text-white border-[#2c6472]'
-                                : 'bg-white text-gray-700 border-gray-300'
-                            }`}
-                            >
-                            {proj.Name || `Project ${idx + 1}`}
-                            </button>
-                        ))}
-                        </div>
-
-                        {/* Selected Project Fields */}
-                        {projects.content[selectedProjectIdx] && (
-                        <div className="space-y-3">
-                            {["Name", "Company", "Duration", "Skills"].map((field) => (
-                            <div key={field} className="flex items-start gap-2">
-                                <label className="text-sm font-semibold text-gray-700 min-w-[90px]">{field}:</label>
-                                {activeSection === 'projects' ? (
-                                <input
-                                    type="text"
-                                    value={projects.content[selectedProjectIdx][field]}
-                                    onChange={(e) => {
-                                    const updated = [...projects.content];
-                                    updated[selectedProjectIdx][field] = e.target.value;
-                                    setProjects((prev) => ({ ...prev, content: updated }));
-                                    }}
-                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                        <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'projects' ? 'border-[#2c6472]' : 'border-gray-300'
+                            }`}>
+                            <div className="flex justify-between items-start mb-2">
+                                <h2 className="font-semibold text-gray-800">{projects.title}</h2>
+                                <img
+                                    width="30px"
+                                    className="cursor-pointer p-2 rounded-full hover:bg-gray-300 transition"
+                                    src={activeSection === 'projects' ? save_icon : edit_icon}
+                                    alt=""
+                                    onClick={() =>
+                                        setActiveSection(activeSection === 'projects' ? null : 'projects')
+                                    }
                                 />
-                                ) : (
-                                <p className="text-[#00000082] font-medium">{projects.content[selectedProjectIdx][field]}</p>
-                                )}
                             </div>
-                            ))}
 
-                            {/* Description */}
-                            <div className="flex flex-col">
-                            <label className="text-sm font-semibold text-gray-700 mb-1">Description:</label>
-                            {activeSection === 'projects' ? (
-                                <textarea
-                                rows={4}
-                                value={projects.content[selectedProjectIdx].Description}
-                                onChange={(e) => {
-                                    const updated = [...projects.content];
-                                    updated[selectedProjectIdx].Description = e.target.value;
-                                    setProjects((prev) => ({ ...prev, content: updated }));
-                                }}
-                                className="w-full min-h-[120px] rounded px-2 py-1 text-[#00000082] font-medium outline-none resize-y"
-                                />
-                            ) : (
-                                <p className="text-[#00000082] font-medium whitespace-pre-wrap">
-                                {projects.content[selectedProjectIdx].Description}
-                                </p>
+                            {/* Project Tabs */}
+                            <div className="flex gap-2 flex-wrap my-3">
+                                {projects.content.map((proj, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => setSelectedProjectIdx(idx)}
+                                        className={`px-3.5 py-1.5 text-xs border rounded-full ${selectedProjectIdx === idx
+                                                ? 'bg-[#2c6472] text-white border-[#2c6472]'
+                                                : 'bg-white text-gray-700 border-gray-300'
+                                            }`}
+                                    >
+                                        {proj.Name || `Project ${idx + 1}`}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Selected Project Fields */}
+                            {projects.content[selectedProjectIdx] && (
+                                <div className="space-y-3">
+                                    {["Name", "Company", "Duration", "Skills"].map((field) => (
+                                        <div key={field} className="flex items-start gap-2">
+                                            <label className="text-sm font-semibold text-gray-700 min-w-[90px]">{field}:</label>
+                                            {activeSection === 'projects' ? (
+                                                <input
+                                                    type="text"
+                                                    value={projects.content[selectedProjectIdx][field]}
+                                                    onChange={(e) => {
+                                                        const updated = [...projects.content];
+                                                        updated[selectedProjectIdx][field] = e.target.value;
+                                                        setProjects((prev) => ({ ...prev, content: updated }));
+                                                    }}
+                                                    className="w-full border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                                />
+                                            ) : (
+                                                <p className="text-[#00000082] font-medium">{projects.content[selectedProjectIdx][field]}</p>
+                                            )}
+                                        </div>
+                                    ))}
+
+                                    {/* Description */}
+                                    <div className="flex flex-col">
+                                        <label className="text-sm font-semibold text-gray-700 mb-1">Description:</label>
+                                        {activeSection === 'projects' ? (
+                                            <textarea
+                                                rows={4}
+                                                value={projects.content[selectedProjectIdx].Description}
+                                                onChange={(e) => {
+                                                    const updated = [...projects.content];
+                                                    updated[selectedProjectIdx].Description = e.target.value;
+                                                    setProjects((prev) => ({ ...prev, content: updated }));
+                                                }}
+                                                className="w-full min-h-[120px] rounded px-2 py-1 text-[#00000082] font-medium outline-none resize-y"
+                                            />
+                                        ) : (
+                                            <p className="text-[#00000082] font-medium whitespace-pre-wrap">
+                                                {projects.content[selectedProjectIdx].Description}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
                             )}
-                            </div>
                         </div>
-                        )}
-                    </div>
                     )}
 
                     {/* Skills */}
-                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${
-                        activeSection === 'skills' ? 'border-[#2c6472]' : 'border-gray-300'
-                    }`}>
+                    <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'skills' ? 'border-[#2c6472]' : 'border-gray-300'
+                        }`}>
                         <div className="flex justify-between items-start mb-2">
                             <h2 className="font-semibold text-gray-800">{skills.title}</h2>
                             <img
@@ -669,48 +664,48 @@ const ExternalCv = () => {
                         </div>
 
                         <div className="pl-1 text-sm space-y-3">
-                        {activeSection === 'languages' ? (
-                            languages.content.map((langObj, idx) => (
-                            <div key={idx} className="flex gap-5">
-                                <input
-                                type="text"
-                                placeholder="Language"
-                                value={langObj.language}
-                                onChange={(e) => {
-                                    const updated = [...languages.content];
-                                    updated[idx].language = e.target.value;
-                                    setLanguages({ ...languages, content: updated });
-                                }}
-                                className="w-[45%] outline-none border rounded px-2 py-1 text-[#00000082] font-medium"
-                                />
-                                <input
-                                type="text"
-                                placeholder="Proficiency (e.g., fluent)"
-                                value={langObj.proficiency}
-                                onChange={(e) => {
-                                    const updated = [...languages.content];
-                                    updated[idx].proficiency = e.target.value;
-                                    setLanguages({ ...languages, content: updated });
-                                }}
-                                className="w-[45%] outline-none border rounded px-2 py-1 text-[#00000082] font-medium"
-                                />
-                            </div>
-                            ))
-                        ) : (
-                            <div className="text-[#00000082] font-medium space-y-1">
-                            {languages.content.length > 0 ? (
+                            {activeSection === 'languages' ? (
                                 languages.content.map((langObj, idx) => (
-                                <p key={idx}>
-                                    {langObj.language} — <span className="italic">{langObj.proficiency}</span>
-                                </p>
+                                    <div key={idx} className="flex gap-5">
+                                        <input
+                                            type="text"
+                                            placeholder="Language"
+                                            value={langObj.language}
+                                            onChange={(e) => {
+                                                const updated = [...languages.content];
+                                                updated[idx].language = e.target.value;
+                                                setLanguages({ ...languages, content: updated });
+                                            }}
+                                            className="w-[45%] outline-none border rounded px-2 py-1 text-[#00000082] font-medium"
+                                        />
+                                        <input
+                                            type="text"
+                                            placeholder="Proficiency (e.g., fluent)"
+                                            value={langObj.proficiency}
+                                            onChange={(e) => {
+                                                const updated = [...languages.content];
+                                                updated[idx].proficiency = e.target.value;
+                                                setLanguages({ ...languages, content: updated });
+                                            }}
+                                            className="w-[45%] outline-none border rounded px-2 py-1 text-[#00000082] font-medium"
+                                        />
+                                    </div>
                                 ))
                             ) : (
-                                <p className="italic text-gray-400">No languages added</p>
+                                <div className="text-[#00000082] font-medium space-y-1">
+                                    {languages.content.length > 0 ? (
+                                        languages.content.map((langObj, idx) => (
+                                            <p key={idx}>
+                                                {langObj.language} — <span className="italic">{langObj.proficiency}</span>
+                                            </p>
+                                        ))
+                                    ) : (
+                                        <p className="italic text-gray-400">No languages added</p>
+                                    )}
+                                </div>
                             )}
-                            </div>
-                        )}
                         </div>
-                    </div>                    
+                    </div>
 
                     {/* Certificates */}
                     <div className={`border rounded-md px-4 mb-4 py-3 bg-white text-sm text-gray-700 relative ${activeSection === 'certificates' ? 'border-[#2c6472]' : 'border-gray-300'
@@ -734,98 +729,98 @@ const ExternalCv = () => {
                         </div>
 
                         <div className="pl-1 text-sm space-y-3">
-                        {certificates.content.map((item, index) => (
-                            <div key={index} className="flex gap-5">
-                            {activeSection === 'certificates' ? (
-                                <>
-                                <input
-                                    type="text"
-                                    placeholder="Certificate Name"
-                                    value={item.certificate_name}
-                                    onChange={(e) => {
-                                    const updated = [...certificates.content];
-                                    updated[index].certificate_name = e.target.value;
-                                    setCertificates((prev) => ({ ...prev, content: updated }));
-                                    }}
-                                    className="w-[45%] border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Provider"
-                                    value={item.provider}
-                                    onChange={(e) => {
-                                    const updated = [...certificates.content];
-                                    updated[index].provider = e.target.value;
-                                    setCertificates((prev) => ({ ...prev, content: updated }));
-                                    }}
-                                    className="w-[45%] border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
-                                />
-                                </>
-                            ) : (
-                                <p className="text-[#00000082] font-medium">
-                                {item.certificate_name}
-                                {item.provider && (
-                                    <span className="text-gray-500 italic"> — {item.provider}</span>
-                                )}
-                                </p>
-                            )}
-                            </div>
-                        ))}
+                            {certificates.content.map((item, index) => (
+                                <div key={index} className="flex gap-5">
+                                    {activeSection === 'certificates' ? (
+                                        <>
+                                            <input
+                                                type="text"
+                                                placeholder="Certificate Name"
+                                                value={item.certificate_name}
+                                                onChange={(e) => {
+                                                    const updated = [...certificates.content];
+                                                    updated[index].certificate_name = e.target.value;
+                                                    setCertificates((prev) => ({ ...prev, content: updated }));
+                                                }}
+                                                className="w-[45%] border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                            />
+                                            <input
+                                                type="text"
+                                                placeholder="Provider"
+                                                value={item.provider}
+                                                onChange={(e) => {
+                                                    const updated = [...certificates.content];
+                                                    updated[index].provider = e.target.value;
+                                                    setCertificates((prev) => ({ ...prev, content: updated }));
+                                                }}
+                                                className="w-[45%] border-b border-gray-300 outline-none text-[#00000082] font-medium px-1"
+                                            />
+                                        </>
+                                    ) : (
+                                        <p className="text-[#00000082] font-medium">
+                                            {item.certificate_name}
+                                            {item.provider && (
+                                                <span className="text-gray-500 italic"> — {item.provider}</span>
+                                            )}
+                                        </p>
+                                    )}
+                                </div>
+                            ))}
                         </div>
-                    </div>                    
+                    </div>
 
                     <div className='bg-white p-5 border border-gray-300 rounded-lg'>
                         <h1 className='flex font-medium text-lg'>Templates</h1>
 
                         <p className='text-center font-medium my-2'>Pick your favourite CV Template</p>
-                    
 
-                    <div className="flex flex-wrap gap-4 mt-5 justify-center">
-                        {Object.entries(templates).map(([name, Template]) => {
-                            if (name === selectedTemplate) return null;
 
-                            return (
-                                
-                                <div
-                                    key={name}
-                                    className="cursor-pointer border rounded hover:shadow-lg hover:border-[#2C6472] transition duration-200 bg-white w-[200px]   overflow-hidden"
-                                    onClick={() => setSelectedTemplate(name)}
-                                >
-                                    {/* 🔍 Container for scaled template */}
-                                    <div className="w-full h-[280px] overflow-hidden relative bg-white">
-                                        {/* Template scaled and positioned */}
-                                        <div
-                                            className="absolute top-0 left-0"
-                                            style={{
-                                                transform: "scale(0.25)",
-                                                transformOrigin: "top left",
-                                                width: "794px",
-                                                height: "1123px",
-                                            }}
-                                        >
-                                            <div className="bg-white w-[794px] h-[1123px] shadow">
-                                                <Template
-                                                    personalInfo={personalInfo}
-                                                    professionalSummary={professionalSummary}
-                                                    workExperience={workExperience}
-                                                    education={education}
-                                                    projects={projects}
-                                                    skills={skills}
-                                                    languages={languages}
-                                                    certificates={certificates}
-                                                />
+                        <div className="flex flex-wrap gap-4 mt-5 justify-center">
+                            {Object.entries(templates).map(([name, Template]) => {
+                                if (name === selectedTemplate) return null;
+
+                                return (
+
+                                    <div
+                                        key={name}
+                                        className="cursor-pointer border rounded hover:shadow-lg hover:border-[#2C6472] transition duration-200 bg-white w-[200px]   overflow-hidden"
+                                        onClick={() => setSelectedTemplate(name)}
+                                    >
+                                        {/* 🔍 Container for scaled template */}
+                                        <div className="w-full h-[280px] overflow-hidden relative bg-white">
+                                            {/* Template scaled and positioned */}
+                                            <div
+                                                className="absolute top-0 left-0"
+                                                style={{
+                                                    transform: "scale(0.25)",
+                                                    transformOrigin: "top left",
+                                                    width: "794px",
+                                                    height: "1123px",
+                                                }}
+                                            >
+                                                <div className="bg-white w-[794px] h-[1123px] shadow">
+                                                    <Template
+                                                        personalInfo={personalInfo}
+                                                        professionalSummary={professionalSummary}
+                                                        workExperience={workExperience}
+                                                        education={education}
+                                                        projects={projects}
+                                                        skills={skills}
+                                                        languages={languages}
+                                                        certificates={certificates}
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    {/* 👇 Template name below */}
-                                    <div className="text-center text-sm py-2 bg-[#3f6068] text-white font-semibold">
-                                        {name}
+                                        {/* 👇 Template name below */}
+                                        <div className="text-center text-sm py-2 bg-[#3f6068] text-white font-semibold">
+                                            {name}
+                                        </div>
                                     </div>
-                                </div>
-                            );
-                        })}
-                    </div>
+                                );
+                            })}
+                        </div>
 
                     </div>
 
@@ -843,6 +838,8 @@ const ExternalCv = () => {
                             skills={skills}
                             languages={languages}
                             certificates={certificates}
+                            language={language} // 👈 Add this line
+
                         />
                     </div>
 
@@ -862,9 +859,9 @@ const ExternalCv = () => {
 
 
             </div>
-        </div>    
+        </div>
 
-  )
+    )
 }
 
 export default ExternalCv

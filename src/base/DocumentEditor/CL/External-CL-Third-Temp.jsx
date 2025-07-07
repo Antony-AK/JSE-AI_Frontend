@@ -1,7 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import { useExternalCl } from '../Context/ExternalClContext';
 
-const ExternalCoverLetterModern = () => {
+const t = (key, lang = "en") => {
+  const map = {
+    date: { en: "Date", de: "Datum" },
+    subject: { en: "Subject", de: "Betreff" },
+    dear: { en: "Dear", de: "Sehr geehrter" },
+    recruiter: { en: "Recruiter", de: "Personalverantwortlicher" },
+    regards: { en: "Kind regards", de: "Mit freundlichen Grüßen" },
+    applying: { en: "Applying position as", de: "Bewerbung für die Stelle als" }, // 🌟 new
+
+  };
+
+  const langMap = {
+    english: "en",
+    german: "de",
+    en: "en",
+    de: "de",
+  };
+
+  const langCode = langMap[lang?.toLowerCase()] || "en";
+  return map[key]?.[langCode] || key;
+};
+
+const ExternalCoverLetterModern = ({ language }) => {
   const { personalInfo, recipient, subject, paragraphs } = useExternalCl();
     const [currentDate, setCurrentDate] = useState('');
   
@@ -33,28 +55,30 @@ const ExternalCoverLetterModern = () => {
   
         <hr className="border-gray-400 mb-4" />
   
-        {/* Recipient */}
-        <div className="mb-3">
-          <p><strong className='font-medium me-2'>To :</strong> {recipient?.name || 'Recruiter'}</p>
-        </div>
   
         {/* Date + Subject */}
         <div className="mb-3">
-          <p><strong className='font-medium me-2'>Date:</strong> {recipient?.date || currentDate}</p>
-          <p className="mt-3"><strong className='font-medium me-2'>Subject:</strong> {subject || `Applying position as ${personalInfo?.title}`}</p>
+         <p><strong className='font-medium me-2'>{t("date", language)}:</strong> {recipient?.date || currentDate}</p>
+        <p className="mt-3">
+          <strong className='font-medium me-2'>{t("subject", language)}:</strong>
+          {subject || `${t("applying", language)} ${personalInfo?.title}`}
+        </p>
         </div>
   
         {/* Body */}
-        <div className="space-y-5 text-justify">
-          <p>Dear {recipient?.name?.split(' ')[0] || 'Recruiter'},</p>
+      <div className="mt-5">
+        <p className='my-5'>
+          {t("dear", language)} {recipient?.name?.split(' ')[0] || t("recruiter", language)},
+        </p>        <div className="text-justify space-y-4">
           {paragraphs?.map((para, idx) => (
             <p key={idx}>{para}</p>
           ))}
         </div>
+      </div>
   
         {/* Footer */}
         <div className="mt-16 space-y-5">
-          <p>Kind regards,</p>
+        <p>{t("regards", language)},</p>
           {/* Signature (Optional Image) */}
           <p className="font-semibold">{personalInfo?.name}</p>
         </div>

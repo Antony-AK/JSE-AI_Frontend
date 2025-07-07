@@ -17,8 +17,15 @@ const t = (key, lang = "en") => {
     website: { en: "Website", de: "Webseite" },
   };
 
-  const normalized = lang.toLowerCase();
-  const langCode = normalized === "german" ? "de" : normalized;
+ const normalized = lang.toLowerCase();
+  const langCodeMap = {
+    english: "en",
+    german: "de",
+    en: "en",
+    de: "de",
+  };
+
+  const langCode = langCodeMap[normalized] || "en";
 
   return map[key]?.[langCode] || key;
 };
@@ -193,7 +200,7 @@ const EuropassCV = ({
               {/* Section Title */}
               <div className="flex gap-12 mb-5">
                 <div className="min-w-[130px]">
-                  <h2 className="text-sm text-[#2c6472] font-bold tracking-widest uppercase">
+                  <h2 className="text-sm text-[#2c6472]  font-bold tracking-widest uppercase">
                     {t("experience", language)}
                   </h2>
                 </div>
@@ -353,7 +360,7 @@ const EuropassCV = ({
                     >
                       {cert.certificate_name}
                       {cert.provider && (
-                        <span className="italic font-normal text-gray-700"> - {cert.provider}</span>
+                        <span className=" font-normal text-gray-700"> - {cert.provider}</span>
                       )}
                     </li>
                   ) : null
@@ -386,7 +393,7 @@ const EuropassCV = ({
                     >
                       {lang.language}
                       {lang.proficiency && (
-                        <span className="italic text-gray-500"> - {lang.proficiency}</span>
+                        <span className=" text-gray-500"> - {lang.proficiency}</span>
                       )}
                     </li>
                   ))}

@@ -1,12 +1,29 @@
 import React, { useRef } from 'react';
 import { useExternalCl } from '../Context/ExternalClContext';
 
-const ExternalClTemp = () => {
+const t = (key, lang = "en") => {
+  const map = {
+    dear: { en: "Dear Recruiter,", de: "Sehr geehrter Personalverantwortlicher," },
+    sincerely: { en: "Yours sincerely,", de: "Mit freundlichen Grüßen," },
+  };
+
+  const langMap = {
+    english: "en",
+    german: "de",
+    en: "en",
+    de: "de",
+  };
+
+  const langCode = langMap[lang] || "en";
+  return map[key]?.[langCode] || key;
+};
+
+const ExternalClTemp = ({ language }) => {
   const previewRef = useRef();
   const { personalInfo, paragraphs } = useExternalCl();
 
   return (
-    <div className="w-full min-h-screen bg-[#f5f5f5] flex items-center justify-center py-10">
+    <div className="w-full min-h-screen bg-[#f5f5f5] flex items-center justify-center ">
       <div
         ref={previewRef}
         id="cl-pdf-preview"
@@ -49,7 +66,7 @@ const ExternalClTemp = () => {
 
         {/* Body */}
         <div style={{ flexGrow: 1, marginTop: '30px' }}>
-          <p style={{ marginBottom: '20px' }}>Dear Recruiter ,</p>
+        <p style={{ marginBottom: '20px' }}>{t("dear", language)}</p>
           {paragraphs.map((para, idx) => (
             <p key={idx} style={{ marginBottom: '18px', textAlign: 'justify' }}>{para}</p>
           ))}
@@ -57,7 +74,7 @@ const ExternalClTemp = () => {
 
         {/* Footer */}
         <div style={{ marginBottom: '100px', borderBottom: '1px solid #000', paddingBottom: '30px' }}>
-          <p>Yours sincerely,</p>
+        <p>{t("sincerely", language)}</p>
           <p style={{ fontWeight: '600', marginTop: '15px' }}>{personalInfo.name}</p>
         </div>
       </div>

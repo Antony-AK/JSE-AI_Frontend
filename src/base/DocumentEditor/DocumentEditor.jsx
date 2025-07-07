@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef,useState } from 'react';
 import html2pdf from 'html2pdf.js';
 import { useNavigate } from 'react-router-dom';
 import download_icon from '../../assets/download.svg'
@@ -18,6 +18,10 @@ const DocumentEditor = () => {
 
     const clPreviewRef = useRef(null);
     const cvPreviewRef = useRef(null);
+          const [language, setLanguage] = useState(() => sessionStorage.getItem("selectedLanguage") || "en");
+    
+
+
 
     const {
         personalInfo: cvPersonalInfo,
@@ -88,7 +92,7 @@ const DocumentEditor = () => {
 
     
     return (
-        <div className='flex flex-col gap-5 p-5 mb-14 overflow-x-hidden'>
+        <div className='flex flex-col gap-5 p-5 mb-14 '>
 
             <div className="flex items-center w-full px-10 mb-5">
                 {/* Empty left space */}
@@ -102,10 +106,10 @@ const DocumentEditor = () => {
                 <div className="flex-1" />
             </div>
 
-            <div className="grid grid-cols-2 mx-auto w-full">
-                <div className="flex flex-col gap-5 justify-center mx-auto">
+            <div className="grid grid-cols-2 mx-auto w-full ">
+                <div className="flex flex-col gap-5 justify-center mx-auto ms-5">
 
-                    <div className="flex justify-between px-5  max-w-[680px]">
+                    <div className="flex justify-between px-5  max-w-[690px]">
                         <div onClick={() => navigate('/user/external-cv')} className="flex-1 -mt-2 flex gap-2 items-center cursor-pointer">
                             <img width="12px" src={edit_icon} alt="" />
                             <p className='text-[#2c6472] text-lg  font-medium'>Edit</p>
@@ -131,6 +135,7 @@ const DocumentEditor = () => {
                                 skills={skills}
                                 languages={languages}
                                 certificates={certificates}
+                                language={language}
                             />
 
                             {/* <ExternalEuropass 
@@ -201,7 +206,7 @@ const DocumentEditor = () => {
 
                     
                     <div style={{ transform: 'scale(0.85)', transformOrigin: 'top left' }}>
-                        <div ref={clPreviewRef} className="h-[1123px] w-[794px] bg-white mx-auto -mt-10 scrollbar-custom">
+                        <div ref={clPreviewRef} className="h-[1123px] w-[794px] bg-white mx-auto  scrollbar-custom">
 
                             <ExternalClTemp
                                 data={{
@@ -211,7 +216,10 @@ const DocumentEditor = () => {
                                     contact: clPersonalInfo.contact,
                                     address: clPersonalInfo.address,
                                     paragraphs,
+                                    
+                                    
                                 }}
+                                language={language}
                             />
 
                         </div>

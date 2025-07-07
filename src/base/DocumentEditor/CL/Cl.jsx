@@ -20,6 +20,8 @@ const Cl = () => {
   const [activeSection, setActiveSection] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedClTemplate, setSelectedClTemplate] = useState("ModernCL");
+      const [language, setLanguage] = useState(() => sessionStorage.getItem("selectedLanguage") || "en");
+  
 
   const clTemplates = {
     "ModernCL": CoverLetterModern,
@@ -137,10 +139,10 @@ const Cl = () => {
 
 
   return (
-    <div className='flex flex-col justify-center items-center mx-auto'>
+    <div className='flex flex-col justify-center items-center mx-auto '>
       <div className="flex items-center w-full px-4 mt-7">
         <div className="w-full text-center">
-          <h2 className="text-2xl font-semibold">CL</h2>
+          <h2 className="text-2xl font-semibold tracking-wide">CL</h2>
         </div>
       </div>
 
@@ -248,7 +250,7 @@ const Cl = () => {
                         }}
                       >
                         <div className="bg-white w-[794px] h-[1123px] shadow">
-                          <Template personalInfo={personalInfo} paragraphs={paragraphs} />
+                          <Template personalInfo={personalInfo} paragraphs={paragraphs} language={language} />
                         </div>
                       </div>
                     </div>
@@ -268,7 +270,7 @@ const Cl = () => {
 
         {/* RIGHT */}
         <div ref={previewRef} className="w-[794px] h-[1123px] flex flex-col gap-14 bg-white">
-          <div> <ActiveCLTemplate personalInfo={personalInfo} paragraphs={paragraphs} />
+          <div> <ActiveCLTemplate personalInfo={personalInfo} paragraphs={paragraphs} language={language} />
           </div>
           <div className='flex  justify-end items-end'>
             <button

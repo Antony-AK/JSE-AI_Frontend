@@ -1,6 +1,38 @@
 import React from 'react'
 
-const ExternalModernClassic = ({ personalInfo, professionalSummary, workExperience, education, projects, skills, languages, certificates }) => {
+const t = (key, lang = "en") => {
+  const map = {
+    contact: { en: "Contact", de: "Kontakt" },
+    information: { en: "Information", de: "Informationen" },
+    summary: { en: "Summary", de: "Zusammenfassung" },
+    about: { en: "About Myself", de: "Über mich" },
+    education: { en: "Education", de: "Ausbildung" },
+    experience: { en: "Experience", de: "Berufserfahrung" },
+    projects: { en: "Projects", de: "Projekte" },
+    certificates: { en: "Certificates", de: "Zertifikate" },
+    languages: { en: "Languages", de: "Sprachen" },
+    skills: { en: "Skills", de: "Fähigkeiten" },
+    address: { en: "Address", de: "Adresse" },
+    email: { en: "Email", de: "E-Mail" },
+    phone: { en: "Phone", de: "Telefon" },
+    linkedin: { en: "LinkedIn", de: "LinkedIn" },
+    website: { en: "Website", de: "Webseite" },
+  };
+
+ const normalized = lang.toLowerCase();
+  const langCodeMap = {
+    english: "en",
+    german: "de",
+    en: "en",
+    de: "de",
+  };
+
+  const langCode = langCodeMap[normalized] || "en";
+
+  return map[key]?.[langCode] || key;
+};
+
+const ExternalModernClassic = ({ personalInfo, professionalSummary, workExperience, education, projects, skills, languages, certificates, language }) => {
   return (
     <div className="flex flex-col gap-2 w-full h-full pb-5">
       {/* Header */}
@@ -9,12 +41,48 @@ const ExternalModernClassic = ({ personalInfo, professionalSummary, workExperien
         <h2 className="text-white font-bold text-[45px]">{personalInfo.Name}</h2>
         <div className="flex flex-col gap-2 text-white text-[13px] font-light">
           <p>
-            {personalInfo.Mail} | {personalInfo.Phone}
+            <a
+              href={`mailto:${personalInfo.Mail}`}
+              className="underline text-[#a6c8ff]"
+            >
+              {personalInfo.Mail}
+            </a>{" "}
+            | (+49) {personalInfo.Phone}
           </p>
           <p>
-            {personalInfo.LinkedIn}{" "}
-            {personalInfo.LinkedIn && personalInfo.Website && ` | `}{" "}
-            {personalInfo.Website}
+            {personalInfo.LinkedIn && (
+              <>
+                <a
+                  href={
+                    personalInfo.LinkedIn.startsWith("http")
+                      ? personalInfo.LinkedIn
+                      : `https://${personalInfo.LinkedIn}`
+                  }
+                  className="underline text-[#a6c8ff]"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {personalInfo.LinkedIn}
+                </a>
+              </>
+            )}
+            {personalInfo.LinkedIn && personalInfo.Website && ` | `}
+            {personalInfo.Website && (
+              <>
+                <a
+                  href={
+                    personalInfo.Website.startsWith("http")
+                      ? personalInfo.Website
+                      : `https://${personalInfo.Website}`
+                  }
+                  className="underline text-[#a6c8ff]"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {personalInfo.Website}
+                </a>
+              </>
+            )}
           </p>
         </div>
       </div>
@@ -25,7 +93,7 @@ const ExternalModernClassic = ({ personalInfo, professionalSummary, workExperien
           <div className="w-full px-10 pt-5 avoid-page-break">
             <div className="flex justify-start items-start gap-12">
               <div className="min-w-[130px]">
-                <h2 className="text-[#4F6D61] font-bold text-lg">Summary</h2>
+                <h2 className="text-[#4F6D61] font-bold text-lg">{t("summary", language)}</h2>
               </div>
 
               <div className="text-sm space-y-2 leading-6">
@@ -44,7 +112,7 @@ const ExternalModernClassic = ({ personalInfo, professionalSummary, workExperien
         <div className="w-full px-10 avoid-page-break">
           <div className="flex justify-start items-start gap-12">
             <div className="min-w-[130px]">
-              <h2 className="text-[#4F6D61] font-bold text-lg">Skills</h2>
+              <h2 className="text-[#4F6D61] font-bold text-lg">{t("skills", language)}</h2>
             </div>
 
             <div className="text-sm">
@@ -72,8 +140,8 @@ const ExternalModernClassic = ({ personalInfo, professionalSummary, workExperien
         <div className="w-full px-10">
           <div className="flex gap-12 items-start">
             {/* Left Side: Experience Label */}
-            <div className="min-w-[130px]">
-              <h2 className="text-[#4F6D61] font-bold text-lg">Experience</h2>
+            <div className="w-[130px]">
+              <h2 className="text-[#4F6D61] font-bold text-lg">{t("experience", language)}</h2>
             </div>
 
             {/* Right Side: Experience Entries */}
@@ -137,7 +205,7 @@ const ExternalModernClassic = ({ personalInfo, professionalSummary, workExperien
           <div className="w-full px-10 avoid-page-break">
             <div className="flex justify-start items-start gap-12">
               <div className="min-w-[130px]">
-                <h2 className="text-[#4F6D61] font-bold text-lg">Education</h2>
+                <h2 className="text-[#4F6D61] font-bold text-lg">{t("education", language)}</h2>
               </div>
 
               <div className="text-[13px] space-y-2.5 leading-6">
@@ -185,7 +253,7 @@ const ExternalModernClassic = ({ personalInfo, professionalSummary, workExperien
             <div className="flex gap-12 items-start">
               {/* Left Side: Section Title */}
               <div className="min-w-[130px]">
-                <h2 className="text-[#4F6D61] font-bold text-lg">Projects</h2>
+                <h2 className="text-[#4F6D61] font-bold text-lg">{t("projects", language)}</h2>
               </div>
 
               {/* Right Side: Project Entries */}
@@ -226,7 +294,7 @@ const ExternalModernClassic = ({ personalInfo, professionalSummary, workExperien
 
                       {/* Skills */}
                       {proj.Skills && (
-                        <p className="text-xs text-gray-600 mt-1 italic">
+                        <p className="text-xs text-gray-600 mt-1 ">
                           <span className="font-semibold text-sm">Skills:</span>{" "}
                           {proj.Skills}
                         </p>
@@ -270,7 +338,7 @@ const ExternalModernClassic = ({ personalInfo, professionalSummary, workExperien
             <div className="flex gap-12 items-start">
               {/* Left Side: Title */}
               <div className="w-[130px]">
-                <h2 className="text-[#4F6D61] font-bold text-lg">Languages</h2>
+                <h2 className="text-[#4F6D61] font-bold text-lg">{t("languages", language)}</h2>
               </div>
 
               {/* Right Side: Language List */}
@@ -286,7 +354,7 @@ const ExternalModernClassic = ({ personalInfo, professionalSummary, workExperien
                       >
                         {lang.language}
                         {lang.proficiency && (
-                          <span className="italic font-normal text-gray-500">
+                          <span className=" font-normal text-gray-500">
                             {" - " + lang.proficiency}
                           </span>
                         )}
@@ -306,7 +374,7 @@ const ExternalModernClassic = ({ personalInfo, professionalSummary, workExperien
           <div className="w-full px-10 avoid-page-break" style={{ breakInside: "avoid" }}>
             <div className="flex gap-12 items-start">
               <div className="w-[130px]">
-                <h2 className="text-[#4F6D61] font-bold text-lg">Certificates</h2>
+                <h2 className="text-[#4F6D61] font-bold text-lg">{t("certificates", language)}</h2>
               </div>
 
               <div className="flex-1">
@@ -317,7 +385,7 @@ const ExternalModernClassic = ({ personalInfo, professionalSummary, workExperien
                       <li key={index} className="avoid-page-break">
                         {cert.certificate_name}
                         {cert.provider && (
-                          <span className="italic font-normal text-gray-700">
+                          <span className=" font-normal text-gray-700">
                             {" - " + cert.provider}
                           </span>
                         )}

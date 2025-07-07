@@ -1,6 +1,37 @@
 import React from 'react'
 
-const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience, education, projects, skills, languages, certificates }) => {
+const t = (key, lang = "en") => {
+  const map = {
+    contact: { en: "Contact", de: "Kontakt" },
+    information: { en: "Information", de: "Informationen" },
+    summary: { en: "Summary", de: "Zusammenfassung" },
+    education: { en: "Education", de: "Ausbildung" },
+    experience: { en: "Experience", de: "Berufserfahrung" },
+    projects: { en: "Projects", de: "Projekte" },
+    certificates: { en: "Certificates", de: "Zertifikate" },
+    languages: { en: "Languages", de: "Sprachen" },
+    skills: { en: "Skills", de: "Fähigkeiten" },
+    email: { en: "Email", de: "E-Mail" },
+    phone: { en: "Phone", de: "Telefon" },
+    linkedin: { en: "LinkedIn", de: "LinkedIn" },
+    website: { en: "Website", de: "Webseite" },
+  };
+
+ const normalized = lang.toLowerCase();
+  const langCodeMap = {
+    english: "en",
+    german: "de",
+    en: "en",
+    de: "de",
+  };
+
+  const langCode = langCodeMap[normalized] || "en";
+
+  return map[key]?.[langCode] || key;
+};
+
+
+const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience, education, projects, skills, languages, certificates, language }) => {
   return (
     <div className="flex flex-col gap-2 w-full h-full">
       {/* Header */}
@@ -20,38 +51,60 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
           <div className="flex justify-start items-start gap-12">
             <div className="min-w-[130px]">
               <h2 className="text-sm text-[#2c6472] font-bold tracking-widest uppercase">
-                Contact
+                {t("contact", language)}
                 <br />
-                Information
+                {t("information", language)}
               </h2>
             </div>
 
             <div className="flex flex-col gap-1 text-sm text-[#2c6472] space-y-1 leading-5">
               <h2 className="font-bold text-[13px]">
-                Email:{" "}
-                <span className="text-black font-normal text-[13px]"> 
+                {t("email", language)}:{" "}
+                <span className="text-black font-normal text-[13px]">
                   {personalInfo.Mail}
                 </span>
               </h2>
               <h2 className="font-bold text-[13px]">
-                Phone:{" "}
+                {t("phone", language)}:{" "}
                 <span className="text-black font-normal">
                   {personalInfo.Phone}
                 </span>
               </h2>
               {personalInfo.LinkedIn && personalInfo.LinkedIn.trim() !== "" && (
                 <h2 className="font-bold text-[13px]">
-                  LinkedIn:{" "}
+                  {t("linkedin", language)}:{" "}
                   <span className="text-black font-normal">
-                    {personalInfo.LinkedIn}
+                    <a
+                      href={
+                        personalInfo.LinkedIn.startsWith("http")
+                          ? personalInfo.LinkedIn
+                          : `https://${personalInfo.LinkedIn}`
+                      }
+                      className="underline text-[#2c6472]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {personalInfo.LinkedIn}
+                    </a>
                   </span>
                 </h2>
               )}
               {personalInfo.Website && personalInfo.Website.trim() !== "" && (
                 <h2 className="font-bold">
-                  Website:{" "}
+                  {t("website", language)}:{" "}
                   <span className="text-black font-normal">
-                    {personalInfo.Website}
+                    <a
+                      href={
+                        personalInfo.Website.startsWith("http")
+                          ? personalInfo.Website
+                          : `https://${personalInfo.Website}`
+                      }
+                      className="underline text-[#2c6472]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {personalInfo.Website}
+                    </a>
                   </span>
                 </h2>
               )}
@@ -68,7 +121,7 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
               <div className="flex justify-start items-start gap-12">
                 <div className="min-w-[130px]">
                   <h2 className="text-sm text-[#2c6472] font-bold tracking-widest uppercase">
-                    Summary
+                    {t("summary", language)}
                   </h2>
                 </div>
 
@@ -90,7 +143,7 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
               <div className="flex justify-start items-start gap-12">
                 <div className="min-w-[130px]">
                   <h2 className="text-sm text-[#2c6472] font-bold tracking-widest uppercase">
-                    Education
+                    {t("education", language)}
                   </h2>
                 </div>
 
@@ -127,65 +180,65 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
         {workExperience.content.some(
           (exp) => exp.Company || exp.Role || exp.Duration || exp.Description
         ) && (
-          <div className="w-full px-10 pt-6">
-            {/* Section Title */}
-            <div className="flex gap-12 mb-5">
-              <div className="min-w-[130px]">
-                <h2 className="text-sm text-[#2c6472] font-bold tracking-widest uppercase">
-                  Experience
-                </h2>
-              </div>
-            </div>
-
-            {/* Experience Entries */}
-            {workExperience.content.map((exp, idx) => {
-              const hasContent =
-                exp.Company || exp.Role || exp.Duration || exp.Description;
-              if (!hasContent) return null;
-
-              return (
-                <div
-                  key={idx}
-                  className="flex gap-4 items-start  pt-1"
-                  style={{
-                    breakInside: "avoid",
-                  }}
-                >
-                  {/* Left: Company Info */}
-                  <div className="w-[180px] flex flex-col gap-0.5">
-                    {exp.Company && (
-                      <p className="text-[15px] font-bold text-[#2c6472]">
-                        {exp.Company}
-                      </p>
-                    )}
-                    {exp.Role && (
-                      <p className="text-sm text-[#497d8a]">{exp.Role}</p>
-                    )}
-                    {exp.Duration && (
-                      <p className="text-xs text-[#497d8a]">{exp.Duration}</p>
-                    )}
-                  </div>
-
-                  {/* Right: Description */}
-                  <div className="flex-1 text-[13px] text-black mb-5">
-                    {Array.isArray(exp.Description) ? (
-                      <ul className="list-disc space-y-2.5">
-                        {exp.Description.map((desc, i) => (
-                          <li key={i}>{desc}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p>{exp.Description}</p>
-                    )}
-                  </div>
+            <div className="w-full px-10 pt-6">
+              {/* Section Title */}
+              <div className="flex gap-12 mb-5">
+                <div className="min-w-[130px]">
+                  <h2 className="text-sm text-[#2c6472] font-bold tracking-widest uppercase">
+                    {t("experience", language)}
+                  </h2>
                 </div>
-              );
-            })}
+              </div>
 
-            {/* Bottom border */}
-            <div className="mt-3 border-b border-gray-300 w-full"></div>
-          </div>
-        )}
+              {/* Experience Entries */}
+              {workExperience.content.map((exp, idx) => {
+                const hasContent =
+                  exp.Company || exp.Role || exp.Duration || exp.Description;
+                if (!hasContent) return null;
+
+                return (
+                  <div
+                    key={idx}
+                    className="flex gap-4 items-start  pt-1"
+                    style={{
+                      breakInside: "avoid",
+                    }}
+                  >
+                    {/* Left: Company Info */}
+                    <div className="w-[180px] flex flex-col gap-0.5">
+                      {exp.Company && (
+                        <p className="text-[15px] font-bold text-[#2c6472]">
+                          {exp.Company}
+                        </p>
+                      )}
+                      {exp.Role && (
+                        <p className="text-sm text-[#497d8a]">{exp.Role}</p>
+                      )}
+                      {exp.Duration && (
+                        <p className="text-xs text-[#497d8a]">{exp.Duration}</p>
+                      )}
+                    </div>
+
+                    {/* Right: Description */}
+                    <div className="flex-1 text-[13px] text-black mb-5">
+                      {Array.isArray(exp.Description) ? (
+                        <ul className="list-disc space-y-2.5">
+                          {exp.Description.map((desc, i) => (
+                            <li key={i}>{desc}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>{exp.Description}</p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Bottom border */}
+              <div className="mt-3 border-b border-gray-300 w-full"></div>
+            </div>
+          )}
       </div>
 
       {/* Projects Section */}
@@ -202,7 +255,7 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
             <div className="flex gap-12 mb-5">
               <div className="">
                 <h2 className="text-sm text-[#2c6472] font-bold tracking-widest uppercase">
-                  Projects
+                  {t("projects", language)}
                 </h2>
               </div>
             </div>
@@ -276,7 +329,7 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
           <div className="px-10 pt-6">
             <div className="w-full flex">
               <h2 className="text-sm w-[160px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
-                {certificates.title || "Certificates"}
+                {t("certificates", language)}
               </h2>
 
               {/* Certificate list */}
@@ -290,7 +343,7 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
                     >
                       {cert.certificate_name}
                       {cert.provider && (
-                        <span className="italic font-normal text-gray-700"> - {cert.provider}</span>
+                        <span className=" font-normal text-gray-700"> - {cert.provider}</span>
                       )}
                     </li>
                   ) : null
@@ -306,30 +359,30 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
       <div className="flex gap-5 text-sm px-10 pt-6 pb-5 flex-col">
         {/* Languages - Left Side */}
         {languages.content &&
-        languages.content.filter((lang) => lang.language?.trim()).length > 0 && (
-          <div className="w-full flex" style={{ breakInside: "avoid" }}>
-            <h2 className="text-sm mb-3 w-[160px] text-[#2c6472] font-bold tracking-widest uppercase">
-              {languages.title || "Languages"}
-            </h2>
+          languages.content.filter((lang) => lang.language?.trim()).length > 0 && (
+            <div className="w-full flex" style={{ breakInside: "avoid" }}>
+              <h2 className="text-sm mb-3 w-[160px] text-[#2c6472] font-bold tracking-widest uppercase">
+                {t("languages", language)}
+              </h2>
 
-            <ul className="list-disc ml-5 text-gray-700 font-medium text-sm space-y-0.5">
-              {languages.content
-                .filter((lang) => lang.language?.trim())
-                .map((lang, idx) => (
-                  <li
-                    key={idx}
-                    className="avoid-page-break"
-                    style={{ breakInside: "avoid" }}
-                  >
-                    {lang.language}
-                    {lang.proficiency && (
-                      <span className="italic text-gray-500"> - {lang.proficiency}</span>
-                    )}
-                  </li>
-                ))}
-            </ul>
-          </div>
-        )}
+              <ul className="list-disc ml-5 text-gray-700 font-medium text-sm space-y-0.5">
+                {languages.content
+                  .filter((lang) => lang.language?.trim())
+                  .map((lang, idx) => (
+                    <li
+                      key={idx}
+                      className="avoid-page-break"
+                      style={{ breakInside: "avoid" }}
+                    >
+                      {lang.language}
+                      {lang.proficiency && (
+                        <span className=" text-gray-500"> - {lang.proficiency}</span>
+                      )}
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          )}
 
         <div className="border-b border-gray-300 w-full"></div>
 
@@ -339,8 +392,8 @@ const ExternalEuropassCV = ({ personalInfo, professionalSummary, workExperience,
             className="pb-5 w-full flex"
             style={{ breakInside: "avoid" }}
           >
-            <h2 className="text-sm w-[640px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
-              {skills.title || "Skills"}
+            <h2 className="text-sm w-[310px] mb-3 text-[#2c6472] font-bold tracking-widest uppercase">
+              {t("skills", language)}
             </h2>
             <div className="text-black text-[13px] leading-6">
               {skills.content

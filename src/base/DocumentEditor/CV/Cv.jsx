@@ -49,31 +49,6 @@ const Cv = () => {
     const [language, setLanguage] = useState(() => sessionStorage.getItem("selectedLanguage") || "en");
 
 
-
-    useEffect(() => {
-        const fetchProfileImage = async () => {
-            try {
-                const headers = { Authorization: `Bearer ${token}` };
-                const res = await axios.get(`${BASE_URL}/photo`, {
-                    headers,
-                    responseType: "blob",
-                });
-                const imageUrl = URL.createObjectURL(res.data);
-                setProfileImage(imageUrl);
-            } catch (error) {
-                console.error("❌ Failed to fetch profile image:", error);
-            }
-        };
-
-        if (token) fetchProfileImage();
-    }, [token]);
-
-    // console.log("💡 personalInfo =>", personalInfo);
-
-
-    const imageToUse = profileImage || personalInfo?.profileImage;
-
-
     const previewRef = useRef();
 
     const handleDownload = () => {
@@ -930,6 +905,7 @@ const Cv = () => {
                                                         skills={skills}
                                                         languages={languages}
                                                         certificates={certificates}
+                                                        language={language}
                                                     />
                                                 </div>
                                             </div>

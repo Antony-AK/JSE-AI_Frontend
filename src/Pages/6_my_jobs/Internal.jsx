@@ -128,7 +128,7 @@ const MyApplication = () => {
 
   useEffect(() => {
     if (selectedLanguage === "both") {
-      fetchSelectedJobs(); // default fetch
+      fetchSelectedJobs(0); // default fetch
     } else {
       fetchJobsByLanguage(selectedLanguage); // based on lang filter
     }
@@ -242,54 +242,53 @@ const MyApplication = () => {
 
 
   const handleLanguageSelect = async (lang) => {
-  setShowLangModal(false);
-  const jobId = selectedJob?.id;
-  if (!jobId) return console.warn("⚠️ No selected job!");
+    setShowLangModal(false);
+    const jobId = selectedJob?.id;
+    if (!jobId) return console.warn("⚠️ No selected job!");
 
 
-  const payload = {
-    job_id: jobId,
-    job_language: lang,
+    const payload = {
+      job_id: jobId,
+      job_language: lang,
+    };
+
+    const endpoint =
+      actionType === "cv"
+        ? `${BASE_URL}/internal/generate-resume`
+        : `${BASE_URL}/internal/generate-cover-letter`;
+
+    const sessionKey = actionType === "cv" ? "generatedCV" : "generatedCL";
+    const navigatePath = actionType === "cv" ? "/user/cv" : "/user/cl";
+
+    try {
+      setIsLoading(true);
+
+      sessionStorage.setItem("selectedLanguage", lang);
+
+      const response = await axios.post(endpoint, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("✅ Generated", response.data);
+
+      sessionStorage.setItem(sessionKey, JSON.stringify({ job_id: jobId }));
+      navigate(navigatePath, { state: { jobId } });
+    } catch (error) {
+      console.error(`❌ Failed to generate ${actionType}:`, error);
+      sessionStorage.setItem(sessionKey, JSON.stringify({ error: true }));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const endpoint =
-    actionType === "cv"
-      ? `${BASE_URL}/internal/generate-resume`
-      : `${BASE_URL}/internal/generate-cover-letter`;
-
-  const sessionKey = actionType === "cv" ? "generatedCV" : "generatedCL";
-  const navigatePath = actionType === "cv" ? "/user/cv" : "/user/cl";
-
-  try {
-    setIsLoading(true);
-
-        sessionStorage.setItem("selectedLanguage", lang);
-
-    const response = await axios.post(endpoint, payload, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    console.log("✅ Generated", response.data);
-
-    sessionStorage.setItem(sessionKey, JSON.stringify({ job_id: jobId }));
-    navigate(navigatePath, { state: { jobId } });
-  } catch (error) {
-    console.error(`❌ Failed to generate ${actionType}:`, error);
-    sessionStorage.setItem(sessionKey, JSON.stringify({ error: true }));
-  } finally {
-    setIsLoading(false);
-  }
+  const getOffsetFromUrl = (url) => {
+  if (!url) return 0;
+  const params = new URLSearchParams(url.split("?")[1]);
+  return parseInt(params.get("offset")) || 0;
 };
-
-
-
-  const handleJobTitleClick = (title) => {
-    setSelectedJob(title);
-    console.log("Selected title:", title) // Set the selected job title for filtering
-  };
 
 
   if (loading) return <Loader />;
@@ -518,12 +517,16 @@ const MyApplication = () => {
                 <br />
                 <div className="flex justify-center items-center gap-2 pt-14  flex-wrap">
                   {/* Prev Button */}
+                  {/* Prev Button */}
                   <button
-                    onClick={() => fetchSelectedJobs(pagination.prev)}
-                    disabled={pagination.prev === null}
-                    className={`px-3 py-1 rounded-md font-medium text-sm ${pagination.prev !== null
-                      ? "bg-[#2C6472] text-white hover:bg-teal-900"
-                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    onClick={() => {
+                      const prevOffset = getOffsetFromUrl(pagination.prev);
+                      fetchSelectedJobs(prevOffset);
+                    }}
+                    disabled={!pagination.prev}
+                    className={`px-3 py-1 rounded-md font-medium text-sm ${pagination.prev
+                        ? "bg-[#2C6472] text-white hover:bg-teal-900"
+                        : "bg-gray-200 text-gray-400 cursor-not-allowed"
                       }`}
                   >
                     Prev
@@ -539,15 +542,20 @@ const MyApplication = () => {
 
                   {/* Next Button */}
                   <button
-                    onClick={() => fetchSelectedJobs(pagination.next)}
-                    disabled={pagination.next === null}
-                    className={`px-3 py-1 rounded-md font-medium text-sm ${pagination.next !== null
-                      ? "bg-[#2C6472] text-white hover:bg-teal-900"
-                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    onClick={() => {
+                      const nextOffset = getOffsetFromUrl(pagination.next);
+                      fetchSelectedJobs(nextOffset);
+                    }}
+                    disabled={!pagination.next}
+                    className={`px-3 py-1 rounded-md font-medium text-sm ${pagination.next
+                        ? "bg-[#2C6472] text-white hover:bg-teal-900"
+                        : "bg-gray-200 text-gray-400 cursor-not-allowed"
                       }`}
                   >
                     Next
                   </button>
+
+
                 </div>
 
                 <br />

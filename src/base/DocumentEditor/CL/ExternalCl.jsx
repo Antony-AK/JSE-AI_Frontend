@@ -16,6 +16,8 @@ const ExternalCl = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState(null);
   const [selectedClTemplate, setSelectedClTemplate] = useState("ExternalModernCL");
+  const [language, setLanguage] = useState(() => sessionStorage.getItem("selectedLanguage") || "en");
+
 
   const clTemplates = {
     "ExternalModernCL": ExternalCoverLetterModern,
@@ -106,10 +108,10 @@ const ExternalCl = () => {
   }
 
   return (
-    <div className='flex flex-col justify-center items-center mx-auto'>
+    <div className='flex flex-col justify-center items-center mx-auto '>
       <div className="flex items-center w-full px-4 mt-7">
         <div className="w-full text-center">
-          <h2 className="text-2xl font-semibold">CL</h2>
+          <h2 className="text-2xl font-semibold tracking-wide">COVER LETTER</h2>
         </div>
       </div>
 
@@ -218,22 +220,27 @@ const ExternalCl = () => {
             </div>
           </div>
 
-          <button
-            className="bg-[#2c6472] text-white mt-4 px-8 py-1.5 rounded-lg"
-            onClick={async () => {
-              await handleUpdateCoverLetter();
-              handleDownload();
-              setActiveSection(null);
-              navigate(-1);
-            }}
-          >
-            Download & Finish Editing
-          </button>
         </div>
 
         {/* RIGHT */}
         <div ref={previewRef} className="w-[794px] h-[1123px] flex flex-col gap-5 bg-white">
-          <ActiveCLTemplate personalInfo={personalInfo} paragraphs={paragraphs} />
+          <div> <ActiveCLTemplate personalInfo={personalInfo} paragraphs={paragraphs} language={language} />
+          </div>       
+             <div className='flex  justify-end items-end'>
+
+            <button
+              className="bg-[#2c6472] text-white mt-4 flex justify-end mb-10 items-end px-8  py-1.5 rounded-lg"
+              onClick={async () => {
+                await handleUpdateCoverLetter();
+                handleDownload();
+                setActiveSection(null);
+                navigate(-1);
+              }}
+            >
+              Download & Finish Editing
+            </button>
+          </div>
+
         </div>
       </div>
     </div>

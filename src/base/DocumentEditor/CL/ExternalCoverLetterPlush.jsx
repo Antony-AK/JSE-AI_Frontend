@@ -1,8 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useExternalCl } from "../Context/ExternalClContext";
 
-const ExternalCoverLetterPlush = () => {
-  const { personalInfo, recipient, subject, paragraphs } = useExternalCl();
+const t = (key, lang = "en") => {
+  const map = {
+    date: { en: "Date", de: "Datum" },
+    subject: { en: "Subject", de: "Betreff" },
+    dear: { en: "Dear", de: "Sehr geehrter" },
+    recruiter: { en: "Recruiter", de: "Personalverantwortlicher" },
+    regards: { en: "Kind regards", de: "Mit freundlichen Grüßen" },
+    applying: { en: "Applying position as", de: "Bewerbung für die Stelle als" },
+  };
+
+  const langMap = {
+    english: "en",
+    german: "de",
+    en: "en",
+    de: "de",
+  };
+
+  const langCode = langMap[lang?.toLowerCase()] || "en";
+  return map[key]?.[langCode] || key;
+};
+
+const ExternalCoverLetterPlush = ({ language }) => {
+  const { personalInfo, recipient, paragraphs } = useExternalCl();
 
   const [currentDate, setCurrentDate] = useState("");
 
@@ -14,9 +35,9 @@ const ExternalCoverLetterPlush = () => {
   }, []);
 
   return (
-    <div className="w-[794px] h-[1123px] mx-auto p-12 bg-white text-black font-[Times New Roman] text-[15px] leading-relaxed flex flex-col justify-between">
+    <div className="w-[794px] h-[1123px] mx-auto p-12 bg-white text-black font-[Times New Roman] text-[15px] leading-relaxed flex flex-col gap-8 ">
       {/* Header */}
-      <div className=" flex justify-center gap-5 w-[90%] mx-auto ">
+      <div className=" flex justify-center gap-5 min-w-[60%] mx-auto ">
         <div className="w-[60%]">
           {personalInfo?.name?.split(" ").length > 1 ? (
             <h1 className="text-[20px] font-medium flex flex-col items-end justify-end ">
@@ -43,26 +64,19 @@ const ExternalCoverLetterPlush = () => {
       </div>
 
       {/* Recipient and Subject */}
-      <div className="text-left  flex flex-col -mt-20 text-[15px]">
-        <div className=" border-y mb-6 items-center border-gray-400">
-          <p className="my-2">
-            <strong className="me-3 font-medium">To :</strong>Recruiter
-          </p>
-        </div>
+      <div className="text-left  flex flex-col  text-[15px] border-t border-gray-300">
 
-        <p className="mb-6">
-          <strong className="font-medium me-3">Date :</strong>{" "}
-          {recipient?.date || currentDate}
+        <p className="mb-3 mt-5">
+          <strong className='font-medium me-3'>{t("date", language)}:</strong> {recipient?.date || currentDate}
         </p>
-        <p className="">
-          <strong className="font-medium me-3">Subject :</strong>Applying
-          postion as {personalInfo?.title}
+        <p>
+          <strong className='font-medium me-3'>{t("subject", language)}:</strong> {`${t("applying", language)} ${personalInfo?.title}`}
         </p>
       </div>
 
       {/* Body */}
-      <div className="space-y-4 -mt-20 text-justify">
-        <p>Dear {recipient?.name || "Recruiter"},</p>
+      <div className="space-y-4  text-justify">
+        <p className='-mt-6'>{t("dear", language)} {recipient?.name?.split(" ")[0] || t("recruiter", language)},</p>
         {paragraphs?.map((para, idx) => (
           <p key={idx}>{para}</p>
         ))}
@@ -70,7 +84,7 @@ const ExternalCoverLetterPlush = () => {
 
       {/* Closing */}
       <div className="mb-5">
-        <p>Kind regards,</p>
+        <p>{t("regards", language)}</p>
         <p className="pt-1 font-semibold">{personalInfo?.name}</p>
       </div>
     </div>

@@ -283,6 +283,10 @@ const Profile = () => {
         </div>
       </div>
 
+      <div className='w-full h-14 bg-white rounded-md flex justify-center items-center'>
+        <p className='text-[#2c6472] font-medium'><strong className='text-black'>Please Note: </strong>For better job results, ensure your profile details are filled correctly and completely.</p>
+      </div>
+
       <div className="flex justify-between py-3 px-5  w-full bg-white rounded-md">
         <div className="flex items-center gap-6">
           <div className='w-20 h-20 rounded-full'>
