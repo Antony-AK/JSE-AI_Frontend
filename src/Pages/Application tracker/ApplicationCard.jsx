@@ -75,6 +75,7 @@ const ApplicationCard = ({
 
   return (
     <div className="flex justify-between items-start bg-white border rounded-lg shadow-sm px-6 py-4 w-full gap-4">
+      
       {/* Left Side */}
       <div className="flex flex-col gap-1.5 flex-grow">
         {/* Header */}
@@ -139,7 +140,7 @@ const ApplicationCard = ({
         </div>
 
         {/* Buttons */}
-        <div className="flex w-full gap-2.5 mt-4 ms-10 flex-wrap">
+        <div className="flex w-[1050px] gap-2.5 mt-4 ms-10 ">
           {statusOrder.map((statusOption, index) => {
             const currentIndex = statusOrder.findIndex(
               (s) => s.toLowerCase() === activeStatus.toLowerCase()
@@ -212,7 +213,7 @@ const ApplicationCard = ({
       </div>
 
       {/* Right Side: Profile Match Circle */}
-      <div className="flex flex-col items-center mt-10">
+      <div className="flex absolute right-20 flex-col items-center mt-10">
         <div className="relative w-20 h-20">
           <svg className="absolute top-0 left-0 w-20 h-20"> {/* 80px x 80px */}
             <circle
@@ -278,7 +279,7 @@ const ApplicationCard = ({
       )}
 
 
-      <div className="relative">
+      <div className="absolute right-14">
         <MoreVertical
           onClick={() => setShowMenu(!showMenu)}
           className="cursor-pointer w-6 h-6 text-gray-500 hover:text-[#2c6472] transition"

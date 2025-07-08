@@ -26,7 +26,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
 
 
     const isFormValid = () => {
-        return formData.job_title && formData.company_name && formData.start_date && formData.key_responsibilities;
+        return formData.job_title && formData.company_name && formData.start_date && formData.end_date;
     };
 
     const sendData = async () => {
@@ -335,7 +335,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
                         </div>
 
                         <div className="flex flex-col w-1/2 gap-2">
-                            <label htmlFor="end_date" className='text-[15px] text-gray-500'>End Date</label>
+                            <label htmlFor="end_date" className='text-[15px] text-gray-500'>End Date <span className="text-red-500">*</span></label>
                             <Calendar
                                 selectedDate={formData.end_date ? new Date(formData.end_date) : null}
                                 onDateChange={(date) =>
@@ -349,7 +349,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
                     </div>
 
                     <div className="flex flex-col w-full gap-2">
-                        <label htmlFor="key_responsibilities" className='text-[15px] text-gray-500'>Key Responsibilities <span className="text-red-500">*</span></label>
+                        <label htmlFor="key_responsibilities" className='text-[15px] text-gray-500'>Key Responsibilities </label>
                         <textarea
                             name="key_responsibilities"
                             value={formData.key_responsibilities}

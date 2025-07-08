@@ -79,11 +79,15 @@ const ExternalThirdCV = ({ personalInfo, professionalSummary, workExperience, ed
             <p>
               <strong>🔗 {t("linkedin", language)}: </strong>{" "}
               <a
-                href={personalInfo?.LinkedIn}
-                className="text-blue-600 underline"
-                target="_blank"
-                rel="noreferrer"
-              >
+                      href={
+                        personalInfo.LinkedIn.startsWith("http")
+                          ? personalInfo.LinkedIn
+                          : `https://www.linkedin.com/in/${personalInfo?.LinkedIn}`
+                      }
+                      className="underline text-[#2c6472]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                 {personalInfo?.LinkedIn}
               </a>
             </p>

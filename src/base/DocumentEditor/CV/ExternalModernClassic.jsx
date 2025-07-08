@@ -52,11 +52,11 @@ const ExternalModernClassic = ({ personalInfo, professionalSummary, workExperien
           <p>
             {personalInfo.LinkedIn && (
               <>
-                <a
+                 <a
                   href={
                     personalInfo.LinkedIn.startsWith("http")
                       ? personalInfo.LinkedIn
-                      : `https://${personalInfo.LinkedIn}`
+                      : `https://www.linkedin.com/in/${personalInfo.LinkedIn}`
                   }
                   className="underline text-[#a6c8ff]"
                   target="_blank"

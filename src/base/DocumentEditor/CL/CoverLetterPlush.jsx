@@ -36,7 +36,7 @@ const CoverLetterPlush = ({ language }) => {
     }, []);
 
     return (
-        <div className="w-[794px] h-[1123px] mx-auto p-12 bg-white text-black font-[Times New Roman] text-[15px] leading-relaxed flex flex-col justify-between">
+        <div className="w-[794px] h-[1123px] mx-auto p-12 bg-white text-black font-[Times New Roman] text-[15px] leading-relaxed flex flex-col gap-8 ">
             {/* Header */}
             <div className=" flex items-center gap-5 min-w-[60%] mx-auto ">
                 <div className='w-[60%]'>
@@ -61,14 +61,11 @@ const CoverLetterPlush = ({ language }) => {
             </div>
 
             {/* Recipient and Subject */}
-            <div className="text-left  flex flex-col  text-[15px] border-t border-gray-300 ">
+            <div className="text-left  flex flex-col   text-[15px] border-t border-gray-300 ">
 
 
                 <p className="mb-3 mt-5">
                     <strong className='font-medium me-3'>{t("date", language)}:</strong> {recipient?.date || currentDate}
-                </p>
-                <p>
-                    <strong className='font-medium me-3'>{t("subject", language)}:</strong> {subject || `${t("applying", language)} ${personalInfo?.title}`}
                 </p>
 
             </div>
@@ -82,7 +79,7 @@ const CoverLetterPlush = ({ language }) => {
             </div>
 
             {/* Closing */}
-            <div className="mb-5">
+            <div className="mb-5 mt-16">
                 <p>{t("regards", language)}</p>
                 <p className="pt-1 font-semibold">{personalInfo?.name}</p>
             </div>

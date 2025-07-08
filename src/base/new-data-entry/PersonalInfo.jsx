@@ -66,35 +66,35 @@ const PersonalInfo = () => {
   };
 
   useEffect(() => {
-  const stored = sessionStorage.getItem("extractedResume");
-  if (stored) {
-    const parsed = JSON.parse(stored)?.data;
+    const stored = sessionStorage.getItem("extractedResume");
+    if (stored) {
+      const parsed = JSON.parse(stored)?.data;
 
-    console.log("📄 Prefilling data from extractedResume:", parsed);
+      console.log("📄 Prefilling data from extractedResume:", parsed);
 
 
-    setFormData((prev) => ({
-      ...prev,
-      first_name: parsed.first_name || '',
-      second_name: parsed.second_name || '',
-      city: parsed.city || '',
-      state: parsed.state || '',
-      country: parsed.country || '',
-      linkedin_profile: parsed.linkedin || '', // 💡 parsed.linkedin instead of linkedin_profile
-      phone: parsed.phone || '',
-      email: parsed.email || ''
-    }));
+      setFormData((prev) => ({
+        ...prev,
+        first_name: parsed.first_name || '',
+        second_name: parsed.second_name || '',
+        city: parsed.city || '',
+        state: parsed.state || '',
+        country: parsed.country || '',
+        linkedin_profile: parsed.linkedin || '', // 💡 parsed.linkedin instead of linkedin_profile
+        phone: parsed.phone || '',
+        email: parsed.email || ''
+      }));
 
-    // 🔄 Also update external links if available
-    if (Array.isArray(parsed.links)) {
-      const updatedLinks = ['website', 'github', 'blog', 'social media'].map(type => {
-        const match = parsed.links.find(link => link.type === type);
-        return { type, url: match?.url || '' };
-      });
-      setExternalLinks(updatedLinks);
+      // 🔄 Also update external links if available
+      if (Array.isArray(parsed.links)) {
+        const updatedLinks = ['website', 'github', 'blog', 'social media'].map(type => {
+          const match = parsed.links.find(link => link.type === type);
+          return { type, url: match?.url || '' };
+        });
+        setExternalLinks(updatedLinks);
+      }
     }
-  }
-}, []);
+  }, []);
 
 
   const fetchProfileInfo = async () => {
@@ -209,8 +209,21 @@ const PersonalInfo = () => {
           return;
         }
 
+        // 🧹 Clean LinkedIn URL to keep only the unique part
+        let cleanedLinkedIn = formData.linkedin_profile.trim();
+        const linkedinBase = "https://www.linkedin.com/in/";
+        if (cleanedLinkedIn.startsWith(linkedinBase)) {
+          cleanedLinkedIn = cleanedLinkedIn.replace(linkedinBase, '');
+        }
+
+        // 🧠 Optionally remove trailing slash
+        if (cleanedLinkedIn.endsWith("/")) {
+          cleanedLinkedIn = cleanedLinkedIn.slice(0, -1);
+        }
+
         const response = await axios.post(apiUrl, {
           ...formData,
+          linkedin_profile: cleanedLinkedIn, // ⬅️ Use the cleaned URL
           external_links: externalLinks
         }, {
           headers: {
@@ -409,7 +422,7 @@ const PersonalInfo = () => {
       {/* Footer appears after scrolling all content */}
       <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm mt-8">
         <img src={warning} className="w-5  h-5 object-cover" alt="" />
-        AI is not perfect. Make sure your data is accurate before saving.            
+        AI is not perfect. Make sure your data is accurate before saving.
       </div>
 
     </div>

@@ -19,7 +19,7 @@ const t = (key, lang = "en") => {
     website: { en: "Website", de: "Webseite" },
   };
 
- const normalized = lang.toLowerCase();
+  const normalized = lang.toLowerCase();
   const langCodeMap = {
     english: "en",
     german: "de",
@@ -70,7 +70,7 @@ const ModernClassic = ({
                   href={
                     personalInfo.LinkedIn.startsWith("http")
                       ? personalInfo.LinkedIn
-                      : `https://${personalInfo.LinkedIn}`
+                      : `https://www.linkedin.com/in/${personalInfo.LinkedIn}`
                   }
                   className="underline text-[#a6c8ff]"
                   target="_blank"

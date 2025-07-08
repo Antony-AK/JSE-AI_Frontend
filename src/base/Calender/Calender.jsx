@@ -134,20 +134,28 @@ const Calendar = ({ selectedDate, onDateChange }) => {
                 </div>
               </div>
 
-
-
+              {/* Next Month */}
               {/* Next Month */}
               <button
                 type="button"
-                onClick={() =>
-                  setCurrentMonth((prev) =>
-                    new Date(prev.getFullYear(), prev.getMonth() + 1, 1)
-                  )
+                onClick={() => {
+                  const nextMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+                  const now = new Date();
+                  if (nextMonth <= now) {
+                    setCurrentMonth(nextMonth);
+                  }
+                }}
+                disabled={
+                  new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1) > new Date()
                 }
-                className="text-xl px-2 text-[#2c6472]"
+                className={`text-xl px-2 ${new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1) > new Date()
+                  ? 'text-gray-300 cursor-not-allowed'
+                  : 'text-[#2c6472]'
+                  }`}
               >
                 ▶
               </button>
+
             </div>
 
             {/* Days Grid */}
@@ -166,19 +174,28 @@ const Calendar = ({ selectedDate, onDateChange }) => {
                 ))}
 
               {/* Calendar days */}
-              {allDays.map((day, index) => (
-                <button
-                  key={index}
-                  type="button" // ✅ THIS LINE FIXES THE ISSUE
-                  onClick={() => handleDayClick(day)}
-                  className={`py-1.5 text-sm rounded-lg transition-all w-full ${isSameDay(day, selectedDate)
-                    ? 'bg-[#2c6472] text-white font-semibold'
-                    : 'hover:bg-[#2c6472]/10 text-gray-800'
-                    }`}
-                >
-                  {format(day, 'd')}
-                </button>
-              ))}
+              {allDays.map((day, index) => {
+                const isTodayOrBefore = day <= new Date();
+
+                return (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => isTodayOrBefore && handleDayClick(day)}
+                    disabled={!isTodayOrBefore}
+                    className={`py-1.5 text-sm rounded-lg transition-all w-full
+                    ${isSameDay(day, selectedDate)
+                        ? 'bg-[#2c6472] text-white font-semibold'
+                        : isTodayOrBefore
+                          ? 'hover:bg-[#2c6472]/10 text-gray-800'
+                          : 'text-gray-400 cursor-not-allowed opacity-50'
+                      }`}
+                  >
+                    {format(day, 'd')}
+                  </button>
+                );
+              })}
+
 
             </div>
           </motion.div>

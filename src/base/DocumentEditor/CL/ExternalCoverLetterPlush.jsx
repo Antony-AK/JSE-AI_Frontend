@@ -69,9 +69,6 @@ const ExternalCoverLetterPlush = ({ language }) => {
         <p className="mb-3 mt-5">
           <strong className='font-medium me-3'>{t("date", language)}:</strong> {recipient?.date || currentDate}
         </p>
-        <p>
-          <strong className='font-medium me-3'>{t("subject", language)}:</strong> {`${t("applying", language)} ${personalInfo?.title}`}
-        </p>
       </div>
 
       {/* Body */}

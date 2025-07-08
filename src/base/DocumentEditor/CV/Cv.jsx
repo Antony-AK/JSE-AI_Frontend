@@ -180,10 +180,22 @@ const Cv = () => {
                     portfolio: personalInfo.Website
                 },
                 profile_summary: professionalSummary.content || "",
-                education: education.content.map(e => e.degree),
-                certifications: certificates.content.map(c => c.Name),
+                education: education.content.map(e => ({
+                    degree: e.degree || "",
+                    city: e.city || "",
+                    field_of_study: e.field_of_study || "",
+                    end_date: e.end_date || "",
+                    achievements: e.achievements || ""
+                })),
+                certifications: certificates.content.map(c => ({
+                    certificate_name: c.certificate_name || "",
+                    provider: c.provider || ""
+                })),
                 skills: skills.content,
-                languages: languages.content,
+                languages: languages.content.map(l => ({
+                    language: l.language || "",
+                    proficiency: l.proficiency || ""
+                })),
                 work_experience: workExperience.content.map(item => ({
                     position: item.Role,
                     company_name: item.Company,

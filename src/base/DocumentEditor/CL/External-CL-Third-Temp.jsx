@@ -59,10 +59,6 @@ const ExternalCoverLetterModern = ({ language }) => {
         {/* Date + Subject */}
         <div className="mb-3">
          <p><strong className='font-medium me-2'>{t("date", language)}:</strong> {recipient?.date || currentDate}</p>
-        <p className="mt-3">
-          <strong className='font-medium me-2'>{t("subject", language)}:</strong>
-          {subject || `${t("applying", language)} ${personalInfo?.title}`}
-        </p>
         </div>
   
         {/* Body */}

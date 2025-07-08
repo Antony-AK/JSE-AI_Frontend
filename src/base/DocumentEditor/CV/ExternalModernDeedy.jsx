@@ -49,18 +49,43 @@ const ExternalModernDeedy = ({ personalInfo, professionalSummary, workExperience
         {/* Contact Info */}
         <div className="mt-2 flex flex-wrap justify-center text-sm text-gray-600 gap-x-2 gap-y-1">
           {[
-            personalInfo.Mail,
-            personalInfo.Phone,
-            personalInfo.LinkedIn,
-            personalInfo.Website,
+            {
+              label: personalInfo.Mail,
+              href: `mailto:${personalInfo.Mail}`,
+            },
+            {
+              label: personalInfo.Phone,
+              href: `tel:${personalInfo.Phone}`,
+            },
+            {
+              label: personalInfo.LinkedIn,
+              href: personalInfo.LinkedIn?.startsWith("http")
+                ? personalInfo.LinkedIn
+                : `https://www.linkedin.com/in/${personalInfo.LinkedIn}`,
+            },
+            {
+              label: personalInfo.Website,
+              href: personalInfo.Website?.startsWith("http")
+                ? personalInfo.Website
+                : `https://${personalInfo.Website}`,
+            },
           ]
-            .filter(Boolean) // remove empty values
+            .filter((item) => item.label) // remove empty ones
             .map((item, idx, arr) => (
-              <p key={idx} className="text-blue-600">
-                {idx !== 0 && "|"} {item}
-              </p>
+              <span key={idx} className="text-blue-600">
+                {idx !== 0 && <span className="mx-1 text-gray-400">|</span>}
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline"
+                >
+                  {item.label}
+                </a>
+              </span>
             ))}
         </div>
+
       </div>
 
       {/* Summary */}

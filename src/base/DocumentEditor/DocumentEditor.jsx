@@ -1,4 +1,4 @@
-import React, { useRef,useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import html2pdf from 'html2pdf.js';
 import { useNavigate } from 'react-router-dom';
@@ -35,8 +35,8 @@ const DocumentEditor = () => {
 
     const clPreviewRef = useRef(null);
     const cvPreviewRef = useRef(null);
-          const [language, setLanguage] = useState(() => sessionStorage.getItem("selectedLanguage") || "en");
-    
+    const [language, setLanguage] = useState(() => sessionStorage.getItem("selectedLanguage") || "en");
+
 
 
 
@@ -106,9 +106,9 @@ const DocumentEditor = () => {
             </div>
         );
     }
-    
+
     return (
-        <div className='flex flex-col gap-5 p-5 mb-14 '>
+        <div className='flex flex-col gap-5 p-5 mb-5 '>
 
             <div className="flex items-center w-full px-10 mb-5">
                 {/* Empty left space */}
@@ -220,7 +220,7 @@ const DocumentEditor = () => {
                         </div>
                     </div>
 
-                    
+
                     <div style={{ transform: 'scale(0.85)', transformOrigin: 'top left' }}>
                         <div ref={clPreviewRef} className="h-[1123px] w-[794px] bg-white mx-auto  scrollbar-custom">
 
@@ -232,8 +232,8 @@ const DocumentEditor = () => {
                                     contact: clPersonalInfo.contact,
                                     address: clPersonalInfo.address,
                                     paragraphs,
-                                    
-                                    
+
+
                                 }}
                                 language={language}
                             />
@@ -245,7 +245,7 @@ const DocumentEditor = () => {
 
             </div>
 
-            <div className="flex justify-between mt-5 px-10">
+            <div className="flex justify-between  px-10">
 
                 <div className="">
                     <div className="flex gap-3 items-center">
@@ -263,11 +263,14 @@ const DocumentEditor = () => {
 
                 <div className="">
                     <button
-                        className="bg-[#2c6472] text-white px-8 py-1.5 rounded-2xl"
+                        className={`px-8 py-1.5 rounded-2xl transition-all duration-200 ${isChecked ? 'bg-[#2c6472] text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            }`}
                         onClick={handleDone}
-                        >
+                        disabled={!isChecked}
+                    >
                         Done
                     </button>
+
                 </div>
 
             </div>

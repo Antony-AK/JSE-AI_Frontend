@@ -206,7 +206,7 @@ const Signup = () => {
 
               {/* Dropdown */}
               {showDropdown && (
-                <div className="absolute left-3 top-full mt-2 w-fit bg-white border border-gray-300 rounded-md shadow z-20">
+                <div className="absolute left-2 top-full w-fit bg-white border border-gray-300 rounded-md shadow z-20">
                   {countryOptions.map((country, index) => (
                     <div
                       key={index}

@@ -73,7 +73,7 @@ const PlushCV = ({
                 href={
                   personalInfo.LinkedIn.startsWith("http")
                     ? personalInfo.LinkedIn
-                    : `https://${personalInfo.LinkedIn}`
+                    : `https://www.linkedin.com/in/${personalInfo.LinkedIn}`
                 }
                 className="text-[#0078d4] underline"
                 target="_blank"

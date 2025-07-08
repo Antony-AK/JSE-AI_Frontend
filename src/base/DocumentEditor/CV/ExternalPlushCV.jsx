@@ -58,16 +58,16 @@ const ExternalPlushCV = ({ personalInfo, professionalSummary, workExperience, ed
           {personalInfo.LinkedIn && (
             <p>
               🔗{" "}
-              <a
-                href={
-                  personalInfo.LinkedIn.startsWith("http")
-                    ? personalInfo.LinkedIn
-                    : `https://${personalInfo.LinkedIn}`
-                }
-                className="text-[#0078d4] underline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+               <a
+                  href={
+                    personalInfo.LinkedIn.startsWith("http")
+                      ? personalInfo.LinkedIn
+                      : `https://www.linkedin.com/in/${personalInfo.LinkedIn}`
+                  }
+                  className="underline text-[#a6c8ff]"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                 {personalInfo.LinkedIn}
               </a>
             </p>

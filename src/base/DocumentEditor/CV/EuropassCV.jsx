@@ -92,7 +92,7 @@ const EuropassCV = ({
                       href={
                         personalInfo.LinkedIn.startsWith("http")
                           ? personalInfo.LinkedIn
-                          : `https://${personalInfo.LinkedIn}`
+                          : `https://www.linkedin.com/in/${personalInfo.LinkedIn}`
                       }
                       className="underline text-[#2c6472]"
                       target="_blank"
