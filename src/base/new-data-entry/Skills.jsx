@@ -670,25 +670,38 @@ const Skills = () => {
 
 
 
-                    <div className="flex gap-3 items-center mt-5">
-                        <input
+                    <div className="flex gap-3 items-start mt-5">
+                        <label htmlFor="primary_title" className="flex items-start gap-3 cursor-pointer">
+                            <input
                             type="checkbox"
-                            className='w-4  h-4 bg-[#2c6472] text-[#2c6472]'
-                            name="primary_title" id="primary_title"
+                            id="primary_title"
+                            name="primary_title"
+                            className="w-4 h-4 accent-[#2c6472] mt-0.5"
                             checked={accepted}
-                            onChange={(e) => setAccepted(e.target.checked)} />
-                        <p className='text-sm text-gray-500'>Please enter only relevant skills. Adding unrelated may affect the quality of your profile.</p>
+                            onChange={(e) => setAccepted(e.target.checked)}
+                            />
+                            <span className="text-sm text-gray-500">
+                            Please enter only relevant skills. Adding unrelated may affect the quality of your profile.
+                            </span>
+                        </label>
                     </div>
 
                     <div className='text-xs my-5 flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
 
-                    <div className="flex w-[70%]   justify-end items-center gap-4 mt-8">
+                    <div className="flex w-[70%] justify-end items-center gap-4 mt-8">
                         <button
                             type="button"
-                            className=" teal-button mb-16 px-6 py-2 bg-[#2c6472] text-white  h-[41px]  rounded-xl focus:outline-none transition-transform duration-200 ease-in-out"
                             onClick={handleNext}
+                            disabled={loading}
+                            className={`teal-button mb-16 px-6 py-2 h-[40px] rounded-xl focus:outline-none transition-transform duration-200 ease-in-out
+                            flex items-center justify-center
+                            ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white w-[200px]`}
                         >
-                            {loading ? 'Saving...' : 'Go to Dashboard'}
+                            {loading ? (
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            ) : (
+                            'Go to Dashboard'
+                            )}
                         </button>
                     </div>
 
@@ -698,7 +711,7 @@ const Skills = () => {
             </div>
 
             {/* Footer appears after scrolling all content */}
-            <div className="flex justify-start gap-2 text-gray-500 text-sm mt-5 ">
+            <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm mt-8">
                 <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
                 AI is not perfect. Make sure your data is accurate before saving.            </div>
 

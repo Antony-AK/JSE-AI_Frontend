@@ -142,7 +142,7 @@ const Cl = () => {
     <div className='flex flex-col justify-center items-center mx-auto '>
       <div className="flex items-center w-full px-4 mt-7">
         <div className="w-full text-center">
-          <h2 className="text-2xl font-semibold tracking-wide">CL</h2>
+          <h2 className="text-2xl font-semibold tracking-wide">COVER LETTER</h2>
         </div>
       </div>
 

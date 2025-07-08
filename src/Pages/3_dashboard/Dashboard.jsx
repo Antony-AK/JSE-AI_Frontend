@@ -99,8 +99,8 @@ const Dashboard = () => {
 
   const statusList = [
     { label: "Multifactor Authentication", isComplete: checklist.mfa },
-    { label: "CV Format Fixed", isComplete: checklist.cvFormat },
-    { label: "CL Format Fixed", isComplete: checklist.clFormat },
+    // { label: "CV Format Fixed", isComplete: checklist.cvFormat },
+    // { label: "CL Format Fixed", isComplete: checklist.clFormat },
     { label: "Profile Image", isComplete: checklist.profileImg },
     { label: "Data Usage", isComplete: checklist.dataUsage },
     { label: "Data Training", isComplete: checklist.dataTraining },
@@ -109,8 +109,6 @@ const Dashboard = () => {
     { label: "Terms", isComplete: checklist.terms },
     { label: "Checklist", isComplete: checklist.profileComplete },
   ];
-
-
 
   const jobs = useMemo(() => {
     return newJobs.length > 0
@@ -330,7 +328,9 @@ const Dashboard = () => {
 
 
           {/* <img src={lock} className='absolute top-[78%] left-[33%] w-14 h-14 z-10' alt="" /> */}
-          <p className='absolute top-[83%] left-[28%] rounded-lg w-52 font-medium text-center flex items-center pl-8 z-10 bg-gray-300/80 px-4 py-2'><img src={lock} className='w-4 h-4 object-cover me-3' alt="" /> Coming Soon</p>
+          <p className="absolute top-[83%] left-[30%] w-fit font-semibold text-center text-[#2c6472] flex items-center z-10 bg-gray-300/80 px-4 py-2 rounded-lg overflow-hidden shine-effect hover:scale-105 transition-all duration-200">
+            Coming Soon
+          </p>
 
 
           {/* Box - 2 */}
@@ -468,12 +468,21 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <p className='text-[#000000A1] font-medium text-sm'>The new version of <span className='text-[#2c6472] font-semibold'>JSE AI </span>
-              brings major improvements across the
-              platform. With advanced AI matching, optimized performance, and a
-              refreshed UI, the app is now smarter and faster than ever before.
-              These upgrades aim to make your job search smoother and more
-              effective. </p>
+            <p className="text-[#000000A1] font-medium text-sm">
+              <span className="text-[#2c6472] font-semibold mr-2">
+                {new Date().toLocaleDateString('en-IN', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })}
+              </span>
+              - The new version of <span className="text-[#2c6472] font-semibold">JSE AI</span> brings major
+              improvements across the platform. With advanced AI matching, optimized
+              performance, and a refreshed UI, the app is now smarter and faster than ever
+              before. These upgrades aim to make your job search smoother and more
+              effective.
+            </p>
+
           </div>
 
         </div>

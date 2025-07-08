@@ -1,65 +1,61 @@
-import React, { useState } from 'react';
-import { toast } from 'react-toastify';
-import { Link, useNavigate } from 'react-router-dom';
-import { Player } from '@lottiefiles/react-lottie-player';
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+import { Player } from "@lottiefiles/react-lottie-player";
 import animationData from "../../assets/Animation - 1745282599914.json";
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import axios from 'axios';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import axios from "axios";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import google from "./../../assets/Google.png";
 import frame from "./../../assets/Frame.png";
-import logo from "../../assets/jsenewlogo.png"
-import { BASE_URL } from "../../utils/api"
-import flag from "../../assets/germanyflag.png"
-import arrow from "../../assets/downarrow.png"
-
+import logo from "../../assets/jsenewlogo.png";
+import { BASE_URL } from "../../utils/api";
+import flag from "../../assets/germanyflag.png";
+import arrow from "../../assets/downarrow.png";
 
 const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [showVerificationPopup, setShowVerificationPopup] = useState(false);
-  const [passwordError, setPasswordError] = useState('');
+  const [passwordError, setPasswordError] = useState("");
   const [shakePassword, setShakePassword] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
-
   const [formData, setFormData] = useState({
-    email: '',
-    phoneNumber: '',
-    password: '',
-    confirmPassword: ''
+    email: "",
+    phoneNumber: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const [showPassword, setShowPassword] = useState({
     password: false,
-    confirmPassword: false
+    confirmPassword: false,
   });
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
     // Real-time password validation
-    if (name === 'password') {
+    if (name === "password") {
       const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
       const hasNumber = /\d/.test(value);
       const isLongEnough = value.length >= 8;
 
       if (!isLongEnough || !hasSpecialChar || !hasNumber) {
-        setPasswordError('(Min 8 chars, with number & symbol.)');
+        setPasswordError("(Min 8 chars, with number & symbol.)");
       } else {
-        setPasswordError('');
+        setPasswordError("");
       }
     }
-
   };
 
-
   const toggleShowPassword = (field) => {
-    setShowPassword(prev => ({
+    setShowPassword((prev) => ({
       ...prev,
-      [field]: !prev[field]
+      [field]: !prev[field],
     }));
   };
 
@@ -75,11 +71,12 @@ const Signup = () => {
       return;
     }
 
-
     if (!formData.password || passwordError) {
       setShakePassword(true);
       setTimeout(() => setShakePassword(false), 400);
-      toast.error("Password must be atleast 8 characters with a number & a special symbol! 🔐");
+      toast.error(
+        "Password must be atleast 8 characters with a number & a special symbol! 🔐"
+      );
 
       return;
     }
@@ -87,7 +84,7 @@ const Signup = () => {
     const signupData = {
       email: formData.email,
       number: formData.phoneNumber, // <-- Ensure it matches the backend field
-      password: formData.password
+      password: formData.password,
     };
 
     try {
@@ -98,49 +95,66 @@ const Signup = () => {
         signupData, // Request body as the second argument
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
 
       if (response.status >= 200 && response.status < 300) {
-        console.log('Signup successful:', response.data);
-
+        console.log("Signup successful:", response.data);
 
         // 👉 Set first login flag so we know it was a new signup
-        localStorage.setItem('firstLogin', 'true');
-
+        localStorage.setItem("firstLogin", "true");
 
         setShowVerificationPopup(true); // Show popup first!
 
         setTimeout(() => {
           setShowVerificationPopup(false);
-          navigate('/user/login', {
+          navigate("/user/login", {
             state: {
               email: formData.email,
-              phoneNumber: formData.phoneNumber
-            }
+              phoneNumber: formData.phoneNumber,
+            },
           });
           setLoading(false);
         }, 2500); // Wait 2.5 seconds and THEN navigate
-
       } else {
-        console.error('Signup failed');
+        console.error("Signup failed");
         setLoading(false);
         toast.error("Signup failed, please try again.");
       }
     } catch (error) {
-      console.error('Error during signup:', error.response?.data || error.message);
+      console.error(
+        "Error during signup:",
+        error.response?.data || error.message
+      );
       setLoading(false);
-      toast.error(error.response?.data?.issue || 'Signup failed, please try again.');
+      toast.error(
+        error.response?.data?.issue || "Signup failed, please try again."
+      );
     }
   };
+
+  const countryOptions = [{ code: "+49", name: "Germany", flag: flag }];
+
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(countryOptions[0]);
+
+  const handleCountrySelect = (country) => {
+    setSelectedCountry(country);
+    setShowDropdown(false);
+  };
+
   return (
-    <div className="flex min-h-screen ">
+    <div className="flex min-h-screen">
       {/* Left Panel */}
       <div className="flex flex-1 flex-col justify-evenly items-center p-8 bg-white ">
         <div className="max-w-lg w-full mt-16">
-          <h2 className="text-3xl font-semibold text-center ">Create account</h2><br /><br />
+          <h2 className="text-3xl font-semibold text-center ">
+            Create account
+          </h2>
+          <br />
+          <br />
 
           {/* Google Auth Button */}
           {/* <button className="w-full h-[52px] flex items-center justify-center border cursor-not-allowed bg-gray-300 relative border-gray-300 -mb-2 rounded-md  hover:shadow transition">
@@ -149,7 +163,6 @@ const Signup = () => {
           </button><br /> */}
           {/* <span className="absolute text-lg text-gray-300 cursor-wait top-48 left-80  font-semibold">Coming Soon</span> */}
 
-
           {/* <div className="flex items-center  ">
             <div className="flex-grow h-px bg-gray-300" />
             <span className="mx-3 text-gray-400 text-sm">or</span>
@@ -157,50 +170,79 @@ const Signup = () => {
           </div><br /> */}
 
           {/* Signup Form */}
-          <form onSubmit={handleSignUp} className='space-y-1'>
+          <form onSubmit={handleSignUp} className="space-y-1">
             {/* email Field */}
             <div className="relative -mt-5">
               <label className="mb-1 ms-3 block  text-gray-500 text-sm">
                 Email
               </label>
               <input
-                id='email'
+                id="email"
                 type="email"
                 name="email"
                 placeholder=" "
                 className="w-full h-[52px] px-4 py-4 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer"
                 value={formData.email}
                 onChange={handleChange}
-
               />
-
-            </div><br />
+            </div>
+            <br />
 
             {/* Phone Number Field */}
-            <div className="relative  ">
-              <label className="mb-1 ms-3 block  text-gray-500 text-sm">
+            <div className="relative">
+              <label className="mb-1 ms-3 block text-gray-500 text-sm">
                 Phone Number
               </label>
-              <div className="absolute left-3 top-[64%] w-24 h-6 flex items-center justify-center gap-1.5 p-4 rounded-md bg-gray-200 transform -translate-y-1/2 text-sm ">
-                <img src={flag} alt="" />
-                <p >+49</p>
-                <img src={arrow} alt="" className='w-3 h-1.5 object-cover'/>
+
+              {/* Flag + Code box */}
+              <div
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="absolute left-3 top-[64%] w-24 h-6 flex items-center justify-center gap-1.5 p-4 rounded-md bg-gray-200 transform -translate-y-1/2 text-sm cursor-pointer z-10"
+              >
+                <img src={flag} alt="" className="w-5 h-3 object-cover" />
+                <p>{selectedCountry.code}</p>
+                <img src={arrow} alt="" className="w-3 h-1.5 object-cover" />
               </div>
+
+              {/* Dropdown */}
+              {showDropdown && (
+                <div className="absolute left-3 top-full mt-2 w-fit bg-white border border-gray-300 rounded-md shadow z-20">
+                  {countryOptions.map((country, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-2 px-5 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => handleCountrySelect(country)}
+                    >
+                      <img
+                        src={country.flag}
+                        alt={country.name}
+                        className="w-5 h-3 object-cover"
+                      />
+                      <span>{country.code}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Phone input */}
               <input
-                id='phoneNumber'
+                id="phoneNumber"
                 type="tel"
                 name="phoneNumber"
                 placeholder=" "
-                className="w-full pl-32 h-[52px]   px-4  py-3.5 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer"
+                className="w-full pl-32 h-[52px] px-4 py-3.5 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer"
                 value={formData.phoneNumber}
                 onChange={handleChange}
               />
 
-
+              {formData.phoneNumber &&
+                (formData.phoneNumber.length < 10 ||
+                  formData.phoneNumber.length > 11) && (
+                  <p className="text-[10px] text-red-500 mt-1">
+                    (Phone number must be 10 to 11 digits)
+                  </p>
+                )}
             </div>
-            {formData.phoneNumber && (formData.phoneNumber.length < 10 || formData.phoneNumber.length > 11) && (
-              <p className="text-[10px] text-red-500 mt-1 ">(Phone number must be 10 to 11 digits)</p>
-            )}
 
             {/* Password Fields */}
             <div className="flex space-x-2">
@@ -210,28 +252,29 @@ const Signup = () => {
                   Create Password
                 </label>
                 <input
-                  id='password'
+                  id="password"
                   type={showPassword.password ? "text" : "password"}
                   name="password"
                   placeholder=" "
-                  className={`w-full h-[52px] px-4 py-4 border ${passwordError ? '' : 'border-gray-300'
-                    } rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer ${shakePassword ? 'shake' : ''
-                    }`}
+                  className={`w-full h-[52px] px-4 py-4 border ${
+                    passwordError ? "" : "border-gray-300"
+                  } rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer ${
+                    shakePassword ? "shake" : ""
+                  }`}
                   value={formData.password}
                   onChange={handleChange}
-
                 />
                 <span
                   className="absolute right-3 top-[56%] text-gray-600 cursor-pointer"
-                  onClick={() => toggleShowPassword('password')}
+                  onClick={() => toggleShowPassword("password")}
                 >
-                  {showPassword.password ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                  {showPassword.password ? (
+                    <FaEyeSlash size={18} />
+                  ) : (
+                    <FaEye size={18} />
+                  )}
                 </span>
-
-
               </div>
-
-
 
               {/* Confirm Password */}
               <div className="relative w-1/2">
@@ -239,40 +282,58 @@ const Signup = () => {
                   Confirm Password
                 </label>
                 <input
-                  id='confirmPassword'
+                  id="confirmPassword"
                   type={showPassword.confirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   placeholder=" "
                   className="w-full h-[52px] px-4 py-4 border  border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-
                 />
 
                 <span
                   className="absolute right-3 top-[56%] text-gray-600 cursor-pointer"
-                  onClick={() => toggleShowPassword('confirmPassword')}
+                  onClick={() => toggleShowPassword("confirmPassword")}
                 >
-                  {showPassword.confirmPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                  {showPassword.confirmPassword ? (
+                    <FaEyeSlash size={18} />
+                  ) : (
+                    <FaEye size={18} />
+                  )}
                 </span>
-              </div><br />
+              </div>
+              <br />
             </div>
             {passwordError && (
               <p className="text-[10px] text-red-500 ">{passwordError}</p>
-            )}<br />
+            )}
+            <br />
 
-            <div className='flex gap-5 mb-5 items-start'>
-              <input
-                type="checkbox"
-                id="terms"
-                className='w-4 h-4 mt-1'
-                checked={agreedToTerms}
-                onChange={(e) => setAgreedToTerms(e.target.checked)}
-              />
-              <p className='text-xs leading-snug'>
-                By signing up, you agree to our <span className='text-[#2c6472] font-medium'>Terms & Conditions</span><br />
-                and <span className='text-[#2c6472] font-medium'>Privacy Policy.</span>
-              </p>
+            <div className="flex gap-3 mb-5 items-start">
+              {/* Label wraps input and text for easier clicking */}
+              <label
+                htmlFor="terms"
+                className="flex items-start gap-3 cursor-pointer"
+              >
+                {/* Custom checkbox */}
+                <input
+                  type="checkbox"
+                  id="terms"
+                  className="w-4 h-4 accent-[#2c6472] mt-1"
+                  checked={agreedToTerms}
+                  onChange={(e) => setAgreedToTerms(e.target.checked)}
+                />
+                {/* Terms and Privacy text */}
+                <span className="text-xs text-[#2c6472] leading-snug">
+                  By signing up, you agree to our{" "}
+                  <span className="font-medium underline">
+                    Terms & Conditions
+                  </span>
+                  <br />
+                  and{" "}
+                  <span className="font-medium underline">Privacy Policy</span>.
+                </span>
+              </label>
             </div>
             <br />
 
@@ -283,52 +344,68 @@ const Signup = () => {
             >
               Sign Up
             </button>
-          </form><br />
+          </form>
+          <br />
 
           {/* Switch to Login */}
           <div className=" text-center mb-20 text-sm me-2 text-gray-600">
-            Already have an account?{' '}
-            <Link to="/user/login" className="text-[#2c6472] font-semibold hover:underline">
+            Already have an account?{" "}
+            <Link
+              to="/user/login"
+              className="text-[#2c6472] font-semibold hover:underline"
+            >
               Login
             </Link>
           </div>
-        </div>          <div className='text-xs flex items-center justify-center text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472]'> Email and Phone number cannot be changed.</span></p></div>
-
+        </div>{" "}
+        <div className="text-xs flex items-center justify-center text-center  ">
+          <p>
+            <span className="font-medium">Please note:</span>
+            <span className="text-[#2c6472]">
+              {" "}
+              Email and Phone number cannot be changed.
+            </span>
+          </p>
+        </div>
       </div>
 
       {/* Right Panel */}
       <div className="hidden md:flex w-1/2 flex-col items-center justify-center bg-[#2c6472] text-white px-8">
-        <h3 className="text-3xl font-medium mb-1 ms-4 text-center">Welcome to</h3>
+        <h3 className="text-3xl font-medium mb-1 ms-4 text-center">
+          Welcome to
+        </h3>
         <div className="flex items-center mb-3 -ms-2">
-          <img
-            src={logo}
-            className="h-12 w-28"
-          />
+          <img src={logo} className="h-12 w-28" />
         </div>
-        <div className='relative mb-5 flex justify-center items-center ms-4'>
-          <img src={frame} alt="" className='relative object-cover ' />
+        <div className="relative mb-5 flex justify-center items-center ms-4">
+          <img src={frame} alt="" className="relative object-cover " />
           <DotLottieReact
             src="https://lottie.host/47dbe349-fbbc-4772-9026-56f4ed8832c8/G4VcaYQkF2.lottie"
             loop
             autoplay
-            style={{ width: '100px', height: '100px' }}
-            className='absolute object-cover me-2 p-2'
+            style={{ width: "100px", height: "100px" }}
+            className="absolute object-cover me-2 p-2"
           />
         </div>
         <p className=" text-center text-sm  mt-4">
-          Unlock your next opportunity<br />
-          Your dream job is just a click away        </p>
+          Unlock your next opportunity
+          <br />
+          Your dream job is just a click away{" "}
+        </p>
       </div>
 
       {showVerificationPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg p-8 text-center border-b-[#2c6472] border-b-8">
-            <h2 className="text-xl font-semibold mb-4 text-[#2c6472]">Check Your Email 📬</h2>
-            <p className="text-gray-700 ">We've sent you a verification link. Please verify before login!</p>
+            <h2 className="text-xl font-semibold mb-4 text-[#2c6472]">
+              Check Your Email 📬
+            </h2>
+            <p className="text-gray-700 ">
+              We've sent you a verification link. Please verify before login!
+            </p>
           </div>
         </div>
       )}
-
 
       {/* Fullscreen Overlay with Animation */}
       {loading && (
@@ -346,5 +423,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
-

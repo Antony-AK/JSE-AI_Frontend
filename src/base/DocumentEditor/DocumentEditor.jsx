@@ -1,4 +1,5 @@
 import React, { useRef,useState } from 'react';
+import { toast } from 'react-toastify';
 import html2pdf from 'html2pdf.js';
 import { useNavigate } from 'react-router-dom';
 import download_icon from '../../assets/download.svg'
@@ -15,6 +16,22 @@ import ExternalPlushCV from './CV/ExternalPlushCV'
 const DocumentEditor = () => {
 
     const navigate = useNavigate();
+
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleDone = () => {
+        if (!isChecked) {
+            toast.error("Please confirm the download.");
+            return;
+        }
+
+        navigate('/user/my-jobs/external');
+
+        // Ensure scroll to top after navigation
+        setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'auto' });
+        }, 100);
+    };
 
     const clPreviewRef = useRef(null);
     const cvPreviewRef = useRef(null);
@@ -89,19 +106,18 @@ const DocumentEditor = () => {
             </div>
         );
     }
-
     
     return (
         <div className='flex flex-col gap-5 p-5 mb-14 '>
 
             <div className="flex items-center w-full px-10 mb-5">
                 {/* Empty left space */}
-                <div className="flex-1 flex items-center cursor-pointer" onClick={() => navigate(-1)}>
-                    <img src={right_arrow} className='w-2 h-3.5 object-cover' alt="" />
-                    <p className='ml-2 text-base font-medium'>Back</p>
+                <div className="flex-1 flex items-center cursor-pointer">
+                    {/* <img src={right_arrow} className='w-2 h-3.5 object-cover' alt="" />
+                    <p className='ml-2 text-base font-medium'>Back</p> */}
                 </div>
                 <div className="flex-1 text-center">
-                    <h2 className="text-xl font-semibold">CV & CL</h2>
+                    <h2 className="text-xl font-semibold uppercase">Curriculum Vitae & Cover Letter</h2>
                 </div>
                 <div className="flex-1" />
             </div>
@@ -233,17 +249,26 @@ const DocumentEditor = () => {
 
                 <div className="">
                     <div className="flex gap-3 items-center">
-                        <input className='accent-[#2c6472] w-4 h-4 -mt-4' id='checkDownload' type="checkbox" />
+                        <input
+                            className='accent-[#2c6472] w-4 h-4 -mt-4'
+                            id='checkDownload'
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={(e) => setIsChecked(e.target.checked)}
+                        />
                         <label htmlFor="checkDownload" className='text-sm mb-3' >Your CV and Cover Letter have been successfully downloaded.</label>
                     </div>
                     <p className='text-[#2c6472] text-sm font-semibold max-w-[600px]'>To locate them, check your device's Downloads folder — the files are saved with the company name and designation for easy access.</p>
                 </div>
 
-                {/* <div className="">
-                    <button className="bg-[#2c6472] text-white px-8 py-1.5 rounded-2xl">
-                        Finish Editing
+                <div className="">
+                    <button
+                        className="bg-[#2c6472] text-white px-8 py-1.5 rounded-2xl"
+                        onClick={handleDone}
+                        >
+                        Done
                     </button>
-                </div> */}
+                </div>
 
             </div>
 

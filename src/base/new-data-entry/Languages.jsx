@@ -227,7 +227,7 @@ const Languages = () => {
 
 
           {/* Buttons */}
-          <div className="flex w-[70%] justify-between items-center gap-4 mt-4">
+          <div className="flex w-[70%] justify-between items-center gap-4 mt-4 mb-10">
             <button
               type="submit"
               className=" py-2 w-[180px] bg-white text-[#2c6472]  h-[43px]  font-semibold cursor-pointer mt-1 hover:scale-95 transition-transform duration-200 ease-in-out"
@@ -237,10 +237,17 @@ const Languages = () => {
 
             <button
               type="button"
-              className=" teal-button px-6 py-2 bg-[#2c6472] text-white  h-[41px]  rounded-xl focus:outline-none transition-transform duration-200 ease-in-out"
               onClick={handleNext}
+              disabled={loading}
+              className={`teal-button px-6 py-2 h-[40px] rounded-xl transition-transform duration-200 ease-in-out
+                flex items-center justify-center
+                ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white w-[150px]`}
             >
-              {loading ? 'Saving...' : 'Save & Next'}
+              {loading ? (
+                <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                'Save & Next'
+              )}
             </button>
           </div>
         </form>
@@ -248,7 +255,7 @@ const Languages = () => {
 
 
       {/* Footer appears after scrolling all content */}
-      <div className="flex justify-start gap-2 text-gray-500 text-sm mt-32 ">
+      <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm mt-8">
         <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
         AI is not perfect. Make sure your data is accurate before saving.            </div>
 

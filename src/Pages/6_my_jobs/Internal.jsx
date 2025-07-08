@@ -31,6 +31,23 @@ const MyApplication = () => {
   const [showLangModal, setShowLangModal] = useState(false);
   const [actionType, setActionType] = useState(""); // "cv" or "cl"
 
+  const [activeMenuIndex, setActiveMenuIndex] = useState(null);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState("All");
+
+  const options = ["All", "New"];
+
+  const handleSelect = (option) => {
+    setSelected(option);
+    setIsOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = () => setActiveMenuIndex(null);
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
 
   const [offset, setOffset] = useState(0);
   const [pagination, setPagination] = useState({
@@ -395,7 +412,7 @@ const MyApplication = () => {
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 className="origin-top absolute left-0 mt-2 w-52 bg-white border border-gray-200 rounded-md shadow-lg z-10 overflow-hidden"
               >
-                <button className="px-4 py-2 text-[13px] text-black font-medium hover:bg-gray-100 text-left">
+                <button className="w-full px-4 py-2 text-[13px] text-black font-medium hover:bg-gray-100 text-left">
                   Recommended Jobs
                 </button>
                 {/* Add more items below if you want */}
@@ -427,9 +444,40 @@ const MyApplication = () => {
                   <p className="text-sm text-gray-400 mt-1">Based on your preferences</p>
                 </div>
 
-                <div className="flex flex-col justify-around gap-2 ">
-                  <button className="bg-white flex justify-center items-center px-3 ps-4 py-1 curson-pointer border border-gray-300 rounded-md  text-sm shadow-sm">All <img src={arrow_down} className="ms-0.5" alt="" /> </button>
-                </div>
+                <div className="relative flex flex-col gap-2 w-20">
+                {/* Dropdown Button */}
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="bg-white flex justify-between items-center px-4 py-1.5 border border-gray-300 rounded-md text-sm shadow-sm w-full"
+                >
+                  {selected}
+                  <img
+                    src={arrow_down}
+                    alt=""
+                    className={`w-4 h-4 ms-1 transform transition-transform duration-200 ${
+                      isOpen ? "rotate-180" : "rotate-0"
+                    }`}
+                  />
+                </button>
+
+                {/* Dropdown Options Rendered via map */}
+                {isOpen && (
+                  <div className="absolute top-10 left-0 bg-white border border-gray-200 rounded-md shadow-md w-full z-10">
+                    {options.map((option, index) => (
+                      <div
+                        key={index}
+                        onClick={() => handleSelect(option)}
+                        className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 ${
+                          selected === option ? "bg-gray-100 font-semibold text-[#2c6472]" : ""
+                        }`}
+                      >
+                        {option}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
               </div>
 
               <div className="w-full mb-5 -space-y-6 rounded-xl bg-white border border-gray-400/20 "><br />
@@ -471,7 +519,7 @@ const MyApplication = () => {
 
 
                       </div>
-                      <div className="flex  flex-col justify-start  -mt-3 items-center"><br />
+                      <div className="flex  flex-col justify-start mr-2 items-center"><br />
                         <div className="relative gap-1 w-24 h-16">
                           <svg
                             viewBox="0 0 100 100"
@@ -509,7 +557,33 @@ const MyApplication = () => {
 
                         <span className="text-sm text-black mt-3 ">Profile Match</span>
                       </div>
-                      <div className="absolute top-2 right-3 text-gray-500 font-medium text-xl">⋮</div>
+                      <div className="absolute top-2 right-3">
+                        <button
+                          className="text-gray-500 font-medium text-xl hover:bg-gray-200 rounded-full w-7"
+                          onClick={(e) => {
+                            e.stopPropagation(); // prevent parent click
+                            setActiveMenuIndex(activeMenuIndex === index ? null : index);
+                          }}
+                        >
+                          ⋮
+                        </button>
+
+                        {activeMenuIndex === index && (
+                          <div className="absolute -right-2 mt-2 bg-white border border-gray-200 shadow-md rounded-md z-20 w-24">
+                            <button
+                              className="w-fit text-left px-4 py-2 text-sm hover:bg-gray-100"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                // TODO: Add save job logic here
+                                console.log("Saved job:", job.jobTitle);
+                                setActiveMenuIndex(null); // close after action
+                              }}
+                            >
+                              Save Job
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>

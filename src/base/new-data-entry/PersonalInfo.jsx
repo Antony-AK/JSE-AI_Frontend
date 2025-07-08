@@ -14,6 +14,7 @@ const PersonalInfo = () => {
   const token = sessionStorage.getItem('authToken');
 
   const [showOthers, setShowOthers] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     first_name: '',
@@ -195,6 +196,7 @@ const PersonalInfo = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const newErrors = validate();
     setErrors(newErrors);
@@ -226,6 +228,8 @@ const PersonalInfo = () => {
       } catch (error) {
         console.error("❌ Error submitting form:", JSON.stringify(error.response?.data, null, 2));
         toast.error(error.response?.data.issue || "Failed to submit. Please try again.");
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -373,8 +377,21 @@ const PersonalInfo = () => {
         <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472]'> Name ,Email & Phone Number cannot be changed.</span></p></div>
 
         <div className="flex justify-end mt-7">
-          <button type="submit" className='rounded-xl px-6 py-2 bg-[#2C6472] text-[#fff] mb-10'>Save & Next</button>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`rounded-xl px-6 py-2 mb-10 flex items-center justify-center
+              ${loading ? 'bg-[#2C6472]/70 cursor-not-allowed' : 'bg-[#2C6472]'}
+              text-white transition-all w-[150px] h-[40px]`}
+          >
+            {loading ? (
+              <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              'Save & Next'
+            )}
+          </button>
         </div>
+
       </form>
 
 
@@ -390,10 +407,10 @@ const PersonalInfo = () => {
       )}
 
       {/* Footer appears after scrolling all content */}
-      <div className="flex justify-start gap-2 text-gray-500 text-sm mt-16 ">
+      <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm mt-8">
         <img src={warning} className="w-5  h-5 object-cover" alt="" />
         AI is not perfect. Make sure your data is accurate before saving.            
-          </div>
+      </div>
 
     </div>
   )

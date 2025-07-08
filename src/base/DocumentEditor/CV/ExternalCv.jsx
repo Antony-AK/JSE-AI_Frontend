@@ -150,7 +150,7 @@ const ExternalCv = () => {
                 <div className="flex-1" />
 
                 <div className="flex-1 text-center">
-                    <h2 className="text-2xl font-semibold">CV</h2>
+                    <h2 className="text-2xl font-semibold uppercase">Curriculum Vitae</h2>
                 </div>
 
                 <div className="flex-1 flex justify-end">

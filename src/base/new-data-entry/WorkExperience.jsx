@@ -30,6 +30,7 @@ const WorkExperience = () => {
 
   const [experiences, setExperiences] = useState([]);
   const [activeId, setActiveId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
 
   const [errors, setErrors] = useState({});
@@ -143,6 +144,9 @@ const WorkExperience = () => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
+
+      setLoading(true);
+
       try {
         if (!token) {
           navigate('/user/login');
@@ -198,6 +202,8 @@ const WorkExperience = () => {
       } catch (error) {
         console.error("❌ API Error:", error.response?.data || error.message);
         toast.error(error.response?.data.issue || "Submission failed. Please try again.");
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -364,7 +370,23 @@ const WorkExperience = () => {
           <div className="cursor-pointer" onClick={() => handleSubmit(false)}>
             <p className='text-lg text-[#2C6472] font-semibold'>+ Add Another</p>
           </div>
-          <button type="button" onClick={() => handleSubmit(true)} className='rounded-xl px-6 py-2 bg-[#2C6472] text-[#fff] mb-10'>Save & Next</button>
+          <button
+            type="button"
+            onClick={() => {
+              setLoading(true);
+              handleSubmit(true);
+            }}
+            disabled={loading}
+            className={`rounded-xl px-6 py-2 mb-10 flex items-center justify-center 
+              ${loading ? 'bg-[#2C6472]/70 cursor-not-allowed' : 'bg-[#2C6472]'} 
+              text-white transition-all w-[150px] h-[40px]`}
+          >
+            {loading ? (
+              <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              'Save & Next'
+            )}
+          </button>
         </div>
 
       </form>
@@ -379,7 +401,7 @@ const WorkExperience = () => {
       )} */}
 
       {/* Footer appears after scrolling all content */}
-      <div className="flex justify-start gap-2 text-gray-500 text-sm mt-10 ">
+      <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm mt-8">
         <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
         More experience you give the better the result of JSE Ai
       </div>

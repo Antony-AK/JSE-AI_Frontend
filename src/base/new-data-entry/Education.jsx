@@ -33,6 +33,7 @@ const Education = () => {
     const [addedCompanies, setAddedCompanies] = useState([]);
     const [educationList, setEducationList] = useState([]);
     const [activeId, setActiveId] = useState(null);
+    const [loading, setLoading] = useState(false);
 
 
 
@@ -122,6 +123,8 @@ const Education = () => {
         const validationErrors = validate();
         setErrors(validationErrors);
         if (Object.keys(validationErrors).length > 0) return;
+
+        setLoading(true);
 
         try {
             if (!token) {
@@ -213,6 +216,8 @@ const Education = () => {
         } catch (err) {
             console.error("❌ API Error:", err.response?.data || err.message);
             toast.error(err.response?.data?.issue || "Something went wrong!");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -386,7 +391,20 @@ const Education = () => {
                     <div className="cursor-pointer" onClick={() => handleSubmit(false)}>
                         <p className='text-lg text-[#2C6472] font-semibold'>+ Add Another</p>
                     </div>
-                    <button type="button" onClick={() => handleSubmit(true)} className='rounded-xl px-6 py-2 bg-[#2C6472] text-[#fff] mb-10'>Save & Next</button>
+                    <button
+                        type="button"
+                        onClick={() => handleSubmit(true)}
+                        disabled={loading}
+                        className={`rounded-xl px-6 py-2 mb-10 flex items-center justify-center
+                            ${loading ? 'bg-[#2C6472]/70 cursor-not-allowed' : 'bg-[#2C6472]'}
+                            text-white transition-all w-[150px] h-[40px]`}
+                        >
+                        {loading ? (
+                            <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
+                        ) : (
+                            'Save & Next'
+                        )}
+                    </button>
                 </div>
 
             </form>
@@ -401,7 +419,7 @@ const Education = () => {
             )}
 
             {/* Footer appears after scrolling all content */}
-            <div className="flex justify-start gap-2 text-gray-500 text-sm mt-10 ">
+            <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm mt-8">
                 <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
                 AI is not perfect. Make sure your data is accurate before saving.
             </div>

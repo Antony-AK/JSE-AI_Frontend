@@ -81,7 +81,7 @@ const Navbar = () => {
     <>
       <header style={{ width: "calc(100% - 264px)" }} className="fixed top-0 z-10 flex justify-between items-center bg-white h-16 ms-[264px] border-t border-b px-6 border-gray-200">
         <h1 className="text-xl font-bold text-gray-800">{getPageTitle()}</h1>
-        <div className="flex items-center space-x-3 relative">
+        <div className="flex items-center space-x-3 relative cursor-pointer">
           <img
             src={profileImage || profile}
             alt="Profile"
@@ -89,7 +89,7 @@ const Navbar = () => {
             onClick={() => setMenuOpen(!menuOpen)}
           />
           <span className="text-gray-800 font-bold" onClick={() => setMenuOpen(!menuOpen)} >{firstName}</span>
-          <img src={arrow_down} alt="" onClick={() => setMenuOpen(!menuOpen)} className='w-8 h-8 mt-1 p-2 rounded-full hover:bg-[#407684] transform duration-200 ease-linear' />
+          <img src={arrow_down} alt="" onClick={() => setMenuOpen(!menuOpen)} className={`w-8 h-8 mt-1 p-2 rounded-full hover:bg-[#407684]/20 transform duration-200 ease-linear ${menuOpen ? 'rotate-180' : 'rotate-0'}`}/>
           {menuOpen && (
             <div className="absolute top-12 -right-2 bg-white border flex flex-col items-center justify-center rounded shadow-md p-1 z-20">
               <div>

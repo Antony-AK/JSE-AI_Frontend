@@ -28,7 +28,8 @@ import personal_tracker_active from '../../assets/personal-tracker.png';
 import profile_icon from '../../assets/profile-icon.svg';
 import profile_active_icon from '../../assets/profile-active-icon.svg';
 
-
+import upgrade_icon from '../../assets/upgrade-icon.svg';
+import upgrade_active_icon from '../../assets/upgrade-active-icon.svg';
 
 const Sidebar = () => {
   const { pathname } = useLocation();
@@ -240,7 +241,7 @@ const Sidebar = () => {
                 }`}
             >
               <img
-                src={pathname === "/user/upgrade" ? profile_active_icon : profile_icon}
+                src={pathname === "/user/upgrade" ? upgrade_active_icon : upgrade_icon}
                 alt="Upgrade"
                 className="w-5 h-5"
               />

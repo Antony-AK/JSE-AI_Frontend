@@ -21,6 +21,7 @@ const ApplicationCard = ({
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingStatus, setPendingStatus] = useState(null);
 
+  const [showMenu, setShowMenu] = useState(false);
 
   // Helper to check if we can go to the next status
   const canUpdateTo = (targetStatus) => {
@@ -149,10 +150,10 @@ const ApplicationCard = ({
             const isNextStep = targetIndex === currentIndex + 1;
 
             const bgColorMap = {
-              Applied: 'bg-blue-300',
-              Interview: 'bg-yellow-300',
-              Selected: 'bg-green-300',
-              Rejected: 'bg-red-300',
+              Applied: 'bg-blue-400',
+              Interview: 'bg-yellow-400',
+              Selected: 'bg-green-400',
+              Rejected: 'bg-red-400',
             };
 
             const borderColorMap = {
@@ -171,14 +172,18 @@ const ApplicationCard = ({
                     setShowConfirmation(true);
                   }
                 }}
-
                 disabled={!isNextStep}
                 className={`w-[140px] h-[40px] mt-2 px-4 py-1.5 rounded-md text-sm font-medium transition
-          ${isCompletedOrCurrent
-                    ? `${bgColorMap[statusOption]} text-white cursor-not-allowed`
-                    : borderColorMap[statusOption]}
-          ${!isNextStep && !isCompletedOrCurrent ? 'opacity-50 cursor-not-allowed' : ''}
-        `}
+                  ${isCompletedOrCurrent
+                    ? `${bgColorMap[statusOption]} text-white border border-gray-400 cursor-not-allowed`
+                    : `border ${borderColorMap[statusOption]}`
+                  }
+                  ${
+                    !isNextStep && !isCompletedOrCurrent
+                      ? 'opacity-50 cursor-not-allowed'
+                      : ''
+                  }
+                `}
               >
                 {statusOption}
               </button>
@@ -189,8 +194,8 @@ const ApplicationCard = ({
           <button
             disabled={activeStatus.toLowerCase() !== 'interview'}
             className={`w-[140px] h-[40px] mt-2 px-4 py-1.5 rounded-2xl text-sm font-medium transition ${activeStatus.toLowerCase() === 'interview'
-              ? 'bg-[#2c6472] text-white hover:bg-slate-700'
-              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              ? 'bg-[#2c6472] text-white border-[#2c6472] hover:bg-slate-700'
+              : 'bg-gray-200 text-gray-400 border-gray-400 cursor-not-allowed'
               }`}
           >
             Job Research
@@ -207,21 +212,28 @@ const ApplicationCard = ({
       </div>
 
       {/* Right Side: Profile Match Circle */}
-      <div className="flex flex-col items-center -ms-10">
-        <div className="relative w-14 h-14">
-          <svg className="absolute top-0 left-0 w-full h-full">
-            <circle cx="28" cy="28" r="24" stroke="#E5E7EB" strokeWidth="4" fill="none" />
+      <div className="flex flex-col items-center mt-10">
+        <div className="relative w-20 h-20">
+          <svg className="absolute top-0 left-0 w-20 h-20"> {/* 80px x 80px */}
             <circle
-              cx="28"
-              cy="28"
-              r="24"
-              stroke="#2c6472"
-              strokeWidth="4"
+              cx="40"
+              cy="40"
+              r="30"
+              stroke="#E5E7EB"
+              strokeWidth="5"
               fill="none"
-              strokeDasharray="150"
-              strokeDashoffset={150 - (150 * (profileMatch ?? 0)) / 100}
+            />
+            <circle
+              cx="40"
+              cy="40"
+              r="30"
+              stroke="#2c6472"
+              strokeWidth="5"
+              fill="none"
+              strokeDasharray="188.5" // 2 * π * r = 2 * 3.14 * 30
+              strokeDashoffset={188.5 - (188.5 * (profileMatch ?? 0)) / 100}
               strokeLinecap="round"
-              transform="rotate(-90 28 28)"
+              transform="rotate(-90 40 40)"
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-gray-800">
@@ -266,7 +278,28 @@ const ApplicationCard = ({
       )}
 
 
-      <MoreVertical className="text-gray-400 absolute top-5 text-lg w-10 cursor-pointer h-10 mt-1" />
+      <div className="relative">
+        <MoreVertical
+          onClick={() => setShowMenu(!showMenu)}
+          className="cursor-pointer w-6 h-6 text-gray-500 hover:text-[#2c6472] transition"
+        />
+
+        {showMenu && (
+          <div className="absolute top-6 right-0 bg-white border border-gray-200 rounded-md shadow-lg w-32 z-50">
+            <button
+              className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-500 hover:text-white transition rounded-md"
+              onClick={() => {
+                setShowMenu(false);
+                // Add your remove logic here
+                console.log("Remove clicked for jobId:", jobId);
+              }}
+            >
+              Remove
+            </button>
+          </div>
+        )}
+      </div>
+
     </div>
   );
 };

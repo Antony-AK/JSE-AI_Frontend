@@ -179,7 +179,7 @@ const JobTitles = () => {
 
     const token = sessionStorage.getItem('authToken');
     if (!token) {
-      console.error('❌ No token found in sessionStorage');
+      console.error('No token found in sessionStorage');
       return;
     }
 
@@ -203,7 +203,7 @@ const JobTitles = () => {
       if (!response.ok) {
         const errorData = await response.json();
         console.error('❌ Failed to upload job titles:', errorData);
-        toast.error('❌ Failed to upload job titles:', errorData.issue)
+        toast.error('Failed to upload job titles:', errorData.issue)
       } else {
         navigate('/user/onboarding/skills');
       }
@@ -349,25 +349,34 @@ const JobTitles = () => {
             ))}
           </div>
 
-          <div className='flex gap-3 mt-5'>
-            <input
-              type='checkbox'
-              className='w-4 mt-0.5 h-4 bg-[#2c6472] text-[#2c6472]'
-              checked={accepted}
-              onChange={(e) => setAccepted(e.target.checked)}
-            />
-            <p className='text-sm text-red-500'>
-              Please enter your job title accurately. This cannot be changed once saved.
-            </p>
+          <div className="flex gap-3 mt-5 items-start">
+            <label className="flex gap-3 items-start cursor-pointer">
+              <input
+                type="checkbox"
+                className="w-4 h-4 mt-0.5 accent-[#2c6472]"
+                checked={accepted}
+                onChange={(e) => setAccepted(e.target.checked)}
+              />
+              <span className="text-sm text-red-500">
+                Please enter your job title accurately. This cannot be changed once saved.
+              </span>
+            </label>
           </div>
 
 
-          <div className='flex w-[70%] justify-end items-center gap-4 mt-8'>
+          <div className='flex w-[70%] justify-end items-center gap-4 mt-8 mb-10'>
             <button
               type='submit'
-              className='teal-button px-6 py-2 bg-[#2c6472] text-white  h-[41px] rounded-xl focus:outline-none transition-transform duration-200 ease-in-out'
+              disabled={loading}
+              className={`teal-button px-6 py-2 h-[40px] rounded-xl focus:outline-none transition-transform duration-200 ease-in-out
+                flex items-center justify-center
+                ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white w-[150px]`}
             >
-              {loading ? 'Saving...' : 'Save & Next'}
+              {loading ? (
+                <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                'Save & Next'
+              )}
             </button>
           </div>
         </form>
@@ -383,7 +392,7 @@ const JobTitles = () => {
       )}
 
       {/* Footer appears after scrolling all content */}
-      <div className="flex justify-start gap-2 text-gray-500 text-sm mt-32 ">
+      <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm mt-8">
         <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
         AI is not perfect. Make sure your data is accurate before saving.            </div>
     </div>
