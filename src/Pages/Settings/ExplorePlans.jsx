@@ -1,218 +1,281 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import tick from '../../assets/tick.svg'
+import { BASE_URL } from '../../utils/api'
 
 const ExplorePlans = () => {
 
-    const plan = ['Free', 'Basic', 'Advanced', 'Premium'];
+    const [data, setData] = useState(null);
+    const [selected, setSelected] = useState("monthly");
 
-    const plans = [
-    {
-        name: 'Free',
-        price: '€ 0 Per Month',
-        monthly: null,
-        quarterly: null,
-        isActive: true,
-        button: null
-    },
-    {
-        name: 'Basic',
-        price: null,
-        monthly: '€ 20 monthly Billed',
-        quarterly: '€ 55 Quarterly Billed',
-        isActive: false,
-        button: {
-        label: 'Upgrade',
-        style: 'text-white bg-[#2c6472] border-[#2c6472]'
+    const token = sessionStorage.getItem("authToken");
+
+    useEffect(() => {
+        const token = sessionStorage.getItem("authToken");
+
+        if (!token) {
+            console.warn("No token found.");
+            return;
         }
-    },
-    {
-        name: 'Advanced',
-        price: null,
-        monthly: '€ 35 monthly Billed',
-        quarterly: '€ 94.50 Quarterly Billed',
-        isActive: false,
-        button: {
-        label: 'Coming Soon',
-        style: 'bg-transparent text-[#2c6472] border-[#00000047]'
-        }
-    },
-    {
-        name: 'Premium',
-        price: null,
-        monthly: '€ 55 monthly Billed',
-        quarterly: '€ 148.50 Quarterly Billed',
-        isActive: false,
-        button: {
-        label: 'Coming Soon',
-        style: 'bg-transparent text-[#2c6472] border-[#00000047]'
-        }
-    }
-    ];  
-    
+
+        fetch(`${BASE_URL}/settings/explore-plans`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(setData)
+            .catch(err => console.error("Failed to fetch plans", err));
+    }, []);
+
     const highlightsData = [
-    {
-        plan: 'Free',
-        items: [
-        'Targeted Job',
-        'CV Automation',
-        'CL Automation',
-        'External CV/CL',
-        'Job Suitability',
-        ],
-    },
-    {
-        plan: 'Basic',
-        items: [
-        'CV & CL Automation: 150 Docs Included',
-        'External CV/CL Automation: 20 Docs',
-        'Language Test MCQ',
-        'Language Filter',
-        ],
-    },
-    {
-        plan: 'Advanced',
-        items: [
-        'CV & CL Automation: 240 Docs Included',
-        'External CV/CL Automation: 35 Docs',
-        'Language Filter',
-        'Recommended Jobs',
-        'Job Research',
-        ],
-    },
-    {
-        plan: 'Premium',
-        items: [
-        'CV & CL Automation: 360 Docs Included',
-        'External CV/CL Automation: 75 Docs',
-        'Job Search : 5',
-        'Learning Roadmap & Skills',
-        'Autofill Tools for External Jobforms',
-        'Early Access to new features',
-        ],
-    },
-    ];    
+        {
+            plan: 'Free',
+            items: [
+                'Targeted Job',
+                'CV Automation',
+                'CL Automation',
+                'External CV/CL',
+                'Job Suitability',
+            ],
+        },
+        {
+            plan: 'Basic',
+            items: [
+                'CV & CL Automation: 150 Docs Included',
+                'External CV/CL Automation: 20 Docs',
+                'Language Test MCQ',
+                'Language Filter',
+            ],
+        },
+        {
+            plan: 'Advanced',
+            items: [
+                'CV & CL Automation: 240 Docs Included',
+                'External CV/CL Automation: 35 Docs',
+                'Language Filter',
+                'Recommended Jobs',
+                'Job Research',
+            ],
+        },
+        {
+            plan: 'Premium',
+            items: [
+                'CV & CL Automation: 360 Docs Included',
+                'External CV/CL Automation: 75 Docs',
+                'Job Search : 5',
+                'Learning Roadmap & Skills',
+                'Autofill Tools for External Jobforms',
+                'Early Access to new features',
+            ],
+        },
+    ];
 
     const features = [
-        { name: 'Targeted Job', values: [true, true, true, true] },
-        { name: 'CV Automation', values: [5, 150, 240, 360] },
-        { name: 'CL Automation', values: [5, 150, 240, 360] },
-        { name: 'External CV/CL', values: [2, 20, 35, 75] },
-        { name: 'Application Tracker', values: [true, true, true, true] },
-        { name: 'Job Suitability', values: [true, true, true, true] },
-        { name: 'Language Test MCQ', values: [false, true, true, true] },
-        { name: 'Spoken Test', values: [false, false, true, true] },
-        { name: 'Language Filter', values: [false, true, true, true] },
-        { name: 'Recommended Jobs', values: [false, true, true, true] },
-        { name: 'Job Research', values: [false, false, 3, 5] },
-        { name: 'Learning Roadmap & Skills', values: [false, false, false, true] },
-        { name: 'Autofill tools for external job forms', values: [false, false, false, true] },
-        { name: 'Early access to new features', values: [false, false, false, true] },
-    ];    
+        { name: 'Targeted Job', monthly: [true, true, true, true], quarterly: [true, true, true, true] },
+        { name: 'CV Automation', monthly: [5, 150, 240, 360], quarterly: [5, 450, 720, 1080] },
+        { name: 'CL Automation', monthly: [5, 150, 240, 360], quarterly: [5, 450, 720, 1080] },
+        { name: 'External CV/CL', monthly: [2, 20, 35, 75], quarterly: [2, 60, 105, 225] },
+        { name: 'Application Tracker', monthly: [true, true, true, true], quarterly: [true, true, true, true] },
+        { name: 'Job Suitability', monthly: [true, true, true, true], quarterly: [true, true, true, true] },
+        { name: 'Language Test MCQ', monthly: [false, false, true, true], quarterly: [false, false, true, true] },
+        { name: 'Spoken Test', monthly: [false, false, true, true], quarterly: [false, false, true, true] },
+        { name: 'Language Filter', monthly: [false, true, true, true], quarterly: [false, true, true, true] },
+        { name: 'Recommended Jobs', monthly: [false, true, true, true], quarterly: [false, true, true, true] },
+        { name: 'Job Research', monthly: [false, false, 3, 5], quarterly: [false, false, 9, 15] },
+        { name: 'Learning Roadmap & Skills', monthly: [false, false, false, true], quarterly: [false, false, false, true] },
+        { name: 'Autofill tools for external job forms', monthly: [false, false, false, true], quarterly: [false, false, false, true] },
+        { name: 'Early access to new features', monthly: [false, false, false, true], quarterly: [false, false, false, true] },
+    ];
 
-  return (
-    <div className='flex flex-col gap-5'>
 
-        {/* Active Plans */}
-        <div className="flex flex-col gap-5">
-            <h2 className='text-lg font-bold'>Active Plan</h2>
-            <div className="flex flex-col gap-1.5 rounded-xl bg-[#2c6472] p-5">
-                <h2 className='text-white text-xl font-bold'>Free</h2>
-                <p className='text-white text-lg'>Enjoy free features at no cost</p>
-                <p className='text-gray-400 text-sm'>€ 0 Per Month</p>
+    return (
+        <div className='flex flex-col gap-5'>
+
+            {/* Active Plans */}
+            <div className="flex flex-col gap-5">
+                <h2 className="text-lg font-bold">Active Plan</h2>
+
+                {data?.plans[selected] ? (
+                    (() => {
+                        const activePlan = data.plans[selected].find(plan => plan.status === "active");
+                        return activePlan ? (
+                            <div className="flex flex-col h-[120px] gap-1 rounded-xl bg-[#2c6472] p-5">
+                                <h2 className="text-white text-lg font-semibold capitalize">{activePlan.plan}</h2>
+                                <p className="text-white text-base">
+                                    {activePlan.plan === "Free"
+                                        ? "Enjoy free features at no cost"
+                                        : `Enjoy ${activePlan.plan} plan benefits`}
+                                </p>
+                                <p className="text-gray-400 text-sm">€ {activePlan.price || "0"} / {activePlan.period}</p>
+                            </div>
+                        ) : (
+                            <p className="text-sm text-gray-500">No active plan found.</p>
+                        );
+                    })()
+                ) : (
+                    <p className="text-sm text-gray-500">Loading active plan...</p>
+                )}
             </div>
-        </div>
 
-        {/* All Plans */}
-        <div className="flex flex-col gap-5">
-            <h2 className='text-lg font-bold'>All Plans</h2>
 
-            <div className="flex">
-                <div className="flex-1"></div>
+            {/* All Plans */}
+            <div className="flex flex-col gap-5">
+                <h2 className='text-lg font-bold'>All Plans</h2>
 
-                {plans.map((plan, index) => (
-                <div key={index} className="flex-1 flex flex-col gap-4">
-                    <h2 className='font-bold text-lg'>{plan.name}</h2>
-
-                    {plan.price && <p className='text-sm'>{plan.price}</p>}
-
-                    {plan.monthly && (
-                    <div className="">
-                        <p className='text-sm'>{plan.monthly}</p>
-                        <p className='text-sm'>{plan.quarterly}</p>
-                    </div>
-                    )}
-
-                    {plan.isActive && (
-                    <p className='text-sm flex items-center gap-2 text-[#2c6472]'>
-                        <span className="w-2 h-2 bg-[#2c6472] rounded-full inline-block" />
-                        Active
-                    </p>
-                    )}
-
-                    {plan.button && (
+                <div className="flex border border-[#2F6C73] rounded-2xl w-fit overflow-hidden mx-auto mb-5">
                     <button
-                        className={`w-32 text-sm font-medium border rounded-xl py-1.5 px-2 hover:scale-105 duration-200 ${plan.button.style}`}
+                        onClick={() => setSelected("monthly")}
+                        className={`px-16 py-2 text-sm font-medium ${selected === "monthly"
+                                ? "bg-[#2F6C73] text-white"
+                                : "text-[#2F6C73] bg-white"
+                            }`}
                     >
-                        {plan.button.label}
+                        Monthly
                     </button>
-                    )}
+                    <button
+                        onClick={() => setSelected("quarterly")}
+                        className={`px-16 py-2 text-sm font-medium text-center ${selected === "quarterly"
+                                ? "bg-[#2F6C73] text-white"
+                                : "text-[#2F6C73] bg-white"
+                            }`}
+                    >
+                        <p className="text-[10px] leading-none">Save 10%</p>
+                        <h2 className="text-sm font-medium">Quarterly</h2>
+                    </button>
                 </div>
-                ))}
+
+                <div className="flex">
+                    <div className="flex-1"></div>
+
+                    {data?.plans[selected].map((plan, i) => {
+                        const isActive = plan.status === "active";
+                        const isComing = plan.status === "coming soon";
+                        const isUpgrade = plan.status === "upgrade";
+
+                        const btn = isComing
+                            ? { label: "Coming Soon", style: "bg-transparent text-[#2c6472] border-[#00000047]" }
+                            : isUpgrade
+                                ? { label: "Upgrade", style: "text-white bg-[#2c6472] border-[#2c6472]" }
+                                : null;
+
+                        return (
+                            <div key={i} className="flex-1 flex flex-col gap-4">
+                                <h2 className="font-bold text-lg capitalize">{plan.plan}</h2>
+                                <p className="text-sm">€ {plan.price} / {plan.period}</p>
+
+                                {isActive && (
+                                    <p className="text-sm flex items-center gap-2 text-[#2c6472]">
+                                        <span className="w-2 h-2 bg-[#2c6472] rounded-full" />
+                                        Active
+                                    </p>
+                                )}
+
+                                {btn && (
+                                    <button className={`w-32 text-sm font-medium border rounded-xl py-1.5 px-2 hover:scale-105 duration-200 ${btn.style}`}>
+                                        {btn.label}
+                                    </button>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+
             </div>
 
-        </div>
+            {/* Highlights */}
+            <div className="bg-[#2C647221] flex flex-col gap-5 mt-10 p-5">
+                <h2 className='font-semibold pl-5'>Highlights</h2>
 
-        {/* Highlights */}
-        <div className="bg-[#2C647221] flex flex-col gap-5 p-5">
-            <h2 className='font-semibold pl-5'>Highlights</h2>
-
-            <div className="flex">
-                <div className="flex-1"></div>
-                {highlightsData.map((plan, index) => (
-                    <div key={index} className="flex flex-col gap-3 flex-1 text-sm font-medium p-1.5">
-                        {plan.items.map((item, idx) => (
-                        <div key={idx} className="flex gap-1.5">
-                            <img src={tick} width="15px" alt="✔" />
-                            <p>{item}</p>
+                <div className="flex">
+                    <div className="flex-1"></div>
+                    {highlightsData.map((plan, index) => (
+                        <div key={index} className="flex flex-col gap-3 flex-1 text-sm font-medium p-1.5">
+                            {plan.items.map((item, idx) => (
+                                <div key={idx} className="flex gap-1.5">
+                                    <img src={tick} width="15px" alt="" />
+                                    <p>{item}</p>
+                                </div>
+                            ))}
                         </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Features */}
+            <div className="w-full flex flex-col gap-2 text-sm font-medium">
+
+                <h2 className='text-lg font-bold'>Features</h2>
+
+                <div className="border border-b-gray-200 h-px my-3"></div>
+
+                {/* Rows */}
+                {features.map((feature, i) => (
+                    <div
+                        key={i}
+                        className={`flex py-2.5 px-3 ${i % 2 === 0 ? 'bg-[#2C647221]' : 'bg-white'}`}
+                    >
+                        <div className="flex-1 font-semibold">{feature.name}</div>
+                        {feature[selected].map((value, j) => (
+                            <div key={j} className="flex-1 text-center">
+                                {value === true ? (
+                                    <img src={tick} alt="tick" className="w-4 h-4 mx-auto" />
+                                ) : value === false ? (
+                                    <span className="text-gray-400">--</span>
+                                ) : (
+                                    <span className="text-[#2c6472] font-medium">{value}</span>
+                                )}
+                            </div>
                         ))}
                     </div>
                 ))}
-            </div>            
-        </div>
 
-        {/* Features */}
-        <div className="w-full flex flex-col gap-2 text-sm font-medium">
-
-            <h2 className='text-lg font-bold'>Features</h2>
+            </div>
 
             <div className="border border-b-gray-200 h-px my-3"></div>
 
-            {/* Rows */}
-            {features.map((feature, i) => (
-                <div
-                key={i}
-                className={`flex py-2.5 px-3 ${i % 2 === 0 ? 'bg-[#2C647221]' : 'bg-white'}`}
-                >
-                <div className="flex-1 font-semibold">{feature.name}</div>
-                {feature.values.map((value, j) => (
-                    <div key={j} className="flex-1 text-center">
-                    {value === true ? (
-                        <img src={tick} alt="tick" className="w-4 h-4 mx-auto" />
-                    ) : value === false ? (
-                        <span className="text-gray-400">--</span>
-                    ) : (
-                        <span className="text-[#2c6472] font-medium">{value}</span>
-                    )}
+            <div className="flex flex-col gap-5">
+
+                <h2 className='text-lg font-bold'>Other Upgrades</h2>
+
+                <div className="bg-[#2c6472] text-white rounded-xl p-6 flex items-center justify-between w-full mx-auto">
+                    <div className='flex flex-col gap-2'>
+                        <h2 className="font-bold text-lg">CV & CL Automation</h2>
+                        <p className="mt-1 font-medium text-sm">Is your monthly automation completed?</p>
+                        <p className="mt-1 text-xs text-gray-200">For 50 CV's & CL's</p>
                     </div>
-                ))}
+                    <button className="bg-white text-[#2c6472] text-sm font-semibold px-4 py-2 rounded-md shadow hover:scale-105 transition">
+                        Upgrade&nbsp;&nbsp;€&nbsp;15
+                    </button>
                 </div>
-            ))}
 
-        </div>                
+                <div className="bg-[#2c6472] text-white rounded-xl p-6 flex items-center justify-between w-full mx-auto">
+                    <div className='flex flex-col gap-2'>
+                        <h2 className="font-bold text-lg">External Jobs</h2>
+                        <p className="mt-1 font-medium text-sm">Is your monthly external automation completed?</p>
+                        <p className="mt-1 text-xs text-gray-200">For 50 CV's & CL's</p>
+                    </div>
+                    <button className="bg-white text-[#2c6472] text-sm font-semibold px-4 py-2 rounded-md shadow hover:scale-105 transition">
+                        Upgrade&nbsp;&nbsp;€&nbsp;15
+                    </button>
+                </div>
 
-    </div>
-  )
+                <div className="bg-[#2c6472] text-white rounded-xl p-6 flex items-center justify-between w-full mx-auto">
+                    <div className='flex flex-col gap-2'>
+                        <h2 className="font-bold text-lg">Job Research</h2>
+                        <p className="mt-1 font-medium text-sm">Do you want more job research?</p>
+                        <p className="mt-1 text-xs text-gray-200">For 4 Job Research?</p>
+                    </div>
+                    <button className="bg-white text-[#2c6472] text-sm font-semibold px-4 py-2 rounded-md shadow hover:scale-105 transition">
+                        Upgrade&nbsp;&nbsp;€&nbsp;15
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    )
 }
 
 export default ExplorePlans
