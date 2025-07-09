@@ -27,26 +27,26 @@ const Certificates = () => {
     const [activeId, setActiveId] = useState(null);
 
     useEffect(() => {
-  const stored = sessionStorage.getItem("extractedResume");
-  if (stored) {
-    const parsed = JSON.parse(stored)?.data;
-    const firstCert = parsed?.certifications?.[0]; // Only first
+        const stored = sessionStorage.getItem("extractedResume");
+        if (stored) {
+            const parsed = JSON.parse(stored)?.data;
+            const firstCert = parsed?.certifications?.[0]; // Only first
 
-    if (firstCert) {
-      const filledCert = {
-        id: Date.now(),
-        certificate_name: firstCert.certificate_name || '',
-        certificate_type: '', // default blank unless you want to auto-detect
-        provider: firstCert.platform || '',
-        completion_date: firstCert.end_date || '',
-      };
+            if (firstCert) {
+                const filledCert = {
+                    id: Date.now(),
+                    certificate_name: firstCert.certificate_name || '',
+                    certificate_type: '', // default blank unless you want to auto-detect
+                    provider: firstCert.platform || '',
+                    completion_date: firstCert.end_date || '',
+                };
 
-      setFormData(filledCert);       // 👈 populate only formData
-      setActiveId(filledCert.id);    // 👈 for future reference
-      setCertificateList([]);        // ❌ don't populate the card list from SS
-    }
-  }
-}, []);
+                setFormData(filledCert);       // 👈 populate only formData
+                setActiveId(filledCert.id);    // 👈 for future reference
+                setCertificateList([]);        // ❌ don't populate the card list from SS
+            }
+        }
+    }, []);
 
 
 
@@ -209,13 +209,18 @@ const Certificates = () => {
 
     return (
         <div className='w-full  p-5 ml-5  text-black'>
-            <div className="flex flex-col">
+            <div className="flex flex-col mt-5">
                 <div className='flex w-full justify-end items-center'>
 
 
-                    <div className="flex items-center cursor-pointer hover:scale-95 transition-transform duration-200 ease-in-out" onClick={() => navigate('/user/onboarding/jobtitles')}>
-                        <p className='me-10  text-lg font-medium text-[#00000057]'>Skip</p>
-                    </div>
+                    {certificateList.length > 0 && (
+                        <div
+                            className="flex items-center cursor-pointer hover:scale-95 transition-transform duration-200 ease-in-out"
+                            onClick={() => navigate('/user/onboarding/jobtitles')}
+                        >
+                            <p className='me-10 text-lg font-medium text-[#00000057]'>Skip</p>
+                        </div>
+                    )}
                 </div>
 
                 <div>
@@ -341,7 +346,7 @@ const Certificates = () => {
                             className={`teal-button px-6 py-2 h-[40px] rounded-xl focus:outline-none transition-transform duration-200 ease-in-out
                                 flex items-center justify-center
                                 ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white w-[150px]`}
-                            >
+                        >
                             {loading ? (
                                 <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
                             ) : (

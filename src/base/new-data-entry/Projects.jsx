@@ -7,6 +7,8 @@ import { toast } from 'react-toastify';
 import Calendar from '../Calender/Calender';
 import { format } from 'date-fns';
 import warning from "../../assets/carbon_warning.png"
+import { isValid } from 'date-fns';
+
 
 
 
@@ -26,13 +28,19 @@ const Projects = () => {
     currentdo: false,
     project_description: ''
   });
-  
+
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [showSavePopup, setShowSavePopup] = useState(false);
   const [addedCompanies, setAddedCompanies] = useState([]);
   const [projectList, setProjectList] = useState([]);
   const [activeId, setActiveId] = useState(null);
+
+  const tryParseDate = (date) => {
+    if (!date) return null;
+    const parsed = new Date(date);
+    return isValid(parsed) ? parsed : null;
+  };
 
   useEffect(() => {
     const stored = sessionStorage.getItem("extractedResume");
@@ -198,15 +206,16 @@ const Projects = () => {
   return (
     <div className='p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen '>
 
-      <div className="flex justify-end items-center w-[95%]">
+      <div className="flex justify-end mt-5 items-center w-[95%]">
         {/* <div className="flex items-center cursor-pointer" onClick={() => navigate(-1)}>
           <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
           <p className='ml-2 text-lg font-medium'>Back</p>
         </div> */}
-
-        <div className="flex items-center cursor-pointer" onClick={() => navigate('/user/onboarding/languages')}>
-          <p className='ml-2 text-lg font-medium text-[#00000057]'>Skip</p>
-        </div>
+        {projectList.length > 0 && (
+          <div className="flex items-center cursor-pointer" onClick={() => navigate('/user/onboarding/languages')}>
+            <p className='ml-2 text-lg font-medium text-[#00000057]'>Skip</p>
+          </div>
+        )}
       </div>
 
       <p className='text-[#2c6472] font-semibold -mt-10'>STEP 4 OF 8</p>
@@ -265,11 +274,7 @@ const Projects = () => {
           <div className="flex flex-col gap-2 w-[50%]">
             <label className='font-medium' htmlFor="start_date">Start Date <span className='text-red-500'>*</span></label>
             <Calendar
-              selectedDate={
-                formData.start_date && !isNaN(new Date(formData.start_date))
-                  ? new Date(formData.start_date)
-                  : null
-              }
+              selectedDate={tryParseDate(formData.start_date)}
               onDateChange={(date) =>
                 setFormData((prev) => ({
                   ...prev,
@@ -291,11 +296,7 @@ const Projects = () => {
               />
             ) : (
               <Calendar
-                selectedDate={
-                  formData.end_date && !isNaN(new Date(formData.end_date))
-                    ? new Date(formData.end_date)
-                    : null
-                }
+                selectedDate={tryParseDate(formData.end_date)}
                 onDateChange={(date) =>
                   setFormData((prev) => ({
                     ...prev,

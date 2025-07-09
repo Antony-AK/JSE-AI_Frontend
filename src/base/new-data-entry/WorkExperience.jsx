@@ -7,6 +7,7 @@ import right_arrow from '../../assets/left-arrow.png'
 import Calendar from '../Calender/Calender';
 import { format } from 'date-fns';
 import warning from "../../assets/carbon_warning.png"
+import { parse, isValid } from 'date-fns';
 
 
 
@@ -36,6 +37,15 @@ const WorkExperience = () => {
   const [errors, setErrors] = useState({});
   // const [showSavePopup, setShowSavePopup] = useState(false);
   const [addedCompanies, setAddedCompanies] = useState([]);
+
+  const tryParseDate = (dateString) => {
+    if (!dateString) return null;
+    const parsed = new Date(dateString);
+    if (!isValid(parsed)) {
+      console.warn("⚠️ Invalid date format passed:", dateString);
+    }
+    return isValid(parsed) ? parsed : null;
+  };
 
   useEffect(() => {
     const stored = sessionStorage.getItem("extractedResume");
@@ -111,33 +121,26 @@ const WorkExperience = () => {
     if (!formData.company_name.trim()) newErrors.company_name = 'Company is required';
     if (!formData.location.trim()) newErrors.location = 'Location is required';
     if (!formData.start_date) newErrors.start_date = 'Start date is required';
-    if (!formData.currentwork && !formData.enddate) {
-      newErrors.enddate = 'End date is required if not currently working';
-    }
 
     const start = formData.start_date ? new Date(formData.start_date) : null;
-    const end = new Date(formData.enddate);
+    const end = formData.enddate ? new Date(formData.enddate) : null;
     const today = new Date();
-
-    if (!formData.start_date) {
-      newErrors.start_date = "Start date is required.";
-    }
 
     if (!formData.currentwork) {
       if (!formData.enddate) {
         newErrors.enddate = "End date is required.";
-      } else if (start > end) {
+      } else if (start && end && start > end) {
         newErrors.enddate = "End date cannot be before start date.";
       }
-    } else {
-      // If currently working, ensure start date is not in the future
-      if (start > today) {
-        newErrors.start_date = "Start date cannot be after current date";
-      }
+    }
+
+    if (formData.currentwork && start && start > today) {
+      newErrors.start_date = "Start date cannot be after current date";
     }
 
     return newErrors;
   };
+
 
   const handleSubmit = async (navigateNext = false) => {
     const newErrors = validate();
@@ -205,6 +208,8 @@ const WorkExperience = () => {
       } finally {
         setLoading(false);
       }
+    } else {
+      setLoading(false); // ✅ Reset loading even when errors are found
     }
   };
 
@@ -243,11 +248,6 @@ const WorkExperience = () => {
           ))}
         </div>
       )}
-
-
-
-
-
 
       <form onSubmit={(e) => e.preventDefault()} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
 
@@ -297,13 +297,21 @@ const WorkExperience = () => {
               Start Date <span className="text-red-500">*</span>
             </p>
             <Calendar
-              selectedDate={formData.start_date ? new Date(formData.start_date) : null}
-              onDateChange={(date) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  start_date: format(date, 'yyyy-MM-dd'),
-                }))
-              }
+              selectedDate={tryParseDate(formData.start_date)}
+              onDateChange={(date) => {
+                if (date && isValid(date)) {
+                  setFormData((prev) => ({
+                    ...prev,
+                    start_date: format(date, 'yyyy-MM-dd'),
+                  }));
+                } else {
+                  setFormData((prev) => ({
+                    ...prev,
+                    start_date: '',
+                  }));
+                }
+              }}
+
             />
             {errors.start_date && (
               <p className="text-red-500 text-sm">{errors.start_date}</p>
@@ -324,14 +332,23 @@ const WorkExperience = () => {
               />
             ) : (
               <Calendar
-                selectedDate={formData.enddate ? new Date(formData.enddate) : null}
-                onDateChange={(date) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    enddate: format(date, 'yyyy-MM-dd'),
-                  }))
-                }
+                selectedDate={tryParseDate(formData.enddate)}
+                onDateChange={(date) => {
+                  if (date && isValid(date)) {
+                    setFormData((prev) => ({
+                      ...prev,
+                      enddate: format(date, 'yyyy-MM-dd'),
+                    }));
+                  } else {
+                    setFormData((prev) => ({
+                      ...prev,
+                      enddate: '',
+                    }));
+                  }
+                }}
+
               />
+
             )}
 
             {errors.enddate && <p className='text-red-500 text-sm'>{errors.enddate}</p>}
@@ -373,7 +390,6 @@ const WorkExperience = () => {
           <button
             type="button"
             onClick={() => {
-              setLoading(true);
               handleSubmit(true);
             }}
             disabled={loading}

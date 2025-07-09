@@ -15,7 +15,6 @@ import Signup from './Pages/Signup/Signup.jsx';
 import Dashboard from './Pages/3_dashboard/Dashboard.jsx';
 import Myapplication from "./Pages/6_my_jobs/Internal.jsx";
 import Savedjob from "./Pages/8_savedjobs/Savedjob.jsx";
-import Setting from "./Pages/9_settings/Settings.jsx";
 import VerificationPage from './base/1_auth/VerificationPage/VerificationPage.jsx';
 import Test1 from './Testing/Test1';
 import Navbar from "./base/navbar/Navbar.jsx";
@@ -89,7 +88,6 @@ const AppRoutes = () => {
                                 <Route path="/user/my-jobs/external" element={<External />} />
                                 <Route path="/user/application-tracker" element={<ApplicationTracker />} />
                                 <Route path="/user/saved-jobs" element={<Savedjob />} />
-                                <Route path="/user/setting" element={<Setting />} />
                                 <Route path="/user/settings" element={<Settings />} />
                                 <Route path="/test1" element={<Test1 />} />
                                 <Route path="/verification" element={<VerificationPage />} />

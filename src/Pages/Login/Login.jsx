@@ -12,14 +12,12 @@ import { BASE_URL } from '../../utils/api';
 import { useProfileImage } from '../../base/ProfileEditor/ProfileImageContext';
 
 
-
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const { fetchProfileImage } = useProfileImage();
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,14 +43,12 @@ const Login = () => {
       } else {
         toast.error(data.issue || 'Error occurred. Try again.');
         setLoading(false); // ✅ Stop loading on error
-
       }
     } catch (err) {
       toast.error('Network error: ' + err.message);
       setLoading(false); // ✅ Stop loading on error
     }
   };
-
 
 
   const fetchEntryProgressAndRedirect = async (token) => {
@@ -82,19 +78,15 @@ const Login = () => {
             languages: '/user/onboarding/languages',
             certificates: '/user/onboarding/certificates',
             preferred_job_titles: '/user/onboarding/jobtitles',
-            Skills: '/user/onboarding/skills',
+            key_skills: '/user/onboarding/skills',
           };
+
+
 
           const nextStep = progress.next_step;
 
           // 👇 Check if it's the FIRST login after signup
           const isFirstLogin = localStorage.getItem('firstLogin') === 'true';
-
-          setTimeout(() => {
-            navigate(nextRoute);
-            setLoading(false); // Turn off loading *after* navigating
-          }, 1000); // slight delay for smoother UX (optional)
-
 
           if (isFirstLogin) {
             localStorage.removeItem('firstLogin'); // ✅ Clear after using
@@ -104,6 +96,11 @@ const Login = () => {
           } else {
             navigate('/user/dataonboarding'); // Fallback if no step info
           }
+
+          console.log("🧠 Onboarding Progress:", progress);
+          console.log("👉 Redirecting to:", stepToPath[nextStep] || '/user/dataonboarding');
+
+          setLoading(false);
         }
       } else {
         navigate('/user/dashboard'); // Fallback

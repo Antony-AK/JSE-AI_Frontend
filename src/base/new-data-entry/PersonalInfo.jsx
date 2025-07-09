@@ -39,56 +39,53 @@ const PersonalInfo = () => {
   const [errors, setErrors] = useState({});
   const [showSavePopup, setShowSavePopup] = useState(false);
 
-  useEffect(() => {
-    const hasSubmitted = sessionStorage.getItem("hasSubmittedPersonalInfo");
-    if (hasSubmitted === "true") {
-      fetchProfileInfo(); // fetch full info
-    } else {
-      fetchEmailAndPhoneOnly(); // fetch only email and phone
-    }
-  }, []);
+
 
   const fetchEmailAndPhoneOnly = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/personal-info`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+  try {
+    console.log("📡 Fetching personal info...");
+    const res = await axios.get(`${BASE_URL}/personal-info`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-      const { email, phone } = res.data || {};
-      setFormData(prev => ({
-        ...prev,
-        email: email || '',
-        phone: phone || ''
-      }));
-    } catch (err) {
-      console.error("Failed to fetch email and phone", err);
-    }
-  };
+    const info = res.data || {};
+    console.log("📬 Got info from backend:", info);
+
+    setFormData(prev => ({
+      ...prev,
+      email: info.email || '',
+      phone: info.phone || ''
+    }));
+  } catch (err) {
+    console.error("❌ Failed to fetch email and phone:", err);
+  }
+};
+
+
 
   useEffect(() => {
+    fetchEmailAndPhoneOnly(); // Always get phone + email from backend
+
     const stored = sessionStorage.getItem("extractedResume");
     if (stored) {
       const parsed = JSON.parse(stored)?.data;
 
-      console.log("📄 Prefilling data from extractedResume:", parsed);
+      console.log("📄 Prefilling from extractedResume:", parsed);
 
-
-      setFormData((prev) => ({
+      setFormData(prev => ({
         ...prev,
         first_name: parsed.first_name || '',
         second_name: parsed.second_name || '',
         city: parsed.city || '',
         state: parsed.state || '',
         country: parsed.country || '',
-        linkedin_profile: parsed.linkedin || '', // 💡 parsed.linkedin instead of linkedin_profile
-        phone: parsed.phone || '',
-        email: parsed.email || ''
+        linkedin_profile: parsed.linkedin || '',
+        // phone and email will always come from backend
       }));
 
-      // 🔄 Also update external links if available
       if (Array.isArray(parsed.links)) {
         const updatedLinks = ['website', 'github', 'blog', 'social media'].map(type => {
-          const match = parsed.links.find(link => link.type === type);
+          const match = parsed.links.find(link => link.type?.toLowerCase() === type);
           return { type, url: match?.url || '' };
         });
         setExternalLinks(updatedLinks);
@@ -96,58 +93,7 @@ const PersonalInfo = () => {
     }
   }, []);
 
-
-  const fetchProfileInfo = async () => {
-    try {
-      const res = await axios.get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      let info = {};
-
-      if (Array.isArray(res.data)) {
-        info = res.data[0] || {};
-      } else if (Array.isArray(res.data?.personal_info)) {
-        info = res.data.personal_info[0] || {};
-      } else if (typeof res.data?.personal_info === 'object') {
-        info = res.data.personal_info;
-      } else if (typeof res.data === 'object') {
-        info = res.data;
-      }
-
-      if (Array.isArray(info.external_links)) {
-        const updatedLinks = ['website', 'github', 'blog', 'social media'].map(type => {
-          const match = info.external_links.find(link => link.type === type);
-          return { type, url: match?.url || '' };
-        });
-        setExternalLinks(updatedLinks);
-      }
-
-
-      setFormData({
-        first_name: (info.first_name || ''),
-        second_name: (info.second_name || ''),
-        email: (info.email || ''),
-        phone: (info.phone || ''),
-        linkedin_profile: (info.linkedin_profile || ''),
-        country: (info.country || ''),
-        state: (info.state || ''),
-        city: (info.city || ''),
-
-      });
-
-      if (info.external_links?.some(link => link.url)) {
-        setShowOthers(true);
-      }
-
-
-    } catch (err) {
-      console.error("❌ Failed to fetch personal info", err);
-    }
-  };
-
+  
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
 
@@ -196,12 +142,13 @@ const PersonalInfo = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
     const newErrors = validate();
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
+          setLoading(true);
+
       try {
         const token = sessionStorage.getItem('authToken');
         if (!token) {
@@ -232,8 +179,6 @@ const PersonalInfo = () => {
           }
         });
 
-        sessionStorage.setItem("hasSubmittedPersonalInfo", "true");
-
         navigate('/user/onboarding/work-experience');
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -244,7 +189,9 @@ const PersonalInfo = () => {
       } finally {
         setLoading(false);
       }
-    }
+    }else {
+    setLoading(false); // ✅ Reset loading even when errors are found
+  }
   };
 
   return (
@@ -338,7 +285,7 @@ const PersonalInfo = () => {
             <div className="flex flex-col gap-2 w-[100%] mx-auto" key={index}>
               <label className='font-medium'>{link.type.charAt(0).toUpperCase() + link.type.slice(1)} Link</label>
               <input
-                className="px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]"
+                className='px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]'
                 type="text"
                 // placeholder={`Enter your ${link.type} URL`}
                 value={link.url}

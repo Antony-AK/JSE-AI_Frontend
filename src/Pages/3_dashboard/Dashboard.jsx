@@ -15,6 +15,7 @@ import { BASE_URL } from "../../utils/api"
 import Loader from '../../base/loader/Loader'
 import { useMemo } from "react";
 import { useProfileImage } from '../../base/ProfileEditor/ProfileImageContext';
+import PackagePopup from '../../base/PackagePopup/PackagePopup'
 
 
 const Dashboard = () => {
@@ -28,6 +29,8 @@ const Dashboard = () => {
   const [selectedLanguageIndex, setSelectedLanguageIndex] = useState(0);
   const { profileImage } = useProfileImage(); // 👈 use context
   const token = sessionStorage.getItem("authToken");
+  const [showPackagePopup, setShowPackagePopup] = useState(false);
+
 
 
   useEffect(() => {
@@ -71,12 +74,17 @@ const Dashboard = () => {
   const infoBlock = {
     userId: profileData?.info_block?.auth_user_id ?? "",
     tier: profileData?.info_block?.subscription_tier ?? "free",
-    dailyJobLimit: profileData?.info_block?.daily_selectable_jobs_count ?? 0,
-    dailyCVLimit: profileData?.info_block?.daily_generatable_cv ?? 0,
-    dailyCLLimit: profileData?.info_block?.daily_generatable_coverletter ?? 0,
+    subscriptionStart: profileData?.info_block?.subscription_interval_start ?? "",
+    subscriptionEnd: profileData?.info_block?.subscription_interval_end ?? "",
+    subscriptionPeriod: profileData?.info_block?.subscription_period ?? "",
     totalApplications: profileData?.info_block?.total_applications ?? 0,
-    totalJobs: profileData?.info_block?.total_jobs_available ?? 0,
+    weeklyApplications: profileData?.info_block?.weekly_applications_count ?? 0,
+    topJobs: profileData?.info_block?.top_jobs_count ?? 0,
+    internalApps: profileData?.info_block?.internal_application_count ?? 0,
+    externalApps: profileData?.info_block?.external_application_count ?? 0,
+    proficiencyTests: profileData?.info_block?.proficiency_test ?? 0,
   };
+
 
   const newJobs = profileData?.new_jobs?.mini_new_jobs ?? [];
 
@@ -212,12 +220,15 @@ const Dashboard = () => {
         </div>
 
         {/* ✅ Remaining Applications (based on limits) */}
-        <div className="relative flex bg-gradient-to-br from-[#6FE297] to-[#48D77A] h-[120px] w-[250px] text-black p-4 rounded-xl">
-          <div className="flex flex-col justify-start items-start">
+        <div onClick={() => setShowPackagePopup(true)}
+          className="relative flex bg-gradient-to-br from-[#6FE297] to-[#48D77A] h-[120px] w-[250px] text-black p-4 rounded-xl">
+          <div className="flex flex-col justify-start items-start gap-1">
             <p className="font-bold">Package</p>
-            <p className='font-semibold'>
-              {Math.max(infoBlock.dailyJobLimit - infoBlock.totalApplications, 0)} / {infoBlock.dailyJobLimit}
-            </p>
+            <div className='flex gap-1'>
+              <p className="text-sm font-semibold">{infoBlock.internalApps} </p> /
+              <p className="text-sm font-semibold"> {infoBlock.externalApps}</p>
+            </div>
+
             <h3 className="font-semibold">
               {infoBlock.tier.charAt(0).toUpperCase() + infoBlock.tier.slice(1)}
             </h3>
@@ -226,6 +237,7 @@ const Dashboard = () => {
             <img width="26px" height="26px" className="p-1" src={total_experience_icon} alt="" />
           </div>
         </div>
+
 
       </div>
 
@@ -247,7 +259,7 @@ const Dashboard = () => {
               {/* Image + Name/Title */}
               <div className="flex items-center space-x-4">
                 <img
-                  src={ profileImage || profile}
+                  src={profileImage || profile}
                   alt=''
                   className="w-14 h-14 rounded-full bg-white object-cover  border border-black"
                 />
@@ -400,7 +412,7 @@ const Dashboard = () => {
           <div className="flex flex-col gap-2.5 border rounded-xl p-5 bg-white space-y-3">
             <div className="flex justify-between">
               <h2 className='font-bold text-[15px]'>New Jobs </h2>
-             <Link to='/user/my-jobs/internal'> <p className='text-[#2c6472] font-medium' >View All</p></Link>
+              <Link to='/user/my-jobs/internal'> <p className='text-[#2c6472] font-medium' >View All</p></Link>
             </div>
 
             {jobs.map((job, index) => (
@@ -488,6 +500,19 @@ const Dashboard = () => {
         </div>
 
       </div>
+
+      {showPackagePopup && (
+        <div className="fixed inset-0 z-50 bg-black/30 flex justify-center items-center">
+          <div className="relative z-50">
+            <PackagePopup
+              isOpen={showPackagePopup}
+              onClose={() => setShowPackagePopup(false)}
+              infoBlock={infoBlock} // 🔥 full data going in
+            />
+          </div>
+        </div>
+      )}
+
 
     </div>
   )

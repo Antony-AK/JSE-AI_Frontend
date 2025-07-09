@@ -8,6 +8,8 @@ import {
   isSameDay,
 } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
+import { isValid } from 'date-fns';
+
 
 const Calendar = ({ selectedDate, onDateChange }) => {
   const [showCalendar, setShowCalendar] = useState(false);
@@ -61,7 +63,7 @@ const Calendar = ({ selectedDate, onDateChange }) => {
         type="text"
         readOnly
         onClick={() => setShowCalendar(true)}
-        value={selectedDate ? format(selectedDate, 'yyyy-MM-dd') : ''}
+        value={selectedDate && isValid(selectedDate) ? format(selectedDate, 'yyyy-MM-dd') : ''}
         placeholder="Pick a date"
         className="w-full px-5 py-3 rounded-lg border border-gray-300 outline-none focus:ring-2 ring-[#2c6472] text-gray-600 cursor-pointer"
       />

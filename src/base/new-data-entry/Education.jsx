@@ -6,6 +6,8 @@ import { BASE_URL } from '../../utils/api'
 import Calendar from '../Calender/Calender';
 import { format } from 'date-fns';
 import warning from "../../assets/carbon_warning.png"
+import { isValid } from 'date-fns';
+
 
 
 const Education = () => {
@@ -28,6 +30,8 @@ const Education = () => {
         description: ''
     });
 
+
+
     const [errors, setErrors] = useState({});
     const [showSavePopup, setShowSavePopup] = useState(false);
     const [addedCompanies, setAddedCompanies] = useState([]);
@@ -36,6 +40,14 @@ const Education = () => {
     const [loading, setLoading] = useState(false);
 
 
+    const tryParseDate = (value) => {
+        if (!value) return null;
+        const parsed = new Date(value);
+        if (!isValid(parsed)) {
+            console.warn("⚠️ Invalid date format passed to Calendar:", value);
+        }
+        return isValid(parsed) ? parsed : null;
+    };
 
     useEffect(() => {
         const stored = sessionStorage.getItem("extractedResume");
@@ -70,6 +82,8 @@ const Education = () => {
         setActiveId(edu.tempId);
         setErrors({});
     };
+
+
 
     const handleChange = (e) => {
         const { id, value, type, checked } = e.target;
@@ -319,7 +333,7 @@ const Education = () => {
                     <div className="flex flex-col gap-2 w-[50%]">
                         <label className='font-medium' htmlFor="start_date">Start Date <span className='text-red-500'>*</span></label>
                         <Calendar
-                            selectedDate={formData.start_date ? new Date(formData.start_date) : null}
+                            selectedDate={tryParseDate(formData.start_date)}
                             onDateChange={(date) =>
                                 setFormData((prev) => ({
                                     ...prev,
@@ -345,7 +359,7 @@ const Education = () => {
                             />
                         ) : (
                             <Calendar
-                                selectedDate={formData.enddate ? new Date(formData.enddate) : null}
+                                selectedDate={tryParseDate(formData.enddate)}
                                 onDateChange={(date) =>
                                     setFormData((prev) => ({
                                         ...prev,
@@ -398,7 +412,7 @@ const Education = () => {
                         className={`rounded-xl px-6 py-2 mb-10 flex items-center justify-center
                             ${loading ? 'bg-[#2C6472]/70 cursor-not-allowed' : 'bg-[#2C6472]'}
                             text-white transition-all w-[150px] h-[40px]`}
-                        >
+                    >
                         {loading ? (
                             <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
                         ) : (

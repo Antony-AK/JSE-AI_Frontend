@@ -154,6 +154,17 @@ const Languages = () => {
 
   return (
     <div className='w-full  p-5 ml-5  text-black'>
+
+      {addedCompanies.length > 0 && (
+        <div className="flex absolute items-center justify-end w-[85%] mt-2">
+          <div
+            className="cursor-pointer px-4 py-2 rounded transition"
+            onClick={() => navigate('/user/onboarding/certificates')}
+          >
+            <p className="text-lg font-medium text-[#00000057]">Skip</p>
+          </div>
+        </div>
+      )}
       <div className="flex flex-col">
 
         <div>
