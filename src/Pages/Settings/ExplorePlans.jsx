@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { toast } from 'react-toastify';
 import tick from '../../assets/tick.svg'
 import { BASE_URL } from '../../utils/api'
 
@@ -28,6 +29,37 @@ const ExplorePlans = () => {
             .then(setData)
             .catch(err => console.error("Failed to fetch plans", err));
     }, []);
+
+    const handlePlanSelect = async (planId) => {
+        try {
+            const token = sessionStorage.getItem("authToken");
+            if (!token) {
+                toast.error("Please login first.");
+                return;
+            }
+
+            const url = `${BASE_URL.replace(/\/$/, '')}/payment/checkout?plan=${planId}`;
+
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data?.url) {
+                window.open(data.url, "_blank");
+            } else {
+                toast.success(data.message || "Something went wrong.");
+            }
+        } catch (err) {
+            console.error("Checkout error:", err);
+            toast.error("Checkout failed.");
+        }
+    };
 
     const highlightsData = {
         monthly: [
@@ -145,7 +177,6 @@ const ExplorePlans = () => {
         <div className='flex flex-col gap-5'>
 
             {/* Active Plans */}
-            {/* Active Plans */}
             <div className="flex flex-col gap-5">
                 <h2 className="text-lg font-bold">Active Plan</h2>
 
@@ -202,7 +233,7 @@ const ExplorePlans = () => {
                         const isUpgrade = plan.status === "upgrade";
 
                         const btn = isComing
-                            ? { label: "Coming Soon", style: "bg-transparent text-[#2c6472] border-[#00000047]" }
+                            ? { label: "Coming Soon", style: "bg-transparent text-[#2c6472] border-[#00000047] cursor-not-allowed opacity-50", disabled: true }
                             : isUpgrade
                                 ? { label: "Upgrade", style: "text-white bg-[#2c6472] border-[#2c6472]" }
                                 : null;
@@ -220,7 +251,13 @@ const ExplorePlans = () => {
                                 )}
 
                                 {btn && (
-                                    <button className={`w-32 text-sm font-medium border rounded-xl py-1.5 px-2 hover:scale-105 duration-200 ${btn.style}`}>
+                                    <button
+                                        onClick={() =>
+                                        !btn.disabled && handlePlanSelect(`${plan.plan.toLowerCase()}_${selected}`)
+                                        }
+                                        disabled={btn.disabled}
+                                        className={`w-32 text-sm font-medium border rounded-xl py-1.5 px-2 hover:scale-105 duration-200 ${btn.style} ${btn.disabled ? '' : 'hover:scale-105'}`}
+                                    >
                                         {btn.label}
                                     </button>
                                 )}

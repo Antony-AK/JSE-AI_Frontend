@@ -3,8 +3,6 @@ import right_arrow from "../../assets/arrow-right.svg";
 import { BASE_URL } from '../../utils/api';
 import { motion, AnimatePresence } from "framer-motion";
 import arrow_down from "../../assets/arrow-down-drop.png"; // 👈 your dropdown arrow
-import { changeLanguageGoogleTranslate } from '../../utils/translate';
-
 
 
 const Preferences = () => {
