@@ -6,6 +6,7 @@
     @apply bg-teal-800 transition-transform ease-linear  duration-200;
 }
 
+
 html {
     scroll-behavior: smooth;
   }

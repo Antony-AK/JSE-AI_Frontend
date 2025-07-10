@@ -16,7 +16,7 @@ const Settings = () => {
   return (
     
     <div className="fixed inset-0 top-16 bg-black bg-opacity-10 flex justify-center items-center z-50">
-        <div className="flex gap-7 w-[80%] h-[90%] bg-white rounded-lg p-6 shadow-lg relative">
+        <div className="flex gap-7 w-[90%] h-[90%] bg-white rounded-lg p-6 shadow-lg relative">
 
             {/* Sidebar */}
             <div className='w-1/4 mt-3'>

@@ -56,6 +56,7 @@ const AppRoutes = () => {
 
     return (
         <div className='App'>
+
             {isDataEntryPage ? (
                 <div className='data-entry'>
                     <Routes>
@@ -74,9 +75,9 @@ const AppRoutes = () => {
                     {!hideLayout && <Navbar />}
                     <div className='flex flex-row h-full'>
                         {!hideLayout && <Sidebar />}
-                        <div 
-                          style={{ width: hideLayout ? '100%' : 'calc(100% - 264px)' }}
-                          className={`${!hideLayout ? 'ms-64 mt-16' : ''} h-full bg-[#f5f5f5]`}
+                        <div
+                            style={{ width: hideLayout ? '100%' : 'calc(100% - 264px)' }}
+                            className={`${!hideLayout ? 'ms-64 mt-16' : ''} h-full bg-[#f5f5f5]`}
                         >
                             <Routes>
                                 <Route path="/user/personal-tracker" element={<PersonalTracker />} />
@@ -95,8 +96,8 @@ const AppRoutes = () => {
                                 <Route path='/user/graph' element={<ApplicationsChart />} />
                                 <Route path='/user/announcements' element={<Announcements />} />
                                 <Route path="/user/cv" element={<CvProvider> <Cv key={Date.now()} /> </CvProvider>} />
-                                <Route path="/user/cl" element={<ClProvider> <Cl key={Date.now()}/> </ClProvider>} />
-                                <Route path="/user/document-editor"element={<ExternalCvProvider> <ExternalClProvider> <DocumentEditor /> </ExternalClProvider> </ExternalCvProvider>}/>
+                                <Route path="/user/cl" element={<ClProvider> <Cl key={Date.now()} /> </ClProvider>} />
+                                <Route path="/user/document-editor" element={<ExternalCvProvider> <ExternalClProvider> <DocumentEditor /> </ExternalClProvider> </ExternalCvProvider>} />
                                 <Route path='/user/external-cv' element={<ExternalCvProvider> <ExternalCv /> </ExternalCvProvider>} />
                                 <Route path='/user/external-cl' element={<ExternalClProvider> <ExternalCl /> </ExternalClProvider>} />
                             </Routes>

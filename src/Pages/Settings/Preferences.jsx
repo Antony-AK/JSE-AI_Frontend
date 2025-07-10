@@ -3,6 +3,8 @@ import right_arrow from "../../assets/arrow-right.svg";
 import { BASE_URL } from '../../utils/api';
 import { motion, AnimatePresence } from "framer-motion";
 import arrow_down from "../../assets/arrow-down-drop.png"; // 👈 your dropdown arrow
+import { changeLanguageGoogleTranslate } from '../../utils/translate';
+
 
 
 const Preferences = () => {
@@ -10,6 +12,18 @@ const Preferences = () => {
     const [updating, setUpdating] = useState(false);
     const [showLangDropdown, setShowLangDropdown] = useState(false);
     const [showTimezoneDropdown, setShowTimezoneDropdown] = useState(false);
+
+    const langMap = {
+  english: "en",
+  german: "de",
+};
+
+const handleLanguageChange = (lang) => {
+  changeLanguageGoogleTranslate(langMap[lang]); // dynamic!
+  const updated = { ...preferences, language: lang };
+  setPreferences(updated);
+  handleUpdate(updated);
+};
 
 
     useEffect(() => {
@@ -74,11 +88,6 @@ const Preferences = () => {
         }
     };
 
-    const handleLanguageChange = (e) => {
-        const updated = { ...preferences, language: e.target.value };
-        setPreferences(updated);
-        handleUpdate(updated);
-    };
 
     const handleTimezoneChange = (e) => {
         const updated = { ...preferences, timezone: e.target.value };
@@ -105,6 +114,8 @@ const Preferences = () => {
         document.addEventListener("click", handleClickOutside);
         return () => document.removeEventListener("click", handleClickOutside);
     }, []);
+
+ 
 
 
     return (
@@ -146,7 +157,7 @@ const Preferences = () => {
                                         key={lang}
                                         className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${preferences?.language === lang ? "bg-gray-100 font-bold" : ""}`}
                                         onClick={() => {
-                                            handleLanguageChange({ target: { value: lang } });
+                                            handleLanguageChange(lang);
                                             setShowLangDropdown(false);
                                         }}
                                     >

@@ -931,17 +931,14 @@ const Cv = () => {
                                 );
                             })}
                         </div>
-
                     </div>
 
 
-
                 </div>
-
                 <div className="w-[60%] flex flex-col gap-8">
 
                     {/* 🖥️ MAIN BIG CV PREVIEW */}
-                    <div ref={previewRef} className="min-h-[1123px] w-[794px] bg-white shadow border">
+                    <div ref={previewRef} className="min-h-[1123px] w-[794px]  bg-white shadow border">
                         <SelectedTemplate
                             personalInfo={personalInfo}
                             professionalSummary={professionalSummary}

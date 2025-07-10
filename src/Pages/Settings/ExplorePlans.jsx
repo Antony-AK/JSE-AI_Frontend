@@ -29,48 +29,94 @@ const ExplorePlans = () => {
             .catch(err => console.error("Failed to fetch plans", err));
     }, []);
 
-    const highlightsData = [
-        {
+    const highlightsData = {
+        monthly: [
+            {
             plan: 'Free',
             items: [
                 'Targeted Job',
-                'CV Automation',
-                'CL Automation',
-                'External CV/CL',
-                'Job Suitability',
+                'CV & CL Automation:5 included',
+                'External CV/CL:2 included',
+                'Application Tracker',
             ],
-        },
-        {
+            },
+            {
             plan: 'Basic',
             items: [
-                'CV & CL Automation: 150 Docs Included',
-                'External CV/CL Automation: 20 Docs',
-                'Language Test MCQ',
+                'CV & CL Automation: 150 Included',
+                'External CV/CL Automation: 20 Included',
+                'Recommended Jobs',
                 'Language Filter',
+                'Basic Support',
             ],
-        },
-        {
+            },
+            {
             plan: 'Advanced',
             items: [
-                'CV & CL Automation: 240 Docs Included',
-                'External CV/CL Automation: 35 Docs',
-                'Language Filter',
-                'Recommended Jobs',
-                'Job Research',
+                'CV & CL Automation: 240 Included',
+                'External CV/CL Automation: 35',
+                'Job Research: 9 included',
+                'Language Test Free MCQ’s',
+                'Spoken Test',
+                'Priority Support',
             ],
-        },
-        {
+            },
+            {
             plan: 'Premium',
             items: [
-                'CV & CL Automation: 360 Docs Included',
-                'External CV/CL Automation: 75 Docs',
-                'Job Search : 5',
+                'CV & CL Automation: 360 Included',
+                'External CV/CL Automation: 75',
+                'Job Research: 15 Included',
                 'Learning Roadmap & Skills',
                 'Autofill Tools for External Jobforms',
-                'Early Access to new features',
+                'Priority Support',
             ],
-        },
-    ];
+            },
+        ],
+        quarterly: [
+            {
+            plan: 'Free',
+            items: [
+                'Targeted Job',
+                'CV & CL Automation:5 included',
+                'External CV/CL:2 included',
+                'Application Tracker',
+            ],
+            },
+            {
+            plan: 'Basic',
+            items: [
+                'CV & CL Automation: 450 Included',
+                'External CV/CL Automation: 60 Included',
+                'Recommended Jobs',
+                'Language Filter',
+                'Basic Support',
+            ],
+            },
+            {
+            plan: 'Advanced',
+            items: [
+                'CV & CL Automation: 720 Included',
+                'External CV/CL Automation: 105 Docs',
+                'Job Research: 9 included',
+                'Language Test Free MCQ’s',
+                'Spoken Test',
+                'Priority Support',
+            ],
+            },
+            {
+            plan: 'Premium',
+            items: [
+                'CV & CL Automation: 1080 Included',
+                'External CV/CL Automation: 225',
+                'Job Research: 15 Included',
+                'Learning Roadmap & Skills',
+                'Autofill Tools for External Jobforms',
+                'Priority Support',
+            ],
+            },
+        ],
+    };    
 
     const features = [
         { name: 'Targeted Job', monthly: [true, true, true, true], quarterly: [true, true, true, true] },
@@ -79,41 +125,42 @@ const ExplorePlans = () => {
         { name: 'External CV/CL', monthly: [2, 20, 35, 75], quarterly: [2, 60, 105, 225] },
         { name: 'Application Tracker', monthly: [true, true, true, true], quarterly: [true, true, true, true] },
         { name: 'Job Suitability', monthly: [true, true, true, true], quarterly: [true, true, true, true] },
-        { name: 'Language Test MCQ', monthly: [false, false, true, true], quarterly: [false, false, true, true] },
-        { name: 'Spoken Test', monthly: [false, false, true, true], quarterly: [false, false, true, true] },
+        { name: 'Language Proficiency Test', monthly: [false, false, true, true], quarterly: [false, false, true, true] },
+        { name: 'Language Spoken Test', monthly: [false, false, '€10', 1], quarterly: [false, false, '€10', 3] },
         { name: 'Language Filter', monthly: [false, true, true, true], quarterly: [false, true, true, true] },
         { name: 'Recommended Jobs', monthly: [false, true, true, true], quarterly: [false, true, true, true] },
         { name: 'Job Research', monthly: [false, false, 3, 5], quarterly: [false, false, 9, 15] },
-        { name: 'Learning Roadmap & Skills', monthly: [false, false, false, true], quarterly: [false, false, false, true] },
-        { name: 'Autofill tools for external job forms', monthly: [false, false, false, true], quarterly: [false, false, false, true] },
-        { name: 'Early access to new features', monthly: [false, false, false, true], quarterly: [false, false, false, true] },
+        { name: 'Learning Skills', monthly: [false, false, false, true], quarterly: [false, false, false, true] },
+        { name: 'Autofill tools', monthly: [false, false, false, true], quarterly: [false, false, false, true] },
+        { name: 'Support', monthly: [false, false, false, true], quarterly: [false, false, false, true] },
     ];
+
+
+    const activePlan =
+        data?.plans?.monthly?.find(p => p.status === "active") ||
+        data?.plans?.quarterly?.find(p => p.status === "active");
 
 
     return (
         <div className='flex flex-col gap-5'>
 
             {/* Active Plans */}
+            {/* Active Plans */}
             <div className="flex flex-col gap-5">
                 <h2 className="text-lg font-bold">Active Plan</h2>
 
-                {data?.plans[selected] ? (
-                    (() => {
-                        const activePlan = data.plans[selected].find(plan => plan.status === "active");
-                        return activePlan ? (
-                            <div className="flex flex-col h-[120px] gap-1 rounded-xl bg-[#2c6472] p-5">
-                                <h2 className="text-white text-lg font-semibold capitalize">{activePlan.plan}</h2>
-                                <p className="text-white text-base">
-                                    {activePlan.plan === "Free"
-                                        ? "Enjoy free features at no cost"
-                                        : `Enjoy ${activePlan.plan} plan benefits`}
-                                </p>
-                                <p className="text-gray-400 text-sm">€ {activePlan.price || "0"} / {activePlan.period}</p>
-                            </div>
-                        ) : (
-                            <p className="text-sm text-gray-500">No active plan found.</p>
-                        );
-                    })()
+                {activePlan ? (
+                    <div className="flex flex-col h-[120px] gap-1 rounded-xl bg-[#2c6472] p-5">
+                        <h2 className="text-white text-lg font-semibold capitalize">{activePlan.plan}</h2>
+                        <p className="text-white text-base">
+                            {activePlan.plan === "Free"
+                                ? "Enjoy free features at no cost"
+                                : `Enjoy ${activePlan.plan} plan benefits`}
+                        </p>
+                        <p className="text-gray-400 text-sm">
+                            € {activePlan.price || "0"} / {activePlan.period}
+                        </p>
+                    </div>
                 ) : (
                     <p className="text-sm text-gray-500">Loading active plan...</p>
                 )}
@@ -128,8 +175,8 @@ const ExplorePlans = () => {
                     <button
                         onClick={() => setSelected("monthly")}
                         className={`px-16 py-2 text-sm font-medium ${selected === "monthly"
-                                ? "bg-[#2F6C73] text-white"
-                                : "text-[#2F6C73] bg-white"
+                            ? "bg-[#2F6C73] text-white"
+                            : "text-[#2F6C73] bg-white"
                             }`}
                     >
                         Monthly
@@ -137,8 +184,8 @@ const ExplorePlans = () => {
                     <button
                         onClick={() => setSelected("quarterly")}
                         className={`px-16 py-2 text-sm font-medium text-center ${selected === "quarterly"
-                                ? "bg-[#2F6C73] text-white"
-                                : "text-[#2F6C73] bg-white"
+                            ? "bg-[#2F6C73] text-white"
+                            : "text-[#2F6C73] bg-white"
                             }`}
                     >
                         <p className="text-[10px] leading-none">Save 10%</p>
@@ -184,21 +231,21 @@ const ExplorePlans = () => {
 
             </div>
 
-            {/* Highlights */}
+           {/* Highlights */}
             <div className="bg-[#2C647221] flex flex-col gap-5 mt-10 p-5">
                 <h2 className='font-semibold pl-5'>Highlights</h2>
 
                 <div className="flex">
                     <div className="flex-1"></div>
-                    {highlightsData.map((plan, index) => (
-                        <div key={index} className="flex flex-col gap-3 flex-1 text-sm font-medium p-1.5">
-                            {plan.items.map((item, idx) => (
-                                <div key={idx} className="flex gap-1.5">
-                                    <img src={tick} width="15px" alt="" />
-                                    <p>{item}</p>
-                                </div>
-                            ))}
+                    {highlightsData[selected].map((plan, index) => (
+                    <div key={index} className="flex flex-col gap-3 flex-1 text-sm font-medium p-1.5">
+                        {plan.items.map((item, idx) => (
+                        <div key={idx} className="flex gap-1.5">
+                            <img src={tick} width="15px" alt="tick" />
+                            <p>{item}</p>
                         </div>
+                        ))}
+                    </div>
                     ))}
                 </div>
             </div>

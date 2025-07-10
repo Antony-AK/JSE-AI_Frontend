@@ -3,34 +3,43 @@ import { Player } from '@lottiefiles/react-lottie-player';
 import animationData from "../../assets/Animation - 1745282599914.json";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import frame from "./../../assets/Frame.png";
-import logo from "../../assets/logo.png"
-import foretpassowrd from "../../assets/forget-password.png";
+import logo from "../../assets/jsenewlogo.png"
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 
 
 const ForgetPassword = () => {
+    const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
-    const [otp, setOtp] = useState(['', '', '', '']);
-    const otpInputsRef = [useRef(), useRef(), useRef(), useRef()];
+    const navigate = useNavigate();
 
+    const handleSubmit = async () => {
+        if (!email) {
+            toast.error("Please enter a valid email");
+            return;
+        }
 
-    const handleOtpChange = (value, index) => {
-        if (!/^\d?$/.test(value)) return; // Only digits
+        setLoading(true);
 
-        const updatedOtp = [...otp];
-        updatedOtp[index] = value;
-        setOtp(updatedOtp);
+        try {
+            const response = await axios.post("https://dev.arshan.digital/b1/auth/request-password-reset", {
+                email: email.trim(),
+            });
 
-        // Auto focus next
-        if (value && index < otpInputsRef.length - 1) {
-            otpInputsRef[index + 1].current.focus();
+            toast.success("Verification mail sent! 📧");
+            console.log("✅ Success:", response.data);
+
+            // optionally redirect to OTP screen or something here
+        } catch (err) {
+            console.error("❌ Error:", err.response?.data || err.message);
+            toast.error(err.response?.data?.message || "Something went wrong!");
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleKeyDown = (e, index) => {
-        if (e.key === 'Backspace' && !otp[index] && index > 0) {
-            otpInputsRef[index - 1].current.focus();
-        }
-    };
 
 
 
@@ -40,33 +49,35 @@ const ForgetPassword = () => {
                 {/* Left Panel */}
                 <div className="flex w-[50%] justify-center items-center p-8 bg-white">
                     <div className=" w-[1200px] ">
-                        <h2 className="text-2xl font-semibold w-full text-center mb-14">Enter the code sent to your email to <br /> change your password.</h2>
+                        <h2 className="text-2xl font-semibold w-full text-center mb-3"> Forget Password </h2>
+                        <h4 className='w-[80%] mx-auto flex flex-col justify-center items-center font-medium text-center mb-10'>We’ll send a verification code to this email if it matches an existing <span className='text-[#2c6472] font-semibold text-lg'>JSE AI <span className='text-black text-base font-medium'>account</span></span></h4>
 
-                        {/* OTP Boxes */}
-                        <div className="flex justify-center items-center gap-4 mt-6">
-                            {otp.map((digit, index) => (
-                                <input
-                                    key={index}
-                                    ref={otpInputsRef[index]}
-                                    type="text"
-                                    inputMode="numeric"
-                                    maxLength={1}
-                                    className="w-12 h-12 text-center text-xl font-semibold border border-gray-300 rounded-md focus:outline-none focus:ring-2 ring-[#2c6472] transition-all"
-                                    value={digit}
-                                    onChange={(e) => handleOtpChange(e.target.value, index)}
-                                    onKeyDown={(e) => handleKeyDown(e, index)}
-                                    placeholder='-'
-                                />
-                            ))}
+
+                        {/* INPUT Boxes */}
+                        <div className="flex flex-col justify-center items-center gap-2 mt-6">
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-[70%] h-14  px-4 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 ring-[#2c6472] transition-all"
+                                placeholder='Enter your registered email'
+                            />
                         </div>
 
 
-                        <div className="mt-14 w-[70%] mx-auto">
+                        <div className="mt-14 w-[70%] mx-auto flex justify-center items-center">
+                            <button
+                                onClick={() => navigate('/user/login')}
+                                className="w-44 mx-auto py-3 bg-white text-[#2c6472]  rounded-2xl border-2 border-[#2c6472] font-semibold hover:bg-[#1f4d59]/5 transition-all"
+                            >
+                                Back
+                            </button>
                             {/* Verify Button */}
                             <button
-                                className="w-full py-3 bg-[#2c6472] text-white rounded-md font-semibold hover:bg-[#1f4d59] transition-all"
+                                onClick={handleSubmit}
+                                className="w-44 mx-auto py-3 bg-[#2c6472] text-white rounded-2xl font-semibold hover:bg-[#1f4d59] transition-all"
                             >
-                                Verify
+                                {loading ? "Sending..." : "Verify"}
                             </button>
                         </div>
                     </div>
@@ -74,23 +85,26 @@ const ForgetPassword = () => {
 
                 {/* Right Panel */}
                 <div className="flex flex-1 flex-col justify-center items-center bg-[#2c6472] text-white p-8">
-                    <div className="flex items-center mb-2">
+                    <div className="flex flex-col  items-center mb-3">
+                        <h3 className="text-center  text-2xl ms-4 font-medium">Welcome Back!</h3>
                         <img
                             src={logo}
-                            className="h-8 w-8"
+                            className="h-12 w-28"
                         />
-                        <h3 className="text-black font-medium text-xl">JSE AI</h3>
                     </div>
-                    <h3 className="text-center text-xl ms-4 font-medium mb-6">Welcome Back!</h3>
                     <div className='relative mb-5 flex justify-center items-center ms-4'>
                         <img src={frame} alt="" className='relative object-cover ' />
                         <DotLottieReact
-                            src="https://lottie.host/47dbe349-fbbc-4772-9026-56f4ed8832c8/G4VcaYQkF2.lottie"
+                            src="https://lottie.host/ea3cb741-1e89-48d0-89de-a5ad795a6cff/Ok1556eeUy.lottie"
                             loop
                             autoplay
-                            style={{ width: '70px', height: '70px' }}
-                            className='absolute object-cover me-2 p-2'
+                            style={{ width: '100px', height: '100px' }}
+                            className='absolute object-cover me-2 p-1'
                         />
+                    </div>
+                    <div> <p className=" text-center items-center text-sm  mt-4">
+                        Unlock your next opportunity<br />
+                        Your dream job is just a click away        </p>
                     </div>
                 </div>
             </div>

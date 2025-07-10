@@ -201,7 +201,7 @@ const Dashboard = () => {
         <div className="relative flex bg-gradient-to-br from-[#FDA67B] to-[#FF9D6B] h-[120px] w-[250px] text-black p-4 rounded-xl">
           <div className="flex flex-col justify-start items-start gap-5">
             <p className="font-bold">Weekly Applied</p>
-            <h3 className="font-bold text-lg">{infoBlock.dailyJobLimit}</h3> {/* Just an example fallback */}
+            <h3 className="font-bold text-lg">{infoBlock.weeklyApplications}</h3> {/* Just an example fallback */}
           </div>
           <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm w-fit h-fit">
             <img width="24px" height="24px" className="p-1" src={jobs_available_icon} alt="" />
@@ -212,7 +212,7 @@ const Dashboard = () => {
         <div className="relative flex bg-gradient-to-br from-[#BDE4FB] to-[#A3C7FD] h-[120px] w-[250px] text-black p-4 rounded-xl">
           <div className="flex flex-col justify-start items-start gap-5">
             <p className="font-bold">Recommeded Jobs</p>
-            <h3 className="font-bold text-lg">{infoBlock.totalJobs}</h3>
+            <h3 className="font-bold text-lg">{infoBlock.topJobs}</h3>
           </div>
           <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm w-fit h-fit">
             <img width="24px" height="24px" className="p-1" src={selectable_jobs_icon} alt="" />

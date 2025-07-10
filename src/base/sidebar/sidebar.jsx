@@ -10,7 +10,7 @@ import dashboard_active_icon from '../../assets/dashboard-active-icon.svg';
 import my_application_icon from '../../assets/job-listing-icon.svg';
 import my_application_active_icon from '../../assets/job-listing-active-icon.svg';
 
-import application_tracker_icon from '../../assets/application-tracker-icon.svg';
+import application_tracker_icon from '../../assets/application.svg';
 import application_tracker_active_icon from '../../assets/application-tracker-active-icon.svg';
 
 import saved_jobs_icon from '../../assets/saved-jobs-icon.svg';
