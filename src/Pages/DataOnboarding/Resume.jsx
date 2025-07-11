@@ -168,7 +168,7 @@ const Resume = () => {
         <div className="flex w-[50%] justify-between items-center gap-4 mt-10 ">
           <button
             type="button"
-            className=" teal-button px-6 py-2 bg-[#2c6472] text-white w-[130px] h-[44px]  rounded-full focus:outline-none transition-transform duration-200 ease-in-out"
+            className=" px-6 py-2 bg-white border-2 border-[#2c6472] text-[#2c6472] w-[130px] h-[44px] hover:bg-[#2c6472]/5  rounded-full focus:outline-none transition-transform duration-200 ease-in-out"
             onClick={() => navigate(-1)}
           >
             Cancel

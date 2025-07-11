@@ -12,16 +12,15 @@ const Preferences = () => {
     const [showTimezoneDropdown, setShowTimezoneDropdown] = useState(false);
 
     const langMap = {
-  english: "en",
-  german: "de",
-};
+        english: "en",
+        german: "de",
+    };
 
-const handleLanguageChange = (lang) => {
-  changeLanguageGoogleTranslate(langMap[lang]); // dynamic!
-  const updated = { ...preferences, language: lang };
-  setPreferences(updated);
-  handleUpdate(updated);
-};
+    const handleLanguageChange = (e) => {
+        const updated = { ...preferences, language: e.target.value };
+        setPreferences(updated);
+        handleUpdate(updated);
+    };
 
 
     useEffect(() => {
@@ -113,7 +112,7 @@ const handleLanguageChange = (lang) => {
         return () => document.removeEventListener("click", handleClickOutside);
     }, []);
 
- 
+
 
 
     return (
@@ -155,7 +154,7 @@ const handleLanguageChange = (lang) => {
                                         key={lang}
                                         className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${preferences?.language === lang ? "bg-gray-100 font-bold" : ""}`}
                                         onClick={() => {
-                                            handleLanguageChange(lang);
+                                            handleLanguageChange({ target: { value: lang } });
                                             setShowLangDropdown(false);
                                         }}
                                     >
