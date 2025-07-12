@@ -213,14 +213,14 @@ const Certificates = () => {
                 <div className='flex w-full justify-end items-center'>
 
 
-                    {certificateList.length > 0 && (
+                    {/* {certificateList.length > 0 && ( */}
                         <div
                             className="flex items-center cursor-pointer hover:scale-95 transition-transform duration-200 ease-in-out"
                             onClick={() => navigate('/user/onboarding/jobtitles')}
                         >
                             <p className='me-10 text-lg font-medium text-[#00000057]'>Skip</p>
                         </div>
-                    )}
+                    {/* )} */}
                 </div>
 
                 <div>

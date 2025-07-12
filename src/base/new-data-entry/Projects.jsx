@@ -207,15 +207,12 @@ const Projects = () => {
     <div className='p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen '>
 
       <div className="flex justify-end mt-5 items-center w-[95%]">
-        {/* <div className="flex items-center cursor-pointer" onClick={() => navigate(-1)}>
-          <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
-          <p className='ml-2 text-lg font-medium'>Back</p>
-        </div> */}
-        {projectList.length > 0 && (
+        
+        {/* {projectList.length > 0 && ( */}
           <div className="flex items-center cursor-pointer" onClick={() => navigate('/user/onboarding/languages')}>
             <p className='ml-2 text-lg font-medium text-[#00000057]'>Skip</p>
           </div>
-        )}
+        {/* )} */}
       </div>
 
       <p className='text-[#2c6472] font-semibold -mt-10'>STEP 4 OF 8</p>

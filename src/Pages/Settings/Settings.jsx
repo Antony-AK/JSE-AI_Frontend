@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState , useEffect} from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import SettingsSidebar from './SettingsSidebar';
 import AccountSecurity from './AccountSecurity';
 import Preferences from './Preferences';
@@ -8,10 +8,19 @@ import Feedback from './Feedback';
 import Billing from './Billing';
 import ExplorePlans from './ExplorePlans';
 
+
 const Settings = () => {
 
     const navigate = useNavigate();
+      const location = useLocation(); // 👈 grab location state
     const [activeSection, setActiveSection] = useState('General');
+
+      useEffect(() => {
+    const defaultSection = location.state?.section;
+    if (defaultSection) {
+      setActiveSection(defaultSection);
+    }
+  }, [location.state]);
 
   return (
     
@@ -37,7 +46,7 @@ const Settings = () => {
                         {activeSection === 'General' ? 'Account Security' : activeSection}
                         </h2>
                     )}
-                    <button onClick={() => navigate(-1)} className="absolute top-3.5 right-3.5 text-gray-500 hover:text-gray-800 text-xl">
+                    <button onClick={() => navigate('/user/dashboard')} className="absolute top-3.5 right-3.5 text-gray-500 hover:text-gray-800 text-xl">
                         ✕
                     </button>
                 </div>

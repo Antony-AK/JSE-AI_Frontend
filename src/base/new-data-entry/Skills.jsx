@@ -483,14 +483,20 @@ const Skills = () => {
                                         } else if (e.key === 'Enter') {
                                             e.preventDefault();
 
+                                            // 🔍 If there's a selected dropdown item, pick it
                                             const selectedSkill =
-                                                highlightIndexGeneral >= 0
+                                                currentList.length > 0 && highlightIndexGeneral >= 0
                                                     ? currentList[highlightIndexGeneral]
-                                                    : currentList[0];
+                                                    : null;
 
-                                            if (!selectedSkill) return;
-                                            handleSelect(selectedSkill);
-                                            setHighlightIndexGeneral(0);
+                                            if (selectedSkill) {
+                                                handleSelect(selectedSkill);
+                                            } else {
+                                                // 🆕 If nothing is selected or dropdown is empty, just add whatever is typed
+                                                setTriggerAddSkill(true);
+                                            }
+
+                                            setHighlightIndexGeneral(0); // reset index
                                         }
                                     }}
 
@@ -627,8 +633,8 @@ const Skills = () => {
                                             key={index}
                                             ref={(el) => (jobRefs.current[index] = el)}
                                             className={`px-4 py-2 cursor-pointer ${index === highlightIndexJob
-                                                    ? 'bg-[#2c6472] text-white'
-                                                    : 'hover:bg-[#2c6472] hover:text-white text-gray-600'
+                                                ? 'bg-[#2c6472] text-white'
+                                                : 'hover:bg-[#2c6472] hover:text-white text-gray-600'
                                                 }`}
                                             onMouseDown={(e) => {
                                                 e.preventDefault();
@@ -673,15 +679,15 @@ const Skills = () => {
                     <div className="flex gap-3 items-start mt-5">
                         <label htmlFor="primary_title" className="flex items-start gap-3 cursor-pointer">
                             <input
-                            type="checkbox"
-                            id="primary_title"
-                            name="primary_title"
-                            className="w-4 h-4 accent-[#2c6472] mt-0.5"
-                            checked={accepted}
-                            onChange={(e) => setAccepted(e.target.checked)}
+                                type="checkbox"
+                                id="primary_title"
+                                name="primary_title"
+                                className="w-4 h-4 accent-[#2c6472] mt-0.5"
+                                checked={accepted}
+                                onChange={(e) => setAccepted(e.target.checked)}
                             />
                             <span className="text-sm text-gray-500">
-                            Please enter only relevant skills. Adding unrelated may affect the quality of your profile.
+                                Please enter only relevant skills. Adding unrelated may affect the quality of your profile.
                             </span>
                         </label>
                     </div>
@@ -698,9 +704,9 @@ const Skills = () => {
                             ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white w-[200px]`}
                         >
                             {loading ? (
-                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                             ) : (
-                            'Go to Dashboard'
+                                'Go to Dashboard'
                             )}
                         </button>
                     </div>

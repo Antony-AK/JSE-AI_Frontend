@@ -113,8 +113,6 @@ const Preferences = () => {
     }, []);
 
 
-
-
     return (
         <div className='flex flex-col gap-5 py-3'>
             {/* Language */}
@@ -209,7 +207,7 @@ const Preferences = () => {
                                         setShowTimezoneDropdown(false);
                                     }}
                                 >
-                                    (GMT+2:00) Berlin
+                                    (CET+2:00) Berlin
                                 </div>
                                 <div
                                     className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${preferences?.timezone === "Asia/Kolkata" ? "bg-gray-100 font-bold" : ""}`}

@@ -64,91 +64,91 @@ const ExplorePlans = () => {
     const highlightsData = {
         monthly: [
             {
-            plan: 'Free',
-            items: [
-                'Targeted Job',
-                'CV & CL Automation:5 included',
-                'External CV/CL:2 included',
-                'Application Tracker',
-            ],
+                plan: 'Free',
+                items: [
+                    'Targeted Job',
+                    'CV & CL Automation:5 included',
+                    'External CV/CL:2 included',
+                    'Application Tracker',
+                ],
             },
             {
-            plan: 'Basic',
-            items: [
-                'CV & CL Automation: 150 Included',
-                'External CV/CL Automation: 20 Included',
-                'Recommended Jobs',
-                'Language Filter',
-                'Basic Support',
-            ],
+                plan: 'Basic',
+                items: [
+                    'CV & CL Automation: 150 Included',
+                    'External CV/CL Automation: 20 Included',
+                    'Recommended Jobs',
+                    'Language Filter',
+                    'Basic Support',
+                ],
             },
             {
-            plan: 'Advanced',
-            items: [
-                'CV & CL Automation: 240 Included',
-                'External CV/CL Automation: 35',
-                'Job Research: 9 included',
-                'Language Test Free MCQ’s',
-                'Spoken Test',
-                'Priority Support',
-            ],
+                plan: 'Advanced',
+                items: [
+                    'CV & CL Automation: 240 Included',
+                    'External CV/CL Automation: 35',
+                    'Job Research: 9 included',
+                    'Language Test Free MCQ’s',
+                    'Spoken Test',
+                    'Priority Support',
+                ],
             },
             {
-            plan: 'Premium',
-            items: [
-                'CV & CL Automation: 360 Included',
-                'External CV/CL Automation: 75',
-                'Job Research: 15 Included',
-                'Learning Roadmap & Skills',
-                'Autofill Tools for External Jobforms',
-                'Priority Support',
-            ],
+                plan: 'Premium',
+                items: [
+                    'CV & CL Automation: 360 Included',
+                    'External CV/CL Automation: 75',
+                    'Job Research: 15 Included',
+                    'Learning Roadmap & Skills',
+                    'Autofill Tools for External Jobforms',
+                    'Priority Support',
+                ],
             },
         ],
         quarterly: [
             {
-            plan: 'Free',
-            items: [
-                'Targeted Job',
-                'CV & CL Automation:5 included',
-                'External CV/CL:2 included',
-                'Application Tracker',
-            ],
+                plan: 'Free',
+                items: [
+                    'Targeted Job',
+                    'CV & CL Automation:5 included',
+                    'External CV/CL:2 included',
+                    'Application Tracker',
+                ],
             },
             {
-            plan: 'Basic',
-            items: [
-                'CV & CL Automation: 450 Included',
-                'External CV/CL Automation: 60 Included',
-                'Recommended Jobs',
-                'Language Filter',
-                'Basic Support',
-            ],
+                plan: 'Basic',
+                items: [
+                    'CV & CL Automation: 450 Included',
+                    'External CV/CL Automation: 60 Included',
+                    'Recommended Jobs',
+                    'Language Filter',
+                    'Basic Support',
+                ],
             },
             {
-            plan: 'Advanced',
-            items: [
-                'CV & CL Automation: 720 Included',
-                'External CV/CL Automation: 105 Docs',
-                'Job Research: 9 included',
-                'Language Test Free MCQ’s',
-                'Spoken Test',
-                'Priority Support',
-            ],
+                plan: 'Advanced',
+                items: [
+                    'CV & CL Automation: 720 Included',
+                    'External CV/CL Automation: 105 Docs',
+                    'Job Research: 9 included',
+                    'Language Test Free MCQ’s',
+                    'Spoken Test',
+                    'Priority Support',
+                ],
             },
             {
-            plan: 'Premium',
-            items: [
-                'CV & CL Automation: 1080 Included',
-                'External CV/CL Automation: 225',
-                'Job Research: 15 Included',
-                'Learning Roadmap & Skills',
-                'Autofill Tools for External Jobforms',
-                'Priority Support',
-            ],
+                plan: 'Premium',
+                items: [
+                    'CV & CL Automation: 1080 Included',
+                    'External CV/CL Automation: 225',
+                    'Job Research: 15 Included',
+                    'Learning Roadmap & Skills',
+                    'Autofill Tools for External Jobforms',
+                    'Priority Support',
+                ],
             },
         ],
-    };    
+    };
 
     const features = [
         { name: 'Targeted Job', monthly: [true, true, true, true], quarterly: [true, true, true, true] },
@@ -167,10 +167,10 @@ const ExplorePlans = () => {
         { name: 'Support', monthly: [false, false, false, true], quarterly: [false, false, false, true] },
     ];
 
-
     const activePlan =
-        data?.plans?.monthly?.find(p => p.status === "active") ||
-        data?.plans?.quarterly?.find(p => p.status === "active");
+        data?.plans?.monthly?.find(p => p.status === "active" || p.status === "cancel") ||
+        data?.plans?.quarterly?.find(p => p.status === "active" || p.status === "cancel");
+
 
 
     return (
@@ -182,19 +182,22 @@ const ExplorePlans = () => {
 
                 {activePlan ? (
                     <div className="flex flex-col h-[120px] gap-1 rounded-xl bg-[#2c6472] p-5">
-                        <h2 className="text-white text-lg font-semibold capitalize">{activePlan.plan}</h2>
+                        <h2 className="text-white text-lg font-semibold capitalize">
+                            {activePlan.plan.charAt(0).toUpperCase() + activePlan.plan.slice(1)}
+                        </h2>
                         <p className="text-white text-base">
-                            {activePlan.plan === "Free"
+                            {activePlan.plan === "free"
                                 ? "Enjoy free features at no cost"
                                 : `Enjoy ${activePlan.plan} plan benefits`}
                         </p>
-                        <p className="text-gray-400 text-sm">
-                            € {activePlan.price || "0"} / {activePlan.period}
+                        <p className="text-gray-300 text-sm">
+                            € {activePlan?.price ?? "0"} / {activePlan?.period ?? ""}
                         </p>
                     </div>
                 ) : (
-                    <p className="text-sm text-gray-500">Loading active plan...</p>
+                    <p className="text-sm text-gray-500">No active plan found.</p>
                 )}
+
             </div>
 
 
@@ -243,17 +246,16 @@ const ExplorePlans = () => {
                                 <h2 className="font-bold text-lg capitalize">{plan.plan}</h2>
                                 <p className="text-sm">€ {plan.price} / {plan.period}</p>
 
-                                {isActive && (
-                                    <p className="text-sm flex items-center gap-2 text-[#2c6472]">
-                                        <span className="w-2 h-2 bg-[#2c6472] rounded-full" />
-                                        Active
+                                {plan.status === "cancel" && (
+                                    <p className="text-sm flex items-center gap-2 text-[#2c6472] px-4 py-1 w-24 justify-center rounded-xl border-2 border-[#2c6472] cursor-pointer hover:bg-[#2c6472]/5">
+                                        Cancel
                                     </p>
                                 )}
 
                                 {btn && (
                                     <button
                                         onClick={() =>
-                                        !btn.disabled && handlePlanSelect(`${plan.plan.toLowerCase()}_${selected}`)
+                                            !btn.disabled && handlePlanSelect(`${plan.plan.toLowerCase()}_${selected}`)
                                         }
                                         disabled={btn.disabled}
                                         className={`w-32 text-sm font-medium border rounded-xl py-1.5 px-2 hover:scale-105 duration-200 ${btn.style} ${btn.disabled ? '' : 'hover:scale-105'}`}
@@ -268,21 +270,21 @@ const ExplorePlans = () => {
 
             </div>
 
-           {/* Highlights */}
+            {/* Highlights */}
             <div className="bg-[#2C647221] flex flex-col gap-5 mt-10 p-5">
                 <h2 className='font-semibold pl-5'>Highlights</h2>
 
                 <div className="flex">
                     <div className="flex-1"></div>
                     {highlightsData[selected].map((plan, index) => (
-                    <div key={index} className="flex flex-col gap-3 flex-1 text-sm font-medium p-1.5">
-                        {plan.items.map((item, idx) => (
-                        <div key={idx} className="flex gap-1.5">
-                            <img src={tick} width="15px" alt="tick" />
-                            <p>{item}</p>
+                        <div key={index} className="flex flex-col gap-3 flex-1 text-sm font-medium p-1.5">
+                            {plan.items.map((item, idx) => (
+                                <div key={idx} className="flex gap-1.5">
+                                    <img src={tick} width="15px" alt="tick" />
+                                    <p>{item}</p>
+                                </div>
+                            ))}
                         </div>
-                        ))}
-                    </div>
                     ))}
                 </div>
             </div>
