@@ -1,15 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
 
 const PasswordPopUp = ({ isOpen, onClose, title, message, onSubmit, icon }) => {
-  const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
-
   useEffect(() => {
-    if (isOpen) {
-      setPassword('');
-      setConfirm('');
-    }
+    
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -36,34 +30,13 @@ const PasswordPopUp = ({ isOpen, onClose, title, message, onSubmit, icon }) => {
         <h2 className="font-bold mb-3 text-center">{title}</h2>
         <p className="font-semibold mb-5 text-center">{message}</p>
 
-        {/* Inputs */}
-        <div className="flex flex-col gap-8">
-          <div className="flex flex-col items-start gap-3 w-full">
-            <label className="text-sm font-medium text-gray-700">Enter a new password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full border px-4 py-2 rounded-lg outline-none text-sm bg-gray-100"
-            />
-          </div>
-
-          <div className="flex flex-col items-start gap-1 w-full">
-            <label className="text-sm font-medium text-gray-700">Confirm your new password</label>
-            <input
-              type="password"
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
-              className="w-full border px-4 py-2 rounded-lg outline-none text-sm bg-gray-100"
-            />
-          </div>
-
-          <button
-            className="w-full bg-[#2c6472] text-white py-2 rounded-lg hover:bg-[#24545d] transition text-sm font-semibold mt-2"
-          >
-            Set a password
-          </button>
-        </div>
+        {/* Submit Button */}
+        <button
+          onClick={onSubmit}
+          className="w-full bg-[#2c6472] text-white py-2 rounded-lg hover:bg-[#24545d] transition text-sm font-semibold"
+        >
+          Send Password Reset Link
+        </button>
       </div>
     </div>
   );

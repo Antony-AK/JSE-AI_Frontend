@@ -86,6 +86,32 @@ const AccountSecurity = () => {
         }
     };
 
+    const handleChangePasswordRequest = async () => {
+        try {
+            const token = sessionStorage.getItem('authToken');
+            if (!token) {
+            toast.error("No authentication token found.");
+            return;
+            }
+
+            const response = await axios.post(
+            `${BASE_URL}/settings/change-password`,
+            { email }, // email is already fetched and stored in state
+            {
+                headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                },
+            }
+            );
+
+            toast.success(response.data?.message || "Password change request sent!");
+            setPopupType(null);
+        } catch (err) {
+            toast.error(err?.response?.data?.message || "Failed to send password reset request.");
+        }
+    };
+
     const handleChangeJobTitleRequest = async () => {
         try {
             const token = sessionStorage.getItem('authToken');
@@ -199,8 +225,9 @@ const AccountSecurity = () => {
                 isOpen={popupType === 'password'}
                 onClose={() => setPopupType(null)}
                 icon={password_icon}
-                title="Set a Password"
-                message="Password must be at least 8 characters long and include at least one number and one special character."
+                title="Request to Change Password"
+                message="We'll send a password reset link to your registered email."
+                onSubmit={handleChangePasswordRequest}
             />
 
             <DeletePopUp
@@ -211,6 +238,6 @@ const AccountSecurity = () => {
 
         </div>
     )
-io}
+  }
 
 export default AccountSecurity
