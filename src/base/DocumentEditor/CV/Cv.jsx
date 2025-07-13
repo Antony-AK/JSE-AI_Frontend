@@ -168,6 +168,7 @@ const Cv = () => {
 
         // 🧠 BUILD CV PAYLOAD FROM CURRENT STATE
         const payload = {
+            cv_format:selectedTemplate,
             job_id: jobId,
             cv_data: {
                 personal_info: {

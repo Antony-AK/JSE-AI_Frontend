@@ -4,9 +4,10 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import Calendar from '../base/Calender/Calender';
 import { format } from 'date-fns';
+import { BASE_URL } from '../utils/api';
 
 const EducationUpdateForm = ({ onclose }) => {
-    const apiUrl = 'https://dev.arshan.digital/b1/academics';
+    const apiUrl = `${BASE_URL}/academics`;
     const [education, setEducation] = useState([]);
     const token = sessionStorage.getItem('authToken');
 
@@ -20,13 +21,32 @@ const EducationUpdateForm = ({ onclose }) => {
         field_of_study: '',
         start_date: '',
         end_date: '',
-        achievements: ''
+        achievements: '',
+        currentlyDoing: false
     });
 
     const handleAddEducation = async () => {
         if (!token || addLoading) return;
 
         setAddLoading(true);
+
+        if (!formData.start_date) {
+            toast.error("Start date is required.");
+            setAddLoading(false);
+            return;
+        }
+
+        if (!formData.currentlyDoing && !formData.end_date) {
+            toast.error("End date is required.");
+            setAddLoading(false);
+            return;
+        }
+
+        if (!isValidDateRange(formData.start_date, formData.end_date)) {
+            toast.error("Start date cannot be after end date.");
+            setAddLoading(false);
+            return;
+        }
 
         const formatDateToISO = (date) => {
             const localDate = new Date(date);
@@ -36,7 +56,7 @@ const EducationUpdateForm = ({ onclose }) => {
         const updatedFormData = {
             ...formData,
             start_date: formatDateToISO(formData.start_date),
-            end_date: formData.end_date ? formatDateToISO(formData.end_date) : null,
+            end_date: formData.currentlyDoing ? null : formatDateToISO(formData.end_date),
         };
 
         try {
@@ -47,7 +67,7 @@ const EducationUpdateForm = ({ onclose }) => {
                 },
             });
 
-            toast.success(`Education data uploaded successfully`);
+            toast.success("Education data uploaded successfully");
 
             setFormData({
                 degree: '',
@@ -108,7 +128,8 @@ const EducationUpdateForm = ({ onclose }) => {
             field_of_study: edu.field_of_study || "",
             start_date: edu.start_date?.split("T")[0] || "",
             end_date: edu.end_date?.split("T")[0] || "",
-            achievements: edu.achievements || ""
+            achievements: edu.achievements || "",
+            currentlyDoing: !edu.end_date,
         });
         setActiveId(edu.tempId);
     };
@@ -123,12 +144,30 @@ const EducationUpdateForm = ({ onclose }) => {
             return date ? new Date(date).toISOString() : null;
         };
 
+        if (!formData.start_date) {
+            toast.error("Start date is required.");
+            setLoading(false);
+            return;
+        }
+
+        if (!formData.currentlyDoing && !formData.end_date) {
+            toast.error("End date is required.");
+            setLoading(false);
+            return;
+        }
+
+        if (!isValidDateRange(formData.start_date, formData.end_date)) {
+            toast.error("Start date cannot be after end date.");
+            setLoading(false);
+            return;
+        }
+
         const updatedExperience = {
             degree: formData.degree,
             institution: formData.institution,
             field_of_study: formData.field_of_study,
             start_date: formatDateToFullISO(formData.start_date),
-            end_date: formData.end_date ? formatDateToFullISO(formData.end_date) : null,
+            end_date: formData.currentlyDoing ? null : formatDateToFullISO(formData.end_date),
             achievements: formData.achievements,
         };
 
@@ -142,7 +181,7 @@ const EducationUpdateForm = ({ onclose }) => {
         const educationIndex = selectedEducation.tempId;
 
         try {
-            const res = await axios.put(`${apiUrl}/${educationIndex}`, updatedExperience, {
+            const res = await axios.put(`${apiUrl}/${educationIndex}, updatedExperience`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
@@ -160,7 +199,7 @@ const EducationUpdateForm = ({ onclose }) => {
             }
         } catch (error) {
             console.error("Update failed:", error);
-            toast.error("❌ Error while updating education.");
+            toast.error("Error while updating education.");
         } finally {
             setLoading(false);
         }
@@ -207,6 +246,14 @@ const EducationUpdateForm = ({ onclose }) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
+
+    const isValidDateRange = (start, end) => {
+        if (!start || !end) return true; // skip if one is empty (e.g., currentlyDoing)
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+        return startDate <= endDate;
+    };
+
     return (
 
         <div className='fixed inset-0 overflow-y-auto bg-white bg-opacity-70 z-50 flex items-center justify-center p-10 trasnfrom ease-in-out duration-200'>
@@ -303,21 +350,51 @@ const EducationUpdateForm = ({ onclose }) => {
                         </div>
 
                         <div className="flex flex-col w-1/2 gap-3">
-                            <label htmlFor="end_date" className='text-[15px] text-gray-500'>End Date <span className="text-red-500">*</span></label>
-                            <Calendar
-                                selectedDate={formData.end_date ? new Date(formData.end_date) : null}
-                                onDateChange={(date) =>
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    end_date: format(date, 'yyyy-MM-dd'),
-                                }))
-                                }
-                            />
+                            <label htmlFor="end_date" className='text-[15px] text-gray-500'>
+                                End Date {!formData.currentlyDoing && <span className="text-red-500">*</span>}
+                            </label>
+                            {formData.currentlyDoing ? (
+                                <input
+                                    type="text"
+                                    value="Currently Studying"
+                                    disabled
+                                    className="w-full px-4 py-3 rounded-md border border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed"
+                                />
+                            ) : (
+                                <Calendar
+                                    selectedDate={formData.end_date ? new Date(formData.end_date) : null}
+                                    onDateChange={(date) =>
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            end_date: format(date, 'yyyy-MM-dd'),
+                                        }))
+                                    }
+                                />
+                            )}
                         </div>
                     </div>
 
+                    <div className="flex items-center mt-2">
+                        <input
+                            type="checkbox"
+                            id="currentlyDoing"
+                            checked={formData.currentlyDoing}
+                            onChange={(e) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    currentlyDoing: e.target.checked,
+                                    end_date: e.target.checked ? "" : prev.end_date, // Clear end_date if checked
+                                }))
+                            }
+                            className="mr-2 accent-[#2c6472] w-4 h-4"
+                        />
+                        <label htmlFor="currentlyDoing" className="text-gray-600 text-sm">
+                            Currently Studing this
+                        </label>
+                    </div>
+
                     <div className="flex flex-col w-full gap-4">
-                        <label htmlFor="achievements" className='text-[15px] text-gray-500'>Achivements  <span className="text-red-500">*</span></label>
+                        <label htmlFor="achievements" className='text-[15px] text-gray-500'>Achivements</label>
                         <textarea
                             name="achievements"
                             onChange={handleChange}

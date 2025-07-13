@@ -24,8 +24,7 @@ const t = (key, lang = "en") => {
 };
 
 
-const CoverLetterModern = ({ language }) => {
-  const { personalInfo, recipient, subject, paragraphs } = useCl();
+const CoverLetterModern = ({ language , personalInfo = {}, recipient = {}, paragraphs = [] }) => {
   const [currentDate, setCurrentDate] = useState('');
 
   useEffect(() => {

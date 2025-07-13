@@ -20,8 +20,8 @@ const Cl = () => {
   const [activeSection, setActiveSection] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedClTemplate, setSelectedClTemplate] = useState("ModernCL");
-      const [language, setLanguage] = useState(() => sessionStorage.getItem("selectedLanguage") || "en");
-  
+  const [language, setLanguage] = useState(() => sessionStorage.getItem("selectedLanguage") || "en");
+
 
   const clTemplates = {
     "ModernCL": CoverLetterModern,
@@ -98,6 +98,7 @@ const Cl = () => {
 
     try {
       const payload = {
+        cl_format: selectedClTemplate, // 🎯 Send the selected template format too
         job_id: jobId,
         cl_data: {
           name: personalInfo.name,

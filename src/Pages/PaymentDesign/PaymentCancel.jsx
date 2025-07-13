@@ -35,7 +35,6 @@ const PaymentCancel = () => {
           Your payment wasn’t completed.
         </p>
 
-
       </div>
     </div>
   );

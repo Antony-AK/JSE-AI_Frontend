@@ -23,8 +23,8 @@ const t = (key, lang = "en") => {
 };
 
 
-const CoverLetterPlush = ({ language }) => {
-    const { personalInfo, recipient, subject, paragraphs } = useCl();
+const CoverLetterPlush = ({ personalInfo, recipient, paragraphs, language }) => {
+
 
     const [currentDate, setCurrentDate] = useState('');
 

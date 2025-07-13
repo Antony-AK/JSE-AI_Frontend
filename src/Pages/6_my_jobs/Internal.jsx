@@ -10,6 +10,7 @@ import download_icon from '../../assets/downloadicon.png'
 import link_icon from '../../assets/link-icon.svg'
 import { Link } from "react-router-dom";
 import { BASE_URL } from "../../utils/api.js";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import animationgif from '../../assets/Animations.gif'
 import { FiSearch } from "react-icons/fi"; // 👈 Import this at the top
@@ -178,6 +179,7 @@ const MyApplication = () => {
     const savedOffset = sessionStorage.getItem("jobPaginationOffset");
     const validOffset = savedOffset ? parseInt(savedOffset) : 0;
 
+
     if (selectedLanguage === "both") {
       fetchSelectedJobs(validOffset); // ⬅️ fetch from saved offset
     } else {
@@ -335,6 +337,8 @@ const MyApplication = () => {
     const payload = {
       job_id: jobId,
       job_language: lang,
+      cl_format: "ModernCL",
+      cv_format: "EuropassCV"
     };
 
     const endpoint =
@@ -395,9 +399,9 @@ const MyApplication = () => {
             placeholder="Search jobs, company"
           />
           <FiSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg" />
-        </div> 
-        
-<JobSearchTitleDropdown onJobsFetched={(mappedJobs) => setSelectedJobs(mappedJobs)} />
+        </div>
+
+        <JobSearchTitleDropdown onJobsFetched={(mappedJobs) => setSelectedJobs(mappedJobs)} />
 
 
         <motion.div
@@ -660,11 +664,35 @@ const MyApplication = () => {
                           <div className="absolute -right-2 mt-2 bg-white border border-gray-200 shadow-md rounded-md z-20 w-24">
                             <button
                               className="w-fit text-left px-4 py-2 text-sm hover:bg-gray-100"
-                              onClick={(e) => {
+                              onClick={async (e) => {
                                 e.stopPropagation();
-                                // TODO: Add save job logic here
-                                console.log("Saved job:", job.jobTitle);
-                                setActiveMenuIndex(null); // close after action
+
+                                const token = sessionStorage.getItem("authToken");
+                                if (!token) {
+                                  alert("You need to be logged in to save jobs!");
+                                  return;
+                                }
+
+                                try {
+                                  const response = await axios.post(
+                                    "https://dev.arshan.digital/b1/saved-jobs",
+                                    { job_id: job.job_id || job.id }, // make sure jobId is correct
+                                    {
+                                      headers: {
+                                        Authorization: `Bearer ${token}`,
+                                        "Content-Type": "application/json"
+                                      }
+                                    }
+                                  );
+
+                                  console.log("✅ Job saved:", response.data);
+                                  toast.success("Job saved successfully!");
+                                } catch (err) {
+                                  console.error("❌ Failed to save job:", err.response?.data || err.message);
+                                  toast.error("Failed to save job. Try again.");
+                                } finally {
+                                  setActiveMenuIndex(null); // close the dropdown after action
+                                }
                               }}
                             >
                               Save Job

@@ -20,10 +20,10 @@ import proficiency_test from '../../assets/proficiency-test.png';
 import active_proficiency_test from '../../assets/active_proficiency-test.png';
 
 import self_development from '../../assets/self-developement.png';
-import self_development_active from '../../assets/self-developement.png';
+import self_development_active from '../../assets/self-development-active.svg';
 
 import personal_tracker from '../../assets/personal-tracker.png';
-import personal_tracker_active from '../../assets/personal-tracker.png';
+import personal_tracker_active from '../../assets/personal-tracker-active.svg';
 
 import profile_icon from '../../assets/profile-icon.svg';
 import profile_active_icon from '../../assets/profile-active-icon.svg';
@@ -73,22 +73,24 @@ const Sidebar = () => {
       activeIcon: saved_jobs_active_icon,
       label: "Saved Jobs"
     },
-    // {
-    //   to: "/user/proficiency-test",
-    //   defaultIcon: proficiency_test,
-    //   activeIcon: active_proficiency_test,
-    //   label: "Proficiency Test"
-    // },
-    // {
-    //   to: "/user/self-development",
-    //   defaultIcon: self_development,
-    //   label: "Self Development"
-    // },
-    // {
-    //   to: "/user/personal-tracker",
-    //   defaultIcon: personal_tracker,
-    //   label: "Personal Tracker"
-    // }
+    {
+      to: "/user/proficiency-test",
+      defaultIcon: proficiency_test,
+      activeIcon: active_proficiency_test,
+      label: "Proficiency Test"
+    },
+    {
+      to: "/user/self-development",
+      defaultIcon: self_development,
+      activeIcon: self_development_active,
+      label: "Self Development"
+    },
+    {
+      to: "/user/personal-tracker",
+      defaultIcon: personal_tracker,
+      activeIcon: personal_tracker_active,
+      label: "Personal Tracker"
+    }
   ];
 
   return (
@@ -165,56 +167,7 @@ const Sidebar = () => {
           })}
         </ul>
 
-         {/* Upcoming Features Dropdown */}
-      <div>
-        <div
-          className="flex items-center justify-between px-4 py-2 ms-4 mt-2 cursor-pointer text-gray-400"
-          onClick={() => setOpenUpcoming(!openUpcoming)}
-        >
-          <div className="flex items-center gap-2">
-            <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">Upcoming Features</span>   
-            <img src={lock_icon} alt="lock" className="w-4 h-4" />
-          </div>
-          {openUpcoming ? (
-            <ChevronUp className="w-4 h-4 text-gray-500" />
-          ) : (
-            <ChevronDown className="w-4 h-4 text-gray-500" />
-          )}
-        </div>
-
-        {/* Hidden until dropdown opens */}
-        {openUpcoming && (
-          <ul className="flex flex-col items-center justify-center mx-auto space-y-5 font-medium text-sm text-gray-500 mt-5 ms-5">
-
-            <Link to="/user/proficiency-test" className="flex items-center gap-3">
-              <img src={proficiency_test} alt="lock" className="w-4 h-4" />
-              <span className="text-[15px] text-gray-400 w-40 font-semibold text-[rgba(0, 0, 0, 0.25)]">
-                Proficiency Test
-              </span>
-            </Link>
-
-            <Link to="/user/self-development" className="flex items-center gap-3">
-              <img src={self_development} alt="lock" className="w-4 h-4" />
-              <span className="text-[15px] text-gray-400 w-40 font-semibold text-[rgba(0, 0, 0, 0.25)]">
-                Self Development
-              </span>
-            </Link>
-
-            <Link to="/user/personal-tracker" className="flex items-center gap-3">
-              <img src={personal_tracker} alt="lock" className="w-4 h-4" />
-              <span className="text-[15px] text-gray-400 w-40 font-semibold text-[rgba(0, 0, 0, 0.25)]">
-                Personal Tracker
-              </span>
-            </Link>
-
-          </ul>
-        )}
       </div>
-      </div>
-
-     
-
-
 
       {/* Bottom Section */}
       <div>

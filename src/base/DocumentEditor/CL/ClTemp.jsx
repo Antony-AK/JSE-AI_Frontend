@@ -19,9 +19,8 @@ const t = (key, lang = "en") => {
 };
 
 
-const ClPreview = ({ language }) => {
+const ClPreview = ({ personalInfo, paragraphs, language  }) => {
   const previewRef = useRef();
-  const { personalInfo, paragraphs } = useCl();
 
   return (
     <div 

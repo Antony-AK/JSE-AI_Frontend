@@ -51,7 +51,7 @@ import PaymentCancel from './Pages/PaymentDesign/PaymentCancel.jsx';
 const AppRoutes = () => {
     const location = useLocation();
 
-    const hideLayout = location.pathname === '/user/cv' || location.pathname === '/user/cl' || location.pathname === '/user/document-editor' || location.pathname === '/user/external-cv' || location.pathname === '/user/external-cl' || location.pathname === '/user/forgot-password' || location.pathname === '/user/success' || location.pathname === '/user/cancel';
+    const hideLayout = location.pathname === '/user/cv' || location.pathname === '/user/cl' || location.pathname === '/user/document-editor' || location.pathname === '/user/external-cv' || location.pathname === '/user/external-cl' || location.pathname === '/user/forgot-password' || location.pathname === '/payment/success' || location.pathname === '/payment/cancel';
 
     // Define routes that are data-entry only
     const isDataEntryPage = location.pathname.startsWith('/user/onboarding') || location.pathname.startsWith('/user/dataonboarding') || location.pathname.startsWith('/user/linkedin') || location.pathname.startsWith('/user/resume') || ['/', '/user/login', '/user/signup'].includes(location.pathname) || location.pathname.startsWith('/user/forgot-password');
@@ -102,8 +102,8 @@ const AppRoutes = () => {
                                 <Route path="/user/document-editor" element={<ExternalCvProvider> <ExternalClProvider> <DocumentEditor /> </ExternalClProvider> </ExternalCvProvider>} />
                                 <Route path='/user/external-cv' element={<ExternalCvProvider> <ExternalCv /> </ExternalCvProvider>} />
                                 <Route path='/user/external-cl' element={<ExternalClProvider> <ExternalCl /> </ExternalClProvider>} />
-                                <Route path='/user/success' element={<PaymentSuccess />} />
-                                <Route path='/user/cancel' element={<PaymentCancel />} />
+                                <Route path='/payment/success' element={<PaymentSuccess />} />
+                                <Route path='/payment/cancel' element={<PaymentCancel />} />
                             </Routes>
                         </div>
                     </div>

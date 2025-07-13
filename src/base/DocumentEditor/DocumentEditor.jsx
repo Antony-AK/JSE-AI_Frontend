@@ -62,6 +62,8 @@ const DocumentEditor = () => {
 
     } = useExternalCl();
 
+
+
     const handleClDownload = () => {
         const element = clPreviewRef.current;
         if (!element) return;
@@ -225,16 +227,14 @@ const DocumentEditor = () => {
                         <div ref={clPreviewRef} className="h-[1123px] w-[794px] bg-white mx-auto  scrollbar-custom">
 
                             <ExternalClTemp
-                                data={{
+                                personalInfo={{
                                     name: clPersonalInfo.name,
                                     title: clPersonalInfo.title,
                                     mail: clPersonalInfo.mail,
                                     contact: clPersonalInfo.contact,
                                     address: clPersonalInfo.address,
-                                    paragraphs,
-
-
                                 }}
+                                paragraphs={paragraphs}
                                 language={language}
                             />
 

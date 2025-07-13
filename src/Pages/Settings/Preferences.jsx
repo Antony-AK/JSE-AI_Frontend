@@ -13,7 +13,7 @@ const Preferences = () => {
 
     const langMap = {
         english: "en",
-        german: "de",
+        // german: "de",
     };
 
     const handleLanguageChange = (e) => {
@@ -113,9 +113,10 @@ const Preferences = () => {
     }, []);
 
 
+
+
     return (
         <div className='flex flex-col gap-5 py-3'>
-            {/* Language */}
             {/* Language */}
             <div className="flex justify-between items-center">
                 <div className="flex flex-col gap-1">
@@ -128,7 +129,8 @@ const Preferences = () => {
                         onClick={() => setShowLangDropdown(!showLangDropdown)}
                         className="flex justify-center items-center w-full px-4 py-1 text-sm font-semibold rounded cursor-pointer bg-white "
                     >
-                        {preferences?.language === "german" ? "German" : "English"}
+                        {/* {preferences?.language === "german" ? "German" : "English"} */}
+                        {preferences?.language?.charAt(0).toUpperCase() + preferences?.language?.slice(1)}
                         <motion.img
                             src={arrow_down}
                             alt="arrow"
@@ -147,7 +149,8 @@ const Preferences = () => {
                                 transition={{ duration: 0.2, ease: "easeInOut" }}
                                 className="absolute right-0 mt-2 w-full bg-white border border-gray-200 rounded shadow-lg z-10 overflow-hidden"
                             >
-                                {["english", "german"].map((lang) => (
+                                {/* {["english", "german"].map((lang) => ( */}
+                                {["english"].map((lang) => (
                                     <div
                                         key={lang}
                                         className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${preferences?.language === lang ? "bg-gray-100 font-bold" : ""}`}
@@ -167,7 +170,6 @@ const Preferences = () => {
 
 
             {/* Timezone */}
-            {/* Timezone */}
             <div className="flex justify-between items-center">
                 <div className="flex flex-col gap-1">
                     <h2 className="font-semibold">Timezone</h2>
@@ -179,9 +181,10 @@ const Preferences = () => {
                         onClick={() => setShowTimezoneDropdown(!showTimezoneDropdown)}
                         className="flex justify-center items-center w-full px-4 py-1 text-sm font-semibold rounded cursor-pointer bg-white "
                     >
-                        {preferences?.timezone === "Asia/Kolkata"
+                        {/* {preferences?.timezone === "Asia/Kolkata"
                             ? "(GMT+5:30) Asia/Kolkata"
-                            : "(GMT+2:00) Berlin"}
+                            : "(GMT+2:00) Berlin"} */}
+                        (GMT+2:00) Berlin    
                         <motion.img
                             src={arrow_down}
                             alt="arrow"
@@ -207,17 +210,17 @@ const Preferences = () => {
                                         setShowTimezoneDropdown(false);
                                     }}
                                 >
-                                    (CET+2:00) Berlin
+                                    (GMT+2:00) Berlin
                                 </div>
-                                <div
-                                    className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${preferences?.timezone === "Asia/Kolkata" ? "bg-gray-100 font-bold" : ""}`}
+                                {/* <div
+                                    className={px-4 py-2 cursor-pointer hover:bg-gray-100 ${preferences?.timezone === "Asia/Kolkata" ? "bg-gray-100 font-bold" : ""}}
                                     onClick={() => {
                                         handleTimezoneChange({ target: { value: "Asia/Kolkata" } });
                                         setShowTimezoneDropdown(false);
                                     }}
                                 >
                                     (GMT+5:30) Asia/Kolkata
-                                </div>
+                                </div> */}
                             </motion.div>
                         )}
                     </AnimatePresence>

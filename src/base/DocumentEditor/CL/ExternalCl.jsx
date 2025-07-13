@@ -71,6 +71,7 @@ const ExternalCl = () => {
 
     try {
       const payload = {
+        cl_format: selectedClTemplate, // 🎯 Send the selected template format too
         job_id: jobId,
         cl_data: {
           name: personalInfo.name,
@@ -225,8 +226,8 @@ const ExternalCl = () => {
         {/* RIGHT */}
         <div ref={previewRef} className="w-[794px] h-[1123px] flex flex-col gap-5 bg-white">
           <div> <ActiveCLTemplate personalInfo={personalInfo} paragraphs={paragraphs} language={language} />
-          </div>       
-             <div className='flex  justify-end items-end'>
+          </div>
+          <div className='flex  justify-end items-end'>
 
             <button
               className="bg-[#2c6472] text-white mt-4 flex justify-end mb-10 items-end px-8  py-1.5 rounded-lg"

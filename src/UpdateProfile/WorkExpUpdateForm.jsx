@@ -4,6 +4,7 @@ import trash from "../assets/trash2.png";
 import axios from "axios";
 import Calendar from '../base/Calender/Calender';
 import { format } from 'date-fns';
+import { BASE_URL } from '../utils/api';
 
 const WorkExpUpdateForm = ({ onclose }) => {
 
@@ -11,7 +12,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
     const [deleteLoading, setDeleteLoading] = useState(false);
     const [saveLoading, setSaveLoading] = useState(false);
 
-    const apiUrl = "https://dev.arshan.digital/b1/work-experience";
+    const apiUrl = `${BASE_URL}/work-experience`;
     const [experiences, setExperiences] = useState([]);
     // const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -20,6 +21,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
         location: "",
         start_date: "",
         end_date: "",
+        currentlyWorking: false,
         key_responsibilities: ""
     });
     const token = sessionStorage.getItem("authToken");
@@ -27,6 +29,13 @@ const WorkExpUpdateForm = ({ onclose }) => {
 
     const isFormValid = () => {
         return formData.job_title && formData.company_name && formData.start_date && formData.end_date;
+    };
+
+    const isValidDateRange = (start, end) => {
+    if (!start || !end) return true; // allow if one is missing (like when currently working)
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    return startDate <= endDate;
     };
 
     const sendData = async () => {
@@ -57,7 +66,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
                     "Content-Type": "application/json",
                 },
             });
-            toast.success(`Work Experience uploaded!`);
+            toast.success("Work Experience uploaded!");
         } catch (error) {
             console.error("Error uploading data:", error);
             if (error.response) {
@@ -68,8 +77,13 @@ const WorkExpUpdateForm = ({ onclose }) => {
 
     const handleAddExperience = async (e) => {
         e.preventDefault();
-        if (!isFormValid()) {
+        if (!formData.job_title || !formData.company_name || !formData.start_date || (!formData.currentlyWorking && !formData.end_date)) {
             toast.error("Please fill all required fields!");
+            return;
+        }
+
+        if (!formData.currentlyWorking && !isValidDateRange(formData.start_date, formData.end_date)) {
+            toast.error("Start date cannot be after end date.");
             return;
         }
 
@@ -82,6 +96,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
             location: "",
             start_date: "",
             end_date: "",
+            currentlyWorking: false,
             key_responsibilities: "",
         });
         setActiveId(null);
@@ -126,6 +141,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
             location: exp.location || "",
             start_date: exp.start_date?.split("T")[0] || "",
             end_date: exp.end_date?.split("T")[0] || "",
+            currentlyWorking: exp.currentlyWorking || false,
             key_responsibilities: exp.key_responsibilities || ""
         });
         setActiveId(exp.tempId);
@@ -155,7 +171,8 @@ const WorkExpUpdateForm = ({ onclose }) => {
             location: formData.location,
             start_date: toISOString(formData.start_date),
             end_date: formData.end_date ? toISOString(formData.end_date) : null,
-            key_responsibilities: formData.key_responsibilities
+            key_responsibilities: formData.key_responsibilities,
+            currentlyWorking: formData.currentlyWorking
         };
 
         const selectedIndex = experiences.findIndex(exp => exp.tempId === activeId);
@@ -168,8 +185,20 @@ const WorkExpUpdateForm = ({ onclose }) => {
 
         const backendIndex = selectedIndex + 1; // If API uses 1-based index
 
+        if (!formData.start_date || (!formData.currentlyWorking && !formData.end_date)) {
+            toast.error("Please fill all required date fields.");
+            setSaveLoading(false);
+            return;
+        }
+
+        if (!formData.currentlyWorking && !isValidDateRange(formData.start_date, formData.end_date)) {
+            toast.error("Start date cannot be after end date.");
+            setSaveLoading(false);
+            return;
+        }
+
         try {
-            const res = await axios.put(`${apiUrl}/${backendIndex}`, updatedExperience, {
+            const res = await axios.put(`${apiUrl}/${backendIndex}, updatedExperience`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
@@ -189,6 +218,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
                     location: "",
                     start_date: "",
                     end_date: "",
+                    currentlyWorking: false,
                     key_responsibilities: ""
                 });
                 setActiveId(null);
@@ -226,6 +256,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
                 location: "",
                 start_date: "",
                 end_date: "",
+                currentlyWorking: false,
                 key_responsibilities: ""
             });
             setActiveId(null);
@@ -241,7 +272,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
 
     return (
         <div className='fixed inset-0 bg-white bg-opacity-70 z-50 flex items-center justify-center'>
-            <div className='w-[700px] h-[650px] bg-white flex flex-col shadow rounded-xl px-10 py-5'>
+            <div className='w-[700px] bg-white flex flex-col shadow rounded-xl px-10 py-5'>
 
                 <div className="flex justify-between w-full mb-7 mt-3">
                     <h3 className='text-lg font-semibold'>Work Experience</h3>
@@ -269,6 +300,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
                                 location: "",
                                 start_date: "",
                                 end_date: "",
+                                currentlyWorking: false,
                                 key_responsibilities: "",
                                 });
                                 setActiveId(null); // clear editing mode
@@ -335,8 +367,19 @@ const WorkExpUpdateForm = ({ onclose }) => {
                         </div>
 
                         <div className="flex flex-col w-1/2 gap-2">
-                            <label htmlFor="end_date" className='text-[15px] text-gray-500'>End Date <span className="text-red-500">*</span></label>
-                            <Calendar
+                            <label htmlFor="end_date" className="text-[15px] text-gray-500">
+                                End Date {!formData.currentlyWorking && <span className="text-red-500">*</span>}
+                            </label>
+
+                            {formData.currentlyWorking ? (
+                                <input
+                                type="text"
+                                value="Currently Working"
+                                disabled
+                                className="w-full px-4 py-3 rounded-md border border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed"
+                                />
+                            ) : (
+                                <Calendar
                                 selectedDate={formData.end_date ? new Date(formData.end_date) : null}
                                 onDateChange={(date) =>
                                     setFormData((prev) => ({
@@ -344,9 +387,26 @@ const WorkExpUpdateForm = ({ onclose }) => {
                                     end_date: format(date, 'yyyy-MM-dd'),
                                     }))
                                 }
-                            />
+                                />
+                            )}
                         </div>
                     </div>
+
+                    <label className="flex items-center gap-2 text-sm">
+                        <input
+                            className='accent-[#2c6472] w-4 h-4'
+                            type="checkbox"
+                            checked={formData.currentlyWorking}
+                            onChange={(e) =>
+                            setFormData((prev) => ({
+                                ...prev,
+                                currentlyWorking: e.target.checked,
+                                end_date: e.target.checked ? "" : prev.end_date,
+                            }))
+                            }
+                        />
+                        Currently Working Here
+                    </label>
 
                     <div className="flex flex-col w-full gap-2">
                         <label htmlFor="key_responsibilities" className='text-[15px] text-gray-500'>Key Responsibilities </label>

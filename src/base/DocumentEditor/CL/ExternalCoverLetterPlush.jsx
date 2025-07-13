@@ -22,8 +22,7 @@ const t = (key, lang = "en") => {
   return map[key]?.[langCode] || key;
 };
 
-const ExternalCoverLetterPlush = ({ language }) => {
-  const { personalInfo, recipient, paragraphs } = useExternalCl();
+const ExternalCoverLetterPlush = ({ language , personalInfo , recipient = {}, paragraphs }) => {
 
   const [currentDate, setCurrentDate] = useState("");
 

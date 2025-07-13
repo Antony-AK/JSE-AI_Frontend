@@ -18,9 +18,8 @@ const t = (key, lang = "en") => {
   return map[key]?.[langCode] || key;
 };
 
-const ExternalClTemp = ({ language }) => {
+const ExternalClTemp = ({ language,   personalInfo, paragraphs}) => {
   const previewRef = useRef();
-  const { personalInfo, paragraphs } = useExternalCl();
 
   return (
     <div className="w-full min-h-screen bg-[#f5f5f5] flex items-center justify-center ">

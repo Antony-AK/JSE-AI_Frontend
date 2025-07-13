@@ -87,9 +87,9 @@ const ExternalCv = () => {
         }
 
 
-
         // 🧠 BUILD CV PAYLOAD FROM CURRENT STATE
         const payload = {
+            cv_format: selectedTemplate,
             job_id: jobId,
             cv_data: {
                 personal_info: {
@@ -138,7 +138,7 @@ const ExternalCv = () => {
 
         try {
             const response = await axios.put(
-                `${BASE_URL}/internal/generate/cv`,
+                `${BASE_URL}/external/generate/cv`,
                 payload,
                 {
                     headers: {
@@ -859,9 +859,11 @@ const ExternalCv = () => {
                         <button
                             className="bg-[#2c6472] text-white px-8 py-1.5 rounded-lg"
                             onClick={async () => {
-                                await handleUpdateCV(); // ✅ First update the CV
-                                handleDownloadAndGoBack(previewRef, navigate); // ✅ Then download + go back
+                                console.log("🎯 Final selected template before PUT:", selectedTemplate); // debug line
+                                await handleUpdateCV(); // ✅ will now include the correct template
+                                handleDownloadAndGoBack(previewRef, navigate);
                             }}
+
                         >
                             Download & Finish Editing
                         </button>

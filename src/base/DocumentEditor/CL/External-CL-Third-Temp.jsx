@@ -23,8 +23,7 @@ const t = (key, lang = "en") => {
   return map[key]?.[langCode] || key;
 };
 
-const ExternalCoverLetterModern = ({ language }) => {
-  const { personalInfo, recipient, subject, paragraphs } = useExternalCl();
+const ExternalCoverLetterModern = ({ language, personalInfo, recipient, subject, paragraphs }) => {
     const [currentDate, setCurrentDate] = useState('');
   
     useEffect(() => {

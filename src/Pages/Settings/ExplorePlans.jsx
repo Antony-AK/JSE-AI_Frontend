@@ -188,7 +188,8 @@ const ExplorePlans = () => {
                         <p className="text-white text-base">
                             {activePlan.plan === "free"
                                 ? "Enjoy free features at no cost"
-                                : `Enjoy ${activePlan.plan} plan benefits`}
+                                : `Enjoy ${activePlan.plan} plan benefits`
+                                }
                         </p>
                         <p className="text-gray-300 text-sm">
                             € {activePlan?.price ?? "0"} / {activePlan?.period ?? ""}
@@ -229,6 +230,22 @@ const ExplorePlans = () => {
 
                 <div className="flex">
                     <div className="flex-1"></div>
+
+                    {/* Conditionally show Free plan title if it's missing and Basic exists */}
+                    {(() => {
+                        const hasFree = data?.plans?.[selected]?.some(p => p.plan.toLowerCase() === "free");
+                        const hasBasic = data?.plans?.[selected]?.some(p => p.plan.toLowerCase() === "basic");
+
+                        if (!hasFree && hasBasic) {
+                        return (
+                            <div className="flex-1 flex flex-col gap-4">
+                            <h2 className="font-bold text-lg capitalize">Free</h2>
+                            <p  className=" text-base flex text-gray-500"><span className='text-center flex justify-center items-center -mt-5 text-3xl me-1'>.</span>Expired</p>
+                            </div>
+                        );
+                        }
+                        return null;
+                    })()}
 
                     {data?.plans[selected].map((plan, i) => {
                         const isActive = plan.status === "active";
@@ -364,4 +381,4 @@ const ExplorePlans = () => {
     )
 }
 
-export default ExplorePlans
+export default ExplorePlans

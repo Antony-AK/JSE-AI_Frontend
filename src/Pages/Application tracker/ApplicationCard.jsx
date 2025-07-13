@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Download, MoreVertical } from "lucide-react";
 import { BASE_URL } from "../../utils/api";
+import axios from "axios";
+import DownloadHandler from "./DownloadHandler";
 
 const ApplicationCard = ({
   jobId,
@@ -11,7 +13,8 @@ const ApplicationCard = ({
   yourSkills,
   requiredSkills,
   profileMatch,
-  status
+  status,
+  onDelete
 }) => {
   const [activeStatus, setActiveStatus] = useState(status || '');
   const [showFullDesc, setShowFullDesc] = useState(false);
@@ -20,6 +23,11 @@ const ApplicationCard = ({
   const statusOrder = ['Applied', 'Interview', 'Selected', 'Rejected'];
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingStatus, setPendingStatus] = useState(null);
+  const [cvDataToDownload, setCvDataToDownload] = useState(null);
+  const [clDataToDownload, setClDataToDownload] = useState(null);
+  const [startDownload, setStartDownload] = useState(false);
+
+
 
   const [showMenu, setShowMenu] = useState(false);
 
@@ -69,13 +77,86 @@ const ApplicationCard = ({
     }
   };
 
+  const handleDownloadAll = async () => {
+    console.log("🔍 jobid", jobId);
+
+    try {
+      const token = sessionStorage.getItem("authToken");
+
+      const response = await axios.get(
+        `${BASE_URL}/api/application-tracker/download-all/${jobId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      console.log("📦 Full API Response:", response.data);
+
+      const { cv_data, cl_data, cv_format, cl_format } = response.data || {};
+
+      console.log("📄 cv_data:", cv_data);
+      console.log("✉️ cl_data:", cl_data);
+      console.log("📄 format:", cv_format, "✉️ format:", cl_format);
+
+      if (!cv_data || !cl_data) {
+        console.error("❌ Missing CV or CL data from API response");
+        alert("Failed to fetch CV or Cover Letter. Empty response received.");
+        return;
+      }
+
+      const mergedCvData = { ...cv_data, format: cv_format };
+      const mergedClData = { ...cl_data, format: cl_format };
+
+      setCvDataToDownload(mergedCvData);
+      setClDataToDownload(mergedClData);
+      setStartDownload(true); // Trigger download
+
+    } catch (err) {
+      console.error("❌ Error downloading documents:", err.response?.data || err.message);
+      alert("Download failed. Try again later.");
+    }
+  };
+
+  const handleDeleteApplication = async () => {
+    setShowMenu(false);
+
+    try {
+      const token = sessionStorage.getItem("authToken");
+      const payload = { status: "deleted" };
+
+      const response = await fetch(`${BASE_URL}/api/application-tracker/${jobId}/status`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to delete");
+      }
+
+      console.log("🗑️ Deleted job", jobId);
+
+      if (typeof onDelete === "function") {
+        onDelete(); // Trigger parent to remove this card
+      }
+
+    } catch (error) {
+      console.error("❌ Failed to delete job:", error.message);
+      alert("Could not delete this application.");
+    }
+  };
+
 
 
 
 
   return (
     <div className="flex justify-between items-start bg-white border rounded-lg shadow-sm px-6 py-4 w-full gap-4">
-      
+
       {/* Left Side */}
       <div className="flex flex-col gap-1.5 flex-grow">
         {/* Header */}
@@ -179,10 +260,9 @@ const ApplicationCard = ({
                     ? `${bgColorMap[statusOption]} text-white border border-gray-400 cursor-not-allowed`
                     : `border ${borderColorMap[statusOption]}`
                   }
-                  ${
-                    !isNextStep && !isCompletedOrCurrent
-                      ? 'opacity-50 cursor-not-allowed'
-                      : ''
+                  ${!isNextStep && !isCompletedOrCurrent
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ''
                   }
                 `}
               >
@@ -203,7 +283,8 @@ const ApplicationCard = ({
           </button>
 
 
-          <button className="bg-[#306b74] hover:bg-[#285962] text-white w-[210px] px-4 py-2 rounded-md text-base font-medium flex items-center justify-center transition duration-200">
+          <button onClick={handleDownloadAll}
+            className="bg-[#306b74] hover:bg-[#285962] text-white w-[210px] px-4 py-2 rounded-md text-base font-medium flex items-center justify-center transition duration-200">
             <Download className="w-5 h-5 mb-1" />
             <span className="leading-tight ms-4 flex text-sm items-start flex-col ">
               Download<br /><span className="">CV & Cover Letter</span>
@@ -252,7 +333,7 @@ const ApplicationCard = ({
               Once you change the status to <span className="font-semibold text-[#2c6472]">{pendingStatus}</span>, it cannot be changed again.
             </p>
             <div className="flex justify-center gap-4">
-            
+
               <button
                 onClick={() => {
                   setShowConfirmation(false);
@@ -263,7 +344,7 @@ const ApplicationCard = ({
                 Cancel
               </button>
 
-                <button
+              <button
                 onClick={() => {
                   updateApplicationStatus(pendingStatus);
                   setShowConfirmation(false);
@@ -293,6 +374,8 @@ const ApplicationCard = ({
                 setShowMenu(false);
                 // Add your remove logic here
                 console.log("Remove clicked for jobId:", jobId);
+               handleDeleteApplication();  // 👈 call the function here
+
               }}
             >
               Remove
@@ -300,6 +383,29 @@ const ApplicationCard = ({
           </div>
         )}
       </div>
+
+      {startDownload && cvDataToDownload && (
+        <DownloadHandler
+          data={cvDataToDownload}
+          onFinish={() => {
+            console.log("✅ CV downloaded");
+            setCvDataToDownload(null);
+          }}
+        />
+      )}
+
+      {startDownload && clDataToDownload && (
+        <DownloadHandler
+          data={clDataToDownload}
+          type="cl"
+          onFinish={() => {
+            console.log("✅ CL downloaded");
+            setClDataToDownload(null);
+            setStartDownload(false); // All done
+          }}
+        />
+      )}
+
 
     </div>
   );

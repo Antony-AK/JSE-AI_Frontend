@@ -56,13 +56,16 @@ const External = () => {
 
     const finalPayload = {
       ...storedPayload,
-      job_language: lang
+      job_language: lang,
+      cl_format: "ExternalModernCL", // 🎯 Send the selected template format too
+      cv_format:"EuropassCV"
+
     };
 
     try {
       setLoading(true);
 
-          sessionStorage.setItem("selectedLanguage", lang);
+      sessionStorage.setItem("selectedLanguage", lang);
 
       const response = await axios.post(`${BASE_URL}/external/generate`, finalPayload, {
         headers: {
