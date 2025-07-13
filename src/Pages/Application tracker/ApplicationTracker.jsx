@@ -216,7 +216,8 @@ const ApplicationTracker = () => {
           key_skills,
           skills,
           match_score,
-          status
+          status,
+          selected_date
         }, idx) => (
           <ApplicationCard
             key={job_id || idx}
@@ -229,6 +230,7 @@ const ApplicationTracker = () => {
             requiredSkills={skills || 'N/A'}
             profileMatch={match_score || 0}
             status={status || 'pending'}
+            selectedDate={selected_date} 
             onDelete={() =>
               setApplications(prev => prev.filter(app => app.job_id !== job_id))
             }

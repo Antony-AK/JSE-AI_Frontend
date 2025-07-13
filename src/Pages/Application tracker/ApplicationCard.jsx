@@ -14,6 +14,7 @@ const ApplicationCard = ({
   requiredSkills,
   profileMatch,
   status,
+  selectedDate,
   onDelete
 }) => {
   const [activeStatus, setActiveStatus] = useState(status || '');
@@ -166,8 +167,8 @@ const ApplicationCard = ({
               {title}
             </h2>
             <p className="text-gray-800 mb-1.5 text-sm">{company}</p>
-            <p className="text-gray-600 text-sm">{location}</p>
-          </div>
+            <p className="text-gray-600  text-sm">{location}</p>
+                  </div>
         </div>
 
         {/* Description */}
@@ -218,6 +219,15 @@ const ApplicationCard = ({
               )}
             </span>
           </p>
+           <p className="text-gray-600 mt-1 text-sm">
+              <strong className="text-black font-semibold me-1">Selected Date:  </strong>
+              {selectedDate ? new Date(selectedDate).toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric',
+                timeZone: 'Asia/Kolkata'
+              }) : 'Not available'}
+            </p>  
         </div>
 
         {/* Buttons */}
@@ -374,7 +384,7 @@ const ApplicationCard = ({
                 setShowMenu(false);
                 // Add your remove logic here
                 console.log("Remove clicked for jobId:", jobId);
-               handleDeleteApplication();  // 👈 call the function here
+                handleDeleteApplication();  // 👈 call the function here
 
               }}
             >
