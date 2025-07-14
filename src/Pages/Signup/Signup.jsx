@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { Player } from "@lottiefiles/react-lottie-player";
@@ -19,6 +19,7 @@ const Signup = () => {
   const [passwordError, setPasswordError] = useState("");
   const [shakePassword, setShakePassword] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const dropdownRef = useRef(null);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -37,6 +38,13 @@ const Signup = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "phoneNumber") {
+      const numericValue = value.replace(/\D/g, ""); // only numbers
+      setFormData((prev) => ({ ...prev, [name]: numericValue }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
 
     // Real-time password validation
     if (name === "password") {
@@ -145,11 +153,27 @@ const Signup = () => {
     setShowDropdown(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="flex min-h-screen">
       {/* Left Panel */}
       <div className="flex flex-1 flex-col justify-evenly items-center p-8 bg-white ">
-        <div className="max-w-lg w-full mt-16">
+        <div className="max-w-lg w-full mt-5">
           <h2 className="text-3xl font-semibold text-center ">
             Create account
           </h2>
@@ -189,7 +213,7 @@ const Signup = () => {
             <br />
 
             {/* Phone Number Field */}
-            <div className="relative">
+            <div ref={dropdownRef} className="relative">
               <label className="mb-1 ms-3 block text-gray-500 text-sm">
                 Phone Number
               </label>
@@ -197,7 +221,7 @@ const Signup = () => {
               {/* Flag + Code box */}
               <div
                 onClick={() => setShowDropdown(!showDropdown)}
-                className="absolute left-3 top-[64%] w-24 h-6 flex items-center justify-center gap-1.5 p-4 rounded-md bg-gray-200 transform -translate-y-1/2 text-sm cursor-pointer z-10"
+                className="absolute left-3 top-[29px] w-24 h-10 flex items-center justify-center gap-1.5 px-3 py-1 rounded-md bg-gray-200 text-sm cursor-pointer z-10"
               >
                 <img src={flag} alt="" className="w-5 h-3 object-cover" />
                 <p>{selectedCountry.code}</p>
@@ -229,6 +253,8 @@ const Signup = () => {
                 id="phoneNumber"
                 type="tel"
                 name="phoneNumber"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 placeholder=" "
                 className="w-full pl-32 h-[52px] px-4 py-3.5 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer"
                 value={formData.phoneNumber}
@@ -256,11 +282,9 @@ const Signup = () => {
                   type={showPassword.password ? "text" : "password"}
                   name="password"
                   placeholder=" "
-                  className={`w-full h-[52px] px-4 py-4 border ${
-                    passwordError ? "" : "border-gray-300"
-                  } rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer ${
-                    shakePassword ? "shake" : ""
-                  }`}
+                  className={`w-full h-[52px] px-4 py-4 border ${passwordError ? "" : "border-gray-300"
+                    } rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer ${shakePassword ? "shake" : ""
+                    }`}
                   value={formData.password}
                   onChange={handleChange}
                 />
@@ -309,13 +333,8 @@ const Signup = () => {
             )}
             <br />
 
-            <div className="flex gap-3 mb-5 items-start">
-              {/* Label wraps input and text for easier clicking */}
-              <label
-                htmlFor="terms"
-                className="flex items-start gap-3 cursor-pointer"
-              >
-                {/* Custom checkbox */}
+            <div className="flex gap-3 mb-5 items-start border p-3 rounded-md">
+              <label htmlFor="terms" className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   id="terms"
@@ -323,18 +342,17 @@ const Signup = () => {
                   checked={agreedToTerms}
                   onChange={(e) => setAgreedToTerms(e.target.checked)}
                 />
-                {/* Terms and Privacy text */}
-                <span className="text-xs text-[#2c6472] leading-snug">
-                  By signing up, you agree to our{" "}
-                  <span className="font-medium underline">
-                    Terms & Conditions
-                  </span>
-                  <br />
-                  and{" "}
-                  <span className="font-medium underline">Privacy Policy</span>.
+
+                <span className="text-xs text-gray-700 leading-snug">
+                  I agree to allow <span className="font-semibold text-[#2c6472]">Arshan UG</span> to share my personal information (e.g., name, email) and user-generated content (e.g., CVs and cover letters) with <span className="font-semibold text-[#2c6472]">Partnered University</span> to support my career goals if I am currently studying or have graduated within the last 6 months from that university.
+                  <br /><br />
+                  I understand I can withdraw this consent at any time by contacting <span className="text-[#2c6472] underline">info@arshan.de</span>.
+                  <br /><br />
+                  For more details, see our <span className="font-medium underline text-[#2c6472] cursor-pointer">Privacy Policy</span>.
                 </span>
               </label>
             </div>
+
             <br />
 
             {/* Submit Button */}

@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 .teal-button:hover{
     @apply bg-teal-800 transition-transform ease-linear  duration-200;
 }
@@ -18,6 +20,16 @@ html {
 
 }
 
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+
 @media print {
   .print-area {
     width: 794px;
@@ -33,6 +45,12 @@ html {
 .page-break {
   page-break-before: always;
   break-before: page; /* for modern browsers */
+}
+
+
+
+.animate-marquee {
+  animation: marquee 60s linear infinite;
 }
 
 

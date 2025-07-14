@@ -22,7 +22,6 @@ import Sidebar from './base/sidebar/sidebar.jsx';
 import 'aos/dist/aos.css';
 import "./App.css"
 import './index.css';
-import Landing from './base/Landing.jsx';
 import DataEntryPages from './Pages/DataEntry/DataEntryPages.jsx'; // not used right now
 import Profile from './Pages/Profile/Profile.jsx';
 import DataOnboarding from './Pages/DataOnboarding/DataOnboarding.jsx';
@@ -46,7 +45,8 @@ import SelfDevelopment from './Pages/SelfDevelopment/SelfDevelopment.jsx';
 import PersonalTracker from './Pages/PersonalTracker/PersonalTracker.jsx';
 import PaymentSuccess from './Pages/PaymentDesign/PaymentSuccess.jsx';
 import PaymentCancel from './Pages/PaymentDesign/PaymentCancel.jsx';
-
+import Landing from './Landing/Main/Landing.jsx'
+import LandingPage from './base/Landingpage.jsx';
 
 const AppRoutes = () => {
     const location = useLocation();
@@ -54,7 +54,7 @@ const AppRoutes = () => {
     const hideLayout = location.pathname === '/user/cv' || location.pathname === '/user/cl' || location.pathname === '/user/document-editor' || location.pathname === '/user/external-cv' || location.pathname === '/user/external-cl' || location.pathname === '/user/forgot-password' || location.pathname === '/payment/success' || location.pathname === '/payment/cancel';
 
     // Define routes that are data-entry only
-    const isDataEntryPage = location.pathname.startsWith('/user/onboarding') || location.pathname.startsWith('/user/dataonboarding') || location.pathname.startsWith('/user/linkedin') || location.pathname.startsWith('/user/resume') || ['/', '/user/login', '/user/signup'].includes(location.pathname) || location.pathname.startsWith('/user/forgot-password');
+    const isDataEntryPage = location.pathname.startsWith('/user/onboarding') || location.pathname.startsWith('/user/dataonboarding') || location.pathname.startsWith('/user/linkedin') || location.pathname.startsWith('/user/resume') || ['/', '/user/login', '/user/signup'].includes(location.pathname) || location.pathname.startsWith('/user/forgot-password') || location.pathname.startsWith('/landingpage') ;
 
     return (
         <div className='App'>
@@ -62,7 +62,8 @@ const AppRoutes = () => {
             {isDataEntryPage ? (
                 <div className='data-entry'>
                     <Routes>
-                        <Route path="/" element={<Landing />} />
+                        <Route path="/" element={<LandingPage />} />
+                        <Route path="/landingpage" element={<Landing/>} />
                         <Route path="/user/login" element={<Login />} />
                         <Route path="/user/forgot-password" element={<ForgetPassword />} />
                         <Route path="/user/signup" element={<Signup />} />

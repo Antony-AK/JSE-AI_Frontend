@@ -17,6 +17,8 @@
     "@lottiefiles/dotlottie-react": "^0.13.3",
     "@lottiefiles/react-lottie-player": "^3.6.0",
     "@mui/material": "^7.0.2",
+    "@react-three/drei": "^10.5.0",
+    "@react-three/fiber": "^9.2.0",
     "@tailwindcss/postcss": "^4.1.4",
     "@tailwindcss/vite": "^4.1.4",
     "aos": "^2.3.4",
@@ -33,10 +35,13 @@
     "react-icons": "^5.5.0",
     "react-katex": "^3.1.0",
     "react-router-dom": "^7.6.2",
+    "react-slick": "^0.30.3",
     "react-spinners": "^0.16.1",
     "react-toastify": "^11.0.5",
     "recharts": "^2.15.3",
-    "styled-components": "^6.1.16"
+    "slick-carousel": "^1.8.1",
+    "styled-components": "^6.1.16",
+    "three": "^0.178.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

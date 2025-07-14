@@ -17,11 +17,16 @@ module.exports = {
         'typewriter-delay-2': 'typewriter 2s steps(30) forwards 1.2s',
         'typewriter-delay-3': 'typewriter 2s steps(30) forwards 2.1s',
         'typewriter-delay-4': 'typewriter 2s steps(30) forwards 3s',
+        'marquee': 'marquee 60s linear infinite',
       },
       keyframes: {
         fadeInOut: {
           '0%, 100%': { opacity: 0 },
           '10%, 90%': { opacity: 1 },
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
         },
         toastIn: {
           '0%': { transform: 'translateX(100%)', opacity: '0' },
@@ -62,7 +67,11 @@ module.exports = {
         spacing: {
           a4w: '794px',
           a4h: '1123px',
-        }
+        },
+        fontFamily: {
+          poppins: ['Poppins', 'sans-serif'],
+        },
+
       },
     },
   },

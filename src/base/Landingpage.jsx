@@ -8,7 +8,7 @@ import frame from '../assets/Frame.png';
 import logo from "../assets/logo.png"
 
 
-const Landing = ({ footerLinks = [] }) => {
+const LandingPage = ({ footerLinks = [] }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [fade, setFade] = useState(false);
@@ -103,4 +103,4 @@ const Landing = ({ footerLinks = [] }) => {
   );
 };
 
-export default Landing;
+export default LandingPage;
