@@ -35,6 +35,8 @@ const MyApplication = () => {
   const [showLangModal, setShowLangModal] = useState(false);
   const [actionType, setActionType] = useState(""); // "cv" or "cl"
 
+  const [selectedTitle, setSelectedTitle] = useState('');
+
   const [activeMenuIndex, setActiveMenuIndex] = useState(null);
   
   const selectedJobRef = useRef(null);
@@ -445,8 +447,12 @@ const MyApplication = () => {
           <FiSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg" />
         </div>
 
-        <JobSearchTitleDropdown onJobsFetched={(mappedJobs) => setSelectedJobs(mappedJobs)} />
-
+        <JobSearchTitleDropdown
+          onJobsFetched={(mappedJobs, selectedTitle) => {
+            setSelectedJobs(mappedJobs);
+            setSelectedTitle(selectedTitle);
+          }}
+        />
 
         <motion.div
           ref={languageDropdownRef} 
@@ -560,7 +566,7 @@ const MyApplication = () => {
         {selectedJobs.length === 0 ? (
           <div className="absolute top-1/2 left-[calc(264px+40%)] transform -translate-x-1/2 -translate-y-1/2 text-center">
             <h2 className="text-2xl font-bold text-gray-700 mb-2">
-              No jobs found
+              No {(selectedTitle?.charAt(0).toUpperCase() + selectedTitle?.slice(1))} jobs found
             </h2>
             <p className="text-gray-500">Please check back later.</p>
           </div>

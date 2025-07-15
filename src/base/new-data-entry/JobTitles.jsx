@@ -126,17 +126,27 @@ const JobTitles = () => {
   const handleSelect = (fieldName, value) => {
     setSearchTerms((prev) => ({ ...prev, [fieldName]: value }));
     setShowDropdowns((prev) => ({ ...prev, [fieldName]: false }));
+    setPendingTitleToAdd(value);
 
     setTimeout(() => {
-      inputRef.current?.focus();
+      inputRef.current?.blur();
     }, 0);
   };
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.primary_title) {
-      newErrors.primary_title = 'Please add at least one job title';
+
+    const selectedCount = [
+      formData.primary_title,
+      formData.secondary_title,
+      formData.tertiary_title,
+    ].filter(Boolean).length;
+
+    if (selectedCount < 3) {
+      toast.error("Please select 3 job titles.");
+      newErrors.primary_title = 'You must select 3 job titles.';
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

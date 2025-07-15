@@ -209,7 +209,7 @@ const Projects = () => {
       <div className="flex justify-end mt-5 items-center w-[95%]">
         
         {/* {projectList.length > 0 && ( */}
-          <div className="flex items-center cursor-pointer" onClick={() => navigate('/user/onboarding/languages')}>
+          <div className="flex items-center p-4 pt-0 cursor-pointer" onClick={() => navigate('/user/onboarding/languages')}>
             <p className='ml-2 text-lg font-medium text-[#00000057]'>Skip</p>
           </div>
         {/* )} */}

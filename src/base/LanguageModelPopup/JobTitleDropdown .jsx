@@ -37,57 +37,65 @@ const JobSearchTitleDropdown = ({ onJobsFetched }) => {
 
 
     const handleTitleSelect = async (title) => {
-  setSelectedTitle(title);
-  setShowDropdown(false);
+        setSelectedTitle(title);
+        setShowDropdown(false);
 
-  try {
-    const token = sessionStorage.getItem("authToken");
-    if (!token) {
-      console.error("⚠ No auth token found.");
-      return;
-    }
+        try {
+            const token = sessionStorage.getItem("authToken");
+            if (!token) {
+            console.error("⚠ No auth token found.");
+            return;
+            }
 
-    const encodedTitle = encodeURIComponent(title);
+            const encodedTitle = encodeURIComponent(title);
 
-    const res = await axios.get(`https://dev.arshan.digital/b1/api/jobs?title=${encodedTitle}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
+            const res = await axios.get(`https://dev.arshan.digital/b1/api/jobs?title=${encodedTitle}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            });
 
-    const mappedJobs = res.data.jobs.map((job) => ({
-      id: job.job_id || job.id,
-      jobTitle: job.job_title || job.title || "Untitled Job",
-      title: job.title || job.job_title,
-      companyName: job.company || "Unknown Company",
-      location: job.location || "Location not specified",
-      postedDate: job.posted_date || "Not specified",
-      description: job.description?.slice(0, 100) + "...",
-      Description: job.description || "No description available",
-      matchValue: job.match_score || 50,
-      skillData: [
-        {
-          label: "Required Skills",
-          value: job.skills ? job.skills.split(",").map((s) => s.trim()) : [],
-        },
-        {
-          label: "Your Skills",
-          value: Array.isArray(job.user_skills) ? job.user_skills : [],
-        },
-        {
-          label: "Job Type",
-          value: job.job_type || "Not specified",
-        },
-      ],
-    }));
+            const jobs = res.data.jobs || [];
 
-    onJobsFetched(mappedJobs);
-  } catch (error) {
-    console.error("❌ Failed to fetch filtered jobs:", error.message);
-  }
-};
+            if (jobs.length === 0) {
+            console.warn(`No jobs found for title: ${title}`);
+            onJobsFetched([], title); // ✅ Pass empty array and title for display
+            return;
+            }
 
+            const mappedJobs = jobs.map((job) => ({
+            id: job.job_id || job.id,
+            jobTitle: job.job_title || job.title || "Untitled Job",
+            title: job.title || job.job_title,
+            companyName: job.company || "Unknown Company",
+            location: job.location || "Location not specified",
+            postedDate: job.posted_date || "Not specified",
+            description: job.description?.slice(0, 100) + "...",
+            Description: job.description || "No description available",
+            matchValue: job.match_score || 50,
+            skillData: [
+                {
+                label: "Required Skills",
+                value: job.skills ? job.skills.split(",").map((s) => s.trim()) : [],
+                },
+                {
+                label: "Your Skills",
+                value: Array.isArray(job.user_skills) ? job.user_skills : [],
+                },
+                {
+                label: "Job Type",
+                value: job.job_type || "Not specified",
+                },
+            ],
+            }));
+
+            onJobsFetched(mappedJobs, title); // ✅ Pass title even when jobs exist
+        } catch (error) {
+            console.error("❌ Failed to fetch filtered jobs:", error.message);
+            onJobsFetched([], title); // ✅ Also pass empty on failure
+        }
+    };
 
     useEffect(() => {
         fetchTitles();
