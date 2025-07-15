@@ -18,6 +18,10 @@ module.exports = {
         'typewriter-delay-3': 'typewriter 2s steps(30) forwards 2.1s',
         'typewriter-delay-4': 'typewriter 2s steps(30) forwards 3s',
         'marquee': 'marquee 60s linear infinite',
+        scrollBehavior: ['responsive'],
+      },
+      variants: {
+        scrollBehavior: ['responsive'],
       },
       keyframes: {
         fadeInOut: {

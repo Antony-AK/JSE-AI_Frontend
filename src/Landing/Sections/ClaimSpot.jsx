@@ -22,7 +22,7 @@ const ClaimSpot = () => {
   };
 
   return (
-    <section className="bg-[#245e69] rounded-xl p-6 md:p-10 text-white max-w-[1100px] mx-auto my-20 flex flex-col md:flex-row items-stretch gap-8">
+    <section id="contactus" className="bg-[#245e69] rounded-xl p-6 md:p-10 text-white max-w-[1100px] mx-auto my-20 flex flex-col md:flex-row items-stretch gap-8">
       {/* Left Side */}
       <div className="basis-[55%] flex flex-col justify-between">
         <div>
@@ -32,18 +32,17 @@ const ClaimSpot = () => {
             Unlimited Potential.
           </h2>
           <p className="mt-5 text-lg font-medium">
-            Tell us your dream role and let our AI match you with ideal
-            opportunities.
+            Sign up today and benefit from our early adopter promotion
           </p>
         </div>
 
         <div className="space-y-4 text-sm mt-auto flex flex-col gap-4">
-          <div className="flex items-center gap-3">
+          {/* <div className="flex items-center gap-3">
             <div className="bg-white p-1.5 rounded-full">
               <FaPhoneAlt className="text-[#2c6472] text-sm" />
             </div>
             <span>+49 178 9815465</span>
-          </div>
+          </div> */}
           <div className="flex items-center gap-3">
             <div className="bg-white p-1.5 rounded-full">
               <FaEnvelope className="text-[#2c6472]" />

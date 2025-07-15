@@ -1,9 +1,14 @@
 import React from 'react';
+import bot1 from "../../assets/bot1.png"
 
 const Header = () => {
   return (
-    <header  className="relative  w-full h-[90vh] bg-white px-4 text-center flex justify-center items-center font-poppins">
-      <div className="relative w-full h-[400px] mt-28 z-[9999] bg-white">
+    <header id="home"  className="relative w-full flex-col h-[70vh] bg-white px-4 text-center flex justify-center items-center font-poppins">
+        <div className='w-[400px] mb-16 h-28  '>
+          <img src={bot1} alt="" />
+        </div>
+
+        <div>
         <h1 className="text-4xl sm:text-5xl font-semibold leading-tight text-gray-900">
           Find your Perfect{' '}
           <span className="text-[#2c6472] leading-[4rem]">Dream<br />Job</span>{' '}
@@ -15,13 +20,13 @@ const Header = () => {
           <br />
           faster career growth.
         </p>
+         </div>
 
         <div className="mt-8">
           <button className="bg-white border border-gray-300 text-black font-medium px-6 py-2 rounded-full hover:bg-[#2c6472] hover:text-white transition duration-100 ease-linear">
             Start 7-day Free Trial
           </button>
         </div>
-      </div>
     </header>
   );
 };

@@ -40,7 +40,7 @@ const FAQ = () => {
   };
 
   return (
-    <section className="max-w-[1100px] mx-auto px-4 py-10">
+    <section id="faqs" className="max-w-[1100px] mx-auto px-4 py-10">
       <h2 className="text-2xl font-semibold mb-5">
         Frequently Asked Questions
       </h2>

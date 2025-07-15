@@ -1,13 +1,14 @@
 import React from 'react';
 import smartjob from "../../assets/smartjoba.mp4"
 import smartjobicon from "../../assets/smartjobicon.png"
+import bot3 from "../../assets/bot3.png"
 
 
 
 const SmartJobSection = () => {
   return (
-    <section className="bg-white py-28 px-4">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
+    <section className="relative bg-white py-28 px-4">
+      <div className="relative max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
         {/* Left: Image + Robot */}
         <div className="relative w-full md:w-1/2 flex justify-center">
           <video
@@ -18,11 +19,6 @@ const SmartJobSection = () => {
             src={smartjob}
             alt="Woman on laptop"
             className="rounded-xl  w-[80%]  h-[500px] bg-slate-200 object-cover"
-          />
-          <img
-            src=""
-            alt="Robot"
-            className="absolute -bottom-3 left-16 w-20 h-20 object-contain bg-slate-600 hidden sm:block"
           />
         </div>
 

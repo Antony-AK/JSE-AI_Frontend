@@ -189,7 +189,7 @@ const ExplorePlans = () => {
                             {activePlan.plan === "free"
                                 ? "Enjoy free features at no cost"
                                 : `Enjoy ${activePlan.plan} plan benefits`
-                                }
+                            }
                         </p>
                         <p className="text-gray-300 text-sm">
                             € {activePlan?.price ?? "0"} / {activePlan?.period ?? ""}
@@ -237,52 +237,89 @@ const ExplorePlans = () => {
                         const hasBasic = data?.plans?.[selected]?.some(p => p.plan.toLowerCase() === "basic");
 
                         if (!hasFree && hasBasic) {
-                        return (
-                            <div className="flex-1 flex flex-col gap-4">
-                            <h2 className="font-bold text-lg capitalize">Free</h2>
-                            <p  className=" text-base flex text-gray-500"><span className='text-center flex justify-center items-center -mt-5 text-3xl me-1'>.</span>Expired</p>
-                            </div>
-                        );
+                            return (
+                                <div className="flex-1 flex flex-col gap-4">
+                                    <h2 className="font-bold text-lg capitalize">Free</h2>
+                                    <p className=" text-base flex text-gray-500"><span className='text-center flex justify-center items-center -mt-5 text-3xl me-1'>.</span>Expired</p>
+                                </div>
+                            );
                         }
                         return null;
                     })()}
 
-                    {data?.plans[selected].map((plan, i) => {
-                        const isActive = plan.status === "active";
-                        const isComing = plan.status === "coming soon";
-                        const isUpgrade = plan.status === "upgrade";
+                    {data?.plans?.[selected]?.length > 0 ? (
+                        data.plans[selected].map((plan, i) => {
+                            const isActive = plan.status === "active";
+                            const isComing = plan.status === "coming soon";
+                            const isUpgrade = plan.status === "upgrade";
 
-                        const btn = isComing
-                            ? { label: "Coming Soon", style: "bg-transparent text-[#2c6472] border-[#00000047] cursor-not-allowed opacity-50", disabled: true }
-                            : isUpgrade
-                                ? { label: "Upgrade", style: "text-white bg-[#2c6472] border-[#2c6472]" }
-                                : null;
+                            const btn = isComing
+                                ? { label: "Coming Soon", style: "bg-transparent text-[#2c6472] border-[#00000047] cursor-not-allowed opacity-50", disabled: true }
+                                : isUpgrade
+                                    ? { label: "Upgrade", style: "text-white bg-[#2c6472] border-[#2c6472]" }
+                                    : null;
 
-                        return (
-                            <div key={i} className="flex-1 flex flex-col gap-4">
-                                <h2 className="font-bold text-lg capitalize">{plan.plan}</h2>
-                                <p className="text-sm">€ {plan.price} / {plan.period}</p>
+                            return (
+                                <div key={i} className="flex-1 flex flex-col gap-4">
+                                    <h2 className="font-bold text-lg capitalize">{plan.plan}</h2>
+                                    <p className="text-sm">€ {plan.price} / {plan.period}</p>
 
-                                {plan.status === "cancel" && (
-                                    <p className="text-sm flex items-center gap-2 text-[#2c6472] px-4 py-1 w-24 justify-center rounded-xl border-2 border-[#2c6472] cursor-pointer hover:bg-[#2c6472]/5">
-                                        Cancel
-                                    </p>
-                                )}
+                                    {plan.status === "cancel" && (
+                                        <button
+                                            onClick={async () => {
+                                                try {
+                                                    const token = sessionStorage.getItem("authToken");
+                                                    if (!token) {
+                                                        toast.error("Please login first.");
+                                                        return;
+                                                    }
 
-                                {btn && (
-                                    <button
-                                        onClick={() =>
-                                            !btn.disabled && handlePlanSelect(`${plan.plan.toLowerCase()}_${selected}`)
-                                        }
-                                        disabled={btn.disabled}
-                                        className={`w-32 text-sm font-medium border rounded-xl py-1.5 px-2 hover:scale-105 duration-200 ${btn.style} ${btn.disabled ? '' : 'hover:scale-105'}`}
-                                    >
-                                        {btn.label}
-                                    </button>
-                                )}
-                            </div>
-                        );
-                    })}
+                                                    const response = await fetch(`${BASE_URL}/settings/cancel/active-plan`, {
+                                                        method: "GET",
+                                                        headers: {
+                                                            "Authorization": `Bearer ${token}`,
+                                                            "Content-Type": "application/json"
+                                                        }
+                                                    });
+
+                                                    const data = await response.json();
+
+                                                    if (response.ok && data.url) {
+                                                        window.open(data.url, "_blank"); // open in new tab
+                                                        // OR use this to redirect in same tab:
+                                                        // window.location.href = data.url;
+                                                    } else {
+                                                        toast.error("Failed to retrieve cancel link.");
+                                                    }
+                                                } catch (error) {
+                                                    console.error("❌ Cancel plan error:", error);
+                                                    toast.error("Something went wrong while cancelling.");
+                                                }
+                                            }}
+                                            className="text-sm flex items-center gap-2 text-[#2c6472] px-4 py-1 w-24 justify-center rounded-xl border-2 border-[#2c6472] cursor-pointer hover:bg-[#2c6472]/5"
+                                        >
+                                            Cancel
+                                        </button>
+                                    )}
+
+
+                                    {btn && (
+                                        <button
+                                            onClick={() =>
+                                                !btn.disabled && handlePlanSelect(`${plan.plan.toLowerCase()}_${selected}`)
+                                            }
+                                            disabled={btn.disabled}
+                                            className={`w-32 text-sm font-medium border rounded-xl py-1.5 px-2 hover:scale-105 duration-200 ${btn.style} ${btn.disabled ? '' : 'hover:scale-105'}`}
+                                        >
+                                            {btn.label}
+                                        </button>
+                                    )}
+                                </div>
+                            );
+                        })
+                    ) : (
+                        <p className="text-sm text-gray-500 text-center flex-1">No plans available.</p>
+                    )}
                 </div>
 
             </div>
@@ -381,4 +418,4 @@ const ExplorePlans = () => {
     )
 }
 
-export default ExplorePlans
+export default ExplorePlans

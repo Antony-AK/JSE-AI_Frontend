@@ -1,5 +1,7 @@
 import React from 'react';
 import logo from '../../assets/jsenewlogoblack.png';
+import { Link } from 'react-scroll';
+
 
 const LandingNavbar = () => {
   return (
@@ -12,7 +14,7 @@ const LandingNavbar = () => {
       {/* Center Links */}
       <ul className="hidden md:flex space-x-8 text-gray-800 font-medium">
         {['Home', 'Features', 'Pricing', 'FAQs', 'Contact us'].map((item, idx) => {
-          const href = `#${item.toLowerCase().replace(' ', '')}`;
+          const href = `#${item.toLowerCase().replace(/\s/g, '')}`;
           return (
             <li key={idx}>
               <a
@@ -28,6 +30,7 @@ const LandingNavbar = () => {
           );
         })}
       </ul>
+
 
       {/* Right Login Button */}
       <div>

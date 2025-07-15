@@ -116,20 +116,19 @@ const Calendar = ({ selectedDate, onDateChange }) => {
                       ref={yearDropdownRef}
                       className="absolute top-10 left-0 z-20 bg-white border border-gray-300 rounded shadow-lg max-h-40 overflow-y-auto w-[80px]"
                     >
-                      {Array.from({ length: new Date().getFullYear() - 2000 + 1 }, (_, i) => 2000 + i).map((year) => (
-                        <div
-                          key={year}
-                          onClick={() => {
-                            setCurrentMonth((prev) => new Date(year, prev.getMonth(), 1));
-                            setShowYearDropdown(false); // close dropdown after select
-                          }}
-                          className={`px-2 py-1 cursor-pointer text-sm text-center hover:bg-[#2c6472] hover:text-white ${currentMonth.getFullYear() === year
-                            ? 'bg-[#2c6472]/10 font-semibold'
-                            : ''
-                            }`}
-                        >
-                          {year}
-                        </div>
+                      {Array.from({ length: new Date().getFullYear() - 2000 + 1 }, (_,   i) => new Date().getFullYear() - i).map((year) => (<div
+                        key={year}
+                        onClick={() => {
+                          setCurrentMonth((prev) => new Date(year, prev.getMonth(), 1));
+                          setShowYearDropdown(false); // close dropdown after select
+                        }}
+                        className={`px-2 py-1 cursor-pointer text-sm text-center hover:bg-[#2c6472] hover:text-white ${currentMonth.getFullYear() === year
+                          ? 'bg-[#2c6472]/10 font-semibold'
+                          : ''
+                          }`}
+                      >
+                        {year}
+                      </div>
                       ))}
                     </div>
                   )}
