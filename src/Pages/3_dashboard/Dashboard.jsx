@@ -110,12 +110,12 @@ const Dashboard = () => {
     // { label: "CV Format Fixed", isComplete: checklist.cvFormat },
     // { label: "CL Format Fixed", isComplete: checklist.clFormat },
     { label: "Profile Image", isComplete: checklist.profileImg },
-    { label: "Data Usage", isComplete: checklist.dataUsage },
-    { label: "Data Training", isComplete: checklist.dataTraining },
-    { label: "Number Lock", isComplete: checklist.numberLock },
-    { label: "Data Finalization", isComplete: checklist.dataFinalization },
-    { label: "Terms", isComplete: checklist.terms },
-    { label: "Checklist", isComplete: checklist.profileComplete },
+    // { label: "Data Usage", isComplete: checklist.dataUsage },
+    // { label: "Data Training", isComplete: checklist.dataTraining },
+    // { label: "Number Lock", isComplete: checklist.numberLock },
+    // { label: "Data Finalization", isComplete: checklist.dataFinalization },
+    // { label: "Terms", isComplete: checklist.terms },
+    // { label: "Checklist", isComplete: checklist.profileComplete },
   ];
 
   const jobs = useMemo(() => {
@@ -183,63 +183,61 @@ const Dashboard = () => {
   return (
     <div className=" flex flex-col gap-5 bg-gray-100 p-5 ps-7">
 
-      <div className="flex justify-between items-center w-full pl-5 pr-5">
+      <div className="w-full">
+  <div className="lg:flex justify-center gap-x-5 gap-y-6">
 
-        {/* ✅ Total Applications */}
-        <div
-          className="relative flex bg-gradient-to-br from-[#FFC2B0] to-[#FF9AA2] h-[120px] w-[250px] text-black p-4 rounded-xl">
-          <div className="flex flex-col justify-start items-start gap-5">
-            <p className="font-bold">Total Applied</p>
-            <h3 className="font-bold text-lg">{infoBlock.totalApplications}</h3>
-          </div>
-          <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm w-fit h-fit">
-            <img width="22px" height="22px" className="p-1" src={total_app_icon} alt="" />
-          </div>
-        </div>
-
-        {/* ✅ Weekly Applied Jobs (You can update this from another API if available) */}
-        <div className="relative flex bg-gradient-to-br from-[#FDA67B] to-[#FF9D6B] h-[120px] w-[250px] text-black p-4 rounded-xl">
-          <div className="flex flex-col justify-start items-start gap-5">
-            <p className="font-bold">Weekly Applied</p>
-            <h3 className="font-bold text-lg">{infoBlock.weeklyApplications}</h3> {/* Just an example fallback */}
-          </div>
-          <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm w-fit h-fit">
-            <img width="24px" height="24px" className="p-1" src={jobs_available_icon} alt="" />
-          </div>
-        </div>
-
-        {/* ✅ Top Jobs For You */}
-        <div className="relative flex bg-gradient-to-br from-[#BDE4FB] to-[#A3C7FD] h-[120px] w-[250px] text-black p-4 rounded-xl">
-          <div className="flex flex-col justify-start items-start gap-5">
-            <p className="font-bold">Recommeded Jobs</p>
-            <h3 className="font-bold text-lg">{infoBlock.topJobs}</h3>
-          </div>
-          <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm w-fit h-fit">
-            <img width="24px" height="24px" className="p-1" src={selectable_jobs_icon} alt="" />
-          </div>
-        </div>
-
-        {/* ✅ Remaining Applications (based on limits) */}
-        <div onClick={() => setShowPackagePopup(true)}
-          className="relative flex bg-gradient-to-br from-[#6FE297] to-[#48D77A] h-[120px] w-[250px] text-black p-4 rounded-xl">
-          <div className="flex flex-col justify-start items-start gap-1">
-            <p className="font-bold">Package</p>
-            <div className='flex gap-1'>
-              <p className="text-sm font-semibold">{infoBlock.internalApps} </p> /
-              <p className="text-sm font-semibold"> {infoBlock.externalApps}</p>
-            </div>
-
-            <h3 className="font-semibold">
-              {infoBlock.tier.charAt(0).toUpperCase() + infoBlock.tier.slice(1)}
-            </h3>
-          </div>
-          <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm w-fit h-fit">
-            <img width="26px" height="26px" className="p-1" src={total_experience_icon} alt="" />
-          </div>
-        </div>
-
-
+    {/* ✅ Total Applications */}
+    <div className="relative flex bg-gradient-to-br from-[#FFC2B0] to-[#FF9AA2] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl max-[1260px]:text-sm">
+      <div className="flex flex-col justify-start items-start gap-5">
+        <p className="font-bold">Total Applied</p>
+        <h3 className="font-bold text-lg">{infoBlock.totalApplications}</h3>
       </div>
+      <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
+        <img width="22px" height="22px" className="p-1" src={total_app_icon} alt="" />
+      </div>
+    </div>
+
+    {/* ✅ Weekly Applied */}
+    <div className="relative flex bg-gradient-to-br from-[#FDA67B] to-[#FF9D6B] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl max-[1260px]:text-sm">
+      <div className="flex flex-col justify-start items-start gap-5">
+        <p className="font-bold">Weekly Applied</p>
+        <h3 className="font-bold text-lg">{infoBlock.weeklyApplications}</h3>
+      </div>
+      <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
+        <img width="24px" height="24px" className="p-1" src={jobs_available_icon} alt="" />
+      </div>
+    </div>
+
+    {/* ✅ Recommended Jobs */}
+    <div className="relative flex bg-gradient-to-br from-[#BDE4FB] to-[#A3C7FD] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl max-[1260px]:text-sm">
+      <div className="flex flex-col justify-start items-start gap-5">
+        <p className="font-bold">Recommended Jobs</p>
+        <h3 className="font-bold text-lg">{infoBlock.topJobs}</h3>
+      </div>
+      <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
+        <img width="24px" height="24px" className="p-1" src={selectable_jobs_icon} alt="" />
+      </div>
+    </div>
+
+    {/* ✅ Package Info */}
+    <div onClick={() => setShowPackagePopup(true)} className="relative flex bg-gradient-to-br from-[#6FE297] to-[#48D77A] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl cursor-pointer max-[1260px]:text-sm">
+      <div className="flex flex-col justify-start items-start gap-1">
+        <p className="font-bold">Package</p>
+        <div className="flex gap-1">
+          <p className="text-sm font-semibold">{infoBlock.internalApps}</p> /
+          <p className="text-sm font-semibold">{infoBlock.externalApps}</p>
+        </div>
+        <h3 className="font-semibold">
+          {infoBlock.tier.charAt(0).toUpperCase() + infoBlock.tier.slice(1)}
+        </h3>
+      </div>
+      <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
+        <img width="26px" height="26px" className="p-1" src={total_experience_icon} alt="" />
+      </div>
+    </div>
+
+  </div>
+</div>
 
 
 
@@ -328,7 +326,17 @@ const Dashboard = () => {
 
               <div className="flex flex-col gap-2 px-3 py-3 h-[98px] rounded-lg bg-[#F8F8F8] overflow-y-auto scrollbar-custom">
                 {statusList.map((item, index) => (
-                  <div key={index} onClick={handleStatusClick} className="flex gap-3 cursor-pointer w-fit">
+                  <div
+                    key={index}
+                    onClick={() => {
+                      if (item.label === "Profile Image") {
+                        navigate("/user/profile");
+                      } else if (item.label === "Multifactor Authentication") {
+                        navigate("/user/settings");
+                      }
+                    }}
+                    className="flex gap-3 cursor-pointer w-fit"
+                  >
                     <img width="18px" src={item.isComplete ? complete : incomplete} alt="" />
                     <p className='font-medium text-sm'>{item.label}</p>
                   </div>

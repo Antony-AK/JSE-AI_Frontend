@@ -83,7 +83,7 @@ const Signup = () => {
       setShakePassword(true);
       setTimeout(() => setShakePassword(false), 400);
       toast.error(
-        "Password must be atleast 8 characters with a number & a special symbol! 🔐"
+        "Password must be atleast 8 characters with a number & a special symbol!"
       );
 
       return;
@@ -334,23 +334,21 @@ const Signup = () => {
             <br />
 
             <div className="flex gap-3 mb-5 items-start border p-3 rounded-md">
-              <label htmlFor="terms" className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  id="terms"
-                  className="w-4 h-4 accent-[#2c6472] mt-1"
-                  checked={agreedToTerms}
-                  onChange={(e) => setAgreedToTerms(e.target.checked)}
-                />
+              <input
+                type="checkbox"
+                id="terms"
+                className="w-4 h-4 accent-[#2c6472] mt-1 shrink-0"
+                checked={agreedToTerms}
+                onChange={(e) => setAgreedToTerms(e.target.checked)}
+              />
 
-                <span className="text-xs text-gray-700 leading-snug">
-                  I agree to allow <span className="font-semibold text-[#2c6472]">Arshan UG</span> to share my personal information (e.g., name, email) and user-generated content (e.g., CVs and cover letters) with <span className="font-semibold text-[#2c6472]">Partnered University</span> to support my career goals if I am currently studying or have graduated within the last 6 months from that university.
-                  <br /><br />
-                  I understand I can withdraw this consent at any time by contacting <span className="text-[#2c6472] underline">info@arshan.de</span>.
-                  <br /><br />
-                  For more details, see our <span className="font-medium underline text-[#2c6472] cursor-pointer">Privacy Policy</span>.
-                </span>
-              </label>
+              <div className="text-xs text-gray-700 leading-snug">
+                I agree to allow <span className="font-semibold text-[#2c6472]">Arshan UG</span> to share my personal information (e.g., name, email) and user-generated content (e.g., CVs and cover letters) with <span className="font-semibold text-[#2c6472]">Partnered University</span> to support my career goals if I am currently studying or have graduated within the last 6 months from that university.
+                <br /><br />
+                I understand I can withdraw this consent at any time by contacting <span className="text-[#2c6472] underline">info@arshan.de</span>.
+                <br /><br />
+                For more details, see our <span className="font-medium underline text-[#2c6472] cursor-pointer">Privacy Policy</span>.
+              </div>
             </div>
 
             <br />

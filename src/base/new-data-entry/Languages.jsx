@@ -177,8 +177,8 @@ const Languages = () => {
 
 
         {addedCompanies.length > 0 && (
-          <div className=" px-6 py-4 -mb-5 flex gap-3 rounded-lg">
-            <ul className="flex gap-3 overflow-x-auto scrollbar-hide">
+          <div className=" px-6 py-4 -mb-5 flex gap-3 rounded-lg w-[90%]">
+            <ul className="flex gap-3 overflow-x-auto hide-scrollbar">
               {addedCompanies.map((company, index) => (
                 <li className='bg-gray-500/30 px-4 py-2 rounded-lg min-w-32 text-center font-semibold text-[#2c6472]' key={index}>{company}</li>
               ))}
@@ -241,9 +241,11 @@ const Languages = () => {
           <div className="flex w-[70%] justify-between items-center gap-4 mt-4 mb-10">
             <button
               type="submit"
-              className=" py-2 w-[180px] bg-white text-[#2c6472]  h-[43px]  font-semibold cursor-pointer mt-1 hover:scale-95 transition-transform duration-200 ease-in-out"
+              disabled={loading}
+              className={`py-2 w-[180px] h-[43px] font-semibold mt-1 transition-transform duration-200 ease-in-out
+                ${loading ? 'bg-white cursor-not-allowed' : 'bg-white text-[#2c6472] hover:scale-95'}`}
             >
-              +Add Another
+              + Add Another
             </button>
 
             <button

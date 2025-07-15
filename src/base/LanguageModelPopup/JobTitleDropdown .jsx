@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronDown } from "react-icons/fa";
 import axios from "axios";
 
 const JobSearchTitleDropdown = ({ onJobsFetched }) => {
+
+    const dropdownRef = useRef(null);
+
     const [titles, setTitles] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedTitle, setSelectedTitle] = useState("Job Search Titles");
@@ -90,8 +93,21 @@ const JobSearchTitleDropdown = ({ onJobsFetched }) => {
         fetchTitles();
     }, []);
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     return (
-        <div className="relative inline-block text-left">
+        <div ref={dropdownRef} className="relative inline-block text-left">
             <button
                 onClick={toggleDropdown}
                 className="px-6 py-1.5 font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105 flex items-center gap-2"

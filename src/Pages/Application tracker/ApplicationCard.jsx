@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Download, MoreVertical } from "lucide-react";
 import { BASE_URL } from "../../utils/api";
 import axios from "axios";
@@ -45,7 +46,20 @@ const ApplicationCard = ({
 
   const isInterviewActive = activeStatus.toLowerCase() === 'interview';
 
+  const menuRef = useRef(null);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const updateApplicationStatus = async (newStatus) => {
     try {
@@ -370,28 +384,33 @@ const ApplicationCard = ({
       )}
 
 
-      <div className="absolute right-14">
+      <div ref={menuRef} className="absolute right-14">
         <MoreVertical
           onClick={() => setShowMenu(!showMenu)}
           className="cursor-pointer w-6 h-6 text-gray-500 hover:text-[#2c6472] transition"
         />
 
-        {showMenu && (
-          <div className="absolute top-6 right-0 bg-white border border-gray-200 rounded-md shadow-lg w-32 z-50">
-            <button
-              className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-500 hover:text-white transition rounded-md"
-              onClick={() => {
-                setShowMenu(false);
-                // Add your remove logic here
-                console.log("Remove clicked for jobId:", jobId);
-                handleDeleteApplication();  // 👈 call the function here
-
-              }}
+        <AnimatePresence>
+          {showMenu && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="absolute top-6 right-0 bg-white border border-gray-200 rounded-md shadow-lg w-32 z-50"
             >
-              Remove
-            </button>
-          </div>
-        )}
+              <button
+                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-500 hover:text-white transition rounded-md"
+                onClick={() => {
+                  setShowMenu(false);
+                  handleDeleteApplication();
+                }}
+              >
+                Remove
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {startDownload && cvDataToDownload && (

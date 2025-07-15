@@ -37,6 +37,7 @@ const SavedJob = () => {
 
   const [activeMenuIndex, setActiveMenuIndex] = useState(null);
   const selectedJobRef = useRef(null);
+  const menuRef = useRef(null);
 
 
   const [isOpen, setIsOpen] = useState(false);
@@ -55,6 +56,18 @@ const SavedJob = () => {
     // 🛑 "New" does nothing special for language — no fetch
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setActiveMenuIndex(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = () => setActiveMenuIndex(null);
@@ -512,7 +525,7 @@ const SavedJob = () => {
                         </button>
 
                         {activeMenuIndex === index && (
-                          <div className="absolute -right-2 mt-2 bg-white border border-gray-200 shadow-md rounded-md z-20 w-28">
+                          <div ref={menuRef} className="absolute -right-2 mt-2 bg-white border border-gray-200 shadow-md rounded-md z-20">
                             <button
                               className="w-fit text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                               onClick={async (e) => {
@@ -555,7 +568,7 @@ const SavedJob = () => {
                               }}
 
                             >
-                              Delete Job
+                              Remove
                             </button>
                           </div>
                         )}

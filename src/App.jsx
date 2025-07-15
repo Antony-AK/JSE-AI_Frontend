@@ -45,7 +45,6 @@ import SelfDevelopment from './Pages/SelfDevelopment/SelfDevelopment.jsx';
 import PersonalTracker from './Pages/PersonalTracker/PersonalTracker.jsx';
 import PaymentSuccess from './Pages/PaymentDesign/PaymentSuccess.jsx';
 import PaymentCancel from './Pages/PaymentDesign/PaymentCancel.jsx';
-import Landing from './Landing/Main/Landing.jsx'
 import LandingPage from './base/Landingpage.jsx';
 
 const AppRoutes = () => {
@@ -63,7 +62,6 @@ const AppRoutes = () => {
                 <div className='data-entry'>
                     <Routes>
                         <Route path="/" element={<LandingPage />} />
-                        <Route path="/landingpage" element={<Landing/>} />
                         <Route path="/user/login" element={<Login />} />
                         <Route path="/user/forgot-password" element={<ForgetPassword />} />
                         <Route path="/user/signup" element={<Signup />} />
