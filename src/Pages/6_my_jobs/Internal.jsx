@@ -36,7 +36,9 @@ const MyApplication = () => {
   const [actionType, setActionType] = useState(""); // "cv" or "cl"
 
   const [activeMenuIndex, setActiveMenuIndex] = useState(null);
-  
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
+
+
   const selectedJobRef = useRef(null);
   const filterDropdownRef = useRef(null);
   const customDropdownRef = useRef(null);
@@ -52,12 +54,25 @@ const MyApplication = () => {
     setSelected(option);
     setIsOpen(false);
 
+     const savedOffset = sessionStorage.getItem("jobPaginationOffset");
+  const validOffset = savedOffset ? parseInt(savedOffset) : 0;
+
+
     // 🟢 Trigger only for "All"
     if (option === "All") {
-      setSelectedLanguage("both");
+    fetchSelectedJobs(validOffset);
     }
     // 🛑 "New" does nothing special for language — no fetch
   };
+
+  useEffect(() => {
+  if (selected === "All") {
+    const savedOffset = sessionStorage.getItem("jobPaginationOffset");
+    const validOffset = savedOffset ? parseInt(savedOffset) : 0;
+    fetchSelectedJobs(validOffset);
+  }
+}, [selected]);
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -217,19 +232,38 @@ const MyApplication = () => {
     }
   };
 
+  useEffect(() => {
+  if (selectedLanguages.length === 0) {
+    setSelectedLanguages(["en", "de"]);
+  }
+}, []);
+
+
 
 
   useEffect(() => {
-    const savedOffset = sessionStorage.getItem("jobPaginationOffset");
-    const validOffset = savedOffset ? parseInt(savedOffset) : 0;
+  const savedOffset = sessionStorage.getItem("jobPaginationOffset");
+  const validOffset = savedOffset ? parseInt(savedOffset) : 0;
 
+  // 🛑 No languages selected — you could either return or fetch default jobs
+  if (selectedLanguages.length === 0) {
+    fetchJobsByLanguage("both", validOffset); // fallback to both
+    return;
+  }
 
-    if (selectedLanguage === "both") {
-      fetchSelectedJobs(validOffset); // ⬅️ fetch from saved offset
-    } else {
-      fetchJobsByLanguage(selectedLanguage, validOffset); // pass to lang fetch too
-    }
-  }, [selectedLanguage]);
+  // 👇 Set lang param correctly
+  let langParam = "";
+  if (selectedLanguages.includes("en") && selectedLanguages.includes("de")) {
+    langParam = "both";
+  } else if (selectedLanguages.includes("en")) {
+    langParam = "en";
+  } else if (selectedLanguages.includes("de")) {
+    langParam = "de";
+  }
+
+  fetchJobsByLanguage(langParam, validOffset);
+}, [selectedLanguages]);
+
 
 
 
@@ -241,17 +275,22 @@ const MyApplication = () => {
       setLoading(true);
       const token = sessionStorage.getItem("authToken");
 
-      // ⬇️ Build correct URL with language and offset
-      let url = `${BASE_URL}/api/jobs?job_language=both&offset=${customOffset}&limit=${perPage}`;
-      if (lang === "en") url = `${BASE_URL}/api/jobs?job_language=english&offset=${customOffset}&limit=${perPage}`;
-      if (lang === "de") url = `${BASE_URL}/api/jobs?job_language=german&offset=${customOffset}&limit=${perPage}`;
+      let jobs = [];
 
-      const response = await axios.get(url, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      if (lang === "en" || lang === "de") {
+        const langUrl = `${BASE_URL}/api/jobs?job_language=${lang === "en" ? "english" : "german"}&offset=${customOffset}&limit=${perPage}`;
+        const res = await axios.get(langUrl, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        jobs = res.data.jobs || [];
+      } else if (lang === "both") {
+        const res = await axios.get(`${BASE_URL}/api/jobs?job_language=both&offset=${customOffset}&limit=${perPage}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        jobs = res.data.jobs || [];
+      }
 
-      const jobs = response.data.jobs || [];
-
+      // Same mapping logic
       const mappedJobs = jobs.map((job) => ({
         id: job.job_id || job.id,
         jobTitle: job.job_title || job.title || "Untitled Job",
@@ -280,26 +319,21 @@ const MyApplication = () => {
 
       setSelectedJobs(mappedJobs);
 
-      // 🧠 Restore selected job
       const savedSelectedJobId = sessionStorage.getItem("selectedJobId");
       const jobToSelect = mappedJobs.find((job) => job.id === savedSelectedJobId);
-      const selected = jobToSelect || mappedJobs[0];
+      setSelectedJob(jobToSelect || mappedJobs[0]);
 
-      setSelectedJob(selected);
-
-      // ✨ Scroll into view
       setTimeout(() => {
         if (selectedJobRef.current) {
           selectedJobRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       }, 300);
 
-      // ✅ Correctly update pagination state
       setPagination({
         current: Math.floor(customOffset / perPage) + 1,
-        total: jobs.length, // or use response.data.pagination?.total
+        total: jobs.length,
         per_page: perPage,
-        next: null, // You can update these if available from API
+        next: null,
         prev: null,
       });
 
@@ -310,6 +344,7 @@ const MyApplication = () => {
       setLoading(false);
     }
   };
+
 
   console.log("Selected Jobs:", selectedJobs);
 
@@ -328,6 +363,22 @@ const MyApplication = () => {
       setShowLangModal(true);
     }
   };
+
+  const handleLanguageToggle = (lang) => {
+    setSelectedLanguages((prev) => {
+      const updated = prev.includes(lang)
+        ? prev.filter((l) => l !== lang)
+        : [...prev, lang];
+
+      // ✅ Close dropdown if at least one selected
+      if (updated.length > 0) {
+        setShowLanguageDropdown(false);
+      }
+
+      return updated;
+    });
+  };
+
 
 
 
@@ -449,7 +500,7 @@ const MyApplication = () => {
 
 
         <motion.div
-          ref={languageDropdownRef} 
+          ref={languageDropdownRef}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
@@ -481,33 +532,28 @@ const MyApplication = () => {
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 className="absolute left-0 mt-7 bg-white p-3 z-10 w-[150px] rounded-md shadow-lg border border-gray-200 overflow-hidden flex flex-col gap-2"
               >
+                {/* English Checkbox */}
                 <label className="flex items-center gap-2 px-3 py-1 hover:bg-gray-100 rounded cursor-pointer">
                   <input
-                    type="radio"
-                    name="language"
+                    type="checkbox"
                     value="en"
-                    checked={selectedLanguage === "en"}
-                    onChange={() => {
-                      setSelectedLanguage("en");
-                      setShowLanguageDropdown(false);
-                    }}
+                    checked={selectedLanguages.includes("en")}
+                    onChange={(e) => handleLanguageToggle("en")}
                   />
                   <span>English</span>
                 </label>
 
+                {/* German Checkbox */}
                 <label className="flex items-center gap-2 px-3 py-1 hover:bg-gray-100 rounded cursor-pointer">
                   <input
-                    type="radio"
-                    name="language"
+                    type="checkbox"
                     value="de"
-                    checked={selectedLanguage === "de"}
-                    onChange={() => {
-                      setSelectedLanguage("de");
-                      setShowLanguageDropdown(false);
-                    }}
+                    checked={selectedLanguages.includes("de")}
+                    onChange={(e) => handleLanguageToggle("de")}
                   />
                   <span>German</span>
                 </label>
+
               </motion.div>
             )}
           </AnimatePresence>
@@ -516,13 +562,12 @@ const MyApplication = () => {
 
         <div ref={filterDropdownRef} className="relative inline-block text-left">
           {/* Filter Button */}
-          <button
+          {/* <button
             onClick={toggleDropdownfilter}
             className="flex items-center gap-x-2 px-4 py-1.5 bg-white font-medium text-[13px] rounded text-black hover:scale-105 shadow-md"
           >
             <img src={filter_icon} alt="" />
             Filter
-            {/* Dropdown Arrow Icon (rotates when open) */}
             <motion.span
               animate={{ rotate: showFilters ? 180 : 0 }}
               transition={{ duration: 0.3 }}
@@ -530,25 +575,19 @@ const MyApplication = () => {
             >
               <FaChevronDown className="text-[12px] text-gray-600" />
             </motion.span>
-          </button>
+          </button> */}
 
           {/* Dropdown Content */}
-          <AnimatePresence>
-            {showFilters && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="origin-top absolute left-0 mt-2 w-52 bg-white border border-gray-200 rounded-md shadow-lg z-10 overflow-hidden"
-              >
-                <button className="w-full px-4 py-2 text-[13px] text-black font-medium hover:bg-gray-100 text-left">
-                  Recommended Jobs
-                </button>
-                {/* Add more items below if you want */}
-              </motion.div>
-            )}
-          </AnimatePresence>
+
+          <div
+            className=" absolute left-0 w-52 -top-4 bg-white border border-gray-300 rounded-md  z-10 overflow-hidden"
+          >
+            <button className="w-full px-2 py-1.5 text-[13px] text-black font-medium hover:bg-gray-100 text-center">
+              Recommended Jobs
+            </button>
+            {/* Add more items below if you want */}
+          </div>
+
         </div>
 
       </div>
@@ -585,9 +624,8 @@ const MyApplication = () => {
                     <img
                       src={arrow_down}
                       alt=""
-                      className={`w-4 h-4 ms-1 transform transition-transform duration-200 ${
-                        isOpen ? "rotate-180" : "rotate-0"
-                      }`}
+                      className={`w-4 h-4 ms-1 transform transition-transform duration-200 ${isOpen ? "rotate-180" : "rotate-0"
+                        }`}
                     />
                   </button>
 
@@ -605,9 +643,8 @@ const MyApplication = () => {
                           <div
                             key={index}
                             onClick={() => handleSelect(option)}
-                            className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 ${
-                              selected === option ? "bg-gray-100 font-semibold text-[#2c6472]" : ""
-                            }`}
+                            className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 ${selected === option ? "bg-gray-100 font-semibold text-[#2c6472]" : ""
+                              }`}
                           >
                             {option}
                           </div>
@@ -639,10 +676,9 @@ const MyApplication = () => {
                           <h3 className="text-base w-96 font-semibold text-[#2C6472] h-12 overflow-y-hidden">{job.jobTitle}</h3>
                           <p className="text-sm   text-gray-600">{job.companyName}</p>
                           <p className="text-sm mb-5 text-gray-500">{job.location}</p>
-
                         </div>
 
-                        <div className="flex absolute  flex-col gap-2 mt-40 -left-3 ">
+                        <div className="flex absolute flex-col gap-2 mt-40 -left-3 ">
                           {selectedJob?.skillData?.slice(0, 2).map((item, index) => (
                             <div
                               key={index}

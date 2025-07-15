@@ -18,7 +18,8 @@ const Signup = () => {
   const [showVerificationPopup, setShowVerificationPopup] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [shakePassword, setShakePassword] = useState(false);
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [agreedToFirst, setAgreedToFirst] = useState(false);
+  const [agreedToSecond, setAgreedToSecond] = useState(false);
   const dropdownRef = useRef(null);
 
   const [formData, setFormData] = useState({
@@ -74,10 +75,11 @@ const Signup = () => {
       return;
     }
 
-    if (!agreedToTerms) {
-      toast.error("Agree to continue.");
-      return;
-    }
+ if (!agreedToFirst || !agreedToSecond) {
+  toast.error("Please accept all terms to continue.");
+  return;
+}
+
 
     if (!formData.password || passwordError) {
       setShakePassword(true);
@@ -329,29 +331,42 @@ const Signup = () => {
               <br />
             </div>
             {passwordError && (
-              <p className="text-[10px] text-red-500 ">{passwordError}</p>
+              <p className="text-[10px] text-red-500">{passwordError}</p>
             )}
             <br />
 
-            <div className="flex gap-3 mb-5 items-start border p-3 rounded-md">
+            <div className="flex gap-3 mb-10 items-start border border-gray-300 p-3 rounded-md">
               <input
                 type="checkbox"
-                id="terms"
                 className="w-4 h-4 accent-[#2c6472] mt-1 shrink-0"
-                checked={agreedToTerms}
-                onChange={(e) => setAgreedToTerms(e.target.checked)}
+                checked={agreedToFirst}
+                onChange={(e) => setAgreedToFirst(e.target.checked)}
               />
-
               <div className="text-xs text-gray-700 leading-snug">
                 I agree to allow <span className="font-semibold text-[#2c6472]">Arshan UG</span> to share my personal information (e.g., name, email) and user-generated content (e.g., CVs and cover letters) with <span className="font-semibold text-[#2c6472]">Partnered University</span> to support my career goals if I am currently studying or have graduated within the last 6 months from that university.
-                <br /><br />
                 I understand I can withdraw this consent at any time by contacting <span className="text-[#2c6472] underline">info@arshan.de</span>.
-                <br /><br />
-                For more details, see our <span className="font-medium underline text-[#2c6472] cursor-pointer">Privacy Policy</span>.
               </div>
             </div>
 
+
+
+            <div className="flex gap-3 mb-5 items-start border p-3 border-gray-300 rounded-md">
+              <input
+                type="checkbox"
+                className="w-4 h-4 accent-[#2c6472] shrink-0"
+                checked={agreedToSecond}
+                onChange={(e) => setAgreedToSecond(e.target.checked)}
+              />
+              <div className="text-xs text-gray-700 leading-snug">
+                By signing up, you agree to our <span className="font-medium underline text-[#2c6472] cursor-pointer mx-1">Terms & Conditions</span>
+                and <span className="font-medium underline ms-1 text-[#2c6472] cursor-pointer">Privacy Policy</span>.
+              </div>
+            </div>
+
+
             <br />
+
+
 
             {/* Submit Button */}
             <button
@@ -364,7 +379,7 @@ const Signup = () => {
           <br />
 
           {/* Switch to Login */}
-          <div className=" text-center mb-20 text-sm me-2 text-gray-600">
+          <div className=" text-center mb-5 text-sm me-2 text-gray-600">
             Already have an account?{" "}
             <Link
               to="/user/login"

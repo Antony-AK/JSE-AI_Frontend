@@ -182,7 +182,7 @@ const ApplicationCard = ({
             </h2>
             <p className="text-gray-800 mb-1.5 text-sm">{company}</p>
             <p className="text-gray-600  text-sm">{location}</p>
-                  </div>
+          </div>
         </div>
 
         {/* Description */}
@@ -233,15 +233,15 @@ const ApplicationCard = ({
               )}
             </span>
           </p>
-           <p className="text-gray-600 mt-1 text-sm">
-              <strong className="text-black font-semibold me-1">Selected Date:  </strong>
-              {selectedDate ? new Date(selectedDate).toLocaleDateString('en-GB', {
-                day: '2-digit',
-                month: 'long',
-                year: 'numeric',
-                timeZone: 'Asia/Kolkata'
-              }) : 'Not available'}
-            </p>  
+          <p className="text-gray-600 mt-1 text-sm">
+            <strong className="text-black font-semibold me-1">Selected Date:  </strong>
+            {selectedDate ? new Date(selectedDate).toLocaleDateString('en-GB', {
+              day: '2-digit',
+              month: 'long',
+              year: 'numeric',
+              timeZone: 'Asia/Kolkata'
+            }) : 'Not available'}
+          </p>
         </div>
 
         {/* Buttons */}
@@ -343,8 +343,8 @@ const ApplicationCard = ({
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-gray-800">
-            {profileMatch}%
-          </div>
+            {Math.round(profileMatch ?? 0)}%       
+               </div>
         </div>
         <span className="text-xs mt-2 w-28 font-medium text-gray-600">Profile Complete</span>
       </div>
