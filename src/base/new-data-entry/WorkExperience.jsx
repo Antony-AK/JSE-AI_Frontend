@@ -219,7 +219,7 @@ const WorkExperience = () => {
         className="flex items-center justify-end w-[95%] mt-2"
       >
         <div
-          className="cursor-pointer px-4 py-2 rounded transition"
+          className="cursor-pointer px-4 py-4 rounded transition"
           onClick={() => navigate('/user/onboarding/education')}
         >
           <p className="text-lg font-medium text-[#00000057]">Skip</p>

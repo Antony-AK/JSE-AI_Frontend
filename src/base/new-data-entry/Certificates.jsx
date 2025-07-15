@@ -215,16 +215,16 @@ const Certificates = () => {
 
                     {/* {certificateList.length > 0 && ( */}
                         <div
-                            className="flex items-center cursor-pointer hover:scale-95 transition-transform duration-200 ease-in-out"
+                            className="mr-10 flex items-center justify-center text-center cursor-pointer transition-transform duration-200 ease-in-out"
                             onClick={() => navigate('/user/onboarding/jobtitles')}
                         >
-                            <p className='me-10 text-lg font-medium text-[#00000057]'>Skip</p>
+                            <p className='cursor-pointer text-lg font-medium text-[#00000057]'>Skip</p>
                         </div>
                     {/* )} */}
                 </div>
 
-                <div>
-                    <p className=' flex font-semibold text-[#2c6472] -mt-8'>STEP 6 OF 8</p>
+                <div className="p-2">
+                <p className="w-fit font-semibold text-[#2c6472] -mt-8">STEP 6 OF 8</p>
                 </div>
 
                 <div>
