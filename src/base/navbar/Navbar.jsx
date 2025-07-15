@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import arrow_down from "../../assets/down-arrow.svg";
 import profile from "../../assets/profile1.png";
@@ -8,6 +9,9 @@ import { useProfileImage } from '../../base/ProfileEditor/ProfileImageContext';
 
 
 const Navbar = () => {
+
+  const menuRef = useRef(null);
+
   const [firstName, setFirstName] = useState('User');
   const [menuOpen, setMenuOpen] = useState(false);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
@@ -51,9 +55,18 @@ const Navbar = () => {
     fetchUserInfo();
   }, []);
 
- 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
 
-
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleLogout = () => {
     sessionStorage.clear();
@@ -81,7 +94,7 @@ const Navbar = () => {
     <>
       <header style={{ width: "calc(100% - 264px)" }} className="fixed top-0 z-10 flex justify-between items-center bg-white h-16 ms-[264px] border-t border-b px-6 border-gray-200">
         <h1 className="text-xl font-bold text-gray-800">{getPageTitle()}</h1>
-        <div className="flex items-center space-x-3 relative cursor-pointer">
+        <div ref={menuRef} className="flex items-center space-x-3 relative cursor-pointer">
           <img
             src={profileImage || profile}
             alt="Profile"
@@ -90,25 +103,34 @@ const Navbar = () => {
           />
           <span className="text-gray-800 font-bold" onClick={() => setMenuOpen(!menuOpen)} >{firstName}</span>
           <img src={arrow_down} alt="" onClick={() => setMenuOpen(!menuOpen)} className={`w-8 h-8 mt-1 p-2 rounded-full hover:bg-[#407684]/20 transform duration-200 ease-linear ${menuOpen ? 'rotate-180' : 'rotate-0'}`}/>
-          {menuOpen && (
-            <div className="absolute top-12 -right-2 bg-white border flex flex-col items-center justify-center rounded shadow-md p-1 z-20">
-              <div>
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="absolute top-12 -right-2 bg-white border flex flex-col items-center justify-center rounded shadow-md p-1 z-20"
+              >
                 <Link
                   to="/user/settings"
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-4 px-4 py-2 rounded-md transition "
+                  className="flex items-center gap-4 px-4 py-2 rounded-md transition"
                 >
                   <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">Settings</span>
                 </Link>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="text-red-800 hover:bg-red-600 hover:text-white transform duration-200 ease-linear font-medium px-3 py-1"
-              >
-                Logout
-              </button>
-            </div>
-          )}
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleLogout}
+                  className="text-red-800 hover:bg-red-600 hover:text-white transform duration-200 ease-linear font-medium px-3 py-1"
+                >
+                  Logout
+                </motion.button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </header>
 

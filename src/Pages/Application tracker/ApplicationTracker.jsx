@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import ApplicationCard from './ApplicationCard';
 import { BASE_URL } from '../../utils/api';
@@ -15,6 +15,20 @@ const ApplicationTracker = () => {
   const [selectedStatuses, setSelectedStatuses] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('');
 
+  const filterRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (filterRef.current && !filterRef.current.contains(event.target)) {
+        setShowFilters(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const [showFilters, setShowFilters] = useState(false);
   const [pagination, setPagination] = useState({
@@ -134,7 +148,7 @@ const ApplicationTracker = () => {
         </div>
 
         {/* Filter */}
-        <div className="relative">
+        <div ref={filterRef} className="relative">
           {/* Filter Button */}
           <button
             onClick={toggleDropdownfilter}

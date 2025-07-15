@@ -384,7 +384,14 @@ const WorkExperience = () => {
 
 
         <div className="flex justify-between mt-7">
-          <div className="cursor-pointer" onClick={() => handleSubmit(false)}>
+          <div
+            className={`cursor-pointer ${loading ? "cursor-not-allowed" : ""}`}
+            onClick={() => {
+              if (!loading) {
+                handleSubmit(false);
+              }
+            }}
+          >
             <p className='text-lg text-[#2C6472] font-semibold'>+ Add Another</p>
           </div>
           <button

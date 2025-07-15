@@ -36,7 +36,11 @@ const MyApplication = () => {
   const [actionType, setActionType] = useState(""); // "cv" or "cl"
 
   const [activeMenuIndex, setActiveMenuIndex] = useState(null);
+  
   const selectedJobRef = useRef(null);
+  const filterDropdownRef = useRef(null);
+  const customDropdownRef = useRef(null);
+  const languageDropdownRef = useRef(null);
 
 
   const [isOpen, setIsOpen] = useState(false);
@@ -54,6 +58,46 @@ const MyApplication = () => {
     }
     // 🛑 "New" does nothing special for language — no fetch
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (customDropdownRef.current && !customDropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        languageDropdownRef.current &&
+        !languageDropdownRef.current.contains(event.target)
+      ) {
+        setShowLanguageDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (filterDropdownRef.current && !filterDropdownRef.current.contains(event.target)) {
+        setShowFilters(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
 
   useEffect(() => {
@@ -405,6 +449,7 @@ const MyApplication = () => {
 
 
         <motion.div
+          ref={languageDropdownRef} 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
@@ -469,7 +514,7 @@ const MyApplication = () => {
 
         </motion.div>
 
-        <div className="relative inline-block text-left">
+        <div ref={filterDropdownRef} className="relative inline-block text-left">
           {/* Filter Button */}
           <button
             onClick={toggleDropdownfilter}
@@ -529,7 +574,7 @@ const MyApplication = () => {
                   <p className="text-sm text-gray-400 mt-1">Based on your preferences</p>
                 </div>
 
-                <div className="relative flex flex-col gap-2 w-20">
+                <div ref={customDropdownRef} className="relative flex flex-col gap-2 w-20">
                   {/* Dropdown Button */}
                   <button
                     type="button"
@@ -540,28 +585,36 @@ const MyApplication = () => {
                     <img
                       src={arrow_down}
                       alt=""
-                      className={`w-4 h-4 ms-1 transform transition-transform duration-200 ${isOpen ? "rotate-180" : "rotate-0"
-                        }`}
+                      className={`w-4 h-4 ms-1 transform transition-transform duration-200 ${
+                        isOpen ? "rotate-180" : "rotate-0"
+                      }`}
                     />
                   </button>
 
-                  {/* Dropdown Options */}
-                  {isOpen && (
-                    <div className="absolute top-10 left-0 bg-white border border-gray-200 rounded-md shadow-md w-full z-10">
-                      {options.map((option, index) => (
-                        <div
-                          key={index}
-                          onClick={() => handleSelect(option)}
-                          className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 ${selected === option
-                            ? "bg-gray-100 font-semibold text-[#2c6472]"
-                            : ""
+                  {/* Animated Dropdown Options */}
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3 }}
+                        className="absolute top-10 left-0 bg-white border border-gray-200 rounded-md shadow-md w-full z-10"
+                      >
+                        {options.map((option, index) => (
+                          <div
+                            key={index}
+                            onClick={() => handleSelect(option)}
+                            className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 ${
+                              selected === option ? "bg-gray-100 font-semibold text-[#2c6472]" : ""
                             }`}
-                        >
-                          {option}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                          >
+                            {option}
+                          </div>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
 
               </div>

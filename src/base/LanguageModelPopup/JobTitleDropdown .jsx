@@ -1,11 +1,19 @@
+<<<<<<< HEAD
 import React, { useEffect, useState, useRef } from "react";
+=======
+import React, { useEffect, useRef, useState } from "react";
+>>>>>>> 9f25a1e25a5d3ae4d1b5271948f3d276e81a929f
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronDown } from "react-icons/fa";
 import axios from "axios";
 
 const JobSearchTitleDropdown = ({ onJobsFetched }) => {
 
+<<<<<<< HEAD
     const dropdownRef = useRef(null); 
+=======
+    const dropdownRef = useRef(null);
+>>>>>>> 9f25a1e25a5d3ae4d1b5271948f3d276e81a929f
 
     const [titles, setTitles] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
