@@ -180,7 +180,7 @@ const Languages = () => {
           <div className=" px-6 py-4 -mb-5 flex gap-3 rounded-lg w-[90%]">
             <ul className="flex gap-3 overflow-x-auto hide-scrollbar">
               {addedCompanies.map((company, index) => (
-                <li className='bg-gray-500/30 px-4 py-2 rounded-lg min-w-32 text-center font-semibold text-[#2c6472]' key={index}>{company}</li>
+                <li className='bg-[#F4F4F4] px-4 py-2 rounded-lg min-w-32 text-center font-semibold text-[#2c6472]' key={index}>{company}</li>
               ))}
             </ul>
           </div>

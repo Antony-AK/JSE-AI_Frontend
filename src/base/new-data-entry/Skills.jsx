@@ -575,7 +575,7 @@ const Skills = () => {
                                     }}
 
                                     className={`flex-shrink-0 h-8 px-3 py-1.5 text-sm rounded snap-start cursor-pointer 
-                                            ${selectedTitle === title ? 'bg-[#2c6472] text-white' : 'text-white bg-gray-500/40'}
+                                            ${selectedTitle === title ? 'bg-[#2c6472] text-white' : 'text-[#2c6472] border border-[#2c6472] bg-[#F4F4F4]'}
                                             hover:bg-[#2c6472] hover:text-white transition-all duration-200`}
                                 >
                                     {title}

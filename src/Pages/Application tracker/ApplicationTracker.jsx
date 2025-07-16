@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import ApplicationCard from './ApplicationCard';
 import { BASE_URL } from '../../utils/api';
-import { FiSearch, FiFilter } from 'react-icons/fi';
+import { FiSearch, FiX } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown } from "react-icons/fa";
 import filter_icon from "../../assets/filter-icon.svg"; // replace with your path
@@ -53,7 +53,7 @@ const ApplicationTracker = () => {
   const toggleDropdownfilter = () => setShowFilters((prev) => !prev);
 
 
-  const fetchAllApplications = async (page = 1) => {
+  const fetchAllApplications = async (page = 1, query = '') => {
     setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
@@ -64,9 +64,9 @@ const ApplicationTracker = () => {
         },
         params: {
           page,
+          ...(query && { company: query }) // Send 'company' param only if query exists
         },
       });
-
 
       const realData = response.data.applications || [];
       setApplications(realData);
@@ -81,8 +81,7 @@ const ApplicationTracker = () => {
     }
   };
 
-
-  const fetchFilteredApplications = async (status, page = 1) => {
+  const fetchFilteredApplications = async (status, page = 1, query = '') => {
     setLoading(true);
     try {
       const token = sessionStorage.getItem("authToken");
@@ -92,11 +91,11 @@ const ApplicationTracker = () => {
           Authorization: `Bearer ${token}`,
         },
         params: {
-          status,
           page,
+          status,
+          ...(query && { company: query }),
         },
       });
-
 
       const realData = response.data.applications || [];
       setApplications(realData);
@@ -118,8 +117,6 @@ const ApplicationTracker = () => {
     setSelectedStatuses(prev => (prev === status ? '' : status));
   };
 
-
-
   useEffect(() => {
     if (selectedStatus) {
       fetchFilteredApplications(selectedStatus, pagination.current);
@@ -128,24 +125,65 @@ const ApplicationTracker = () => {
     }
   }, [selectedStatus, pagination.current]);
 
-
-
-
   return (
     <div className="min-h-screen bg-gray-100 p-6 flex flex-col gap-6">
       {/* Top Search + Filter Bar */}
       <div className="flex flex-wrap items-center  gap-4 w-full p-4 rounded-md shadow-sm">
-        {/* Search */}
-        <div className="relative w-full max-w-sm">
-          <input
-            type="text"
-            placeholder="Search jobs or companies..."
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <FiSearch className="absolute top-3 left-3 text-gray-400" />
+
+        {/* Search + Clear */}
+        <div className="flex items-center gap-2 w-full max-w-sm">
+          <div className="relative w-full">
+            <input
+              type="text"
+              placeholder="Search jobs or companies..."
+              className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  if (selectedStatus) {
+                    fetchFilteredApplications(selectedStatus, 1, searchQuery);
+                  } else {
+                    fetchAllApplications(1, searchQuery);
+                  }
+                  setPagination((prev) => ({ ...prev, current: 1 }));
+                }
+              }}
+            />
+            <FiSearch
+              className="absolute top-3 right-3 text-gray-400 cursor-pointer"
+              onClick={() => {
+                if (selectedStatus) {
+                  fetchFilteredApplications(selectedStatus, 1, searchQuery);
+                } else {
+                  fetchAllApplications(1, searchQuery);
+                }
+                setPagination((prev) => ({ ...prev, current: 1 }));
+              }}
+            />
+          </div>
+
+          <div className="w-14">
+            {searchQuery && (
+              <button
+                className="text-sm ml-2 text-red-500 hover:underline whitespace-nowrap"
+                onClick={() => {
+                  setSearchQuery('');
+                  setPagination(prev => ({ ...prev, current: 1 }));
+                  if (selectedStatus) {
+                    fetchFilteredApplications(selectedStatus, 1, '');
+                  } else {
+                    fetchAllApplications(1, '');
+                  }
+                }}
+              >
+                Clear
+              </button>
+            )}
+          </div>
+
         </div>
+
 
         {/* Filter */}
         <div ref={filterRef} className="relative">

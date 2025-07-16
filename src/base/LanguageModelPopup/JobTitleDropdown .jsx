@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronDown } from "react-icons/fa";
 import axios from "axios";
+import arrow_down from '../../assets/arrow-down-drop.png'
 import { BASE_URL } from "../../utils/api";
 
 const JobSearchTitleDropdown = ({ onJobsFetched }) => {
@@ -119,15 +120,16 @@ const JobSearchTitleDropdown = ({ onJobsFetched }) => {
         <div ref={dropdownRef} className="relative inline-block text-left">
             <button
                 onClick={toggleDropdown}
-                className="px-6 py-1.5 font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black hover:scale-105 flex items-center gap-2"
+                className="px-6 py-1.5 font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black flex items-center gap-2"
             >
                 {selectedTitle}
-                <motion.span
+                <motion.img
+                    src={arrow_down}
+                    alt=""
+                    className="ms-1 w-5"
                     animate={{ rotate: showDropdown ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
-                >
-                    <FaChevronDown className="text-[12px] text-gray-600" />
-                </motion.span>
+                />
             </button>
 
             {/* Dropdown */}
