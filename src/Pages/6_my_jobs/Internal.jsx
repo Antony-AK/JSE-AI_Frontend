@@ -36,11 +36,13 @@ const MyApplication = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("both"); // default
   const [showLangModal, setShowLangModal] = useState(false);
   const [actionType, setActionType] = useState(""); // "cv" or "cl"
-
+  const [filteredJobs, setFilteredJobs] = useState([]);
+  const [jobTitleFilter, setJobTitleFilter] = useState(null);
+  const [isFilterActive, setIsFilterActive] = useState(false); // 🔥 NEW
   const [selectedTitle, setSelectedTitle] = useState('');
-
   const [activeMenuIndex, setActiveMenuIndex] = useState(null);
-  
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
+
   const selectedJobRef = useRef(null);
   const filterDropdownRef = useRef(null);
   const customDropdownRef = useRef(null);
@@ -56,12 +58,20 @@ const MyApplication = () => {
     setSelected(option);
     setIsOpen(false);
 
-    // 🟢 Trigger only for "All"
     if (option === "All") {
-      setSelectedLanguage("both");
+      setSelectedLanguages([]); // 👉 triggers fetchSelectedJobs()
     }
-    // 🛑 "New" does nothing special for language — no fetch
   };
+
+
+  useEffect(() => {
+    if (selected === "All") {
+      const savedOffset = sessionStorage.getItem("jobPaginationOffset");
+      const validOffset = savedOffset ? parseInt(savedOffset) : 0;
+      fetchSelectedJobs(validOffset);
+    }
+  }, [selected]);
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -221,19 +231,34 @@ const MyApplication = () => {
     }
   };
 
-
-
   useEffect(() => {
     const savedOffset = sessionStorage.getItem("jobPaginationOffset");
     const validOffset = savedOffset ? parseInt(savedOffset) : 0;
 
+    const hasEnglish = selectedLanguages.includes("en");
+    const hasGerman = selectedLanguages.includes("de");
 
-    if (selectedLanguage === "both") {
-      fetchSelectedJobs(validOffset); // ⬅️ fetch from saved offset
-    } else {
-      fetchJobsByLanguage(selectedLanguage, validOffset); // pass to lang fetch too
+    // ✅ If no languages selected, fallback to full job list
+    if (!hasEnglish && !hasGerman) {
+      fetchSelectedJobs(validOffset); // 👈 show all jobs again
+      return;
     }
-  }, [selectedLanguage]);
+
+    // ✅ Both selected => fetch all jobs
+    if (hasEnglish && hasGerman) {
+      fetchSelectedJobs(validOffset);
+      return;
+    }
+
+    // ✅ Only one selected — call language-specific fetch
+    if (hasEnglish) {
+      fetchJobsByLanguage("en", validOffset);
+    } else if (hasGerman) {
+      fetchJobsByLanguage("de", validOffset);
+    }
+  }, [selectedLanguages]);
+
+
 
 
 
@@ -244,17 +269,39 @@ const MyApplication = () => {
     try {
       setLoading(true);
       const token = sessionStorage.getItem("authToken");
+      let jobs = [];
 
-      // ⬇️ Build correct URL with language and offset
-      let url = `${BASE_URL}/api/jobs?job_language=both&offset=${customOffset}&limit=${perPage}`;
-      if (lang === "en") url = `${BASE_URL}/api/jobs?job_language=english&offset=${customOffset}&limit=${perPage}`;
-      if (lang === "de") url = `${BASE_URL}/api/jobs?job_language=german&offset=${customOffset}&limit=${perPage}`;
+      if (lang === "en" || lang === "de") {
+        const langUrl = `${BASE_URL}/api/jobs?job_language=${lang === "en" ? "english" : "german"}&offset=${customOffset}&limit=${perPage}`;
+        const res = await axios.get(langUrl, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        jobs = res.data.jobs || [];
+      } else if (lang === "both") {
+        const [resEn, resDe] = await Promise.all([
+          axios.get(`${BASE_URL}/api/jobs?job_language=english&offset=${customOffset}&limit=${perPage}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${BASE_URL}/api/jobs?job_language=german&offset=${customOffset}&limit=${perPage}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${BASE_URL}/api/jobs?job_language=both&offset=${customOffset}&limit=${perPage}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
 
-      const response = await axios.get(url, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+        const allJobs = [
+          ...(resEn.data.jobs || []),
+          ...(resDe.data.jobs || []),
+          ...(resBoth.data.jobs || [])
+        ];
 
-      const jobs = response.data.jobs || [];
+        // Combine and remove duplicates by ID
+        const uniqueJobs = Array.from(new Map(
+          allJobs.map(job => [job.job_id || job.id, job])
+        ).values());
+        jobs = uniqueJobs;
+      }
 
       const mappedJobs = jobs.map((job) => ({
         id: job.job_id || job.id,
@@ -284,26 +331,21 @@ const MyApplication = () => {
 
       setSelectedJobs(mappedJobs);
 
-      // 🧠 Restore selected job
       const savedSelectedJobId = sessionStorage.getItem("selectedJobId");
       const jobToSelect = mappedJobs.find((job) => job.id === savedSelectedJobId);
-      const selected = jobToSelect || mappedJobs[0];
+      setSelectedJob(jobToSelect || mappedJobs[0]);
 
-      setSelectedJob(selected);
-
-      // ✨ Scroll into view
       setTimeout(() => {
         if (selectedJobRef.current) {
           selectedJobRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       }, 300);
 
-      // ✅ Correctly update pagination state
       setPagination({
         current: Math.floor(customOffset / perPage) + 1,
-        total: jobs.length, // or use response.data.pagination?.total
+        total: jobs.length,
         per_page: perPage,
-        next: null, // You can update these if available from API
+        next: null,
         prev: null,
       });
 
@@ -314,6 +356,8 @@ const MyApplication = () => {
       setLoading(false);
     }
   };
+
+
 
   console.log("Selected Jobs:", selectedJobs);
 
@@ -332,6 +376,25 @@ const MyApplication = () => {
       setShowLangModal(true);
     }
   };
+
+
+  const handleLanguageToggle = (lang) => {
+    setSelectedLanguages((prev) => {
+      let updated;
+
+      if (prev.includes(lang)) {
+        // 👉 If already selected, remove it
+        updated = prev.filter((l) => l !== lang);
+      } else {
+        // 👉 If not selected, add it
+        updated = [...prev, lang];
+      }
+
+      return updated;
+    });
+  };
+
+
 
 
 
@@ -434,6 +497,9 @@ const MyApplication = () => {
     return parseInt(params.get("offset")) || 0;
   };
 
+const jobsToRender = isFilterActive ? filteredJobs : selectedJobs;
+
+
 
   if (loading) return <Loader />;
 
@@ -450,14 +516,22 @@ const MyApplication = () => {
         </div>
 
         <JobSearchTitleDropdown
-          onJobsFetched={(mappedJobs, selectedTitle) => {
-            setSelectedJobs(mappedJobs);
-            setSelectedTitle(selectedTitle);
+          onJobsFetched={(mappedJobs, title) => {
+            setFilteredJobs(mappedJobs);
+            setJobTitleFilter({
+              title,
+              count: mappedJobs.length
+            });
+            setSelectedTitle(title); // 🔥 THIS IS WHAT YOU WERE MISSING
+              setIsFilterActive(true); // ✅ Mark that we applied a filter
+
           }}
         />
 
+
+
         <motion.div
-          ref={languageDropdownRef} 
+          ref={languageDropdownRef}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
@@ -489,33 +563,28 @@ const MyApplication = () => {
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 className="absolute left-0 mt-7 bg-white p-3 z-10 w-[150px] rounded-md shadow-lg border border-gray-200 overflow-hidden flex flex-col gap-2"
               >
+                {/* English Checkbox */}
                 <label className="flex items-center gap-2 px-3 py-1 hover:bg-gray-100 rounded cursor-pointer">
                   <input
-                    type="radio"
-                    name="language"
+                    type="checkbox"
                     value="en"
-                    checked={selectedLanguage === "en"}
-                    onChange={() => {
-                      setSelectedLanguage("en");
-                      setShowLanguageDropdown(false);
-                    }}
+                    checked={selectedLanguages.includes("en")}
+                    onChange={(e) => handleLanguageToggle("en")}
                   />
                   <span>English</span>
                 </label>
 
+                {/* German Checkbox */}
                 <label className="flex items-center gap-2 px-3 py-1 hover:bg-gray-100 rounded cursor-pointer">
                   <input
-                    type="radio"
-                    name="language"
+                    type="checkbox"
                     value="de"
-                    checked={selectedLanguage === "de"}
-                    onChange={() => {
-                      setSelectedLanguage("de");
-                      setShowLanguageDropdown(false);
-                    }}
+                    checked={selectedLanguages.includes("de")}
+                    onChange={(e) => handleLanguageToggle("de")}
                   />
                   <span>German</span>
                 </label>
+
               </motion.div>
             )}
           </AnimatePresence>
@@ -524,13 +593,12 @@ const MyApplication = () => {
 
         <div ref={filterDropdownRef} className="relative inline-block text-left">
           {/* Filter Button */}
-          <button
+          {/* <button
             onClick={toggleDropdownfilter}
             className="flex items-center gap-x-2 px-4 py-1.5 bg-white font-medium text-[13px] rounded text-black hover:scale-105 shadow-md"
           >
             <img src={filter_icon} alt="" />
             Filter
-            {/* Dropdown Arrow Icon (rotates when open) */}
             <motion.span
               animate={{ rotate: showFilters ? 180 : 0 }}
               transition={{ duration: 0.3 }}
@@ -538,25 +606,19 @@ const MyApplication = () => {
             >
               <FaChevronDown className="text-[12px] text-gray-600" />
             </motion.span>
-          </button>
+          </button> */}
 
           {/* Dropdown Content */}
-          <AnimatePresence>
-            {showFilters && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="origin-top absolute left-0 mt-2 w-52 bg-white border border-gray-200 rounded-md shadow-lg z-10 overflow-hidden"
-              >
-                <button className="w-full px-4 py-2 text-[13px] text-black font-medium hover:bg-gray-100 text-left">
-                  Recommended Jobs
-                </button>
-                {/* Add more items below if you want */}
-              </motion.div>
-            )}
-          </AnimatePresence>
+
+          <div
+            className=" absolute left-0 w-52 -top-4 bg-white border border-gray-300 rounded-md  z-10 overflow-hidden"
+          >
+            <button className="w-full px-2 py-1.5 text-[13px] text-black font-medium hover:bg-gray-100 text-center">
+              Recommended Jobs
+            </button>
+            {/* Add more items below if you want */}
+          </div>
+
         </div>
 
       </div>
@@ -565,12 +627,23 @@ const MyApplication = () => {
 
       <div className="flex flex-col w-full min-h-screen bg-gray-40">
         <br />
-        {selectedJobs.length === 0 ? (
+        {jobsToRender.length === 0 ? (
           <div className="absolute top-1/2 left-[calc(264px+40%)] transform -translate-x-1/2 -translate-y-1/2 text-center">
             <h2 className="text-2xl font-bold text-gray-700 mb-2">
               No {(selectedTitle?.charAt(0).toUpperCase() + selectedTitle?.slice(1))} jobs found
             </h2>
             <p className="text-gray-500">Please check back later.</p>
+               <button
+                        onClick={() => {
+                          setFilteredJobs([]);
+                          setSelectedTitle('');
+                              setIsFilterActive(false); // 🧼 clear flag too
+
+                        }}
+                        className="text-sm text-red-600 underline  mt-6 hover:text-blue-800 transition"
+                      >
+                        Clear Filter
+                      </button>
           </div>
         ) : (
           <div className="flex flex-1 border-t border-gray-300 -mt-5  gap-5">
@@ -578,9 +651,37 @@ const MyApplication = () => {
 
               <div className="p-5 flex justify-between pt-4">
                 <div>
-                  <h2 className="text-sm font-semibold">Showing {pagination.total} Jobs</h2>
-                  <p className="text-sm text-gray-400 mt-1">Based on your preferences</p>
+                  {filteredJobs.length > 0 ? (
+                    <div className="flex items-center gap-4">
+                      <div>
+                        <h2 className="text-sm font-semibold">
+                          Showing {filteredJobs.length} Jobs
+                        </h2>
+                        <p className="text-sm text-gray-400 mt-1">
+                          Based on <span className="font-medium text-black">{selectedTitle}</span>
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setFilteredJobs([]);
+                          setSelectedTitle('');
+                              setIsFilterActive(false); // 🧼 clear flag too
+
+                        }}
+                        className="text-sm text-red-600 underline  mt-6 hover:text-blue-800 transition"
+                      >
+                        Clear Filter
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <h2 className="text-sm font-semibold">Showing {pagination.total} Jobs</h2>
+                      <p className="text-sm text-gray-400 mt-1">Based on your preferences</p>
+                    </>
+                  )}
                 </div>
+
+
 
                 <div ref={customDropdownRef} className="relative flex flex-col gap-2 w-20">
                   {/* Dropdown Button */}
@@ -593,9 +694,8 @@ const MyApplication = () => {
                     <img
                       src={arrow_down}
                       alt=""
-                      className={`w-4 h-4 ms-1 transform transition-transform duration-200 ${
-                        isOpen ? "rotate-180" : "rotate-0"
-                      }`}
+                      className={`w-4 h-4 ms-1 transform transition-transform duration-200 ${isOpen ? "rotate-180" : "rotate-0"
+                        }`}
                     />
                   </button>
 
@@ -613,9 +713,8 @@ const MyApplication = () => {
                           <div
                             key={index}
                             onClick={() => handleSelect(option)}
-                            className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 ${
-                              selected === option ? "bg-gray-100 font-semibold text-[#2c6472]" : ""
-                            }`}
+                            className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 ${selected === option ? "bg-gray-100 font-semibold text-[#2c6472]" : ""
+                              }`}
                           >
                             {option}
                           </div>
@@ -628,8 +727,10 @@ const MyApplication = () => {
               </div>
 
               <div className="w-full mb-5 -space-y-6 rounded-xl bg-white border border-gray-400/20 "><br />
+
+
                 <div className="h-[720px] overflow-x-hidden  overflow-y-auto scrollbar-custom">
-                  {selectedJobs.map((job, index) => (
+                  {jobsToRender.map((job, index) => (
                     <div
                       key={index}
                       onClick={() => {
@@ -647,10 +748,9 @@ const MyApplication = () => {
                           <h3 className="text-base w-96 font-semibold text-[#2C6472] h-12 overflow-y-hidden">{job.jobTitle}</h3>
                           <p className="text-sm   text-gray-600">{job.companyName}</p>
                           <p className="text-sm mb-5 text-gray-500">{job.location}</p>
-
                         </div>
 
-                        <div className="flex absolute  flex-col gap-2 mt-40 -left-3 ">
+                        <div className="flex absolute flex-col gap-2 mt-40 -left-3 ">
                           {selectedJob?.skillData?.slice(0, 2).map((item, index) => (
                             <div
                               key={index}
