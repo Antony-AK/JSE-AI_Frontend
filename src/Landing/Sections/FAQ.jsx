@@ -84,7 +84,7 @@ const FAQ = () => {
               {isOpen && (
                 <motion.div
                   layout
-                  className="px-6 sm:px-8 pb-5 sm:pb-6 text-xs sm:text-sm md:text-[15px] text-gray-500 font-medium"
+                  className="px-6 sm:px-8 pb-5 sm:pb-6 text-xs leading-relaxed sm:text-sm md:text-[15px] text-gray-600 font-medium"
                   transition={{
                     layout: { duration: 0.3, ease: "easeInOut" },
                   }}

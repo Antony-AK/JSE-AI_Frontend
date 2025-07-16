@@ -541,7 +541,7 @@ const SavedJob = () => {
                                   const jobId = job.job_id || job.id;
 
                                   const response = await axios.delete(
-                                    `https://dev.arshan.digital/b1/saved-jobs/${jobId}`,
+                                    `${BASE_URL}/saved-jobs/${jobId}`,
                                     {
                                       headers: {
                                         Authorization: `Bearer ${token}`,

@@ -16,8 +16,7 @@ const Header = () => {
         </h1>
 
         <p className="mt-6 text-gray-500 font-medium text-base  max-w-2xl mx-auto">
-          JSE AI supercharges your job hunt with precision matches, seamlessly connecting you to opportunities tailored to your skills and aspirations
-          faster career growth.
+          JSE AI supercharges your job hunt with precision matches, seamlessly connecting you to opportunities tailored to your skills and aspirations.
         </p>
       </div>
 

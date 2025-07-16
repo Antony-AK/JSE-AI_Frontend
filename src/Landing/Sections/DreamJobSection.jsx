@@ -36,13 +36,13 @@ const DreamJobSection = () => {
               />
             </div>
             <h3 className="text-lg sm:text-xl font-semibold text-center mt-6">
-              Build Your CV
+              Define your target
             </h3>
-            <p className="text-sm sm:text-base font-medium mt-2 leading-relaxed text-center">
-              Build your CV or upload<br />
-              Choose the 3 Jobs Title<br />
-              Let AI find the perfect job posts for you
-            </p>
+            <ul className="text-sm sm:text-base font-medium mt-4 space-y-2 text-gray-600 text-left list-disc list-inside">
+              <li>Build your CV or upload</li>
+              <li>Choose job titles</li>
+              <li>Let AI find the perfect job posts for you</li>
+            </ul>
           </div>
 
           {/* Card 2 */}
@@ -57,11 +57,11 @@ const DreamJobSection = () => {
             <h3 className="text-lg sm:text-xl font-semibold text-center mt-6">
               Find Your Match & Apply
             </h3>
-            <p className="text-sm sm:text-base font-medium mt-2 leading-relaxed text-center max-w-[340px]">
-              Choose the language of application<br />
-              Pick the jobs recommended by AI or you<br />
-               Enjoy automation, just review customized application
-            </p>
+            <ul className="text-sm sm:text-base font-medium mt-4 space-y-2 text-gray-600 text-left list-disc list-inside max-w-[340px]">
+              <li>Choose the language of application</li>
+              <li>Pick recommended job posts or upload external ones</li>
+              <li>Enjoy automated applications — just review and send</li>
+            </ul>
           </div>
 
           {/* Card 3 */}
@@ -76,11 +76,11 @@ const DreamJobSection = () => {
             <h3 className="text-lg sm:text-xl font-semibold text-center mt-6">
               Track Your Applications
             </h3>
-            <p className="text-sm sm:text-base font-medium mt-2 leading-relaxed text-center max-w-[300px]">
-              Easily Track all your job applications internally and externally<br />
-              Prepare for interviews with smart research<br />
-              Celebrate your perfect match!
-            </p>
+            <ul className="text-sm sm:text-base font-medium mt-4 space-y-2 text-gray-600 text-left list-disc list-inside max-w-[300px]">
+              <li>Track all your job applications internally</li>
+              <li>Prepare for interviews with smart research</li>
+              <li>Celebrate your perfect match!</li>
+            </ul>
           </div>
         </div>
       </div>

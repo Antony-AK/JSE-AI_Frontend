@@ -936,7 +936,7 @@ const MyApplication = () => {
 
                                 try {
                                   const response = await axios.post(
-                                    "https://dev.arshan.digital/b1/saved-jobs",
+                                    `${BASE_URL}/saved-jobs`,
                                     { job_id: job.job_id || job.id }, // make sure jobId is correct
                                     {
                                       headers: {

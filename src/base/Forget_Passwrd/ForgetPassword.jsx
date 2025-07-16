@@ -6,6 +6,7 @@ import frame from "./../../assets/Frame.png";
 import logo from "../../assets/jsenewlogo.png"
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import {BASE_URL} from "../../utils/api"
 import { useNavigate, useLocation } from 'react-router-dom';
 
 
@@ -24,7 +25,7 @@ const ForgetPassword = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post("https://dev.arshan.digital/b1/auth/request-password-reset", {
+            const response = await axios.post(`${BASE_URL}/auth/request-password-reset`, {
                 email: email.trim(),
             });
 

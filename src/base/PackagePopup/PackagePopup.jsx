@@ -2,8 +2,12 @@ import React from 'react';
 import { Dialog } from '@headlessui/react';
 import { X } from 'lucide-react';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 const PackagePopup = ({ isOpen, onClose, infoBlock }) => {
+
+  const navigate = useNavigate();
+
   const {
     subscriptionStart,
     subscriptionEnd,
@@ -36,6 +40,11 @@ const PackagePopup = ({ isOpen, onClose, infoBlock }) => {
       percentage: calcPercent(proficiencyTests, 5),
     }
   ];
+
+  const handleUpgradeClick = () => {
+    onClose(); // close the popup
+    navigate('/user/settings', { state: { section: 'Explore Plans' } }); // ✅ navigate with state
+  };
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
@@ -92,7 +101,7 @@ const PackagePopup = ({ isOpen, onClose, infoBlock }) => {
                     </div>
                   </div>
 
-                  <button className="border border-gray-300 rounded-full px-4 py-1 text-sm hover:bg-gray-100 transition">
+                  <button onClick={handleUpgradeClick} className="border border-gray-300 rounded-full px-4 py-1 text-sm hover:bg-gray-100 transition">
                     Upgrade
                   </button>
                 </div>
@@ -102,7 +111,7 @@ const PackagePopup = ({ isOpen, onClose, infoBlock }) => {
 
           <div className="mt-6 bg-[#24525f] text-white text-sm rounded-lg flex items-center justify-between px-4 py-3">
             <p className="font-medium">Unlock premium benefits — upgrade to the Gold Package now.</p>
-            <button className="bg-white text-[#24525f] rounded-full px-4 py-1 font-medium text-sm">
+            <button onClick={handleUpgradeClick} className="bg-white text-[#24525f] rounded-full px-4 py-1 font-medium text-sm">
               Upgrade
             </button>
           </div>

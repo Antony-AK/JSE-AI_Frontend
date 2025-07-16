@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BASE_URL } from '../../utils/api';
 
 const Feedback = () => {
   const [selected, setSelected] = useState('Bug');
@@ -23,7 +24,7 @@ const Feedback = () => {
     try {
       setLoading(true);
 
-      const response = await fetch("https://dev.arshan.digital/b1/settings/givefeedback", {
+      const response = await fetch(`${BASE_URL}/settings/givefeedback`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
