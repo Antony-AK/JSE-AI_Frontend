@@ -71,7 +71,6 @@ const External = () => {
   const isFreePlan = infoBlock.subscription_tier === 'free';
   const externalUsed = infoBlock.external_application_count || 0;
 
-  // Show modal ONLY when on free plan AND externalUsed is 0
   if (isFreePlan && externalUsed === 0) {
     setLimitModalOpen(true);
     return;
