@@ -34,12 +34,12 @@ const MyApplication = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("both"); // default
   const [showLangModal, setShowLangModal] = useState(false);
   const [actionType, setActionType] = useState(""); // "cv" or "cl"
-
+  const [filteredJobs, setFilteredJobs] = useState([]);
+  const [jobTitleFilter, setJobTitleFilter] = useState(null);
+  const [isFilterActive, setIsFilterActive] = useState(false); // 🔥 NEW
   const [selectedTitle, setSelectedTitle] = useState('');
-
   const [activeMenuIndex, setActiveMenuIndex] = useState(null);
   const [selectedLanguages, setSelectedLanguages] = useState([]);
-
 
   const selectedJobRef = useRef(null);
   const filterDropdownRef = useRef(null);
@@ -56,24 +56,19 @@ const MyApplication = () => {
     setSelected(option);
     setIsOpen(false);
 
-     const savedOffset = sessionStorage.getItem("jobPaginationOffset");
-  const validOffset = savedOffset ? parseInt(savedOffset) : 0;
-
-
-    // 🟢 Trigger only for "All"
     if (option === "All") {
-    fetchSelectedJobs(validOffset);
+      setSelectedLanguages([]); // 👉 triggers fetchSelectedJobs()
     }
-    // 🛑 "New" does nothing special for language — no fetch
   };
 
+
   useEffect(() => {
-  if (selected === "All") {
-    const savedOffset = sessionStorage.getItem("jobPaginationOffset");
-    const validOffset = savedOffset ? parseInt(savedOffset) : 0;
-    fetchSelectedJobs(validOffset);
-  }
-}, [selected]);
+    if (selected === "All") {
+      const savedOffset = sessionStorage.getItem("jobPaginationOffset");
+      const validOffset = savedOffset ? parseInt(savedOffset) : 0;
+      fetchSelectedJobs(validOffset);
+    }
+  }, [selected]);
 
 
   useEffect(() => {
@@ -235,36 +230,32 @@ const MyApplication = () => {
   };
 
   useEffect(() => {
-  if (selectedLanguages.length === 0) {
-    setSelectedLanguages(["en", "de"]);
-  }
-}, []);
+    const savedOffset = sessionStorage.getItem("jobPaginationOffset");
+    const validOffset = savedOffset ? parseInt(savedOffset) : 0;
 
+    const hasEnglish = selectedLanguages.includes("en");
+    const hasGerman = selectedLanguages.includes("de");
 
+    // ✅ If no languages selected, fallback to full job list
+    if (!hasEnglish && !hasGerman) {
+      fetchSelectedJobs(validOffset); // 👈 show all jobs again
+      return;
+    }
 
+    // ✅ Both selected => fetch all jobs
+    if (hasEnglish && hasGerman) {
+      fetchSelectedJobs(validOffset);
+      return;
+    }
 
-  useEffect(() => {
-  const savedOffset = sessionStorage.getItem("jobPaginationOffset");
-  const validOffset = savedOffset ? parseInt(savedOffset) : 0;
+    // ✅ Only one selected — call language-specific fetch
+    if (hasEnglish) {
+      fetchJobsByLanguage("en", validOffset);
+    } else if (hasGerman) {
+      fetchJobsByLanguage("de", validOffset);
+    }
+  }, [selectedLanguages]);
 
-  // 🛑 No languages selected — you could either return or fetch default jobs
-  if (selectedLanguages.length === 0) {
-    fetchJobsByLanguage("both", validOffset); // fallback to both
-    return;
-  }
-
-  // 👇 Set lang param correctly
-  let langParam = "";
-  if (selectedLanguages.includes("en") && selectedLanguages.includes("de")) {
-    langParam = "both";
-  } else if (selectedLanguages.includes("en")) {
-    langParam = "en";
-  } else if (selectedLanguages.includes("de")) {
-    langParam = "de";
-  }
-
-  fetchJobsByLanguage(langParam, validOffset);
-}, [selectedLanguages]);
 
 
 
@@ -276,7 +267,6 @@ const MyApplication = () => {
     try {
       setLoading(true);
       const token = sessionStorage.getItem("authToken");
-
       let jobs = [];
 
       if (lang === "en" || lang === "de") {
@@ -286,13 +276,31 @@ const MyApplication = () => {
         });
         jobs = res.data.jobs || [];
       } else if (lang === "both") {
-        const res = await axios.get(`${BASE_URL}/api/jobs?job_language=both&offset=${customOffset}&limit=${perPage}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        jobs = res.data.jobs || [];
+        const [resEn, resDe] = await Promise.all([
+          axios.get(`${BASE_URL}/api/jobs?job_language=english&offset=${customOffset}&limit=${perPage}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${BASE_URL}/api/jobs?job_language=german&offset=${customOffset}&limit=${perPage}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${BASE_URL}/api/jobs?job_language=both&offset=${customOffset}&limit=${perPage}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+
+        const allJobs = [
+          ...(resEn.data.jobs || []),
+          ...(resDe.data.jobs || []),
+          ...(resBoth.data.jobs || [])
+        ];
+
+        // Combine and remove duplicates by ID
+        const uniqueJobs = Array.from(new Map(
+          allJobs.map(job => [job.job_id || job.id, job])
+        ).values());
+        jobs = uniqueJobs;
       }
 
-      // Same mapping logic
       const mappedJobs = jobs.map((job) => ({
         id: job.job_id || job.id,
         jobTitle: job.job_title || job.title || "Untitled Job",
@@ -348,6 +356,7 @@ const MyApplication = () => {
   };
 
 
+
   console.log("Selected Jobs:", selectedJobs);
 
   const handleGenerateClick = (type) => {
@@ -366,20 +375,23 @@ const MyApplication = () => {
     }
   };
 
+
   const handleLanguageToggle = (lang) => {
     setSelectedLanguages((prev) => {
-      const updated = prev.includes(lang)
-        ? prev.filter((l) => l !== lang)
-        : [...prev, lang];
+      let updated;
 
-      // ✅ Close dropdown if at least one selected
-      if (updated.length > 0) {
-        setShowLanguageDropdown(false);
+      if (prev.includes(lang)) {
+        // 👉 If already selected, remove it
+        updated = prev.filter((l) => l !== lang);
+      } else {
+        // 👉 If not selected, add it
+        updated = [...prev, lang];
       }
 
       return updated;
     });
   };
+
 
 
 
@@ -483,6 +495,9 @@ const MyApplication = () => {
     return parseInt(params.get("offset")) || 0;
   };
 
+const jobsToRender = isFilterActive ? filteredJobs : selectedJobs;
+
+
 
   if (loading) return <Loader />;
 
@@ -499,11 +514,19 @@ const MyApplication = () => {
         </div>
 
         <JobSearchTitleDropdown
-          onJobsFetched={(mappedJobs, selectedTitle) => {
-            setSelectedJobs(mappedJobs);
-            setSelectedTitle(selectedTitle);
+          onJobsFetched={(mappedJobs, title) => {
+            setFilteredJobs(mappedJobs);
+            setJobTitleFilter({
+              title,
+              count: mappedJobs.length
+            });
+            setSelectedTitle(title); // 🔥 THIS IS WHAT YOU WERE MISSING
+              setIsFilterActive(true); // ✅ Mark that we applied a filter
+
           }}
         />
+
+
 
         <motion.div
           ref={languageDropdownRef}
@@ -602,12 +625,23 @@ const MyApplication = () => {
 
       <div className="flex flex-col w-full min-h-screen bg-gray-40">
         <br />
-        {selectedJobs.length === 0 ? (
+        {jobsToRender.length === 0 ? (
           <div className="absolute top-1/2 left-[calc(264px+40%)] transform -translate-x-1/2 -translate-y-1/2 text-center">
             <h2 className="text-2xl font-bold text-gray-700 mb-2">
               No {(selectedTitle?.charAt(0).toUpperCase() + selectedTitle?.slice(1))} jobs found
             </h2>
             <p className="text-gray-500">Please check back later.</p>
+               <button
+                        onClick={() => {
+                          setFilteredJobs([]);
+                          setSelectedTitle('');
+                              setIsFilterActive(false); // 🧼 clear flag too
+
+                        }}
+                        className="text-sm text-red-600 underline  mt-6 hover:text-blue-800 transition"
+                      >
+                        Clear Filter
+                      </button>
           </div>
         ) : (
           <div className="flex flex-1 border-t border-gray-300 -mt-5  gap-5">
@@ -615,9 +649,37 @@ const MyApplication = () => {
 
               <div className="p-5 flex justify-between pt-4">
                 <div>
-                  <h2 className="text-sm font-semibold">Showing {pagination.total} Jobs</h2>
-                  <p className="text-sm text-gray-400 mt-1">Based on your preferences</p>
+                  {filteredJobs.length > 0 ? (
+                    <div className="flex items-center gap-4">
+                      <div>
+                        <h2 className="text-sm font-semibold">
+                          Showing {filteredJobs.length} Jobs
+                        </h2>
+                        <p className="text-sm text-gray-400 mt-1">
+                          Based on <span className="font-medium text-black">{selectedTitle}</span>
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setFilteredJobs([]);
+                          setSelectedTitle('');
+                              setIsFilterActive(false); // 🧼 clear flag too
+
+                        }}
+                        className="text-sm text-red-600 underline  mt-6 hover:text-blue-800 transition"
+                      >
+                        Clear Filter
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <h2 className="text-sm font-semibold">Showing {pagination.total} Jobs</h2>
+                      <p className="text-sm text-gray-400 mt-1">Based on your preferences</p>
+                    </>
+                  )}
                 </div>
+
+
 
                 <div ref={customDropdownRef} className="relative flex flex-col gap-2 w-20">
                   {/* Dropdown Button */}
@@ -663,8 +725,10 @@ const MyApplication = () => {
               </div>
 
               <div className="w-full mb-5 -space-y-6 rounded-xl bg-white border border-gray-400/20 "><br />
+
+
                 <div className="h-[720px] overflow-x-hidden  overflow-y-auto scrollbar-custom">
-                  {selectedJobs.map((job, index) => (
+                  {jobsToRender.map((job, index) => (
                     <div
                       key={index}
                       onClick={() => {
