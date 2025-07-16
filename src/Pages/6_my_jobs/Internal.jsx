@@ -22,7 +22,7 @@ import LimitReachedModal from '../6_my_jobs/MyJobsPopUp/LimitReachedModel.jsx';
 const MyApplication = () => {
   const navigate = useNavigate();
 
-  const [showLimitModal, setShowLimitModal] = useState(true);
+  const [showLimitModal, setShowLimitModal] = useState(false);
 
   const [selectedJobs, setSelectedJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -53,6 +53,25 @@ const MyApplication = () => {
   const [selected, setSelected] = useState("All");
 
   const options = ["All", "New"];
+
+  const [infoBlock, setInfoBlock] = useState(null);
+
+  useEffect(() => {
+    const fetchInfoBlock = async () => {
+      try {
+        const token = sessionStorage.getItem("authToken");
+        const res = await fetch(`${BASE_URL}/dashboard`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (data.info_block) setInfoBlock(data.info_block);
+      } catch (err) {
+        console.error("Failed to fetch info block:", err);
+      }
+    };
+
+    fetchInfoBlock();
+  }, []);
 
   const handleSelect = (option) => {
     setSelected(option);
@@ -363,15 +382,33 @@ const MyApplication = () => {
 
   const handleGenerateClick = (type) => {
     const jobId = selectedJob?.id;
-    if (!jobId) return;
+    if (!jobId) {
+      toast.error("No job selected.");
+      return;
+    }
+
+    // 🧠 Validate infoBlock presence first
+    if (!infoBlock) {
+      toast.error("User info not loaded. Please try again.");
+      return;
+    }
+
+    // 💡 Check internal usage limit
+    const isFreePlan = infoBlock.subscription_tier === "free";
+    const internalUsed = infoBlock.internal_application_count || 0;
+
+    if (isFreePlan && internalUsed === 0) {
+      setShowLimitModal(true);
+      return;
+    }
 
     const jobLanguageMap = JSON.parse(sessionStorage.getItem("jobLanguages") || "{}");
     const savedLang = jobLanguageMap[jobId];
 
-    setActionType(type); // still set it for future reference (like styling)
+    setActionType(type); // save action type for later
 
     if (savedLang) {
-      handleLanguageSelect(savedLang, type); // 👉 pass type explicitly
+      handleLanguageSelect(savedLang, type);
     } else {
       setShowLangModal(true);
     }

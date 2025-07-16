@@ -34,7 +34,7 @@ const LimitReachedModal = ({ isOpen, onClose, type }) => {
 
           {/* Title & Message */}
           <div className="text-center">
-            <h3 className="text-2xl font-bold text-[#24525f] mb-5">Limit Reached</h3>
+            <h3 className="text-2xl font-bold text-[#24525f] mb-5">Upgrade Plan</h3>
             <p className="mt-2 text-gray-700">
               You’ve reached your limit for <strong>{typeText}</strong> on the current plan.
             </p>
@@ -44,7 +44,7 @@ const LimitReachedModal = ({ isOpen, onClose, type }) => {
           <div className="mt-6 flex justify-center gap-4">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded hover:bg-gray-200 transition"
+              className="px-4 py-2 text-sm font-medium border border-[#2c6472] text-gray-700 bg-gray-100 rounded hover:bg-gray-200 transition w-40"
             >
               Cancel
             </button>
@@ -53,9 +53,9 @@ const LimitReachedModal = ({ isOpen, onClose, type }) => {
                 onClose();
                 navigate("/user/settings", { state: { section: "Explore Plans" } });
               }}
-              className="px-4 py-2 text-sm text-white bg-[#24525f] rounded hover:bg-[#1d424c] transition"
+              className="px-4 py-2 text-sm text-white bg-[#24525f] rounded hover:bg-[#1d424c] transition w-40"
             >
-              Upgrade Plan
+              Upgrade Now
             </button>
           </div>
         </Dialog.Panel>

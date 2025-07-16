@@ -75,10 +75,10 @@ const Signup = () => {
       return;
     }
 
- if (!agreedToFirst || !agreedToSecond) {
-  toast.error("Please accept all terms to continue.");
-  return;
-}
+    if (!agreedToSecond) {
+      toast.error("Please accept the terms to continue.");
+      return;
+    }
 
 
     if (!formData.password || passwordError) {
@@ -358,8 +358,25 @@ const Signup = () => {
                 onChange={(e) => setAgreedToSecond(e.target.checked)}
               />
               <div className="text-xs text-gray-700 leading-snug">
-                By signing up, you agree to our <span className="font-medium underline text-[#2c6472] cursor-pointer mx-1">Terms & Conditions</span>
-                and <span className="font-medium underline ms-1 text-[#2c6472] cursor-pointer">Privacy Policy</span>.
+                By signing up, you agree to our{" "}
+                <a
+                  href="/Terms&Conditions.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium underline text-[#2c6472] cursor-pointer mx-1"
+                >
+                  Terms & Conditions
+                </a>
+                and{" "}
+                <a
+                  href="/PrivacyPolicy.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium underline ms-1 text-[#2c6472] cursor-pointer"
+                >
+                  Privacy Policy
+                </a>
+                .
               </div>
             </div>
 
