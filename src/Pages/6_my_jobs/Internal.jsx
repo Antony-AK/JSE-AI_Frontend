@@ -618,9 +618,7 @@ const jobsToRender = isFilterActive ? filteredJobs : selectedJobs;
           </div>
 
         </div>
-
       </div>
-
 
 
       <div className="flex flex-col w-full min-h-screen bg-gray-40">

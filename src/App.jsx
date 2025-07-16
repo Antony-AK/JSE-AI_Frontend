@@ -47,14 +47,15 @@ import PaymentSuccess from './Pages/PaymentDesign/PaymentSuccess.jsx';
 import PaymentCancel from './Pages/PaymentDesign/PaymentCancel.jsx';
 import LandingPage from './base/Landingpage.jsx';
 import Landing from './Landing/Main/Landing.jsx';
+import ScreenSizeBlocker from './base/ScreenBlocker/ScreenSizeBlocker.jsx';
 
 const AppRoutes = () => {
     const location = useLocation();
 
-    const hideLayout = location.pathname === '/user/cv' || location.pathname === '/user/cl' || location.pathname === '/user/document-editor' || location.pathname === '/user/external-cv' || location.pathname === '/user/external-cl' || location.pathname === '/user/forgot-password' || location.pathname === '/payment/success' || location.pathname === '/payment/cancel'   || location.pathname === '/landingpage' ;
+    const hideLayout = location.pathname === '/user/cv' || location.pathname === '/user/cl' || location.pathname === '/user/document-editor' || location.pathname === '/user/external-cv' || location.pathname === '/user/external-cl' || location.pathname === '/user/forgot-password' || location.pathname === '/payment/success' || location.pathname === '/payment/cancel' || location.pathname === '/landingpage';
 
     // Define routes that are data-entry only
-    const isDataEntryPage = location.pathname.startsWith('/user/onboarding') || location.pathname.startsWith('/user/dataonboarding') || location.pathname.startsWith('/user/linkedin') || location.pathname.startsWith('/user/resume') || ['/', '/user/login', '/user/signup'].includes(location.pathname) || location.pathname.startsWith('/user/forgot-password') || location.pathname.startsWith('/landingpage') ;
+    const isDataEntryPage = location.pathname.startsWith('/user/onboarding') || location.pathname.startsWith('/user/dataonboarding') || location.pathname.startsWith('/user/linkedin') || location.pathname.startsWith('/user/resume') || ['/', '/user/login', '/user/signup'].includes(location.pathname) || location.pathname.startsWith('/user/forgot-password') || location.pathname.startsWith('/landingpage');
 
     return (
         <div className='App'>
@@ -63,7 +64,7 @@ const AppRoutes = () => {
                 <div className='data-entry'>
                     <Routes>
                         <Route path="/" element={<LandingPage />} />
-                        <Route path="/landingpage" element={<Landing/>} />
+                        <Route path="/landingpage" element={<Landing />} />
                         <Route path="/user/login" element={<Login />} />
                         <Route path="/user/forgot-password" element={<ForgetPassword />} />
                         <Route path="/user/signup" element={<Signup />} />
@@ -117,19 +118,22 @@ const AppRoutes = () => {
 function App() {
     return (
         <>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                closeOnClick={false}
-                rtl={false}
-                pauseOnHover={false}
-                pauseOnFocusLoss={false}
-                draggable
-                theme="light"
-                transition={Bounce}
-            />
-            <AppRoutes />
+            <ScreenSizeBlocker>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnHover={false}
+                    pauseOnFocusLoss={false}
+                    draggable
+                    theme="light"
+                    transition={Bounce}
+                />
+                <AppRoutes />
+            </ScreenSizeBlocker>
+
         </>
     );
 }
