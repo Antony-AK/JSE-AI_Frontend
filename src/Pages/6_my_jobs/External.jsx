@@ -1,14 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/api';
 import animationgif from '../../assets/Animations.gif';
 import LanguageSelectModel from "../../base/LanguageModelPopup/LanguageSelectModel.jsx";
 import { toast } from 'react-toastify';
-
+import LimitReachedModal from '../6_my_jobs/MyJobsPopUp/LimitReachedModel.jsx';
 
 const External = () => {
+
+  const [infoBlock, setInfoBlock] = useState(null); // ⬅️ Store only info_block
+  const [limitModalOpen, setLimitModalOpen] = useState(false);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("authToken");
+    if (!token) return;
+
+    const fetchDashboardInfo = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/dashboard`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await res.json();
+        if (data.info_block) {
+          setInfoBlock(data.info_block);
+        }
+      } catch (err) {
+        console.error("Error fetching info_block:", err);
+      }
+    };
+
+    fetchDashboardInfo();
+  }, []);
+
   const navigate = useNavigate();
+
   const token = sessionStorage.getItem("authToken");
 
   const [formData, setFormData] = useState({
@@ -32,22 +61,38 @@ const External = () => {
 
   // Step 1: Generate job ID and show language modal
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const generatedJobId = `job_${Date.now()}${Math.floor(Math.random() * 1000)}`;
+  e.preventDefault();
 
-    const payload = {
-      job_id: generatedJobId,
-      company: formData.companyName,
-      job_title: formData.jobTitle,
-      link: formData.jobLink,
-      description: formData.jobDescription,
-      source: "external",
-    };
+  if (!infoBlock) {
+    toast.error("User info not loaded. Please try again.");
+    return;
+  }
 
-    setJobId(generatedJobId);
-    setStoredPayload(payload); // Store for use after language is chosen
-    setShowLangModal(true);   // Now ask for language
+  const isFreePlan = infoBlock.subscription_tier === 'free';
+  const externalUsed = infoBlock.external_application_count || 0;
+
+  if (isFreePlan && externalUsed === 0) {
+    setLimitModalOpen(true);
+    return;
+  }
+
+  const generatedJobId = `job_${Date.now()}${Math.floor(Math.random() * 1000)}`;
+
+  const payload = {
+    job_id: generatedJobId,
+    company: formData.companyName,
+    job_title: formData.jobTitle,
+    link: formData.jobLink,
+    description: formData.jobDescription,
+    source: "external",
   };
+
+  setJobId(generatedJobId);
+  setStoredPayload(payload);
+  setShowLangModal(true);
+};
+
+
 
   // Step 2: Send full payload including job_language to backend
   const handleLanguageSelect = async (lang) => {
@@ -164,7 +209,16 @@ const External = () => {
           </div>
         </div>
       )}
+
+      <LimitReachedModal
+        isOpen={limitModalOpen}
+        onClose={() => setLimitModalOpen(false)}
+        type="external"
+      />
+
     </div>
+
+    
   );
 };
 

@@ -22,17 +22,17 @@ const PackagePopup = ({ isOpen, onClose, infoBlock }) => {
   const progressItems = [
     {
       title: 'Internal',
-      remaining: `${internalApps}/20`,
-      percentage: calcPercent(internalApps, 20),
+      remaining: `${internalApps}/${tier === 'free' ? 5 : 150}`,
+      percentage: calcPercent(internalApps, tier === 'free' ? 5 : 150),
     },
     {
       title: 'External',
-      remaining: `${externalApps}/20`,
-      percentage: calcPercent(externalApps, 20),
+      remaining: `${externalApps}/${tier === 'free' ? 2 : 20}`,
+      percentage: calcPercent(externalApps, tier === 'free' ? 2 : 20),
     },
     {
       title: 'Proficiency Test',
-      remaining: `${proficiencyTests}/5`,
+      remaining: `${proficiencyTests}`,
       percentage: calcPercent(proficiencyTests, 5),
     }
   ];

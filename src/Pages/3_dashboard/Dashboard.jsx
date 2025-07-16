@@ -82,7 +82,8 @@ const Dashboard = () => {
     topJobs: profileData?.info_block?.top_jobs_count ?? 0,
     internalApps: profileData?.info_block?.internal_application_count ?? 0,
     externalApps: profileData?.info_block?.external_application_count ?? 0,
-    proficiencyTests: profileData?.info_block?.proficiency_test ?? 0,
+    // proficiencyTests: profileData?.info_block?.proficiency_test ?? 0,
+    proficiencyTests: 0
   };
 
 

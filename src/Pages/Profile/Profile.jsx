@@ -148,6 +148,10 @@ const Profile = () => {
   const external = profileData?.seeker?.external_application_count ?? 0;
   const proficiency = profileData?.seeker?.proficicency_test ?? 0;
 
+  const maxInternal = tier === 'free' ? 5 : 15;
+  const maxExternal = tier === 'free' ? 2 : 15;
+  const maxProficiency = 0;
+
 
 
   const handleClose = () => {
@@ -189,7 +193,7 @@ const Profile = () => {
           <div className="flex flex-col w-96  justify-center items-center gap-2">
             <p className="text-sm font-medium">Internal Applications</p>
             <p className="text-sm font-semibold">
-              {profileData?.seeker?.internal_application_count ?? 0}/15
+              {internal}/{maxInternal}
             </p>
             <div className="relative w-20 h-20">
               <svg className="absolute top-0 left-0 w-full h-full">
@@ -203,18 +207,14 @@ const Profile = () => {
                   fill="none"
                   strokeDasharray="226.2"
                   strokeDashoffset={
-                    226.2 -
-                    (226.2 *
-                      ((profileData?.seeker?.internal_application_count ?? 0) / 15) *
-                      100) /
-                    100
+                    226.2 - (226.2 * internal) / maxInternal
                   }
                   strokeLinecap="round"
                   transform="rotate(-90 40 40)"
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">
-                {Math.round(((profileData?.seeker?.internal_application_count ?? 0) / 15) * 100)}%
+                {Math.round((internal / maxInternal) * 100)}%
               </div>
             </div>
           </div>
@@ -223,7 +223,7 @@ const Profile = () => {
           <div className="flex flex-col justify-center items-center gap-2 w-96">
             <p className="text-sm font-medium text-white">External Applications</p>
             <p className="text-sm font-semibold text-white">
-              {profileData?.seeker?.external_application_count ?? 0}/15
+              {external}/{maxExternal}
             </p>
             <div className="relative w-20 h-20">
               <svg className="absolute top-0 left-0 w-full h-full">
@@ -237,15 +237,14 @@ const Profile = () => {
                   fill="none"
                   strokeDasharray="226.2"
                   strokeDashoffset={
-                    226.2 -
-                    (226.2 * ((profileData?.seeker?.external_application_count ?? 0) / 15))
+                    226.2 - (226.2 * external) / maxExternal
                   }
                   strokeLinecap="round"
                   transform="rotate(-90 40 40)"
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center text-sm font-bold text-white">
-                {Math.round(((profileData?.seeker?.external_application_count ?? 0) / 15) * 100)}%
+                {Math.round((external / maxExternal) * 100)}%
               </div>
             </div>
           </div>
@@ -254,7 +253,8 @@ const Profile = () => {
           <div className="flex flex-col justify-center items-center gap-2 w-96">
             <p className="text-sm font-medium text-white">Proficiency Test</p>
             <p className="text-sm font-semibold text-white">
-              {profileData?.seeker?.proficicency_test ?? 0}/15
+              {/* {proficiency}/{maxProficiency} */}
+              {proficiency}/{maxProficiency}
             </p>
             <div className="relative w-20 h-20">
               <svg className="absolute top-0 left-0 w-full h-full">
@@ -268,15 +268,20 @@ const Profile = () => {
                   fill="none"
                   strokeDasharray="226.2"
                   strokeDashoffset={
-                    226.2 -
-                    (226.2 * ((profileData?.seeker?.proficicency_test ?? 0) / 15))
+                    // 226.2 - (226.2 * proficiency) / maxProficiency
+                    maxProficiency > 0
+                    ? 226.2 - (226.2 * proficiency) / maxProficiency
+                    : 226.2
                   }
                   strokeLinecap="round"
                   transform="rotate(-90 40 40)"
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center text-sm font-bold text-white">
-                {Math.round(((profileData?.seeker?.proficicency_test ?? 0) / 15) * 100)}%
+                {/* {Math.round((proficiency / maxProficiency) * 100)}% */}
+                {maxProficiency > 0
+                ? `${Math.round((proficiency / maxProficiency) * 100)}%`
+                : '0%'}
               </div>
             </div>
           </div>

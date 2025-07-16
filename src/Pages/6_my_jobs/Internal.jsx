@@ -17,11 +17,13 @@ import { FiSearch } from "react-icons/fi"; // 👈 Import this at the top
 import LanguageSelectModel from "../../base/LanguageModelPopup/LanguageSelectModel.jsx";
 import JobTitleDropdown from "../../base/LanguageModelPopup/JobTitleDropdown .jsx";
 import JobSearchTitleDropdown from "../../base/LanguageModelPopup/JobTitleDropdown .jsx";
-
-
+import LimitReachedModal from '../6_my_jobs/MyJobsPopUp/LimitReachedModel.jsx';
 
 const MyApplication = () => {
   const navigate = useNavigate();
+
+  const [showLimitModal, setShowLimitModal] = useState(true);
+
   const [selectedJobs, setSelectedJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
@@ -1100,7 +1102,11 @@ const jobsToRender = isFilterActive ? filteredJobs : selectedJobs;
         </div>
       )}
 
-
+      <LimitReachedModal
+        isOpen={showLimitModal}
+        onClose={() => setShowLimitModal(false)}
+        type="internal"
+      />
 
     </div >
   );
