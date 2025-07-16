@@ -6,27 +6,32 @@ const faqs = [
   {
     question: "What is JSE AI and how does it work?",
     answer:
-      "JSE AI is an advanced job platform that uses artificial intelligence to match job seekers with precise opportunities. Our AI analyzes your profile, skills, and preferences to recommend jobs that align with your career goals. The platform automates application processes and provides personalized career insights.",
+      "JSE AI is an advanced job portal that uses artificial intelligence to match job seekers with perfect opportunities. Our AI analyzes your profile, skills, and preferences to recommend jobs that align with your career goals. The platform automates application processes and provides personalized career insights."
   },
   {
     question: "How accurate is the AI job matching?",
     answer:
-      "Our AI matching system has a 92% success rate. It continuously learns from user's experience and projects to improve recommendations.",
+      "Our AI job matching system, with a 95% success rate, is based on your skills, experience, and projects. It compares and analyzes job opportunities, displaying only those with a suitability score of 50% or higher. Jobs with an 80% or greater suitability score are prioritized in your recommended jobs list, ensuring highly relevant matches tailored to your profile. More Data you give more accurate it will get."
   },
   {
-    question: "What’s included in the 7-day free trial?",
+    question: "How does the AI improve my applications?",
     answer:
-      "During your free trial, you get limited access to all Basic plan features including CV & Cover Letter automation, job recommendations, language filters, and our AI matching system. No credit card required to start.",
+      "The AI analyzes your experience and professional details to highlight relevant skills and achievements, aligning them with job descriptions you provide. It adapts content to different industries and roles, saving you time while improving your application’s impact."
   },
   {
-    question: "How does the CV and Cover Letter automation work?",
+    question: "Can I customize my CVs and cover letters?",
     answer:
-      "Our AI automatically tailors your CV and cover letter for each job application based on the job requirements and your profile. You can review, edit & change format before downloading.",
+      "Absolutely! You can edit AI-generated drafts, add personal touches, rearrange sections, and choose from multiple design templates to match your style or industry standards."
   },
   {
-    question: "Can I cancel my subscription anytime?",
+    question: "How quickly can I create an application?",
     answer:
-      "Yes, you can cancel your subscription at any time. If you cancel, you'll continue to have access to paid features until the end of your billing period.",
+      "With JSE Ai, you can generate a draft CV or cover letter in minutes by entering your details. Editing, finalizing typically takes 5 - 10 minutes, depending on your customization needs."
+  },
+  {
+    question: "Does JSE Ai offer support for job interviews?",
+    answer:
+      "While JSE Ai focuses on application materials, it provides tips within the platform based on your professional details to prepare for interviews, such as common questions for each company, background of the company and their current projects related to your experience."
   },
 ];
 
