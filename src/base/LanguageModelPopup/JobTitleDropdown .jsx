@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronDown } from "react-icons/fa";
 import axios from "axios";
+import { BASE_URL } from "../../utils/api";
 
 const JobSearchTitleDropdown = ({ onJobsFetched }) => {
 
@@ -21,7 +22,7 @@ const JobSearchTitleDropdown = ({ onJobsFetched }) => {
                 return;
             }
 
-            const res = await axios.get("https://dev.arshan.digital/b1/jobtitles", {
+            const res = await axios.get(`${BASE_URL}/jobtitles`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -49,7 +50,7 @@ const JobSearchTitleDropdown = ({ onJobsFetched }) => {
 
             const encodedTitle = encodeURIComponent(title);
 
-            const res = await axios.get(`https://dev.arshan.digital/b1/api/jobs?title=${encodedTitle}`, {
+            const res = await axios.get(`${BASE_URL}/api/jobs?title=${encodedTitle}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',

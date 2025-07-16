@@ -24,6 +24,9 @@ const MyApplication = () => {
 
   const [showLimitModal, setShowLimitModal] = useState(false);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchTimeoutRef = useRef(null);
+
   const [selectedJobs, setSelectedJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
@@ -246,6 +249,58 @@ const MyApplication = () => {
     } catch (error) {
       const errMsg = error.response?.data?.message || "⚠ Failed to fetch jobs.";
       setError(errMsg);
+      setLoading(false);
+    }
+  };
+
+  const handleSearchJobs = async (query) => {
+    if (!query.trim()) {
+      fetchSelectedJobs(); // Reset to default jobs if search is cleared
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const token = sessionStorage.getItem("authToken");
+
+      const res = await axios.get(`${BASE_URL}/api/jobs`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { company: query },
+      });
+
+      const jobs = res.data.jobs || [];
+
+      const mappedJobs = jobs.map((job) => ({
+        id: job.job_id || job.id,
+        jobTitle: job.job_title || job.title || "Untitled Job",
+        title: job.title || job.job_title,
+        companyName: job.company || "Unknown Company",
+        location: job.location || "Location not specified",
+        postedDate: job.posted_date || "Not specified",
+        description: job.description?.slice(0, 100) + "...",
+        Description: job.description || "No description available",
+        matchValue: job.match_score || 50,
+        skillData: [
+          {
+            label: "Required Skills",
+            value: job.skills ? job.skills.split(",").map((s) => s.trim()) : [],
+          },
+          {
+            label: "Your Skills",
+            value: Array.isArray(job.user_skills) ? job.user_skills : [],
+          },
+          {
+            label: "Job Type",
+            value: job.job_type || "Not specified",
+          },
+        ],
+      }));
+
+      setFilteredJobs(mappedJobs);
+      setIsFilterActive(true);
+      setLoading(false);
+    } catch (error) {
+      console.error("❌ Search failed:", error);
       setLoading(false);
     }
   };
@@ -534,7 +589,7 @@ const MyApplication = () => {
     return parseInt(params.get("offset")) || 0;
   };
 
-const jobsToRender = isFilterActive ? filteredJobs : selectedJobs;
+  const jobsToRender = isFilterActive ? filteredJobs : selectedJobs;
 
 
 
@@ -546,10 +601,20 @@ const jobsToRender = isFilterActive ? filteredJobs : selectedJobs;
         <div className="w-[40%] relative">
           <input
             type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSearchJobs(searchQuery);
+              }
+            }}
             className="px-4 py-2 w-full border border-gray-300 rounded-md outline-none pr-10"
             placeholder="Search jobs, company"
           />
-          <FiSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg" />
+          <FiSearch
+            onClick={() => handleSearchJobs(searchQuery)}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg cursor-pointer"
+          />
         </div>
 
         <JobSearchTitleDropdown

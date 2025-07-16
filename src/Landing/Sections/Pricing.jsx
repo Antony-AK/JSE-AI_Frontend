@@ -129,7 +129,7 @@ const Pricing = () => {
         </LayoutGroup>
       </div>
 
-      <div className="w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 px-4">
         {plans.map((plan, idx) => (
           <div key={idx} className="perspective h-[500px] relative">
             {plan.isPopular && (

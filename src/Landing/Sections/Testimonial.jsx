@@ -1,6 +1,5 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
-import profile from "../../assets/profile.jpg";
 import avatar_1 from '../../assets/avatar-1.png'
 import avatar_2 from '../../assets/avatar-2.png'
 import avatar_3 from '../../assets/avatar-3.png'
@@ -32,7 +31,6 @@ const testimonials = [
     feedback:
       "The internal & external job options are super useful. JSE AI’s AI-powered system shows exactly what fits me.",
   },
-  // repeat to make scroll smooth
   {
     name: "Andrew",
     role: "Product Designer",
@@ -53,13 +51,13 @@ const testimonials = [
 
 const Testimonial = () => {
   return (
-    <section className="py-12 h-[60vh] relative z-[999] bg-white px-4">
+    <section className="py-12 h-auto bg-white px-4">
       {/* Title & Subheading */}
       <div className="mb-14 max-w-[1200px] mx-auto px-4">
-        <h2 className="text-2xl font-semibold">What Our Users Say</h2>
-        <p className="text-gray-400 mt-1 text-[15px] font-semibold">
+        <h2 className="text-xl sm:text-2xl font-semibold">What Our Users Say</h2>
+        <p className="text-sm sm:text-[15px] text-gray-400 mt-1 font-semibold">
           Join thousands of professionals who have transformed their careers
-          <br /> with JSE AI.
+          <br className="hidden sm:block" /> with JSE AI.
         </p>
       </div>
 
@@ -69,31 +67,31 @@ const Testimonial = () => {
           {[...testimonials, ...testimonials].map((user, index) => (
             <div
               key={index}
-              className="w-[380px] h-[180px] border rounded-lg p-6 shadow-sm flex-shrink-0"
+              className="w-[300px] h-[160px] sm:w-[380px] sm:h-[180px] border rounded-lg p-5 sm:p-6 shadow-sm flex-shrink-0"
             >
               <div className="flex items-center mb-4">
                 <img
                   src={user.image}
                   alt={user.name}
-                  className="w-14 h-14 rounded-full mr-4 object-cover"
+                  className="w-12 h-12 sm:w-14 sm:h-14 rounded-full mr-4 object-cover"
                 />
 
                 <div className="flex flex-col w-full">
                   <div className="flex items-center justify-between w-full">
-                    <p className="font-bold">{user.name}</p>
+                    <p className="font-bold text-sm sm:text-base">{user.name}</p>
                     <div className="flex gap-1 text-[#2c6472]">
                       {[...Array(user.rating)].map((_, i) => (
-                        <FaStar key={i} className="w-4 h-4" />
+                        <FaStar key={i} className="w-3 h-3 sm:w-4 sm:h-4" />
                       ))}
                     </div>
                   </div>
-                  <p className="text-sm font-medium text-gray-800">
+                  <p className="text-xs sm:text-sm font-medium text-gray-800">
                     {user.role}
                   </p>
                 </div>
               </div>
 
-              <p className="text-sm font-medium">{user.feedback}</p>
+              <p className="text-xs sm:text-sm font-medium">{user.feedback}</p>
             </div>
           ))}
         </div>

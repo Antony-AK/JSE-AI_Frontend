@@ -7,23 +7,25 @@ import bot3 from "../../assets/bot3.png"
 
 const SmartJobSection = () => {
   return (
-    <section className="relative bg-white py-28 px-4">
+    <section className="relative bg-white py-16 px-6 sm:px-6 md:px-10">
       <div className="relative max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
         {/* Left: Image + Robot */}
         <div className="relative w-full md:w-1/2 flex justify-center">
-          <video
-            loop={true}
-            autoPlay
-            muted
-            playsInline
-            src={smartjob}
-            alt="Woman on laptop"
-            className="rounded-xl  w-[80%]  h-[500px] bg-slate-200 object-cover"
-          />
-        </div>
+  <div className="aspect-square w-[80%] bg-slate-200 rounded-xl overflow-hidden">
+    <video
+      loop
+      autoPlay
+      muted
+      playsInline
+      src={smartjob}
+      alt="Woman on laptop"
+      className="w-full h-full object-cover"
+    />
+  </div>
+</div>
 
         {/* Right: Text */}
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2 flex flex-col justify-center items-center">
           <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 leading-snug mb-4">
             More than a job site.
             <span className="text-[#2c6472] font-bold"> JSE AI </span>

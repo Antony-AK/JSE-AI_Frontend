@@ -34,17 +34,23 @@ const FAQ = () => {
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggleFAQ = (index) => {
-    setOpenIndex(prev => (prev === index ? null : index));
+    setOpenIndex((prev) => (prev === index ? null : index));
   };
 
   return (
-    <section id="faqs" className="max-w-[1100px] h-[95vh] mx-auto px-4 py-10">
-      <h2 className="text-2xl font-semibold mb-5">Frequently Asked Questions</h2>
-      <p className="mb-10 text-gray-500 font-medium">
-        Got questions? We’ve got answers. <br /> Find everything you need to know about JSE AI.
+    <section
+      id="faqs"
+      className="max-w-[1100px] h-auto mx-auto px-4 sm:px-6 md:px-10 py-10"
+    >
+      <h2 className="text-xl sm:text-2xl font-semibold mb-5">
+        Frequently Asked Questions
+      </h2>
+      <p className="mb-10 text-sm sm:text-base text-gray-500 font-medium">
+        Got questions? We’ve got answers. <br /> Find everything you need to
+        know about JSE AI.
       </p>
 
-      <div className="space-y-4 px-10">
+      <div className="space-y-4">
         {faqs.map((faq, index) => {
           const isOpen = openIndex === index;
           return (
@@ -58,7 +64,7 @@ const FAQ = () => {
               <motion.button
                 layout="position"
                 onClick={() => toggleFAQ(index)}
-                className="w-full flex justify-between items-center px-8 py-6 text-lg text-left font-bold text-black"
+                className="w-full flex justify-between items-center px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg text-left font-bold text-black"
               >
                 <span>{faq.question}</span>
                 <motion.img
@@ -73,8 +79,10 @@ const FAQ = () => {
               {isOpen && (
                 <motion.div
                   layout
-                  className="px-8 pb-6 text-[15px] text-gray-500 font-medium"
-                  transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
+                  className="px-6 sm:px-8 pb-5 sm:pb-6 text-xs sm:text-sm md:text-[15px] text-gray-500 font-medium"
+                  transition={{
+                    layout: { duration: 0.3, ease: "easeInOut" },
+                  }}
                 >
                   {faq.answer}
                 </motion.div>
