@@ -59,38 +59,42 @@ const External = () => {
     }));
   };
 
-  // Step 1: Generate job ID and show language modal
   const handleSubmit = (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!infoBlock) {
-    toast.error("User info not loaded. Please try again.");
-    return;
-  }
+    const { companyName, jobTitle, jobLink, jobDescription } = formData;
+    if (!companyName || !jobTitle || !jobLink || !jobDescription) {
+      toast.error("Please fill in all the fields.");
+      return;
+    }
 
-  const isFreePlan = infoBlock.subscription_tier === 'free';
-  const externalUsed = infoBlock.external_application_count || 0;
+    if (!infoBlock) {
+      toast.error("User info not loaded. Please try again.");
+      return;
+    }
 
-  if (isFreePlan && externalUsed === 0) {
-    setLimitModalOpen(true);
-    return;
-  }
+    const isFreePlan = infoBlock.subscription_tier === 'free';
+    const externalUsed = infoBlock.external_application_count || 0;
 
-  const generatedJobId = `job_${Date.now()}${Math.floor(Math.random() * 1000)}`;
+    if (isFreePlan && externalUsed === 0) {
+      setLimitModalOpen(true);
+      return;
+    }
 
-  const payload = {
-    job_id: generatedJobId,
-    company: formData.companyName,
-    job_title: formData.jobTitle,
-    link: formData.jobLink,
-    description: formData.jobDescription,
-    source: "external",
+    const generatedJobId = `job_${Date.now()}${Math.floor(Math.random() * 1000)}`;
+    const payload = {
+      job_id: generatedJobId,
+      company: companyName,
+      job_title: jobTitle,
+      link: jobLink,
+      description: jobDescription,
+      source: "external",
+    };
+
+    setJobId(generatedJobId);
+    setStoredPayload(payload);
+    setShowLangModal(true);
   };
-
-  setJobId(generatedJobId);
-  setStoredPayload(payload);
-  setShowLangModal(true);
-};
 
 
 
