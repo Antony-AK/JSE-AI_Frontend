@@ -55,7 +55,7 @@ const MyApplication = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState("All");
 
-  const options = ["All", "New"];
+  const options = ["All"];
 
   const [infoBlock, setInfoBlock] = useState(null);
 

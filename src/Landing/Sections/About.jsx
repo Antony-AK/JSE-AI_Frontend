@@ -12,7 +12,7 @@ const About = () => {
         </div>
 
         {/* Right: Text */}
-        <div className="text-[#2c6472] text-center text-xl md:text-left sm:text-2xl md:text-3xl font-semibold leading-relaxed sm:leading-[2.5rem] md:leading-[4rem] font-poppins px-2">
+        <div className="text-[#2c6472] text-center text-xl md:text-left sm:text-2xl md:text-3xl font-semibold leading-relaxed sm:leading-[2.5rem] md:leading-[3rem] font-poppins px-2">
           Let JSE AI search and personalize job <br />
           opportunities for you. So you can focus on <br />
           growing, not grinding.

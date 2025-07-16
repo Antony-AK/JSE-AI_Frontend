@@ -57,10 +57,10 @@ const DreamJobSection = () => {
             <h3 className="text-lg sm:text-xl font-semibold text-center mt-6">
               Find Your Match & Apply
             </h3>
-            <p className="text-sm sm:text-base font-medium mt-2 leading-relaxed text-center max-w-[300px]">
+            <p className="text-sm sm:text-base font-medium mt-2 leading-relaxed text-center max-w-[340px]">
               Choose the language of application<br />
               Pick the jobs recommended by AI or you<br />
-              Enjoy automation, just review and send
+               Enjoy automation, just review customized application
             </p>
           </div>
 
@@ -77,7 +77,7 @@ const DreamJobSection = () => {
               Track Your Applications
             </h3>
             <p className="text-sm sm:text-base font-medium mt-2 leading-relaxed text-center max-w-[300px]">
-              Track all your job applications<br />
+              Easily Track all your job applications internally and externally<br />
               Prepare for interviews with smart research<br />
               Celebrate your perfect match!
             </p>
