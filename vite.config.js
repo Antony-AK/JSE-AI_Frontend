@@ -15,4 +15,12 @@ export default defineConfig({
   optimizeDeps: {
     include: ['latex.js', 'html2pdf.js'],
   },
+  css: {
+  preprocessorOptions: {
+    css: {
+      charset: false,
+    },
+  },
+}
+
 });

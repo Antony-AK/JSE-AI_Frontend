@@ -170,7 +170,7 @@ const Pricing = () => {
                         alt="tick"
                         className="w-5 h-5 mr-3 mt-1"
                       />
-                      <span className="font-medium text-gray-500 text-xs">
+                      <span className="font-medium text-gray-500 text-sm">
                         {feature}
                       </span>
                     </li>
@@ -209,7 +209,7 @@ const Pricing = () => {
                         alt="tick"
                         className="w-5 h-5 mr-3 mt-1"
                       />
-                      <span className="font-medium text-gray-500 text-xs">
+                      <span className="font-medium text-gray-500 text-sm">
                         {feature}
                       </span>
                     </li>

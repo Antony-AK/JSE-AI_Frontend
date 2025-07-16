@@ -7,7 +7,7 @@ const Landing = () => {
  
 
   return (
-    <div className="Main bg-white font-poppins relative scroll-smooth  overflow-y-scroll h-screen">
+    <div className="Main bg-white font-Manrope relative scroll-smooth  overflow-y-scroll h-screen">
       <LandingNavbar />
       <Section />
     </div>

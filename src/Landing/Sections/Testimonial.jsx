@@ -55,7 +55,7 @@ const Testimonial = () => {
   return (
     <section className="py-12 h-[60vh] relative z-[999] bg-white px-4">
       {/* Title & Subheading */}
-      <div className="mb-14 max-w-[1100px] mx-auto px-4">
+      <div className="mb-14 max-w-[1200px] mx-auto px-4">
         <h2 className="text-2xl font-semibold">What Our Users Say</h2>
         <p className="text-gray-400 mt-1 text-[15px] font-semibold">
           Join thousands of professionals who have transformed their careers

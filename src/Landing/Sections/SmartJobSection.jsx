@@ -1,5 +1,5 @@
 import React from 'react';
-import smartjob from "../../assets/smartjoba.mp4"
+import smartjob from "../../assets/girl.mp4"
 import smartjobicon from "../../assets/smartjobicon.png"
 import bot3 from "../../assets/bot3.png"
 

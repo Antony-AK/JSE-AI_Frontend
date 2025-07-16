@@ -174,7 +174,9 @@ const Dashboard = () => {
 
 
 
-  if (loading) return <div className='flex justify-center items-center w-full h-full '><Loader /></div>;
+if (loading || !Array.isArray(profileData?.new_jobs?.mini_new_jobs)) {
+  return <div className='flex justify-center items-center w-full h-full'><Loader /></div>;
+}
   if (error) return <div className="text-red-500 flex justify-center items-center mt-64">{error}</div>;
 
   const handleStatusClick = () => {

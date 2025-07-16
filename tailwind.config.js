@@ -74,6 +74,7 @@ module.exports = {
         },
         fontFamily: {
           poppins: ['Poppins', 'sans-serif'],
+          Manrope: ['Manrope', 'sans-serif']
         },
 
       },

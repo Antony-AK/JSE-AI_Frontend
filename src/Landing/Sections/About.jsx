@@ -3,7 +3,7 @@ import bot2 from "../../assets/bot2.png"
 
 const About = () => {
   return (
-    <section  className="w-full h-[100vh]  flex justify-between items-center bg-white py-20 px-6 ">
+    <section  className="w-full h-[80vh]  flex justify-between items-center bg-white py-20 px-6 ">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
         {/* Left: Robot Image */}
         <div className="flex-shrink-0 w-96 h-96">

@@ -1,7 +1,6 @@
 import React from 'react';
 import logo from '../../assets/jsenewlogoblack.png';
-import { Link } from 'react-scroll';
-
+import { Link } from 'react-router-dom';
 
 const LandingNavbar = () => {
   return (
@@ -12,7 +11,7 @@ const LandingNavbar = () => {
       </div>
 
       {/* Center Links */}
-      <ul className="hidden md:flex space-x-8 text-gray-800 font-medium">
+      <ul className="hidden md:flex space-x-8 ms-28 text-gray-800 font-Manrope font-medium">
         {['Home', 'Features', 'Pricing', 'FAQs', 'Contact us'].map((item, idx) => {
           const href = `#${item.toLowerCase().replace(/\s/g, '')}`;
           return (
@@ -33,10 +32,14 @@ const LandingNavbar = () => {
 
 
       {/* Right Login Button */}
-      <div>
-        <button className="bg-[#2c6472] text-white px-6 py-2 rounded-full font-medium hover:bg-[#25545f] transition duration-300">
+      <div className='flex gap-3'>
+        <Link to='/user/signup'><button className="bg-[#2c6472] text-white px-6 py-2 rounded-full font-medium hover:bg-[#25545f] transition duration-300">
+          Sign Up
+        </button></Link>
+         <Link to='/user/login'><button className="bg-[#2c6472] text-white px-6 py-2 rounded-full font-medium hover:bg-[#25545f] transition duration-300">
           Login
-        </button>
+        </button></Link>
+         
       </div>
     </nav>
   );

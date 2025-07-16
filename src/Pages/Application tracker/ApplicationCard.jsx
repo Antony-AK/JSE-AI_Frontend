@@ -299,7 +299,7 @@ const ApplicationCard = ({
           <button
             disabled={activeStatus.toLowerCase() !== 'interview'}
             className={`w-[140px] h-[40px] mt-2 px-4 py-1.5 rounded-2xl text-sm font-medium transition ${activeStatus.toLowerCase() === 'interview'
-              ? 'bg-[#2c6472] text-white border-[#2c6472] hover:bg-slate-700'
+              ? 'bg-gray-200 text-gray-400 border-gray-400 cursor-not-allowed'
               : 'bg-gray-200 text-gray-400 border-gray-400 cursor-not-allowed'
               }`}
           >

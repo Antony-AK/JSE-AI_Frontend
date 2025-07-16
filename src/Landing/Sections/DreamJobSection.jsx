@@ -1,11 +1,8 @@
 import React from 'react';
-import dream1 from "../../assets/laptop.png"
-import dream2 from "../../assets/dreamjob21.svg"
-import dream3 from "../../assets/dreamjob22.svg"
+import dream1 from "../../assets/MacBook2.png"
+import dream2 from "../../assets/MacBook1.png"
+import dream3 from "../../assets/MacBook3.png"
 import bot3 from "../../assets/bot1.png"
-
-
-
 
 const DreamJobSection = () => {
   return (
@@ -14,60 +11,58 @@ const DreamJobSection = () => {
       <div className='relative z-[999]  bg-white'>
 
         <div className=" text-center mb-16 ">
-          <img src={bot3} alt="" className='w-52 h-30 absolute -top-24 left-[45%]' />
+          <img src={bot3} alt="" className='w-52 h-30 absolute -top-24 left-[43%]' />
 
           <h2 className="text-2xl sm:text-3xl mt-10 font-bold text-black">
             We bring you closer to your dream job.
           </h2>
-          <p className="text-gray-500 mt-2 text-sm sm:text-base">
+          <p className="text-gray-500 mt-2 text-sm font-medium sm:text-base">
             We discover. You elevate. Goals achieved.
           </p>
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-40 max-w-6xl mx-auto text-center">
-          {/* Card 1 */}
-          <div>
-            <div className="bg-[#ffd7d7] p-4 rounded-2xl flex justify-center items-center h-56">
-              <img src={dream1} alt="Career Starts" className="object-contain mt-[87px] h-full" />
+        <div className="grid grid-cols-1 md:grid-cols-3 max-w-7xl  mx-auto text-center">
+          {/* Card 1 - Build Your CV */}
+          <div className='flex justify-center items-center flex-col'>
+            <div className="bg-[#ffd7d7]  rounded-2xl flex justify-center items-center w-80 h-64">
+              <img src={dream2} alt="Career Starts " className="object-cover rounded-2xl" />
             </div>
-            <h3 className="text-xl font-semibold mt-4">Your Career Starts Here.</h3>
-            <p className="text-sm font-medium mt-2 text-center">Everything you need to land your dream job.</p>
-          </div>
-
-          {/* Card 2 */}
-          <div>
-            <div className="bg-[#ffc8b1] p-4 rounded-2xl flex flex-col justify-center items-center h-56 ">
-              <img src={dream2} alt="Gateway to Jobs" className="object-contain  h-[60%]" />
-              <img src={dream3} alt="" className="object-contain h-[50%]" />
-            </div>
-            <h3 className="text-xl font-semibold mt-4">Your Gateway to Jobs.</h3>
-            <p className="text-sm font-medium mt-2 w-[300px] -ms-2 text-center ">
-              Generate CVs & Cover Letters in German<br /> & English.
+            <h3 className="text-xl font-semibold text-center mt-6">Build Your CV</h3>
+            <p className="text-sm font-medium mt-2 leading-relaxed text-center">
+              Build your CV or upload<br />
+              Choose the 3 Jobs Title<br />
+              Let AI find the perfect job posts for you
             </p>
           </div>
 
-          {/* Card 3 */}
-          <div>
-            <div className="bg-[#c7f5cb] p-4 rounded-2xl relative w-80 h-64">
-              <div className="absolute top-4 left-6 rotate-[-10deg] bg-blue-500 text-white text-xs font-medium px-4 py-2 h-9 w-28 rounded-md flex items-center justify-center shadow-md">Projects</div>
+          {/* Card 2 - Find Your Match */}
+          <div className='flex justify-center items-center flex-col'>
+            <div className="bg-[#ffc8b1]  rounded-2xl flex flex-col justify-center items-center w-80 h-64 ">
+              <img src={dream1} alt="Gateway to Jobs" className="object-cover rounded-2xl" />
+            </div>
+            <h3 className="text-xl font-semibold text-center mt-6">Find Your Match & Apply</h3>
+            <p className="text-sm font-medium mt-2 w-[300px] leading-relaxed text-center">
+              Choose the language of application<br />
+              Pick the jobs recommended by AI or you<br />
+              Enjoy automation, just review and send
+            </p>
+          </div>
 
-              <div className="absolute top-12 right-6 rotate-[10deg] bg-orange-500 text-white text-xs font-medium px-4 py-2 h-9 w-28 rounded-md flex items-center justify-center shadow-md">FAQ</div>
-
-              <div className="absolute bottom-28 left-8 rotate-[-5deg] bg-green-800 text-white text-xs font-medium px-4 py-2 h-9 w-28 rounded-md flex items-center justify-center shadow-md">Job</div>
-
-              <div className="absolute bottom-20 right-8 rotate-[5deg] bg-blue-200 text-white text-xs font-medium px-4 py-2 h-9 w-28 rounded-md flex items-center justify-center shadow-md">Activities</div>
-
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-[#2c6472] text-white text-xs font-medium px-2 py-2 h-9 w-28 rounded-md flex items-center justify-center shadow-md">Job Research</div>
+          {/* Card 3 - Track Your Applications */}
+          <div className='flex justify-center items-center flex-col'>
+            <div className="bg-[#ffc8b1]  rounded-2xl flex flex-col justify-center items-center w-80 h-64 ">
+              <img src={dream3} alt="Gateway to Jobs" className="object-cover rounded-2xl" />
             </div>
 
-            <h3 className="text-xl font-semibold mt-4">Research. Align.Act</h3>
-            <p className="text-sm text-black font-medium  mt-2 -ms-2 w-[300px] text-center">
-              Study. Plan. Act. Learn the company’s mission before interviewing.
+            <h3 className="text-xl font-semibold text-center mt-6">Track Your Applications</h3>
+            <p className="text-sm text-black font-medium  mt-2 leading-relaxed w-[300px] text-center">
+              Track all your job applications<br />
+              Prepare for interviews with smart research<br />
+              Celebrate your perfect match!
             </p>
           </div>
         </div>
-
       </div>
     </section>
   );

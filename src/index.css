@@ -3,10 +3,11 @@
 @tailwind utilities;
 
 
-
 .teal-button:hover{
     @apply bg-teal-800 transition-transform ease-linear  duration-200;
 }
+
+
 
 
 html {

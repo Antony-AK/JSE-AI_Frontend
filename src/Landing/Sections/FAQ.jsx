@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import arrow from "../../assets/arrow-right.svg";
 
 const faqs = [
@@ -31,36 +31,32 @@ const faqs = [
 ];
 
 const FAQ = () => {
-  const [openStates, setOpenStates] = useState(faqs.map(() => false));
+  const [openIndex, setOpenIndex] = useState(null);
 
   const toggleFAQ = (index) => {
-    setOpenStates((prev) =>
-      prev.map((isOpen, i) => (i === index ? !isOpen : isOpen))
-    );
+    setOpenIndex(prev => (prev === index ? null : index));
   };
 
   return (
-    <section id="faqs" className="max-w-[1100px] mx-auto px-4 py-10">
-      <h2 className="text-2xl font-semibold mb-5">
-        Frequently Asked Questions
-      </h2>
+    <section id="faqs" className="max-w-[1100px] h-[95vh] mx-auto px-4 py-10">
+      <h2 className="text-2xl font-semibold mb-5">Frequently Asked Questions</h2>
       <p className="mb-10 text-gray-500 font-medium">
-        Got questions? We’ve got answers. <br /> Find everything you need to
-        know about JSE AI.
+        Got questions? We’ve got answers. <br /> Find everything you need to know about JSE AI.
       </p>
 
       <div className="space-y-4 px-10">
         {faqs.map((faq, index) => {
-          const isOpen = openStates[index];
+          const isOpen = openIndex === index;
           return (
             <motion.div
               key={index}
               layout
               initial={{ borderRadius: 10 }}
               className="border rounded-lg overflow-hidden shadow-sm"
+              transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
             >
               <motion.button
-                layout
+                layout="position"
                 onClick={() => toggleFAQ(index)}
                 className="w-full flex justify-between items-center px-8 py-6 text-lg text-left font-bold text-black"
               >
@@ -74,20 +70,15 @@ const FAQ = () => {
                 />
               </motion.button>
 
-              <AnimatePresence initial={false}>
-                {isOpen && (
-                  <motion.div
-                    key="content"
-                    initial={{ opacity: 0, maxHeight: 0 }}
-                    animate={{ opacity: 1, maxHeight: 500 }} // set max height to a big enough number
-                    exit={{ opacity: 0, maxHeight: 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="px-8 pb-4 text-sm text-gray-500 font-medium overflow-hidden"
-                  >
-                    {faq.answer}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {isOpen && (
+                <motion.div
+                  layout
+                  className="px-8 pb-6 text-[15px] text-gray-500 font-medium"
+                  transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
+                >
+                  {faq.answer}
+                </motion.div>
+              )}
             </motion.div>
           );
         })}
