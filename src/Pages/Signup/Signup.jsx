@@ -223,7 +223,7 @@ const Signup = () => {
               {/* Flag + Code box */}
               <div
                 onClick={() => setShowDropdown(!showDropdown)}
-                className="absolute left-3 top-[29px] w-24 h-10 flex items-center justify-center gap-1.5 px-3 py-1 rounded-md bg-gray-200 text-sm cursor-pointer z-10"
+                className="absolute left-3 top-[29px] w-24 h-10 flex items-center justify-center gap-1.5 px-3 py-1 rounded-md  text-sm cursor-pointer z-10"
               >
                 <img src={flag} alt="" className="w-5 h-3 object-cover" />
                 <p>{selectedCountry.code}</p>

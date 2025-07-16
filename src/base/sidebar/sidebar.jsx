@@ -175,7 +175,7 @@ const Sidebar = () => {
           <li>
             <Link
               to="/user/profile"
-              className={`flex items-center gap-4 px-4 py-2 rounded-md transition ${pathname === "/user/profile" ? "text-[#2c6472] bg-gray-100" : "text-gray-400"
+              className={`flex items-center gap-4 px-4 py-2 rounded-md transition ${pathname === "/user/profile" ? "text-[#2c6472] " : "text-gray-400"
                 }`}
             >
               <img
@@ -190,7 +190,7 @@ const Sidebar = () => {
           <li>
             <Link
               to="/user/upgrade"
-              className={`flex items-center gap-4 px-4 py-2 rounded-md transition ${pathname === "/user/upgrade" ? "text-[#2c6472] bg-gray-100" : "text-gray-400"
+              className={`flex items-center gap-4 px-4 py-2 rounded-md transition ${pathname === "/user/upgrade" ? "text-[#2c6472] " : "text-gray-400"
                 }`}
             >
               <img

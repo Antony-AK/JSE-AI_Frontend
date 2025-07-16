@@ -185,7 +185,7 @@ const Login = () => {
 
               <button
                 type="submit"
-                className="teal-button w-half h-[44px] bg-[#2c6472] text-white py-2 mt-4 rounded-[10px] font-semibold hover:bg-[#24525f] transition"
+                className="teal-button w-half h-[50px] bg-[#2c6472] text-white py-2 mt-4 rounded-md font-semibold hover:bg-[#24525f] transition"
                 disabled={loading}
               >
                 Login
