@@ -241,7 +241,7 @@ const Certificates = () => {
                                     onClick={() => handleSelectCertificate(cert)}
                                     className={`flex-shrink-0 w-[200px] px-4 py-3 rounded-xl snap-start cursor-pointer 
             text-sm flex flex-col items-start justify-center gap-1 font-semibold whitespace-nowrap transition-all duration-200
-            ${activeId === cert.id ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 text-[#2c6472]'}
+            ${activeId === cert.id ? 'bg-[#2c6472] text-white' : 'bg-[#F4F4F4] text-[#2c6472]'}
             hover:bg-[#2c6472] hover:text-white`}
                                 >
                                     <p className="text-base font-bold truncate w-full">{cert.certificate_name}</p>

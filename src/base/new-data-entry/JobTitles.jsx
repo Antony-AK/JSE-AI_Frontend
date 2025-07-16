@@ -312,10 +312,13 @@ const JobTitles = () => {
                   <li
                     ref={(el) => (itemRefs.current[index] = el)}
                     onClick={() => handleSelect('primary_title', title)}
-                    className={`px-4 py-2 cursor-pointer ${index === highlightedIndex
+                    className={`px-4 py-2 cursor-pointer transition-all duration-200
+                    ${index === highlightedIndex
+                      ? 'bg-[#2c6472] text-white'
+                      : index === 0
                       ? 'bg-[#2c6472] text-white'
                       : 'text-gray-500 hover:bg-[#2c6472] hover:text-white'
-                      }`}
+                    }`}
                   >
                     {title}
                   </li>
