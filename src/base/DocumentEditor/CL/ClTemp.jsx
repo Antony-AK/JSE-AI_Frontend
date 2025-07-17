@@ -62,7 +62,7 @@ const ClPreview = ({ personalInfo, paragraphs, language  }) => {
       </div>
 
       {/* Footer */}
-      <div style={{ marginBottom: '100px', borderBottom: '1px solid #000', paddingBottom: '30px' }}>
+      <div style={{ marginBottom: '200px', borderBottom: '1px solid #000', paddingBottom: '30px' }}>
         <p>{t("sincerely", language)}</p>
         <p style={{ fontWeight: '600', marginTop: '15px' }}>{personalInfo.name}</p>
       </div>

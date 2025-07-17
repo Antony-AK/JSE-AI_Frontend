@@ -270,12 +270,12 @@ const Cl = () => {
 
 
         {/* RIGHT */}
-        <div ref={previewRef} className="w-[794px] h-[1123px] flex flex-col gap-14 bg-white">
+        <div ref={previewRef} className="w-[794px] h-[1123px] flex flex-col   gap-14 bg-white">
           <div> <ActiveCLTemplate personalInfo={personalInfo} paragraphs={paragraphs} language={language} />
           </div>
           <div className='flex  justify-end items-end'>
             <button
-              className="bg-[#2c6472] text-white mt-4 flex justify-end items-end px-8  py-1.5 rounded-lg"
+              className="bg-[#2c6472] text-white mt-4 flex justify-end mb-10 items-end px-8  py-1.5 rounded-lg"
               onClick={async () => {
                 await handleUpdateCoverLetter();   // ✨ First update the data in DB
                 handleDownload();                  // 🧾 Then download PDF

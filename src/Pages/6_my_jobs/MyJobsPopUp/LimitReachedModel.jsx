@@ -41,13 +41,7 @@ const LimitReachedModal = ({ isOpen, onClose, type }) => {
           </div>
 
           {/* Action Buttons */}
-          <div className="mt-6 flex justify-center gap-4">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 text-sm font-medium border border-[#2c6472] text-gray-700 bg-gray-100 rounded hover:bg-gray-200 transition w-40"
-            >
-              Cancel
-            </button>
+          <div className="mt-6 flex justify-center items-center gap-4">
             <button
               onClick={() => {
                 onClose();

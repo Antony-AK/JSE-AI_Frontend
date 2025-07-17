@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion, LayoutGroup, AnimatePresence } from "framer-motion";
 import tick from "../../assets/green-tick.png";
+import { Link } from "react-router-dom";
 
 const plans = [
   {
@@ -42,8 +43,8 @@ const plans = [
     },
     features: {
       monthly: [
-        "CV & CL Automation: 5 Included",
-        "External CV/CL Automation:2",
+        "CV & CL Automation: 150 Included",
+        "External CV/CL Automation:20",
         "Application Tracker",
         "Recommended Jobs",
         "Language Filter",
@@ -66,7 +67,7 @@ const plans = [
     name: "Premium",
     label: "For Extra Benefits",
     price: {
-      monthly: "€ 35",
+      monthly: "€ 55",
       quarterly: "€ 149",
     },
     features: {
@@ -93,10 +94,10 @@ const plans = [
 ];
 
 const Pricing = () => {
-  const [billingCycle, setBillingCycle] = useState("quarterly");
+  const [billingCycle, setBillingCycle] = useState("monthly");
 
   return (
-    <div id="pricing" className="flex flex-col gap-5 px-4 py-12">
+    <div id="pricing" className="flex flex-col gap-5 mb-20 px-4 py-12">
       <div className="flex flex-col justify-center gap-5 text-center mb-10">
         <h2 className="text-2xl font-semibold">Choose Your Perfect Plan</h2>
         <p className="text-gray-500 font-semibold">
@@ -106,14 +107,13 @@ const Pricing = () => {
 
         {/* Toggle Buttons with Framer Motion */}
         <LayoutGroup>
-          <div className="relative flex bg-gray-200 p-1 rounded-md w-fit mx-auto">
+          <div className="relative flex bg-gray-200 p-1 rounded-md w-fit mx-auto flex-col sm:flex-row">
             {["monthly", "quarterly"].map((type) => (
               <button
                 key={type}
                 onClick={() => setBillingCycle(type)}
-                className={`relative px-14 py-2 text-sm font-semibold rounded-md z-10 ${
-                  billingCycle === type ? "text-black" : "text-gray-500"
-                }`}
+                className={`relative sm:px-14 px-6 py-2 sm:w-72 w-[250px] text-sm font-semibold rounded-md z-10 ${billingCycle === type ? "text-black" : "text-gray-500"
+                  }`}
               >
                 {billingCycle === type && (
                   <motion.div
@@ -122,11 +122,17 @@ const Pricing = () => {
                     className="absolute inset-0 bg-white shadow rounded-md z-0"
                   />
                 )}
-                <span className="relative z-10 capitalize">{type}</span>
+                <span className="relative z-10 capitalize flex flex-col items-center justify-center gap-1">
+                  {type}
+                  {type === "quarterly" && (
+                    <span className="text-[#2c6472] text-base font-medium">(save 10%)</span>
+                  )}
+                </span>
               </button>
             ))}
           </div>
         </LayoutGroup>
+
       </div>
 
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 px-4">
@@ -143,11 +149,10 @@ const Pricing = () => {
                 rotateY: billingCycle === "monthly" ? 0 : 180,
               }}
               transition={{ duration: 0.1, ease: "linear" }}
-              className={`relative w-full h-full preserve-3d rounded-xl border hover:shadow-md transition-all duration-300 ${
-                plan.isPopular
+              className={`relative w-full h-full preserve-3d rounded-xl border hover:shadow-md transition-all duration-300 ${plan.isPopular
                   ? "scale-110 border-[#2c6472] bg-white"
                   : "border-gray-200 bg-white"
-              }`}
+                }`}
             >
               {/* Front */}
               <div className="absolute inset-0 backface-hidden p-6">
@@ -156,7 +161,7 @@ const Pricing = () => {
                   {plan.price.monthly}
                   <span className="text-sm font-medium text-gray-500">
                     {" "}
-                    / monthly
+
                   </span>
                 </p>
                 <ul className="flex flex-col gap-2 text-sm text-gray-700 mb-6 mt-8 space-y-2">
@@ -176,16 +181,15 @@ const Pricing = () => {
                     </li>
                   ))}
                 </ul>
-                <button
+                <Link to='/user/signup'><button
                   disabled={!plan.isAvailable}
-                  className={`w-full py-2 text-sm font-medium rounded-md ${
-                    plan.isAvailable
+                  className={`w-full py-2 text-sm font-medium rounded-md ${plan.isAvailable
                       ? "bg-[#2c6472] text-white hover:bg-[#265864] mt-12"
                       : "bg-black text-white opacity-70 mt-2"
-                  }`}
+                    }`}
                 >
                   {plan.buttonText}
-                </button>
+                </button></Link>
               </div>
 
               {/* Back */}
@@ -195,7 +199,7 @@ const Pricing = () => {
                   {plan.price.quarterly}
                   <span className="text-sm font-medium text-gray-500">
                     {" "}
-                    / quarterly
+
                   </span>
                 </p>
                 <ul className="flex flex-col gap-2 text-sm text-gray-700 mb-6 mt-8 space-y-2">
@@ -215,16 +219,15 @@ const Pricing = () => {
                     </li>
                   ))}
                 </ul>
-                <button
+                <Link to='/user/signup'> <button
                   disabled={!plan.isAvailable}
-                  className={`w-full py-2 text-sm font-medium rounded-md ${
-                    plan.isAvailable
+                  className={`w-full py-2 text-sm font-medium rounded-md ${plan.isAvailable
                       ? "bg-[#2c6472] text-white hover:bg-[#265864] mt-12"
                       : "bg-black text-white opacity-70 mt-2"
-                  }`}
+                    }`}
                 >
                   {plan.buttonText}
-                </button>
+                </button></Link>
               </div>
             </motion.div>
           </div>

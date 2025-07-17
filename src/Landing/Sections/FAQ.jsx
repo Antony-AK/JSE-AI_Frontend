@@ -45,7 +45,7 @@ const FAQ = () => {
   return (
     <section
       id="faqs"
-      className="max-w-[1100px] h-auto mx-auto px-4 sm:px-6 md:px-10 py-10"
+      className="max-w-[1100px] h-[100vh] mx-auto px-4 sm:px-6 md:px-10 py-10"
     >
       <h2 className="text-xl sm:text-2xl font-semibold mb-5">
         Frequently Asked Questions

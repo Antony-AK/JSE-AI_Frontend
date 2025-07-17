@@ -29,26 +29,42 @@ const Footer = () => {
             <div className="rounded-full bg-white p-2">
               <FaEnvelope className="text-[#2c6472] w-3 h-3" />
             </div>
-            <span>info@arshan.de</span>
+            <a
+              href="mailto:info@arshan.de"
+              className="hover:underline text-white"
+            >
+              info@arshan.digital
+            </a>
           </div>
         </div>
-      </div>
+         </div>
 
-      <hr className="w-[90%] mx-auto my-8 border-gray-400 px-20" />
+        <hr className="w-[90%] mx-auto my-8 border-gray-400 px-20" />
 
-      <div className="mx-auto flex flex-col px-20 md:flex-row justify-between items-center text-sm font-medium">
-        <p className="text-center text-xs sm:text-sm">
-          © 2025 JSE AI powered by Arshan. All Rights Reserved
-        </p>
-        <div className="flex gap-7 mt-3 md:mt-0">
-          <div className="rounded-full bg-white p-2">
-            <FaInstagram className="text-[#2c6472] w-4 h-4" />
-          </div>
-          <div className="rounded-full bg-white p-2">
-            <FaLinkedinIn className="text-[#2c6472] w-4 h-4" />
+        <div className="mx-auto flex flex-col px-20 md:flex-row justify-between items-center text-sm font-medium">
+          <p className="text-center text-xs sm:text-sm">
+            © 2025 JSE AI powered by Arshan. All Rights Reserved
+          </p>
+          <div className="flex gap-7 mt-3 md:mt-0">
+            <a
+              href="https://www.instagram.com/arshan_consulting/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full bg-white p-2"
+            >
+              <FaInstagram className="text-[#2c6472] w-4 h-4" />
+            </a>
+            <a
+              href="https://www.linkedin.com/company/arshanconsulting/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full bg-white p-2"
+            >
+              <FaLinkedinIn className="text-[#2c6472] w-4 h-4" />
+            </a>
           </div>
         </div>
-      </div>
+     
     </footer>
   );
 };

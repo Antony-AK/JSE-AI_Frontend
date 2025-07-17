@@ -35,6 +35,12 @@ const Projects = () => {
   const [addedCompanies, setAddedCompanies] = useState([]);
   const [projectList, setProjectList] = useState([]);
   const [activeId, setActiveId] = useState(null);
+  const [hasWorkExperience, setHasWorkExperience] = useState(false);
+  const [showSkip, setShowSkip] = useState(false);
+
+
+
+
 
   const tryParseDate = (date) => {
     if (!date) return null;
@@ -64,6 +70,44 @@ const Projects = () => {
       }
     }
   }, []);
+
+  useEffect(() => {
+    const fetchWorkExperiences = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/work-experience`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+              console.log("🔁 API raw response:", res); // <- Log entire response
+
+
+        const experiences = res.data?.work_experiences || [];
+        if (experiences.length > 0) {
+          setHasWorkExperience(true);
+        }
+      } catch (error) {
+        console.error("Error fetching work experiences:", error);
+      }
+    };
+
+    fetchWorkExperiences();
+  }, []);
+
+useEffect(() => {
+  console.log("🔐 Auth token:", token);
+
+  console.log("🔥 Checking skip condition:");
+  console.log("hasWorkExperience:", hasWorkExperience);
+  console.log("projectList.length:", projectList.length);
+  if (hasWorkExperience || projectList.length > 0) {
+    setShowSkip(true);
+  } else {
+    setShowSkip(false);
+  }
+}, [hasWorkExperience, projectList]);
+
 
 
 
@@ -179,6 +223,10 @@ const Projects = () => {
           const finalList = found ? updatedList : [...projectList, { ...formData, id: Date.now() }];
 
           setProjectList(finalList);
+
+if (finalList.length > 0 && hasWorkExperience === true) {
+  setShowSkip(true);
+}
           setFormData({
             project_name: '',
             institution: '',
@@ -207,13 +255,16 @@ const Projects = () => {
     <div className='p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen '>
 
       <div className="flex justify-end mt-5 items-center w-[95%]">
-        
-        {/* {projectList.length > 0 && ( */}
-          <div className="flex items-center p-4 pt-0 cursor-pointer" onClick={() => navigate('/user/onboarding/languages')}>
+        {showSkip  &&(
+          <div
+            className="flex items-center p-4 pt-0 cursor-pointer"
+            onClick={() => navigate('/user/onboarding/languages')}
+          >
             <p className='ml-2 text-lg font-medium text-[#00000057]'>Skip</p>
           </div>
-        {/* )} */}
+        )}
       </div>
+
 
       <p className='text-[#2c6472] font-semibold -mt-10'>STEP 4 OF 8</p>
 

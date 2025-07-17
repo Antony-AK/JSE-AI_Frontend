@@ -8,52 +8,54 @@ import avatar_5 from '../../assets/avatar-5.png'
 
 const testimonials = [
   {
-    name: "Andrew",
-    role: "Product Designer",
+    name: "Ravi Menon",
+    role: "Data Analyst",
     image: avatar_1,
     rating: 5,
     feedback:
-      "AI made the job hunt effortless. Applied to 30+ roles in one week and landed interviews!",
+      "This platform gave me complete visibility into my job applications. Within 10 days, I got 3 callbacks!",
   },
   {
-    name: "Steve",
-    role: "Frontend Developer",
+    name: "Daniel Cruz",
+    role: "Frontend Engineer",
     image: avatar_2,
     rating: 5,
     feedback:
-      "The AI-generated CV and tracking dashboard gave me clarity I never had before. Highly recommended!",
+      "Loved the way it organized my skills and resume! Everything looked so professional and clean.",
   },
   {
-    name: "Frank",
-    role: "Backend Developer",
+    name: "Mehul Sinha",
+    role: "AI Research Intern",
     image: avatar_3,
     rating: 5,
     feedback:
-      "The internal & external job options are super useful. JSE AI’s AI-powered system shows exactly what fits me.",
+      "Being new to the field, I was confused where to start. JSE AI guided me step-by-step. I finally feel confident!",
   },
   {
-    name: "Andrew",
-    role: "Product Designer",
+    name: "Karthik Sharma",
+    role: "DevOps Engineer",
     image: avatar_4,
     rating: 5,
     feedback:
-      "AI made the job hunt effortless. Applied to 30+ roles in one week and landed interviews!",
+      "I didn’t expect much, but wow! The automated job matching and resume tracking blew my mind. Super efficient.",
   },
   {
-    name: "Steve",
-    role: "Frontend Developer",
+    name: "Jay Patel",
+    role: "UX Designer",
     image: avatar_5,
     rating: 5,
     feedback:
-      "The AI-generated CV and tracking dashboard gave me clarity I never had before. Highly recommended!",
+      "The design, ease of use, and how everything flows—this feels built for job seekers like me. Total game changer!",
   },
 ];
 
+
+
 const Testimonial = () => {
   return (
-    <section className="py-12 h-auto bg-white px-4">
+    <section className=" h-[70vh]   bg-white px-4">
       {/* Title & Subheading */}
-      <div className="mb-14 max-w-[1200px] mx-auto px-4">
+      <div className="mb-14 max-w-[1200px] mt-20 mx-auto px-4">
         <h2 className="text-xl sm:text-2xl font-semibold">What Our Users Say</h2>
         <p className="text-sm sm:text-[15px] text-gray-400 mt-1 font-semibold">
           Join thousands of professionals who have transformed their careers

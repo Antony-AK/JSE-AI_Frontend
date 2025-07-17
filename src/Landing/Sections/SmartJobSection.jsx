@@ -7,8 +7,8 @@ import bot3 from "../../assets/bot3.png"
 
 const SmartJobSection = () => {
   return (
-    <section className="relative bg-white py-16 px-6 sm:px-6 md:px-10">
-      <div className="relative max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
+    <section className="relative bg-white my-auto px-6 min-h-[90vh] sm:px-6 md:px-10">
+      <div className="relative max-w-7xl mt-20 mx-auto flex flex-col md:flex-row items-center gap-12">
         {/* Left: Image + Robot */}
         <div className="relative w-full md:w-1/2 flex justify-center">
           <div className="aspect-square w-[80%] bg-slate-200 rounded-xl overflow-hidden">

@@ -305,6 +305,68 @@ const MyApplication = () => {
     }
   };
 
+  const fetchRecommendedJobs = async () => {
+    setLoading(true);
+    try {
+      const token = sessionStorage.getItem("authToken");
+      const response = await axios.get(`${BASE_URL}/api/jobs`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { recommended: true, offset: 0, limit: perPage },
+      });
+
+      const recommendedJobs = response.data.jobs || [];
+
+      const mappedJobs = recommendedJobs.map((job) => ({
+        id: job.job_id || job.id,
+        jobTitle: job.job_title || job.title || "Untitled Job",
+        title: job.title || job.job_title,
+        companyName: job.company || "Unknown Company",
+        location: job.location || "Location not specified",
+        postedDate: job.posted_date || "Not specified",
+        description: job.description?.slice(0, 100) + "...",
+        Description: job.description || "No description available",
+        matchValue: job.match_score || 50,
+        skillData: [
+          {
+            label: "Required Skills",
+            value: job.skills ? job.skills.split(",").map((s) => s.trim()) : [],
+          },
+          {
+            label: "Your Skills",
+            value: Array.isArray(job.user_skills) ? job.user_skills : [],
+          },
+          {
+            label: "Job Type",
+            value: job.job_type || "Not specified",
+          },
+        ],
+        selected: job.selected || false,
+        cvGenerated: job.cv_generated || false,
+        coverLetterGenerated: job.cover_letter_generated || false,
+        viewLink: job.view_link || "#",
+      }));
+
+     
+
+      setSelectedJobs(mappedJobs);
+      setSelectedJob(mappedJobs[0] || null);
+      setPagination({
+        current: 1,
+        total: response.data.pagination?.total || mappedJobs.length,
+        per_page: response.data.pagination?.per_page || perPage,
+        next: response.data.pagination?.next || null,
+        prev: response.data.pagination?.prev || null,
+      });
+
+      setOffset(0);
+      setLoading(false);
+    } catch (error) {
+      console.error("Failed to fetch recommended jobs:", error);
+      setLoading(false);
+    }
+  };
+
+
   useEffect(() => {
     const savedOffset = sessionStorage.getItem("jobPaginationOffset");
     const validOffset = savedOffset ? parseInt(savedOffset) : 0;
@@ -452,7 +514,14 @@ const MyApplication = () => {
     const isFreePlan = infoBlock.subscription_tier === "free";
     const internalUsed = infoBlock.internal_application_count || 0;
 
-    if (isFreePlan && internalUsed === 0) {
+    const cvAlreadyGenerated = selectedJob?.cvGenerated;
+    const clAlreadyGenerated = selectedJob?.coverLetterGenerated;
+    if (
+      isFreePlan &&
+      internalUsed === 0 &&
+      !cvAlreadyGenerated &&
+      !clAlreadyGenerated
+    ) {
       setShowLimitModal(true);
       return;
     }
@@ -461,6 +530,14 @@ const MyApplication = () => {
     const savedLang = jobLanguageMap[jobId];
 
     setActionType(type); // save action type for later
+
+    if (
+      (type === "cv" && cvAlreadyGenerated) ||
+      (type === "cl" && clAlreadyGenerated)
+    ) {
+      handleLanguageSelect(savedLang || "english", type);
+      return;
+    }
 
     if (savedLang) {
       handleLanguageSelect(savedLang, type);
@@ -583,6 +660,8 @@ const MyApplication = () => {
 
 
 
+
+
   const getOffsetFromUrl = (url) => {
     if (!url) return 0;
     const params = new URLSearchParams(url.split("?")[1]);
@@ -625,7 +704,7 @@ const MyApplication = () => {
               count: mappedJobs.length
             });
             setSelectedTitle(title); // 🔥 THIS IS WHAT YOU WERE MISSING
-              setIsFilterActive(true); // ✅ Mark that we applied a filter
+            setIsFilterActive(true); // ✅ Mark that we applied a filter
 
           }}
         />
@@ -713,9 +792,10 @@ const MyApplication = () => {
           {/* Dropdown Content */}
 
           <div
-            className=" absolute left-0 w-52 -top-4 bg-white border border-gray-300 rounded-md  z-10 overflow-hidden"
+            className="  left-0 w-52 -top-4 bg-white border border-gray-300 rounded-md  overflow-hidden"
           >
-            <button className="w-full px-2 py-1.5 text-[13px] text-black font-medium hover:bg-gray-100 text-center">
+            <button onClick={fetchRecommendedJobs} // 👈 this is the hook
+              className="w-full px-2 py-1.5 text-[13px] text-black font-medium hover:bg-gray-100 text-center">
               Recommended Jobs
             </button>
             {/* Add more items below if you want */}
@@ -733,17 +813,18 @@ const MyApplication = () => {
               No {(selectedTitle?.charAt(0).toUpperCase() + selectedTitle?.slice(1))} jobs found
             </h2>
             <p className="text-gray-500">Please check back later.</p>
-               <button
-                        onClick={() => {
-                          setFilteredJobs([]);
-                          setSelectedTitle('');
-                              setIsFilterActive(false); // 🧼 clear flag too
-
-                        }}
-                        className="text-sm text-red-600 underline  mt-6 hover:text-blue-800 transition"
-                      >
-                        Clear Filter
-                      </button>
+            <button
+              onClick={() => {
+                setFilteredJobs([]);
+                setSelectedTitle('');
+                setIsFilterActive(false); // 🧼 clear flag too
+                setSelected('All');           // ✅ clear dropdown/tab selection
+                fetchSelectedJobs();
+              }}
+              className="text-sm text-red-600 underline  mt-6 hover:text-blue-800 transition"
+            >
+              Clear Filter
+            </button>
           </div>
         ) : (
           <div className="flex flex-1 border-t border-gray-300 -mt-5  gap-5">
@@ -765,7 +846,7 @@ const MyApplication = () => {
                         onClick={() => {
                           setFilteredJobs([]);
                           setSelectedTitle('');
-                              setIsFilterActive(false); // 🧼 clear flag too
+                          setIsFilterActive(false); // 🧼 clear flag too
 
                         }}
                         className="text-sm text-red-600 underline  mt-6 hover:text-blue-800 transition"
@@ -851,7 +932,7 @@ const MyApplication = () => {
                         </div>
 
                         <div className="flex absolute flex-col gap-2 mt-40 -left-3 ">
-                          {selectedJob?.skillData?.slice(0, 2).map((item, index) => (
+                          {job?.skillData?.slice(0, 2).map((item, index) => (
                             <div
                               key={index}
                               className="grid grid-cols-[120px_1fr] gap-2 text-sm"
@@ -904,7 +985,7 @@ const MyApplication = () => {
 
                           {/* Center text */}
                           <div className="absolute inset-0 flex m-2 items-center justify-center text-[13px]  font-semibold text-gray-800">
-                            {selectedJob.matchValue}%
+                            {job.matchValue}%
                           </div>
                         </div>
 
@@ -1102,10 +1183,10 @@ const MyApplication = () => {
                       })}
                     </div>
 
-                    <div className="flex mx-auto  gap-5 mt-4">
+                    <div className="flex  w-full gap-5 mt-4">
                       <button
                         onClick={() => handleGenerateClick("cv")}
-                        className="px-5 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[200px] h-[47px] text-white items-center justify-center rounded transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105"
+                        className="px-7 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[240px] h-[47px] text-white items-center justify-center rounded-3xl transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105"
                       >
                         CV
                       </button>
@@ -1113,7 +1194,7 @@ const MyApplication = () => {
                       <button
                         onClick={() => handleGenerateClick("cl")}
 
-                        className="px-5 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[200px] h-[47px] text-white rounded transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105"
+                        className="px-7 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[240px] h-[47px] text-white rounded-3xl transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105"
                       >
                         CL
                       </button>
@@ -1121,10 +1202,10 @@ const MyApplication = () => {
                     </div>
                     <br />
 
-                    <div className="flex w-[90%] mx-auto items-center  gap-5 ms-5 ">
+                    <div className="flex w-[100%] mx-auto items-center  gap-5  ">
 
                       <button
-                        className="flex gap-2 mx-auto justify-center items-center font-semibold text-[#2C6472] rounded-md text-sm bg-gray-200 underline border w-[200px] h-[47px] hover:border-[#2C6472] px-4  transition  hover:bg-white hover:text-[#2C6472] hover:scale-105"
+                        className="flex gap-2 mx-auto justify-center  items-center font-semibold text-[#2C6472] rounded-3xl text-sm bg-[#F4F4F4F4] underline border w-full h-[47px] hover:border-[#2C6472] px-4  transition  hover:bg-white hover:text-[#2C6472] hover:scale-105"
                         onClick={() => handleGetJobURL(selectedJob.id)}
                       >
                         Go to Job Link

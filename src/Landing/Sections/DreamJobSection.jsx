@@ -6,15 +6,15 @@ import bot3 from "../../assets/bot1.png";
 
 const DreamJobSection = () => {
   return (
-    <section id="features" className="bg-white py-16 px-4">
+    <section id="features" className="bg-white min-h-[100vh] px-4">
       {/* Top Section */}
-      <div className="relative z-[999] bg-white">
+      <div className=" ">
         {/* Heading & Bot */}
         <div className="text-center mb-20 relative">
           <img
             src={bot3}
             alt=""
-            className="w-32 sm:w-52 absolute -top-24 left-1/2 -translate-x-1/2"
+            className="w-36 sm:w-52 absolute -top-16 md:-top-24 left-1/2 -translate-x-1/2"
           />
           <h2 className="text-2xl sm:text-3xl mt-20 font-bold text-black">
             We bring you closer to your dream job.
@@ -60,7 +60,7 @@ const DreamJobSection = () => {
             <ul className="text-sm sm:text-base font-medium mt-4 space-y-2 text-gray-600 text-left list-disc list-inside max-w-[340px]">
               <li>Choose the language of application</li>
               <li>Pick recommended job posts or upload external ones</li>
-              <li>Enjoy automated applications — just review and send</li>
+              <li>Enjoy automated applications just review and send</li>
             </ul>
           </div>
 
@@ -77,7 +77,7 @@ const DreamJobSection = () => {
               Track Your Applications
             </h3>
             <ul className="text-sm sm:text-base font-medium mt-4 space-y-2 text-gray-600 text-left list-disc list-inside max-w-[300px]">
-              <li>Track all your job applications internally</li>
+              <li>Easily Track the status of all your applications </li>
               <li>Prepare for interviews with smart research</li>
               <li>Celebrate your perfect match!</li>
             </ul>

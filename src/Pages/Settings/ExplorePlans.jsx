@@ -375,7 +375,7 @@ const ExplorePlans = () => {
 
             <div className="border border-b-gray-200 h-px my-3"></div>
 
-            <div className="flex flex-col gap-5">
+            {/* <div className="flex flex-col gap-5">
 
                 <h2 className='text-lg font-bold'>Other Upgrades</h2>
 
@@ -412,7 +412,7 @@ const ExplorePlans = () => {
                     </button>
                 </div>
 
-            </div>
+            </div> */}
 
         </div>
     )
