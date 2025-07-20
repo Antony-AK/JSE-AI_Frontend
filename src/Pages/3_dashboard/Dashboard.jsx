@@ -174,9 +174,9 @@ const Dashboard = () => {
 
 
 
-if (loading || !Array.isArray(profileData?.new_jobs?.mini_new_jobs)) {
-  return <div className='flex justify-center items-center w-full h-full'><Loader /></div>;
-}
+  if (loading ) {
+    return <div className='flex justify-center items-center w-full h-full'><Loader /></div>;
+  }
   if (error) return <div className="text-red-500 flex justify-center items-center mt-64">{error}</div>;
 
   const handleStatusClick = () => {
@@ -187,60 +187,60 @@ if (loading || !Array.isArray(profileData?.new_jobs?.mini_new_jobs)) {
     <div className=" flex flex-col gap-5 bg-gray-100 p-5 ps-7">
 
       <div className="w-full">
-  <div className="lg:flex justify-center gap-x-5 gap-y-6">
+        <div className="lg:flex justify-center gap-x-5 gap-y-6">
 
-    {/* ✅ Total Applications */}
-    <div className="relative flex bg-gradient-to-br from-[#FFC2B0] to-[#FF9AA2] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl max-[1260px]:text-sm">
-      <div className="flex flex-col justify-start items-start gap-5">
-        <p className="font-bold">Total Applied</p>
-        <h3 className="font-bold text-lg">{infoBlock.totalApplications}</h3>
-      </div>
-      <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
-        <img width="22px" height="22px" className="p-1" src={total_app_icon} alt="" />
-      </div>
-    </div>
+          {/* ✅ Total Applications */}
+          <div className="relative flex bg-gradient-to-br from-[#FFC2B0] to-[#FF9AA2] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl max-[1260px]:text-sm">
+            <div className="flex flex-col justify-start items-start gap-5">
+              <p className="font-bold">Total Applied</p>
+              <h3 className="font-bold text-lg">{infoBlock.totalApplications}</h3>
+            </div>
+            <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
+              <img width="22px" height="22px" className="p-1" src={total_app_icon} alt="" />
+            </div>
+          </div>
 
-    {/* ✅ Weekly Applied */}
-    <div className="relative flex bg-gradient-to-br from-[#FDA67B] to-[#FF9D6B] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl max-[1260px]:text-sm">
-      <div className="flex flex-col justify-start items-start gap-5">
-        <p className="font-bold">Weekly Applied</p>
-        <h3 className="font-bold text-lg">{infoBlock.weeklyApplications}</h3>
-      </div>
-      <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
-        <img width="24px" height="24px" className="p-1" src={jobs_available_icon} alt="" />
-      </div>
-    </div>
+          {/* ✅ Weekly Applied */}
+          <div className="relative flex bg-gradient-to-br from-[#FDA67B] to-[#FF9D6B] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl max-[1260px]:text-sm">
+            <div className="flex flex-col justify-start items-start gap-5">
+              <p className="font-bold">Weekly Applied</p>
+              <h3 className="font-bold text-lg">{infoBlock.weeklyApplications}</h3>
+            </div>
+            <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
+              <img width="24px" height="24px" className="p-1" src={jobs_available_icon} alt="" />
+            </div>
+          </div>
 
-    {/* ✅ Recommended Jobs */}
-    <div className="relative flex bg-gradient-to-br from-[#BDE4FB] to-[#A3C7FD] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl max-[1260px]:text-sm">
-      <div className="flex flex-col justify-start items-start gap-5">
-        <p className="font-bold">Recommended Jobs</p>
-        <h3 className="font-bold text-lg">{infoBlock.topJobs}</h3>
-      </div>
-      <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
-        <img width="24px" height="24px" className="p-1" src={selectable_jobs_icon} alt="" />
-      </div>
-    </div>
+          {/* ✅ Recommended Jobs */}
+          <div className="relative flex bg-gradient-to-br from-[#BDE4FB] to-[#A3C7FD] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl max-[1260px]:text-sm">
+            <div className="flex flex-col justify-start items-start gap-5">
+              <p className="font-bold">Recommended Jobs</p>
+              <h3 className="font-bold text-lg">{infoBlock.topJobs}</h3>
+            </div>
+            <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
+              <img width="24px" height="24px" className="p-1" src={selectable_jobs_icon} alt="" />
+            </div>
+          </div>
 
-    {/* ✅ Package Info */}
-    <div onClick={() => setShowPackagePopup(true)} className="relative flex bg-gradient-to-br from-[#6FE297] to-[#48D77A] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl cursor-pointer max-[1260px]:text-sm">
-      <div className="flex flex-col justify-start items-start gap-1">
-        <p className="font-bold">Package</p>
-        <div className="flex gap-1">
-          <p className="text-sm font-semibold">{infoBlock.internalApps}</p> /
-          <p className="text-sm font-semibold">{infoBlock.externalApps}</p>
+          {/* ✅ Package Info */}
+          <div onClick={() => setShowPackagePopup(true)} className="relative flex bg-gradient-to-br from-[#6FE297] to-[#48D77A] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl cursor-pointer max-[1260px]:text-sm">
+            <div className="flex flex-col justify-start items-start gap-1">
+              <p className="font-bold">Package</p>
+              <div className="flex gap-1">
+                <p className="text-sm font-semibold">{infoBlock.internalApps}</p> /
+                <p className="text-sm font-semibold">{infoBlock.externalApps}</p>
+              </div>
+              <h3 className="font-semibold">
+                {infoBlock.tier.charAt(0).toUpperCase() + infoBlock.tier.slice(1)}
+              </h3>
+            </div>
+            <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
+              <img width="26px" height="26px" className="p-1" src={total_experience_icon} alt="" />
+            </div>
+          </div>
+
         </div>
-        <h3 className="font-semibold">
-          {infoBlock.tier.charAt(0).toUpperCase() + infoBlock.tier.slice(1)}
-        </h3>
       </div>
-      <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
-        <img width="26px" height="26px" className="p-1" src={total_experience_icon} alt="" />
-      </div>
-    </div>
-
-  </div>
-</div>
 
 
 
@@ -426,57 +426,56 @@ if (loading || !Array.isArray(profileData?.new_jobs?.mini_new_jobs)) {
               <Link to='/user/my-jobs/internal'> <p className='text-[#2c6472] font-medium' >View All</p></Link>
             </div>
 
-            {jobs.map((job, index) => (
-              <React.Fragment key={index}>
-                <div className="flex justify-between">
-                  <div className="flex flex-col gap-1">
-                    <h2 className='font-semibold text-[#2c6472]'>{job.title}</h2>
-                    <p className='font-medium text-sm'>{job.company}</p>
-                    <p className='text-sm'>{job.location}</p>
-                  </div>
-
-                  {/* Profile Completion Circle */}
-                  <div className="flex flex-col items-center mr-5">
-                    <div className="relative w-14 h-14">
-                      <svg className="absolute top-0 left-0 w-full h-full">
-                        <circle
-                          cx="28"
-                          cy="28"
-                          r="24"
-                          stroke="#E5E7EB"
-                          strokeWidth="4"
-                          fill="none"
-                        />
-                        <circle
-                          cx="28"
-                          cy="28"
-                          r="24"
-                          stroke="#2c6472"
-                          strokeWidth="4"
-                          fill="none"
-                          strokeDasharray="150"
-                          strokeDashoffset={
-                            !isNaN(animatedCompletions[index])
-                              ? 150 - (150 * animatedCompletions[index]) / 100
-                              : 150
-                          } strokeLinecap="round"
-                          transform="rotate(-90 28 28)"
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-gray-800">
-                        {animatedCompletions[index]}%
-                      </div>
+            {jobs.length > 0 ? (
+              jobs.map((job, index) => (
+                <React.Fragment key={index}>
+                  <div className="flex justify-between">
+                    <div className="flex flex-col gap-1">
+                      <h2 className='font-semibold text-[#2c6472]'>{job.title}</h2>
+                      <p className='font-medium text-sm'>{job.company}</p>
+                      <p className='text-sm'>{job.location}</p>
                     </div>
-                    <span className="text-xs font-medium text-gray-600 mt-1">Profile Match</span>
-                  </div>
-                </div>
 
-                {/* Divider */}
-                {index !== jobs.length - 1 && (
-                  <div className="mx-auto border-t border-t-[#0000000F] w-[97%]"></div>
-                )}
-              </React.Fragment>
-            ))}
+                    {/* Profile Completion Circle */}
+                    <div className="flex flex-col items-center mr-5">
+                      <div className="relative w-14 h-14">
+                        <svg className="absolute top-0 left-0 w-full h-full">
+                          <circle cx="28" cy="28" r="24" stroke="#E5E7EB" strokeWidth="4" fill="none" />
+                          <circle
+                            cx="28"
+                            cy="28"
+                            r="24"
+                            stroke="#2c6472"
+                            strokeWidth="4"
+                            fill="none"
+                            strokeDasharray="150"
+                            strokeDashoffset={
+                              !isNaN(animatedCompletions[index])
+                                ? 150 - (150 * animatedCompletions[index]) / 100
+                                : 150
+                            }
+                            strokeLinecap="round"
+                            transform="rotate(-90 28 28)"
+                          />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-gray-800">
+                          {animatedCompletions[index]}%
+                        </div>
+                      </div>
+                      <span className="text-xs font-medium text-gray-600 mt-1">Profile Match</span>
+                    </div>
+                  </div>
+
+                  {index !== jobs.length - 1 && (
+                    <div className="mx-auto border-t border-t-[#0000000F] w-[97%]"></div>
+                  )}
+                </React.Fragment>
+              ))
+            ) : (
+              <div className="text-gray-500 text-sm text-center py-4">
+                No new jobs found matching your profile.
+              </div>
+            )}
           </div>
 
           {/* Box - 4 */}

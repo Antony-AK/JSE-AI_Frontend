@@ -6,7 +6,7 @@ import bot3 from "../../assets/bot1.png";
 
 const DreamJobSection = () => {
   return (
-    <section id="features" className="bg-white min-h-[100vh] px-4">
+    <section id="features" className="bg-white scroll-mt-28 min-h-[100vh] px-4">
       {/* Top Section */}
       <div className=" ">
         {/* Heading & Bot */}
@@ -57,7 +57,7 @@ const DreamJobSection = () => {
             <h3 className="text-lg sm:text-xl font-semibold text-center mt-6">
               Find Your Match & Apply
             </h3>
-            <ul className="text-sm sm:text-base font-medium mt-4 space-y-2 text-gray-600 text-left list-disc list-inside max-w-[340px]">
+            <ul className="text-sm sm:text-base font-medium mt-4 space-y-2 ms-4  text-gray-600 text-left list-disc list-inside max-w-[340px]">
               <li>Choose the language of application</li>
               <li>Pick recommended job posts or upload external ones</li>
               <li>Enjoy automated applications just review and send</li>

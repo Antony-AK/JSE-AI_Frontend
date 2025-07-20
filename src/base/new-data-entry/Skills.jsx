@@ -371,7 +371,6 @@ const Skills = () => {
                 navigate('/user/dashboard');
             }
 
-            await fetchEntryProgressAndRedirect(token);
 
         } catch (error) {
             console.error("❌ Network or server error:", error);
@@ -379,37 +378,6 @@ const Skills = () => {
     };
 
 
-    const fetchEntryProgressAndRedirect = async (token) => {
-        try {
-            const res = await fetch(`${BASE_URL}/user/entry-progress/check`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            const progress = await res.json();
-            console.log("🧠 Entry Progress Response:", progress);
-
-            if (res.ok && progress.completed === true) {
-                // ✅ Only allow access to dashboard if completed
-                navigate('/user/dashboard');
-            } else {
-                // ❌ Any incomplete, unknown, or invalid response — logout user
-                toast.error("❌ Data entry incomplete or invalid user. Logging out...");
-                sessionStorage.clear();
-                localStorage.clear();
-                navigate('/user/login');
-            }
-        } catch (err) {
-            console.error('💥 Error:', err);
-            toast.error("Something went wrong. Logging out...");
-            sessionStorage.clear();
-            localStorage.clear();
-            navigate('/user/login');
-        }
-    };
 
 
     // 🔁 Hook to handle click outside

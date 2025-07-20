@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import axios from "axios"; // 👈 import axios at the top
+import { BASE_URL } from "../../utils/api";
+import { toast } from "react-toastify";
+
+
 
 const ClaimSpot = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +13,30 @@ const ClaimSpot = () => {
     profession: "",
   });
 
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/api/sign-up-bonus`,
+      {
+        name: formData.name,
+        email: formData.email,
+        expected_profession: formData.profession, // ✅ mapped key
+      }
+    );
+
+    console.log(" Successfully submitted:", response.data);
+    toast.success(" Spot claimed successfully!");
+    setFormData({ name: "", email: "", profession: "" }); // Reset form
+
+  } catch (error) {
+    console.error(" Error submitting form:", error);
+    alert("Oops! Something went wrong. Try again.");
+  }
+};
+
+
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -15,17 +44,12 @@ const ClaimSpot = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    console.log(formData);
-  };
 
   return (
-    <div className="px-4 sm:px-6 md:px-10 min-h-[100vh]">
+    <div className="px-4 sm:px-6 min-h-[80vh]">
       <section
         id="contactus"
-        className="bg-[#245e69] rounded-xl  p-6 md:p-10 mt-36 text-white max-w-[1100px] mx-auto my-20 flex flex-col md:flex-row items-stretch gap-8"
+        className="bg-[#245e69] scroll-mt-28 rounded-xl  p-6 md:p-10  mt-36 mb-14 md:mb-0 text-white max-w-[1100px] mx-auto  flex flex-col md:flex-row items-stretch gap-8"
       >
         {/* Left Side */}
         <div className="basis-[55%] flex flex-col justify-between">
@@ -109,7 +133,6 @@ const ClaimSpot = () => {
                 className="w-full border text-xs sm:text-sm border-gray-300 rounded-full px-5 py-3 outline-none"
                 value={formData.profession}
                 onChange={handleChange}
-                required
               />
             </div>
           </div>

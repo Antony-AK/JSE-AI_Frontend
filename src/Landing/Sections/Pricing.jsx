@@ -97,7 +97,7 @@ const Pricing = () => {
   const [billingCycle, setBillingCycle] = useState("monthly");
 
   return (
-    <div id="pricing" className="flex flex-col gap-5 mb-20 px-4 py-12">
+    <div id="pricing" className="flex flex-col gap-5 md:mb-20 px-4 py-12">
       <div className="flex flex-col justify-center gap-5 text-center mb-10">
         <h2 className="text-2xl font-semibold">Choose Your Perfect Plan</h2>
         <p className="text-gray-500 font-semibold">

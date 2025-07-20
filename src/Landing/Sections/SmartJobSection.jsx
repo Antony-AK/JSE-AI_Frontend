@@ -11,7 +11,7 @@ const SmartJobSection = () => {
       <div className="relative max-w-7xl mt-20 mx-auto flex flex-col md:flex-row items-center gap-12">
         {/* Left: Image + Robot */}
         <div className="relative w-full md:w-1/2 flex justify-center">
-          <div className="aspect-square w-[80%] bg-slate-200 rounded-xl overflow-hidden">
+          <div className="aspect-square md:w-[80%] bg-slate-200 rounded-xl overflow-hidden">
             <video
               loop
               autoPlay
@@ -37,7 +37,7 @@ const SmartJobSection = () => {
           </p>
 
           {/* Features */}
-          <ul className="space-y-10 text-sm sm:text-base text-gray-700">
+          <ul className="space-y-7 md:space-y-10 text-sm sm:text-base text-gray-700">
             <li className="flex items-start gap-3">
               <img src={smartjobicon} alt="icon" className="w-5 h-5 mt-1" />
               <div>

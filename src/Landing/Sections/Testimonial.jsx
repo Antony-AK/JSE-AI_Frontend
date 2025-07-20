@@ -53,7 +53,7 @@ const testimonials = [
 
 const Testimonial = () => {
   return (
-    <section className=" h-[70vh]   bg-white px-4">
+    <section className=" h-[50vh] md:h-[60vh]   bg-white px-4">
       {/* Title & Subheading */}
       <div className="mb-14 max-w-[1200px] mt-20 mx-auto px-4">
         <h2 className="text-xl sm:text-2xl font-semibold">What Our Users Say</h2>

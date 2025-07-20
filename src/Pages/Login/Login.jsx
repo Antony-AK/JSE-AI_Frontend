@@ -39,7 +39,33 @@ const Login = () => {
       if (response.ok) {
         sessionStorage.setItem('authToken', data.token);
         fetchProfileImage(data.token); // ✅ Pass the token explicitly
-        fetchEntryProgressAndRedirect(data.token);
+
+         const { next_step, progress_completed } = data.user;
+
+      const stepToPath = {
+        personal_infos: '/user/onboarding/personal-information',
+        work_experiences: '/user/onboarding/work-experience',
+        educations: '/user/onboarding/education',
+        projects: '/user/onboarding/projects',
+        languages: '/user/onboarding/languages',
+        certificates: '/user/onboarding/certificates',
+        preferred_job_titles: '/user/onboarding/jobtitles',
+        key_skills: '/user/onboarding/skills',
+      };
+
+      const isFirstLogin = localStorage.getItem('firstLogin') === 'true';
+
+      if (progress_completed) {
+        navigate('/user/dashboard');
+      } else if (isFirstLogin) {
+        localStorage.removeItem('firstLogin');
+        navigate('/user/dataonboarding');
+      } else if (next_step && stepToPath[next_step]) {
+        navigate(stepToPath[next_step]);
+      } else {
+        navigate('/user/dataonboarding'); // Fallback
+      }
+
       } else {
         toast.error(data.issue || 'Error occurred. Try again.');
         setLoading(false); // ✅ Stop loading on error
@@ -47,68 +73,6 @@ const Login = () => {
     } catch (err) {
       toast.error('Network error: ' + err.message);
       setLoading(false); // ✅ Stop loading on error
-    }
-  };
-
-
-  const fetchEntryProgressAndRedirect = async (token) => {
-    try {
-      setLoading(true); // Turn on loading
-      const res = await fetch(`${BASE_URL}/user/entry-progress/check`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      const progress = await res.json();
-
-      console.log("🧠 Entry Progress Response:", progress);
-
-      if (res.ok) {
-        if (progress.completed) {
-          navigate('/user/dashboard');
-        } else {
-          const stepToPath = {
-            personal_infos: '/user/onboarding/personal-information',
-            work_experiences: '/user/onboarding/work-experience',
-            educations: '/user/onboarding/education',
-            projects: '/user/onboarding/projects',
-            languages: '/user/onboarding/languages',
-            certificates: '/user/onboarding/certificates',
-            preferred_job_titles: '/user/onboarding/jobtitles',
-            key_skills: '/user/onboarding/skills',
-          };
-
-
-
-          const nextStep = progress.next_step;
-
-          // 👇 Check if it's the FIRST login after signup
-          const isFirstLogin = localStorage.getItem('firstLogin') === 'true';
-
-          if (isFirstLogin) {
-            localStorage.removeItem('firstLogin'); // ✅ Clear after using
-            navigate('/user/dataonboarding'); // 🚀 Force to onboarding method chooser
-          } else if (nextStep && stepToPath[nextStep]) {
-            navigate(stepToPath[nextStep]); // Go to next step
-          } else {
-            navigate('/user/dataonboarding'); // Fallback if no step info
-          }
-
-          console.log("🧠 Onboarding Progress:", progress);
-          console.log("👉 Redirecting to:", stepToPath[nextStep] || '/user/dataonboarding');
-
-          setLoading(false);
-        }
-      } else {
-        navigate('/user/dashboard'); // Fallback
-      }
-    } catch (err) {
-      console.error('💥 Error:', err);
-      navigate('/user/dashboard');
-    } finally {
     }
   };
 
