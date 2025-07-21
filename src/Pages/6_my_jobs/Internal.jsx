@@ -179,39 +179,41 @@ const MyApplication = () => {
       const totalItems = paginationInfo.total || 0;
       const currentPage = Math.floor(customOffset / perPage) + 1;
 
-      const mappedJobs = fetchedJobs.map((job) => {
+      const mappedJobs = fetchedJobs
+        .filter(job => job && typeof job === "object")
+        .map((job) => {
 
-        return {
-          id: job.job_id || job.id, // 👉 Use backend ID only
-          jobTitle: job.job_title || job.title || "Untitled Job",
-          title: job.title || job.job_title,
-          companyName: job.company || "Unknown Company",
-          company: job.company || "Unknown Company",
-          location: job.location || "Location not specified",
-          postedDate: job.posted_date || "Not specified",
-          description: job.description?.slice(0, 100) + "...",
-          Description: job.description || "No description available",
-          matchValue: job.match_score || 50,
-          skillData: [
-            {
-              label: "Required Skills",
-              value: job.skills ? job.skills.split(",").map((s) => s.trim()) : [],
-            },
-            {
-              label: "Your Skills",
-              value: Array.isArray(job.user_skills) ? job.user_skills : [],
-            },
-            {
-              label: "Job Type",
-              value: job.job_type || "Not specified",
-            },
-          ],
-          selected: job.selected || false,
-          cvGenerated: job.cv_generated || false,
-          coverLetterGenerated: job.cover_letter_generated || false,
-          viewLink: job.view_link || "#",
-        };
-      });
+          return {
+            id: job.job_id || job.id, // 👉 Use backend ID only
+            jobTitle: job.job_title || job.title || "Untitled Job",
+            title: job.title || job.job_title,
+            companyName: job.company || "Unknown Company",
+            company: job.company || "Unknown Company",
+            location: job.location || "Location not specified",
+            postedDate: job.posted_date || "Not specified",
+            description: job.description?.slice(0, 100) + "...",
+            Description: job.description || "No description available",
+            matchValue: job.match_score || 50,
+            skillData: [
+              {
+                label: "Required Skills",
+                value: job.skills ? job.skills.split(",").map((s) => s.trim()) : [],
+              },
+              {
+                label: "Your Skills",
+                value: Array.isArray(job.user_skills) ? job.user_skills : [],
+              },
+              {
+                label: "Job Type",
+                value: job.job_type || "Not specified",
+              },
+            ],
+            selected: job.selected || false,
+            cvGenerated: job.cv_generated || false,
+            coverLetterGenerated: job.cover_letter_generated || false,
+            viewLink: job.view_link || "#",
+          };
+        });
 
 
       setSelectedJobs(mappedJobs);
@@ -316,7 +318,7 @@ const MyApplication = () => {
 
       const recommendedJobs = response.data.jobs || [];
 
-      const mappedJobs = recommendedJobs.map((job) => ({
+      const mappedJobs = recommendedJobs .filter(job => job && typeof job === "object") .map((job) => ({
         id: job.job_id || job.id,
         jobTitle: job.job_title || job.title || "Untitled Job",
         title: job.title || job.job_title,
@@ -346,7 +348,7 @@ const MyApplication = () => {
         viewLink: job.view_link || "#",
       }));
 
-     
+
 
       setSelectedJobs(mappedJobs);
       setSelectedJob(mappedJobs[0] || null);
@@ -977,7 +979,7 @@ const MyApplication = () => {
                               strokeWidth="7"
                               fill="none"
                               strokeDasharray="282"  // Circumference of the circle (2πr)
-                              strokeDashoffset={282 - (282 * selectedJob.matchValue) / 100}
+                              strokeDashoffset={282 - (282 * job.matchValue || 0) / 100}
                               strokeLinecap="round"
                               transform="rotate(-90 50 50)"  // Rotate to start from top
                             />
@@ -985,7 +987,7 @@ const MyApplication = () => {
 
                           {/* Center text */}
                           <div className="absolute inset-0 flex m-2 items-center justify-center text-[13px]  font-semibold text-gray-800">
-                            {job.matchValue}%
+                            {job.matchValue  || 0}%
                           </div>
                         </div>
 

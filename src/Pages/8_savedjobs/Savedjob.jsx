@@ -555,7 +555,7 @@ const SavedJob = () => {
                               strokeWidth="7"
                               fill="none"
                               strokeDasharray="282"  // Circumference of the circle (2πr)
-                              strokeDashoffset={282 - (282 * selectedJob.matchValue) / 100}
+                              strokeDashoffset={282 - (282 * job.matchValue) / 100}
                               strokeLinecap="round"
                               transform="rotate(-90 50 50)"  // Rotate to start from top
                             />
