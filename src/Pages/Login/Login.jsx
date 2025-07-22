@@ -43,9 +43,9 @@ const Login = () => {
          const { next_step, progress_completed } = data.user;
 
       const stepToPath = {
-        personal_infos: '/user/onboarding/personal-information',
+        personal_info: '/user/onboarding/personal-information',
         work_experiences: '/user/onboarding/work-experience',
-        educations: '/user/onboarding/education',
+        academics: '/user/onboarding/education',
         projects: '/user/onboarding/projects',
         languages: '/user/onboarding/languages',
         certificates: '/user/onboarding/certificates',

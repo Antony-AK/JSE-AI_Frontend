@@ -1005,7 +1005,7 @@ const MyApplication = () => {
                         </button>
 
                         {activeMenuIndex === index && (
-                          <div className="absolute -right-2 mt-2 bg-white border border-gray-200 shadow-md rounded-md z-20 w-24">
+                          <div className="absolute -right-2 mt-2 bg-white border border-gray-200 shadow-md rounded-md z-5 w-24">
                             <button
                               className="w-fit text-left px-4 py-2 text-sm hover:bg-gray-100"
                               onClick={async (e) => {

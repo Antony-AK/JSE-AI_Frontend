@@ -38,20 +38,20 @@ const Signup = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
 
-    if (name === "phoneNumber") {
-      const numericValue = value.replace(/\D/g, ""); // only numbers
-      setFormData((prev) => ({ ...prev, [name]: numericValue }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+    // Clean phoneNumber only
+    const newValue = name === "phoneNumber" ? value.replace(/\D/g, "") : value;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: newValue
+    }));
 
     // Real-time password validation
     if (name === "password") {
-      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
-      const hasNumber = /\d/.test(value);
-      const isLongEnough = value.length >= 8;
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(newValue);
+      const hasNumber = /\d/.test(newValue);
+      const isLongEnough = newValue.length >= 8;
 
       if (!isLongEnough || !hasSpecialChar || !hasNumber) {
         setPasswordError("(Min 8 chars, with number & symbol.)");
@@ -60,6 +60,7 @@ const Signup = () => {
       }
     }
   };
+
 
   const toggleShowPassword = (field) => {
     setShowPassword((prev) => ({

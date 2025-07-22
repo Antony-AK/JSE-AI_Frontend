@@ -581,7 +581,7 @@ const SavedJob = () => {
                         </button>
 
                         {activeMenuIndex === index && (
-                          <div ref={menuRef} className="absolute -right-2 mt-2 bg-white border border-gray-200 shadow-md rounded-md z-20">
+                          <div ref={menuRef} className="absolute -right-2 mt-2 bg-white border border-gray-200 shadow-md rounded-md z-5">
                             <button
                               className="w-fit text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                               onClick={async (e) => {

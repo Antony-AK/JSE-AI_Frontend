@@ -5,7 +5,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { BASE_URL } from '../../utils/api'
 import warning from "../../assets/carbon_warning.png"
 
+
 const PersonalInfo = () => {
+  const location = useLocation();
 
   const navigate = useNavigate();
 
@@ -40,48 +42,94 @@ const PersonalInfo = () => {
   const [showSavePopup, setShowSavePopup] = useState(false);
 
 
-
   const fetchEmailAndPhoneOnly = async () => {
-  try {
-    console.log("📡 Fetching personal info...");
-    const res = await axios.get(`${BASE_URL}/personal-info`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    try {
+      console.log("📡 Fetching personal info...");
+      const res = await axios.get(`${BASE_URL}/personal-info`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    const info = res.data || {};
-    console.log("📬 Got info from backend:", info);
+      const raw = res.data;
 
-    setFormData(prev => ({
-      ...prev,
-      email: info.email || '',
-      phone: info.phone || ''
-    }));
-  } catch (err) {
-    console.error("❌ Failed to fetch email and phone:", err);
-  }
-};
+      let email = "";
+      let phone = "";
+      let first_name = "";
+      let second_name = "";
+      let linkedin_profile = "";
+      let country = "Germany";
+      let state = "";
+      let city = "";
+      let external_links = [];
+
+      if (raw.email && raw.phone) {
+        // Format: { email: "you@domain.com", phone: "123456" }
+        email = raw.email;
+        phone = raw.phone;
+      } else if (raw.personal_info) {
+        // Format: { personal_info: { ... } }
+        const info = raw.personal_info;
+        email = info.email || "";
+        phone = info.phone || "";
+        first_name = info.first_name || "";
+        second_name = info.second_name || "";
+        linkedin_profile = info.linkedin_profile || "";
+        country = info.country || "Germany";
+        state = info.state || "";
+        city = info.city || "";
+        external_links = Array.isArray(info.external_links) ? info.external_links : [];
+      }
+
+      setFormData(prev => ({
+        ...prev,
+        email,
+        phone,
+        first_name,
+        second_name,
+        linkedin_profile,
+        country,
+        state,
+        city
+      }));
+
+      if (external_links.length) {
+        const updatedLinks = ['website', 'github', 'blog', 'social media'].map(type => {
+          const match = external_links.find(link => link.type?.toLowerCase() === type);
+          return { type, url: match?.url || '' };
+        });
+        setExternalLinks(updatedLinks);
+      }
+
+      console.log("✅ Fetched and updated formData!");
+    } catch (err) {
+      console.error("❌ Failed to fetch personal info:", err);
+    }
+  };
+
 
 
 
   useEffect(() => {
-    fetchEmailAndPhoneOnly(); // Always get phone + email from backend
+    const prefillFromResume = () => {
+      const stored = sessionStorage.getItem("extractedResume");
+      if (!stored) return;
 
-    const stored = sessionStorage.getItem("extractedResume");
-    if (stored) {
       const parsed = JSON.parse(stored)?.data;
-
       console.log("📄 Prefilling from extractedResume:", parsed);
 
-      setFormData(prev => ({
-        ...prev,
-        first_name: parsed.first_name || '',
-        second_name: parsed.second_name || '',
-        city: parsed.city || '',
-        state: parsed.state || '',
-        country: parsed.country || '',
-        linkedin_profile: parsed.linkedin || '',
-        // phone and email will always come from backend
-      }));
+      setFormData(prev => {
+        return {
+          ...prev,
+          first_name: parsed.first_name || prev.first_name,
+          second_name: parsed.second_name || prev.second_name,
+          city: parsed.city || prev.city,
+          state: parsed.state || prev.state,
+          country: parsed.country || prev.country,
+          linkedin_profile: parsed.linkedin || prev.linkedin_profile,
+          // 🛡️ Extra check: If prev.email/phone is already set, NEVER overwrite them
+          email: prev.email?.trim() ? prev.email : parsed.email || '',
+          phone: prev.phone?.trim() ? prev.phone : parsed.phone || '',
+        };
+      });
 
       if (Array.isArray(parsed.links)) {
         const updatedLinks = ['website', 'github', 'blog', 'social media'].map(type => {
@@ -90,10 +138,27 @@ const PersonalInfo = () => {
         });
         setExternalLinks(updatedLinks);
       }
-    }
-  }, []);
 
-  
+    };
+
+    const init = async () => {
+      await fetchEmailAndPhoneOnly();   // ✅ Fetch secure data from backend
+      await new Promise(resolve => setTimeout(resolve, 50)); // 💤 wait
+      prefillFromResume();              // ✅ Then fill missing resume fields, skip email/phone
+    };
+
+    init();
+  }, [location.pathname]);
+
+
+
+  useEffect(() => {
+    if (!formData.email || !formData.phone) {
+      console.warn("⚠️ Email or phone is missing in formData:", formData);
+    }
+  }, [formData.email, formData.phone]);
+
+
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
 
@@ -147,7 +212,7 @@ const PersonalInfo = () => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-          setLoading(true);
+      setLoading(true);
 
       try {
         const token = sessionStorage.getItem('authToken');
@@ -189,9 +254,9 @@ const PersonalInfo = () => {
       } finally {
         setLoading(false);
       }
-    }else {
-    setLoading(false); // ✅ Reset loading even when errors are found
-  }
+    } else {
+      setLoading(false); // ✅ Reset loading even when errors are found
+    }
   };
 
   return (
