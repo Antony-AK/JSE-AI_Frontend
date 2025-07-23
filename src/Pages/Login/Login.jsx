@@ -124,7 +124,7 @@ const Login = () => {
                 </label>
                 <input
                   id='password'
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? 'password' : 'text'}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
