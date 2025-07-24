@@ -84,7 +84,7 @@ const AppRoutesContent = () => {
                         <div
                         className={`h-full bg-[#f5f5f5] mt-16 
                             ${!hideLayout ? 'md:ms-64' : ''} 
-                            w-full`}  // Always 100% width; margin only applied on md+
+                            w-full`}  // Always 100% width; margin only applied on md+   
                         >
                             <Routes>
                                 <Route path="/user/personal-tracker" element={<PersonalTracker />} />
@@ -146,7 +146,7 @@ const AppRoutes = () => {
     '/payment/cancel',
     '/landingpage',
     '/user/dashboard'
-  ].includes(path) || path.startsWith('/user/onboarding');
+  ].includes(path) || path.startsWith('/user/onboarding');   
 
   return isUnblockedPage
     ? <AppRoutesContent />
