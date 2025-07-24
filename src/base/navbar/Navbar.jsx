@@ -21,6 +21,13 @@ const Navbar = () => {
 
   const token = sessionStorage.getItem('authToken');
 
+  useEffect(() => {
+  if (!token) {
+    console.warn("No token found. Redirecting to login...");
+    navigate("/user/login");
+  }
+}, [token, navigate]);
+
   const fetchUserInfo = async () => {
     if (!token) {
       console.warn('No token found in sessionStorage');

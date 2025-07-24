@@ -152,6 +152,8 @@ const MyApplication = () => {
   });
   const perPage = pagination.per_page; // or hardcode 10 if it's fixed
   const hasFetched = useRef(false);
+  const [jobLoading, setJobLoading] = useState(false);
+
 
 
   const toggleExpand = (label) => {
@@ -164,7 +166,29 @@ const MyApplication = () => {
   const token = sessionStorage.getItem("authToken");
 
   const fetchSelectedJobs = async (customOffset = offset) => {
-    setLoading(true);
+    const cachedJobs = sessionStorage.getItem("jobCache");
+    const cachedPagination = sessionStorage.getItem("jobPagination");
+    const savedSelectedJobId = sessionStorage.getItem("selectedJobId");
+
+    let usedCache = false;
+
+    if (cachedJobs && cachedPagination) {
+      const parsedJobs = JSON.parse(cachedJobs);
+      const parsedPagination = JSON.parse(cachedPagination);
+
+      setSelectedJobs(parsedJobs);
+      setPagination(parsedPagination);
+
+      const jobToSelect = parsedJobs.find((job) => job.id === savedSelectedJobId);
+      setSelectedJob(jobToSelect || parsedJobs[0]);
+
+      usedCache = true; // 🧠 mark cache as used
+    }
+
+    // 👇 Only show loading spinner if cache wasn't used
+    if (!usedCache) {
+      setJobLoading(true);
+    }
 
     try {
       const token = sessionStorage.getItem("authToken");
@@ -173,6 +197,7 @@ const MyApplication = () => {
         headers: { Authorization: `Bearer ${token}` },
         params: { offset: customOffset, limit: perPage },
       });
+
 
       const fetchedJobs = response.data.jobs || [];
       const paginationInfo = response.data.pagination || {};
@@ -215,6 +240,19 @@ const MyApplication = () => {
           };
         });
 
+      // 🧠 Store in session for next visit
+      sessionStorage.setItem("jobCache", JSON.stringify(mappedJobs));
+      sessionStorage.setItem("jobPagination", JSON.stringify({
+        current: currentPage,
+        total: totalItems,
+        per_page: paginationInfo.per_page || perPage,
+        next: paginationInfo.next || null,
+        prev: paginationInfo.prev || null,
+      }));
+      sessionStorage.setItem("jobPaginationOffset", customOffset);
+
+
+
 
       setSelectedJobs(mappedJobs);
 
@@ -247,11 +285,11 @@ const MyApplication = () => {
       });
 
       setOffset(customOffset);
-      setLoading(false);
+      setJobLoading(false); // ✅ stop loader
     } catch (error) {
       const errMsg = error.response?.data?.message || "⚠ Failed to fetch jobs.";
       setError(errMsg);
-      setLoading(false);
+      setJobLoading(false); // ✅ stop loader
     }
   };
 
@@ -318,7 +356,7 @@ const MyApplication = () => {
 
       const recommendedJobs = response.data.jobs || [];
 
-      const mappedJobs = recommendedJobs .filter(job => job && typeof job === "object") .map((job) => ({
+      const mappedJobs = recommendedJobs.filter(job => job && typeof job === "object").map((job) => ({
         id: job.job_id || job.id,
         jobTitle: job.job_title || job.title || "Untitled Job",
         title: job.title || job.job_title,
@@ -673,8 +711,16 @@ const MyApplication = () => {
   const jobsToRender = isFilterActive ? filteredJobs : selectedJobs;
 
 
+ const isColdLoading = (loading || jobLoading) && selectedJobs.length === 0;
 
-  if (loading) return <Loader />;
+if (isColdLoading) {
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <Loader />
+    </div>
+  );
+}
+
 
   return (
     <div className="flex items-center flex-col h-screen bg-gray-50 px-6 ms-2 w-full max-w-[1440px] mx-auto">
@@ -705,13 +751,11 @@ const MyApplication = () => {
               title,
               count: mappedJobs.length
             });
-            setSelectedTitle(title); // 🔥 THIS IS WHAT YOU WERE MISSING
-            setIsFilterActive(true); // ✅ Mark that we applied a filter
+            setSelectedTitle(title);
+            setIsFilterActive(true);
 
           }}
         />
-
-
 
         <motion.div
           ref={languageDropdownRef}
@@ -809,7 +853,13 @@ const MyApplication = () => {
 
       <div className="flex flex-col w-full min-h-screen bg-gray-40">
         <br />
-        {jobsToRender.length === 0 ? (
+        {jobLoading ? (
+          <div className="flex justify-center items-center  w-full">
+            <div className="flex flex-col items-center">
+              <p className="text-gray-600 text-base font-medium">Fetching jobs, please wait...</p>
+            </div>
+          </div>
+        ) : jobsToRender.length === 0 ? (
           <div className="absolute top-1/2 left-[calc(264px+40%)] transform -translate-x-1/2 -translate-y-1/2 text-center">
             <h2 className="text-2xl font-bold text-gray-700 mb-2">
               No {(selectedTitle?.charAt(0).toUpperCase() + selectedTitle?.slice(1))} jobs found
@@ -987,7 +1037,7 @@ const MyApplication = () => {
 
                           {/* Center text */}
                           <div className="absolute inset-0 flex m-2 items-center justify-center text-[13px]  font-semibold text-gray-800">
-                            {job.matchValue  || 0}%
+                            {job.matchValue || 0}%
                           </div>
                         </div>
 
@@ -1046,6 +1096,7 @@ const MyApplication = () => {
                       </div>
                     </div>
                   ))}
+
                 </div>
 
                 <br />
@@ -1286,6 +1337,7 @@ const MyApplication = () => {
           </div>
         </div>
       )}
+
 
       <LimitReachedModal
         isOpen={showLimitModal}

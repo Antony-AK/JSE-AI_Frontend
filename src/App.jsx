@@ -44,6 +44,7 @@ import PaymentSuccess from './Pages/PaymentDesign/PaymentSuccess.jsx';
 import PaymentCancel from './Pages/PaymentDesign/PaymentCancel.jsx';
 import Landing from './Landing/Main/Landing.jsx';
 import ScreenSizeBlocker from './base/ScreenBlocker/ScreenSizeBlocker.jsx';
+import ProtectedRoute from './routes/ProtectedRoute.jsx';
 
 const AppRoutesContent = () => {
     const location = useLocation();
@@ -87,15 +88,27 @@ const AppRoutesContent = () => {
                                 <Route path="/user/self-development" element={<SelfDevelopment />} />
                                 <Route path="/user/proficiency-test" element={<ProficiencyTest />} />
                                 <Route path="/user/upgrade" element={<Upgrade />} />
-                                <Route path="/user/dashboard" element={<Dashboard />} />
-                                <Route path="/user/my-jobs/internal" element={<Myapplication />} />
-                                <Route path="/user/my-jobs/external" element={<External />} />
-                                <Route path="/user/application-tracker" element={<ApplicationTracker />} />
-                                <Route path="/user/saved-jobs" element={<Savedjob />} />
-                                <Route path="/user/settings" element={<Settings />} />
+                                <Route path="/user/dashboard" element={<ProtectedRoute>
+                                    <Dashboard />
+                                </ProtectedRoute>} />
+                                <Route path="/user/my-jobs/internal" element={<ProtectedRoute>
+                                    <Myapplication />
+                                </ProtectedRoute>} />
+                                <Route path="/user/my-jobs/external" element={<ProtectedRoute><External /></ProtectedRoute>} />
+                                <Route path="/user/application-tracker" element={<ProtectedRoute>
+                                    <ApplicationTracker />
+                                </ProtectedRoute>} />
+                                <Route path="/user/saved-jobs" element={<ProtectedRoute>
+                                    <Savedjob />
+                                </ProtectedRoute>} />
+                                <Route path="/user/settings" element={<ProtectedRoute>
+                                    <Settings />
+                                </ProtectedRoute>} />
                                 <Route path="/test1" element={<Test1 />} />
                                 <Route path="/verification" element={<VerificationPage />} />
-                                <Route path="/user/profile" element={<Profile />} />
+                                <Route path="/user/profile" element={<ProtectedRoute>
+                                    <Profile />
+                                </ProtectedRoute>} />
                                 <Route path='/user/graph' element={<ApplicationsChart />} />
                                 <Route path='/user/announcements' element={<Announcements />} />
                                 <Route path="/user/cv" element={<CvProvider> <Cv key={Date.now()} /> </CvProvider>} />
