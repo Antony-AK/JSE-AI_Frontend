@@ -32,10 +32,10 @@ const WorkExpUpdateForm = ({ onclose }) => {
     };
 
     const isValidDateRange = (start, end) => {
-    if (!start || !end) return true; // allow if one is missing (like when currently working)
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-    return startDate <= endDate;
+        if (!start || !end) return true; // allow if one is missing (like when currently working)
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+        return startDate <= endDate;
     };
 
     const sendData = async () => {
@@ -46,17 +46,17 @@ const WorkExpUpdateForm = ({ onclose }) => {
         }
 
         const formatDateForAPI = (dateString) => {
-            if (!dateString) return null; // ⛔ avoid formatting if empty
+            if (!dateString || dateString.trim() === "") return null;
             const date = new Date(dateString);
-            return date.toISOString(); // ✅ full ISO string with "T"
+            return date.toISOString();
         };
+
 
         const requestData = {
             ...formData,
             start_date: formatDateForAPI(formData.start_date),
-            ...(formData.end_date && { end_date: formatDateForAPI(formData.end_date) }),
+            end_date: formData.currentlyWorking ? null : formatDateForAPI(formData.end_date),
         };
-
 
 
         try {
@@ -160,7 +160,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
     // Save Changes
     const handleSave = async () => {
         if (activeId === null) return;
-        
+
         setSaveLoading(true); // Start spinner
 
         const toISOString = (dateStr) => dateStr ? new Date(dateStr).toISOString() : null;
@@ -198,7 +198,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
         }
 
         try {
-            const res = await axios.put(`${apiUrl}/${backendIndex}, updatedExperience`, {
+            const res = await axios.put(`${apiUrl}/${backendIndex}`, updatedExperience, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
@@ -295,21 +295,21 @@ const WorkExpUpdateForm = ({ onclose }) => {
                         <div
                             onClick={() => {
                                 setFormData({
-                                job_title: "",
-                                company_name: "",
-                                location: "",
-                                start_date: "",
-                                end_date: "",
-                                currentlyWorking: false,
-                                key_responsibilities: "",
+                                    job_title: "",
+                                    company_name: "",
+                                    location: "",
+                                    start_date: "",
+                                    end_date: "",
+                                    currentlyWorking: false,
+                                    key_responsibilities: "",
                                 });
                                 setActiveId(null); // clear editing mode
                             }}
                             className="flex items-center justify-center flex-shrink-0 h-8 w-8 p-3 rounded snap-start cursor-pointer 
                                 bg-gray-500/20 text-[#2c6472] text-2xl hover:bg-gray-900/20 transition-all duration-200"
-                            >
+                        >
                             +
-                        </div>                        
+                        </div>
                     </div>
                 )}
 
@@ -359,8 +359,8 @@ const WorkExpUpdateForm = ({ onclose }) => {
                                 selectedDate={formData.start_date ? new Date(formData.start_date) : null}
                                 onDateChange={(date) =>
                                     setFormData((prev) => ({
-                                    ...prev,
-                                    start_date: format(date, 'yyyy-MM-dd'),
+                                        ...prev,
+                                        start_date: format(date, 'yyyy-MM-dd'),
                                     }))
                                 }
                             />
@@ -373,20 +373,20 @@ const WorkExpUpdateForm = ({ onclose }) => {
 
                             {formData.currentlyWorking ? (
                                 <input
-                                type="text"
-                                value="Currently Working"
-                                disabled
-                                className="w-full px-4 py-3 rounded-md border border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed"
+                                    type="text"
+                                    value="Currently Working"
+                                    disabled
+                                    className="w-full px-4 py-3 rounded-md border border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed"
                                 />
                             ) : (
                                 <Calendar
-                                selectedDate={formData.end_date ? new Date(formData.end_date) : null}
-                                onDateChange={(date) =>
-                                    setFormData((prev) => ({
-                                    ...prev,
-                                    end_date: format(date, 'yyyy-MM-dd'),
-                                    }))
-                                }
+                                    selectedDate={formData.end_date ? new Date(formData.end_date) : null}
+                                    onDateChange={(date) =>
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            end_date: format(date, 'yyyy-MM-dd'),
+                                        }))
+                                    }
                                 />
                             )}
                         </div>
@@ -398,11 +398,11 @@ const WorkExpUpdateForm = ({ onclose }) => {
                             type="checkbox"
                             checked={formData.currentlyWorking}
                             onChange={(e) =>
-                            setFormData((prev) => ({
-                                ...prev,
-                                currentlyWorking: e.target.checked,
-                                end_date: e.target.checked ? "" : prev.end_date,
-                            }))
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    currentlyWorking: e.target.checked,
+                                    end_date: e.target.checked ? "" : prev.end_date,
+                                }))
                             }
                         />
                         Currently Working Here
@@ -416,16 +416,15 @@ const WorkExpUpdateForm = ({ onclose }) => {
                             onChange={handleChange}
                             required
                             className='border border-gray-500/30 px-4 py-2 rounded outline-none'
-                        />  
+                        />
                     </div>
 
                     <div className="flex justify-between w-full mt-2">
                         <button
                             onClick={activeId === null && !addLoading ? handleAddExperience : null}
                             disabled={activeId !== null || addLoading}
-                            className={`text-sm flex items-center gap-2 font-medium hover:scale-95 transition ${
-                                activeId !== null || addLoading ? 'text-gray-500/60 cursor-not-allowed' : 'text-[#2c6472]'
-                            }`}
+                            className={`text-sm flex items-center gap-2 font-medium hover:scale-95 transition ${activeId !== null || addLoading ? 'text-gray-500/60 cursor-not-allowed' : 'text-[#2c6472]'
+                                }`}
                         >
                             {addLoading ? (
                                 <div className="w-4 h-4 border-[2.5px] border-[#2c6472] border-t-transparent rounded-full animate-spin" />
@@ -437,9 +436,8 @@ const WorkExpUpdateForm = ({ onclose }) => {
                         <button
                             onClick={activeId !== null && !deleteLoading ? handleDeleteExperience : null}
                             disabled={activeId === null || deleteLoading}
-                            className={`text-sm flex items-center gap-2 font-medium hover:scale-95 transition ${
-                                activeId === null || deleteLoading ? 'text-gray-500/60 cursor-not-allowed' : 'text-red-500'
-                            }`}
+                            className={`text-sm flex items-center gap-2 font-medium hover:scale-95 transition ${activeId === null || deleteLoading ? 'text-gray-500/60 cursor-not-allowed' : 'text-red-500'
+                                }`}
                         >
                             {deleteLoading ? (
                                 <div className="w-4 h-4 border-[2.5px] border-red-500 border-t-transparent rounded-full animate-spin" />
@@ -452,9 +450,8 @@ const WorkExpUpdateForm = ({ onclose }) => {
 
                     <div className='flex justify-center items-center gap-4 mt-3'>
                         <button
-                            className={`w-32 text-sm px-2 py-2 rounded-xl hover:scale-95 transition flex items-center justify-center gap-2 ${
-                                activeId !== null && !saveLoading ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 cursor-not-allowed'
-                            }`}
+                            className={`w-32 text-sm px-2 py-2 rounded-xl hover:scale-95 transition flex items-center justify-center gap-2 ${activeId !== null && !saveLoading ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 cursor-not-allowed'
+                                }`}
                             onClick={activeId !== null && !saveLoading ? handleSave : null}
                             disabled={activeId === null || saveLoading}
                         >

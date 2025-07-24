@@ -22,6 +22,9 @@ const Signup = () => {
   const [agreedToSecond, setAgreedToSecond] = useState(false);
   const dropdownRef = useRef(null);
 
+
+
+
   const [formData, setFormData] = useState({
     email: "",
     phoneNumber: "",
@@ -61,13 +64,16 @@ const Signup = () => {
     }
   };
 
+const togglePasswordVisibility = (field) => {
+  setShowPassword((prev) => ({
+    ...prev,
+    [field]: !prev[field],
+  }));
+  
+};
 
-  const toggleShowPassword = (field) => {
-    setShowPassword((prev) => ({
-      ...prev,
-      [field]: !prev[field],
-    }));
-  };
+
+
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -173,7 +179,7 @@ const Signup = () => {
   }, []);
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen relative">
       {/* Left Panel */}
       <div className="flex flex-1 flex-col justify-evenly items-center p-8 bg-white ">
         <div className="max-w-lg w-full mt-5">
@@ -276,64 +282,83 @@ const Signup = () => {
             {/* Password Fields */}
             <div className="flex space-x-2">
               {/* Create Password */}
-              <div className="relative w-1/2">
+              <div className="w-1/2">
                 <label className="mb-1 ms-3 mt-3 block text-gray-500 text-sm">
                   Create Password
                 </label>
-                <input
-                  id="password"
-                  type={showPassword.password ? "text" : "password"}
-                  name="password"
-                  placeholder=" "
-                  className={`w-full h-[52px] px-4 py-4 border ${passwordError ? "" : "border-gray-300"
-                    } rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer ${shakePassword ? "shake" : ""
-                    }`}
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-                <span
-                  className="absolute right-3 top-[56%] text-gray-600 cursor-pointer"
-                  onClick={() => toggleShowPassword("password")}
-                >
-                  {showPassword.password ? (
-                    <FaEyeSlash size={18} />
-                  ) : (
-                    <FaEye size={18} />
-                  )}
-                </span>
+
+                {/* Wrap input + icon in their own relative div */}
+                <div className="relative  h-[52px]">
+                  <input
+                    id="password"
+                    type={showPassword.password ? "password" : "text"}
+                    name="password"
+                    placeholder=" "
+                    className={`w-full h-full px-4 text-black  border ${passwordError ? "border-gray-300" : "border-gray-300"
+                      } rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer ${shakePassword ? "shake" : ""
+                      }`}
+                    value={formData.password}
+                    onChange={handleChange}
+                  />
+                  <div className="absolute inset-y-0 right-3 flex items-center">
+                    <button
+                      type="button"
+                    onClick={() => togglePasswordVisibility("password")}
+                      className="bg-transparent p-1"
+                    >
+                      {showPassword.password ? (
+                        <FaEyeSlash className="text-gray-500" size={18} />
+                      ) : (
+                        <FaEye className="text-gray-500" size={18} />
+                      )}
+                    </button>
+                  </div>
+                </div>
               </div>
+
 
               {/* Confirm Password */}
-              <div className="relative w-1/2">
-                <label className="mb-1 ms-3 mt-3 block  text-gray-500 text-sm">
+              <div className="w-1/2">
+                <label className="mb-1 ms-3 mt-3 block text-gray-500 text-sm">
                   Confirm Password
                 </label>
-                <input
-                  id="confirmPassword"
-                  type={showPassword.confirmPassword ? "text" : "password"}
-                  name="confirmPassword"
-                  placeholder=" "
-                  className="w-full h-[52px] px-4 py-4 border  border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
 
-                <span
-                  className="absolute right-3 top-[56%] text-gray-600 cursor-pointer"
-                  onClick={() => toggleShowPassword("confirmPassword")}
-                >
-                  {showPassword.confirmPassword ? (
-                    <FaEyeSlash size={18} />
-                  ) : (
-                    <FaEye size={18} />
-                  )}
-                </span>
+                <div className="relative h-[52px]">
+                  <input
+                    id="confirmPassword"
+                    type={showPassword.confirmPassword ? "password" : "text"}
+                    name="confirmPassword"
+                    placeholder=" "
+                    className={`w-full h-full px-4  border ${passwordError ? "border-gray-300" : "border-gray-300"
+                      } rounded-md text-base focus:outline-none focus:ring-2 focus:ring-[#2c6472] peer ${shakePassword ? "shake" : ""
+                      }`}
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                  />
+                  <div className="absolute inset-y-0 right-3 flex items-center z-10">
+                    <button
+                      type="button"
+                    onClick={() => togglePasswordVisibility("confirmPassword")}
+                      className="bg-transparent p-1"
+                    >
+                      {showPassword.confirmPassword ? (
+                        <FaEyeSlash className="text-gray-500" size={18} />
+                      ) : (
+                        <FaEye className="text-gray-500" size={18} />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
               </div>
-              <br />
+
             </div>
+
+            {/* Password Hint Message */}
             {passwordError && (
-              <p className="text-[10px] text-red-500">{passwordError}</p>
+              <p className="text-[10px] text-red-500 mt-1">{passwordError}</p>
             )}
+
             <br />
 
             <div className="flex gap-3 mb-10 items-start border border-gray-300 p-3 rounded-md">
@@ -458,7 +483,7 @@ const Signup = () => {
 
       {/* Fullscreen Overlay with Animation */}
       {loading && (
-        <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center z-40 transition-opacity duration-1000">
+        <div className="fixed inset-0 bg-white bg-opacity-90 flex items-center justify-center z-30 pointer-events-auto transition-opacity duration-1000">
           <Player
             autoplay
             loop

@@ -14,12 +14,17 @@ html {
     scroll-behavior: smooth;
   }
 
-
-* {
-  word-wrap: break-word;
+body, p, span, div {
   overflow-wrap: break-word;
-
+  word-wrap: break-word;
 }
+
+html, body {
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
 
 @keyframes marquee {
   0% {
