@@ -13,29 +13,26 @@ import Projects from '../../base/new-data-entry/Projects';
 
 const DataEntryPages = () => {
   return (
-    <div className="flex min-h-screen bg-white text-white">
+    <div className="flex flex-col md:flex-row min-h-screen bg-white text-black">
       {/* Sidebar on the left */}
-      <div className="w-[30%]  fixed top-0 left-0 bottom-0 p-5 z-10">
+      <div className="w-full md:w-[30%] bottom-0 p-5 z-10">
         <DataEntrySidebar />
       </div>
 
       {/* Main content on the right */}
-      <div className="ml-[30%] flex flex-col bg-white p-5 w-[73%] text-black relative z-0">
-        <div className="flex-grow">
-          <Routes>
-            <Route path="languages" element={<Languages />} />
-            <Route path="certificates" element={<Certificates />} />
-            <Route path="jobtitles" element={<JobTitles />} />
-            <Route path="skills" element={<Skills />} />
-            <Route path="personal-information" element={<PersonalInfo />} />
-            <Route path="work-experience" element={<WorkExperience />} />
-            <Route path="education" element={<Education />} />
-            <Route path="projects" element={<Projects />} />
-          </Routes>
-        </div>
-
-      
+      <div className="w-full md:w-[70%] p-5">
+        <Routes>
+          <Route path="languages" element={<Languages />} />
+          <Route path="certificates" element={<Certificates />} />
+          <Route path="jobtitles" element={<JobTitles />} />
+          <Route path="skills" element={<Skills />} />
+          <Route path="personal-information" element={<PersonalInfo />} />
+          <Route path="work-experience" element={<WorkExperience />} />
+          <Route path="education" element={<Education />} />
+          <Route path="projects" element={<Projects />} />
+        </Routes>
       </div>
+
     </div>
   );
 };

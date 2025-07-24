@@ -398,21 +398,21 @@ const Skills = () => {
 
 
     return (
-        <div className='w-full min-h-screen p-5 ml-5 text-black'>
+        <div className='w-full min-h-screen p-3 md:p-10 text-black'>
             <div className="flex flex-col">
 
 
                 <div>
-                    <p className=' flex font-semibold text-[#2c6472]'>STEP 8 OF 8</p>
+                    <p className='text-[#2c6472] font-semibold w-fit'>STEP 8 OF 8</p>
                 </div>
 
                 <div>
-                    <h1 className='text-2xl font-semibold mt-7'>Add your key skills.</h1>
+                    <h1 className='font-bold sm:text-lg md:text-xl mt-7'>Add your key skills.</h1>
                 </div>
 
-                <form className='ms-6' >
+                <form className='md:ms-6' >
                     <div className="flex flex-col mt-5 ">
-                        <label className="mb-3 block font-medium text-lg ">
+                        <label className="mb-3 block text-sm sm:text-base md:text-lg font-medium">
                             General Skills <span className='text-red-500 ms-1'>*</span>
                         </label>
                     </div>
@@ -424,7 +424,7 @@ const Skills = () => {
                                 <input
                                     ref={generalInputRef}
                                     type="text"
-                                    className="peer w-[70%] h-[64px] rounded-lg text-lg scrollbar-custom px-4 py-2 border border-gray-300  text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]"
+                                    className="peer w-full md:max-w-[650px] rounded-lg text-lg scrollbar-custom px-4 py-3 md:py-5 border border-gray-300  text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]"
                                     value={generalSearchTerm}
                                     onChange={(e) => {
                                         setGeneralSearchTerm(e.target.value);
@@ -476,7 +476,7 @@ const Skills = () => {
 
                                 />
                                 {showDropdown && dropdownType === "general" && (
-                                    <ul className="absolute top-16 z-10 w-[70%] max-h-48 overflow-y-auto text-gray-600 bg-white border border-gray-300 shadow-md">
+                                    <ul className="absolute top-16 z-10 w-full md:max-w-[650px] max-h-48 overflow-y-auto text-gray-600 bg-white border border-gray-300 shadow-md">
                                         {filteredSkills.map((skill, index) => (
                                             <li
                                                 key={index}
@@ -504,13 +504,13 @@ const Skills = () => {
                             <div className="text-red-500 text-sm mt-1">{errors.generalSkills}</div>
                         )}
 
-                        <div className="flex flex-wrap gap-2 h-[80px] w-[70%] scrollbar-custom border-x border-black overflow-y-auto p-2  ">
+                        <div className="flex flex-wrap gap-2 h-[80px] w-full md:max-w-[650px] scrollbar-custom border-x border-black overflow-y-auto p-2  ">
                             {formData.generalSkills.map((skill, index) => (
                                 <div
                                     key={index}
                                     className="bg-gray-100 h-8 px-3 py-1 text-gray-500 rounded-full flex items-center"
                                 >
-                                    <span className="mr-2">{skill}</span>
+                                    <span className="mr-2 text-sm md:text-base">{skill}</span>
                                     <button
                                         type="button"
                                         onClick={() => removeSkill(index, 'generalSkills')}
@@ -528,7 +528,7 @@ const Skills = () => {
 
 
                     <div className='mt-8'>
-                        <label className="mb-3 block font-medium text-lg ">
+                        <label className="mb-3 block  text-sm sm:text-base md:text-lg font-medium">
                             Job Specific Skills <span className='text-red-500 ms-1'>*</span>
                         </label>
                         <div className="expereince-title flex gap-4  mb-5 overflow-x-auto hide-scrollbar snap-x snap-mandatory">
@@ -555,7 +555,7 @@ const Skills = () => {
                             <input
                                 ref={jobInputRef}
                                 type="text"
-                                className="peer w-[70%] h-[64px] rounded-lg text-lg scrollbar-custom px-4 py-2 border border-gray-300  text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]"
+                                className="peer w-full md:max-w-[650px] rounded-lg md:text-lg scrollbar-custom px-4 py-3 md:py-5 border border-gray-300  text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]"
                                 value={jobSearchTerm}
                                 onChange={(e) => {
                                     setJobSearchTerm(e.target.value);
@@ -595,7 +595,7 @@ const Skills = () => {
                                 }}
                             />
                             {selectedTitle && showDropdown && dropdownType === "job" && (
-                                <ul className="absolute top-16 z-10 w-[70%] max-h-48 overflow-y-auto text-gray-600 bg-white border border-gray-300 shadow-md">
+                                <ul className="absolute top-16 z-10 w-full md:max-w-[650px] max-h-48 overflow-y-auto text-gray-600 bg-white border border-gray-300 shadow-md">
                                     {filteredSkills.map((skill, index) => (
                                         <li
                                             key={index}
@@ -624,13 +624,13 @@ const Skills = () => {
                     )}
 
 
-                    <div className="flex flex-wrap gap-2 h-[80px] w-[70%] mt-3 mb-12 scrollbar-custom border-x border-black overflow-y-auto p-2  ">
+                    <div className="flex flex-wrap gap-2 h-[80px] w-full md:max-w-[650px] mt-3 mb-12 scrollbar-custom border-x border-black overflow-y-auto p-2  ">
                         {formData.jobSpecificSkills.map((skill, index) => (
                             <div
                                 key={index}
                                 className="bg-gray-100 h-8 px-3 py-1 text-gray-500 rounded-full flex items-center"
                             >
-                                <span className="mr-2">{skill}</span>
+                                <span className="mr-2 text-xs md:text-base">{skill}</span>
                                 <button
                                     type="button"
                                     onClick={() => removeSkill(index, 'jobSpecificSkills')}
@@ -654,22 +654,22 @@ const Skills = () => {
                                 checked={accepted}
                                 onChange={(e) => setAccepted(e.target.checked)}
                             />
-                            <span className="text-sm text-gray-500">
+                            <span className="text-xs md:text-sm text-gray-500 mb-3">
                                 Please enter only relevant skills. Adding unrelated may affect the quality of your profile.
                             </span>
                         </label>
                     </div>
 
-                    <div className='text-xs my-5 flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+                    <div className='text-xs my-5 flex items-center justify-start text-center'><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
 
-                    <div className="flex w-[70%] justify-end items-center gap-4 mt-8">
+                    <div className="flex w-full md:max-w-[560px] justify-end items-center gap-4 mt-8">
                         <button
                             type="button"
                             onClick={handleNext}
                             disabled={loading}
-                            className={`teal-button mb-16 px-6 py-2 h-[40px] rounded-xl focus:outline-none transition-transform duration-200 ease-in-out
+                            className={`teal-button mb-16 px-6 py-2 rounded-xl focus:outline-none transition-transform duration-200 ease-in-out
                             flex items-center justify-center
-                            ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white w-[200px]`}
+                            ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white w-[200px] text-sm md:text-base`}
                         >
                             {loading ? (
                                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -685,7 +685,7 @@ const Skills = () => {
             </div>
 
             {/* Footer appears after scrolling all content */}
-            <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm mt-8">
+            <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-[13px] md:text-sm mt-8">
                 <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
                 AI is not perfect. Make sure your data is accurate before saving.            </div>
 

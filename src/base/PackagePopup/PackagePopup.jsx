@@ -50,7 +50,7 @@ const PackagePopup = ({ isOpen, onClose, infoBlock }) => {
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-10">
-        <Dialog.Panel className="relative bg-white p-6 rounded-lg shadow-xl w-[45%] z-50 border border-blue-300">
+        <Dialog.Panel className="relative bg-white p-6 rounded-lg shadow-xl w-[550px] z-50 border border-blue-300">
           <button onClick={onClose} className="absolute top-4 right-4">
             <X className="text-gray-500 hover:text-black" />
           </button>
@@ -109,7 +109,7 @@ const PackagePopup = ({ isOpen, onClose, infoBlock }) => {
             ))}
           </div>
 
-          <div className="mt-6 bg-[#24525f] text-white text-sm rounded-lg flex items-center justify-between px-4 py-3">
+          <div className="mt-6 bg-[#24525f] text-white text-sm rounded-lg flex flex-col md:flex-row gap-5 md:gap-0 items-center justify-between px-4 py-3">
             <p className="font-medium">Unlock premium benefits — upgrade to the Gold Package now.</p>
             <button onClick={handleUpgradeClick} className="bg-white text-[#24525f] rounded-full px-4 py-1 font-medium text-sm">
               Upgrade

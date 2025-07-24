@@ -166,7 +166,7 @@ const Login = () => {
         </div>
 
         {/* Right Panel */}
-        <div className="flex flex-1 flex-col justify-center items-center bg-[#2c6472] text-white p-8">
+        <div className="hidden md:flex flex-1 flex-col justify-center items-center bg-[#2c6472] text-white p-8">
           <div className="flex flex-col  items-center mb-3">
             <h3 className="text-center  text-2xl ms-4 font-medium">Welcome Back!</h3>
             <img

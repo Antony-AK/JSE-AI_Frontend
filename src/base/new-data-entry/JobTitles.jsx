@@ -241,19 +241,19 @@ const JobTitles = () => {
   ].filter((item) => item.value);
 
   return (
-    <div className='w-full p-5 ml-5 text-black'>
+    <div className='w-full p-3 md:p-10 text-black'>
       <div className='flex flex-col'>
 
-        <p className='flex font-semibold text-[#2c6472]'>STEP 7 OF 8</p>
+        <p className='text-[#2c6472] font-semibold w-fit'>STEP 7 OF 8</p>
 
-        <h1 className='text-2xl font-semibold mt-7'>Your designation defines your position.</h1>
+        <h1 className='font-bold sm:text-lg md:text-xl mt-7'>Your designation defines your position.</h1>
 
-        <form className='ms-6' onSubmit={handleNext}>
+        <form className='md:ms-6' onSubmit={handleNext}>
           <div className='flex flex-col mt-5 mb-4'>
-            <label className='mb-3 block font-medium text-lg'>
+            <label className='mb-3 block text-sm sm:text-base md:text-lg font-medium'>
               Job Search Postions <span className='text-red-500 ms-1'>*</span>
             </label>
-            <p className='text-base font-medium text-gray-500 mb-2'>
+            <p className='text-sm sm:text-base md:text-lg font-medium text-gray-500 mb-2'>
               Job Search titles you're interested in , Select upto 3 titles.
             </p>
           </div>
@@ -262,7 +262,7 @@ const JobTitles = () => {
             <input
               ref={inputRef}
               type='text'
-              className={`w-[70%] h-[64px] px-4 py-3 border ${errors.primary_title ? 'border-red-500' : 'border-gray-300'} rounded-lg text-lg text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]`}
+              className={`w-full md:max-w-[560px] h-[64px] px-4 py-3 md:text-lg border ${errors.primary_title ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-600 focus:outline-none focus:ring-1 focus:ring-[#2c6472]`}
               value={searchTerms.primary_title}
               onChange={(e) => handleSearchChange(e, 'primary_title')}
               onFocus={() => setShowDropdowns({ primary_title: true })}
@@ -307,7 +307,7 @@ const JobTitles = () => {
 
 
             {showDropdowns.primary_title && (
-              <ul className='absolute z-10 w-[70%] max-h-48 overflow-y-auto mt-14 bg-white border border-gray-300 rounded shadow-md'>
+              <ul className='absolute z-10 w-full md:max-w-[560px] max-h-48 overflow-y-auto mt-16 bg-white border border-gray-300 rounded shadow-md'>
                 {filteredTitles.map((title, index) => (
                   <li
                     ref={(el) => (itemRefs.current[index] = el)}
@@ -344,17 +344,17 @@ const JobTitles = () => {
             <div className='text-red-500 text-sm mt-1'>{errors.primary_title}</div>
           )}
 
-          <div className='flex flex-wrap w-[70%] mt-5 gap-3 h-[100px] p-2 rounded'>
+          <div className='flex flex-wrap w-full md:w-[70%] mt-5 gap-3 h-[100px] p-2 rounded'>
             {selectedTitles.map(({ key, value }, index) => (
               <div
                 key={index}
-                className='bg-gray-100 h-8 px-3 py-1 text-gray-500 rounded-full flex items-center'
+                className='bg-gray-100 h-8 px-3 py-1  text-gray-500 rounded-full flex items-center'
               >
-                <span className='mr-2'>{value}</span>
+                <span className='mr-2 text-sm md:text-base'>{value}</span>
                 <button
                   type='button'
                   onClick={() => removeSkill(key)}
-                  className='text-gray-500 text-xl hover:text-red-500 focus:outline-none'
+                  className='text-gray-500 md:text-xl hover:text-red-500 focus:outline-none'
                 >
                   &times;
                 </button>
@@ -362,7 +362,7 @@ const JobTitles = () => {
             ))}
           </div>
 
-          <div className="flex gap-3 mt-5 items-start">
+          <div className={`flex gap-3 ${selectedTitles.length > 0 ? 'mt-14' : ''} items-start`}>
             <label className="flex gap-3 items-start cursor-pointer">
               <input
                 type="checkbox"
@@ -377,13 +377,13 @@ const JobTitles = () => {
           </div>
 
 
-          <div className='flex w-[70%] justify-end items-center gap-4 mt-8 mb-10'>
+          <div className='flex w-full md:max-w-[560px] justify-end items-center gap-4 my-10'>
             <button
               type='submit'
               disabled={loading}
               className={`teal-button px-6 py-2 h-[40px] rounded-xl focus:outline-none transition-transform duration-200 ease-in-out
                 flex items-center justify-center
-                ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white w-[150px]`}
+                ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white w-[150px] text-sm md:text-base`}
             >
               {loading ? (
                 <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
@@ -405,7 +405,7 @@ const JobTitles = () => {
       )}
 
       {/* Footer appears after scrolling all content */}
-      <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm mt-8">
+      <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-[13px] md:text-sm mt-8">
         <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
         AI is not perfect. Make sure your data is accurate before saving.            </div>
     </div>

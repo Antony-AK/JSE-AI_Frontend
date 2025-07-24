@@ -252,7 +252,7 @@ if (finalList.length > 0 && hasWorkExperience === true) {
   };
 
   return (
-    <div className='p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen '>
+    <div className='p-3 md:p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen '>
 
       <div className="flex justify-end mt-5 items-center w-[95%]">
         {showSkip  &&(
@@ -266,9 +266,9 @@ if (finalList.length > 0 && hasWorkExperience === true) {
       </div>
 
 
-      <p className='text-[#2c6472] font-semibold -mt-10'>STEP 4 OF 8</p>
+      <p className='text-[#2c6472] font-semibold -mt-10 w-fit'>STEP 4 OF 8</p>
 
-      <h2 className='font-bold text-xl'>Share your past project experience.</h2>
+      <h2 className='font-bold sm:text-lg md:text-xl'>Share your past project experience.</h2>
 
       {projectList.length > 0 && (
         <div className="flex gap-3 px-6 py-4 -m-3 w-[90%] rounded-lg overflow-x-auto hide-scrollbar snap-x snap-mandatory">
@@ -290,13 +290,13 @@ if (finalList.length > 0 && hasWorkExperience === true) {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
+      <form onSubmit={handleSubmit} className="md:p-5 pt-2 flex flex-col gap-5 w-full">
 
         {/* Project Name */}
-        <div className="flex flex-col gap-2 text-lg">
-          <label className='font-medium' htmlFor="project_name">Project Name <span className='text-red-500'>*</span></label>
+        <div className="flex flex-col gap-2">
+          <label className='text-sm sm:text-base md:text-lg  font-medium' htmlFor="project_name">Project Name <span className='text-red-500'>*</span></label>
           <input
-            className={`px-5 py-3 rounded-lg border ${errors.project_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+            className={`px-5 py-3 rounded-lg md:text-lg border ${errors.project_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
             type="text"
             id='project_name'
             value={formData.project_name}
@@ -306,10 +306,10 @@ if (finalList.length > 0 && hasWorkExperience === true) {
         </div>
 
         {/* Company Name */}
-        <div className="flex flex-col gap-2 text-lg">
-          <label className='font-medium' htmlFor="institution">University / Company Name <span className='text-red-500'>*</span></label>
+        <div className="flex flex-col gap-2">
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="institution">University / Company Name <span className='text-red-500'>*</span></label>
           <input
-            className={`px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]`}
+            className={`px-5 py-3 rounded-lg md:text-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]`}
             type="text"
             id='institution'
             value={formData.institution}
@@ -318,9 +318,9 @@ if (finalList.length > 0 && hasWorkExperience === true) {
         </div>
 
         {/* Start & End Date */}
-        <div className="flex justify-start gap-10 text-lg w-full">
+        <div className="flex justify-start gap-5 w-full">
           <div className="flex flex-col gap-2 w-[50%]">
-            <label className='font-medium' htmlFor="start_date">Start Date <span className='text-red-500'>*</span></label>
+            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="start_date">Start Date <span className='text-red-500'>*</span></label>
             <Calendar
               selectedDate={tryParseDate(formData.start_date)}
               onDateChange={(date) =>
@@ -333,7 +333,7 @@ if (finalList.length > 0 && hasWorkExperience === true) {
             {errors.start_date && <p className='text-red-500 text-sm'>{errors.start_date}</p>}
           </div>
           <div className="flex flex-col gap-2 w-[50%]">
-            <label className='font-medium' htmlFor="end_date">End Date {!formData.currentdo && <span className='text-red-500'>*</span>}</label>
+            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="end_date">End Date {!formData.currentdo && <span className='text-red-500'>*</span>}</label>
             {formData.currentdo ? (
               <input
                 disabled
@@ -367,15 +367,15 @@ if (finalList.length > 0 && hasWorkExperience === true) {
             checked={formData.currentdo}
             onChange={handleChange}
           />
-          <label className='font-medium text-lg' htmlFor="currentdo">I'm currently doing</label>
+          <label className='font-medium text-sm sm:text-base md:text-lg' htmlFor="currentdo">I'm currently doing</label>
         </div>
 
         {/* Project Description */}
-        <div className="flex flex-col gap-2 text-lg">
-          <label className="font-medium" htmlFor="project_description">Project Description</label>
+        <div className="flex flex-col gap-2">
+          <label className="text-sm sm:text-base md:text-lg font-medium" htmlFor="project_description">Project Description</label>
           <textarea
             id="project_description"
-            className="px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472] resize-none"
+            className="px-5 py-3 rounded-lg md:text-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472] resize-none"
             rows={4}
             value={formData.project_description}
             onChange={handleChange}
@@ -387,7 +387,7 @@ if (finalList.length > 0 && hasWorkExperience === true) {
 
         <div className="flex justify-between mt-7">
           <div className="cursor-pointer" onClick={() => handleSubmit(false)}>
-            <p className='text-lg text-[#2C6472] font-semibold'>+ Add Another</p>
+            <p className='md:text-lg text-[#2C6472] font-semibold mt-2'>+ Add Another</p>
           </div>
           <button
             type="button"
@@ -395,7 +395,7 @@ if (finalList.length > 0 && hasWorkExperience === true) {
             disabled={loading}
             className={`rounded-xl px-6 py-2 mb-10 flex items-center justify-center
               ${loading ? 'bg-[#2C6472]/70 cursor-not-allowed' : 'bg-[#2C6472]'}
-              text-white transition-all w-[150px] h-[40px]`}
+              text-white transition-all w-[150px] h-[40px] text-sm md:text-base`}
           >
             {loading ? (
               <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
@@ -417,7 +417,7 @@ if (finalList.length > 0 && hasWorkExperience === true) {
       )}
 
       {/* Footer appears after scrolling all content */}
-      <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm mt-8">
+      <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-[13px] md:text-sm mt-8">
         <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
         More Projects you give the better the result of JSE Ai
       </div>

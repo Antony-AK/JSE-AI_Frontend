@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { ToastContainer, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -48,6 +48,8 @@ import ScreenSizeBlocker from './base/ScreenBlocker/ScreenSizeBlocker.jsx';
 const AppRoutesContent = () => {
     const location = useLocation();
 
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
     const hideLayout = location.pathname === '/user/cv' || location.pathname === '/user/cl' || location.pathname === '/user/document-editor' || location.pathname === '/user/external-cv' || location.pathname === '/user/external-cl' || location.pathname === '/user/forgot-password' || location.pathname === '/payment/success' || location.pathname === '/payment/cancel' || location.pathname === '/landingpage';
 
     const isDataEntryPage = location.pathname.startsWith('/user/onboarding') ||
@@ -75,12 +77,13 @@ const AppRoutesContent = () => {
                 </div>
             ) : (
                 <div className="main relative flex flex-col">
-                    {!hideLayout && <Navbar />}
+                    {!hideLayout && <Navbar onMenuToggle={() => setSidebarOpen(prev => !prev)} />}
                     <div className='flex flex-row h-full'>
-                        {!hideLayout && <Sidebar />}
+                        {!hideLayout && <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />}
                         <div
-                            style={{ width: hideLayout ? '100%' : 'calc(100% - 264px)' }}
-                            className={`${!hideLayout ? 'ms-64 mt-16' : ''} h-full bg-[#f5f5f5]`}
+                        className={`h-full bg-[#f5f5f5] mt-16 
+                            ${!hideLayout ? 'md:ms-64' : ''} 
+                            w-full`}  // Always 100% width; margin only applied on md+
                         >
                             <Routes>
                                 <Route path="/user/personal-tracker" element={<PersonalTracker />} />
@@ -115,12 +118,26 @@ const AppRoutesContent = () => {
 };
 
 const AppRoutes = () => {
-    const location = useLocation();
-    const isLandingPage = location.pathname === "/";
+  const location = useLocation();
+  const path = location.pathname;
 
-    return isLandingPage
-        ? <AppRoutesContent />
-        : <ScreenSizeBlocker><AppRoutesContent /></ScreenSizeBlocker>;
+  const isUnblockedPage = [
+    '/', 
+    '/user/login', 
+    '/user/signup', 
+    '/user/forgot-password', 
+    '/user/dataonboarding', 
+    '/user/linkedin', 
+    '/user/resume',
+    '/payment/success',
+    '/payment/cancel',
+    '/landingpage',
+    '/user/dashboard'
+  ].includes(path) || path.startsWith('/user/onboarding');
+
+  return isUnblockedPage
+    ? <AppRoutesContent />
+    : <ScreenSizeBlocker><AppRoutesContent /></ScreenSizeBlocker>;
 };
 
 function App() {

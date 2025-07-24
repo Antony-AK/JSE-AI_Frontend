@@ -214,12 +214,12 @@ const WorkExperience = () => {
   };
 
   return (
-    <div className='p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen overflow-y-auto'>
+    <div className='p-3 md:p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen overflow-y-auto'>
       <div
         className="flex items-center justify-end w-[95%] mt-2"
       >
         <div
-          className="cursor-pointer px-4 py-4 rounded transition"
+          className="cursor-pointer px-4 rounded transition"
           onClick={() => navigate('/user/onboarding/education')}
         >
           <p className="text-lg font-medium text-[#00000057]">Skip</p>
@@ -227,9 +227,9 @@ const WorkExperience = () => {
       </div>
 
 
-      <p className='text-[#2c6472] font-semibold -mt-10'>STEP 2 OF 8</p>
+      <p className='text-[#2c6472] font-semibold -mt-10 w-fit'>STEP 2 OF 8</p>
 
-      <h2 className='font-bold text-xl'>Highlight your Work Experience.</h2>
+      <h2 className='font-bold sm:text-lg md:text-xl'>Highlight your Work Experience.</h2>
 
       {experiences.length > 0 && (
         <div className="flex gap-3 px-6 py-4 -m-3 w-[90%] rounded-lg overflow-x-auto hide-scrollbar snap-x snap-mandatory">
@@ -249,13 +249,13 @@ const WorkExperience = () => {
         </div>
       )}
 
-      <form onSubmit={(e) => e.preventDefault()} className="p-5 pt-2 flex flex-col gap-5 w-[80%]">
+      <form onSubmit={(e) => e.preventDefault()} className="md:p-5 pt-2 flex flex-col gap-5">
 
         {/* Role */}
-        <div className="flex flex-col gap-2 text-lg">
-          <label className='font-medium' htmlFor="job_title">Role <span className='text-red-500'>*</span></label>
+        <div className="flex flex-col gap-2">
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="job_title">Role <span className='text-red-500'>*</span></label>
           <input
-            className={`px-5 py-3 rounded-lg border ${errors.job_title ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+            className={`px-5 py-3 rounded-lg md:text-lg border ${errors.job_title ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
             type="text"
             id='job_title'
             value={formData.job_title}
@@ -265,11 +265,11 @@ const WorkExperience = () => {
         </div>
 
         {/* company_name & Location */}
-        <div className="flex justify-start gap-10 text-lg w-full">
-          <div className="flex flex-col gap-2 w-[50%]">
-            <label className='font-medium' htmlFor="company_name">Company <span className='text-red-500'>*</span></label>
+        <div className="flex flex-col sm:flex-row justify-start gap-5 w-full">
+          <div className="flex flex-col gap-2 w-full sm:w-[50%]">
+            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="company_name">Company <span className='text-red-500'>*</span></label>
             <input
-              className={`px-5 py-3 rounded-lg border ${errors.company_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+              className={`px-5 py-3 rounded-lg md:text-lg border ${errors.company_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
               type="text"
               id='company_name'
               value={formData.company_name}
@@ -277,10 +277,10 @@ const WorkExperience = () => {
             />
             {errors.company_name && <p className='text-red-500 text-sm'>{errors.company_name}</p>}
           </div>
-          <div className="flex flex-col gap-2 w-[50%]">
-            <label className='font-medium' htmlFor="location">Location <span className='text-red-500'>*</span></label>
+          <div className="flex flex-col gap-2 w-full sm:w-[50%]">
+            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="location">Location <span className='text-red-500'>*</span></label>
             <input
-              className={`px-5 py-3 rounded-lg border ${errors.location ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+              className={`px-5 py-3 rounded-lg md:text-lg border ${errors.location ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
               type="text"
               id='location'
               value={formData.location}
@@ -291,9 +291,9 @@ const WorkExperience = () => {
         </div>
 
         {/* Start & End Date */}
-        <div className="flex justify-start gap-10 text-lg w-full">
-          <div className="flex flex-col gap-2 w-[50%]">
-            <p className="font-medium">
+        <div className="flex justify-start gap-5 w-full">
+          <div className="flex flex-col gap-2 w-[50%] md:text-lg">
+            <p className="text-sm sm:text-base md:text-lg font-medium">
               Start Date <span className="text-red-500">*</span>
             </p>
             <Calendar
@@ -318,8 +318,8 @@ const WorkExperience = () => {
             )}
           </div>
 
-          <div className="flex flex-col gap-2 w-[50%]">
-            <label className='font-medium' htmlFor="enddate">
+          <div className="flex flex-col gap-2 w-[50%] md:text-lg">
+            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="enddate">
               End Date {!formData.currentwork && <span className='text-red-500'>*</span>}
             </label>
             {formData.currentwork ? (
@@ -331,6 +331,7 @@ const WorkExperience = () => {
                 className="w-full px-5 py-3 rounded-lg border border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed"
               />
             ) : (
+              
               <Calendar
                 selectedDate={tryParseDate(formData.enddate)}
                 onDateChange={(date) => {
@@ -365,15 +366,15 @@ const WorkExperience = () => {
             checked={formData.currentwork}
             onChange={handleChange}
           />
-          <label className='font-medium text-lg' htmlFor="currentwork">I'm currently working</label>
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="currentwork">I'm currently working</label>
         </div>
 
         {/* Work Description */}
-        <div className="flex flex-col gap-2 text-lg">
-          <label className="font-medium" htmlFor="key_responsibilities">Work Description <span className='text-[#0000009c]'>(Optional)</span></label>
+        <div className="flex flex-col gap-2">
+          <label className="text-sm sm:text-base md:text-lg font-medium" htmlFor="key_responsibilities">Work Description <span className='text-[#0000009c]'>(Optional)</span></label>
           <textarea
             id="key_responsibilities"
-            className="px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472] resize-none"
+            className="px-5 py-3 rounded-lg md:text-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472] resize-none"
             rows={4}
             value={formData.key_responsibilities}
             onChange={handleChange}
@@ -392,7 +393,7 @@ const WorkExperience = () => {
               }
             }}
           >
-            <p className='text-lg text-[#2C6472] font-semibold'>+ Add Another</p>
+            <p className='mt-2 md:text-lg text-[#2C6472] font-semibold'>+ Add Another</p>
           </div>
           <button
             type="button"
@@ -402,7 +403,7 @@ const WorkExperience = () => {
             disabled={loading}
             className={`rounded-xl px-6 py-2 mb-10 flex items-center justify-center 
               ${loading ? 'bg-[#2C6472]/70 cursor-not-allowed' : 'bg-[#2C6472]'} 
-              text-white transition-all w-[150px] h-[40px]`}
+              text-white transition-all w-[150px] h-[40px] text-sm md:text-base`}
           >
             {loading ? (
               <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
@@ -424,7 +425,7 @@ const WorkExperience = () => {
       )} */}
 
       {/* Footer appears after scrolling all content */}
-      <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm mt-8">
+      <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm md:text-base mt-8">
         <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
         More experience you give the better the result of JSE Ai
       </div>

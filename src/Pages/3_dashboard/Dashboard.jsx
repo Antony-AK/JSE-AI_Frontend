@@ -1,37 +1,34 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import axios from 'axios'
-import profile from "../../assets/profile1.png"
-import total_app_icon from "../../assets/total-app.svg"
-import jobs_available_icon from "../../assets/calender.png"
-import selectable_jobs_icon from '../../assets/jobbag.png'
-import total_experience_icon from '../../assets/cubic.png'
-import complete from '../../assets/complete.svg'
-import incomplete from '../../assets/incomplete.svg'
-import announcements from '../../assets/announcements-icon.svg'
-import lock from "../../assets/lock_icon.png"
+import React, { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
+import profile from "../../assets/profile1.png";
+import total_app_icon from "../../assets/total-app.svg";
+import jobs_available_icon from "../../assets/calender.png";
+import selectable_jobs_icon from "../../assets/jobbag.png";
+import total_experience_icon from "../../assets/cubic.png";
+import complete from "../../assets/complete.svg";
+import incomplete from "../../assets/incomplete.svg";
+import announcements from "../../assets/announcements-icon.svg";
+import lock from "../../assets/lock_icon.png";
 import "aos/dist/aos.css";
-import { BASE_URL } from "../../utils/api"
-import Loader from '../../base/loader/Loader'
+import { BASE_URL } from "../../utils/api";
+import Loader from "../../base/loader/Loader";
 import { useMemo } from "react";
-import { useProfileImage } from '../../base/ProfileEditor/ProfileImageContext';
-import PackagePopup from '../../base/PackagePopup/PackagePopup'
-
+import { useProfileImage } from "../../base/ProfileEditor/ProfileImageContext";
+import PackagePopup from "../../base/PackagePopup/PackagePopup";
 
 const Dashboard = () => {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showChart, setShowChart] = useState(false);
-  const [chartTitle, setChartTitle] = useState('');
+  const [chartTitle, setChartTitle] = useState("");
   const [chartData, setChartData] = useState([]);
   const navigate = useNavigate();
   const [selectedLanguageIndex, setSelectedLanguageIndex] = useState(0);
   const { profileImage } = useProfileImage(); // 👈 use context
   const token = sessionStorage.getItem("authToken");
   const [showPackagePopup, setShowPackagePopup] = useState(false);
-
-
 
   useEffect(() => {
     if (!token) {
@@ -43,19 +40,19 @@ const Dashboard = () => {
 
     axios
       .get(`${BASE_URL}/dashboard`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
         setProfileData(res.data);
         setLoading(false);
       })
       .catch((err) => {
-        const errorMessage = err.response?.data?.message || "⚠ Failed to load profile data.";
+        const errorMessage =
+          err.response?.data?.message || "⚠ Failed to load profile data.";
         setError(errorMessage);
         setLoading(false);
       });
   }, [token]);
-
 
   const checklist = {
     mfa: profileData?.checklist?.checklist_mfa ?? false,
@@ -65,16 +62,17 @@ const Dashboard = () => {
     dataUsage: profileData?.checklist?.checklist_data_usage ?? false,
     dataTraining: profileData?.checklist?.checklist_data_training ?? false,
     numberLock: profileData?.checklist?.checklist_number_lock ?? false,
-    dataFinalization: profileData?.checklist?.checklist_data_finalization ?? false,
+    dataFinalization:
+      profileData?.checklist?.checklist_data_finalization ?? false,
     terms: profileData?.checklist?.checklist_terms ?? false,
     profileComplete: profileData?.checklist?.checklist_complete ?? false,
   };
 
-
   const infoBlock = {
     userId: profileData?.info_block?.auth_user_id ?? "",
     tier: profileData?.info_block?.subscription_tier ?? "free",
-    subscriptionStart: profileData?.info_block?.subscription_interval_start ?? "",
+    subscriptionStart:
+      profileData?.info_block?.subscription_interval_start ?? "",
     subscriptionEnd: profileData?.info_block?.subscription_interval_end ?? "",
     subscriptionPeriod: profileData?.info_block?.subscription_period ?? "",
     totalApplications: profileData?.info_block?.total_applications ?? 0,
@@ -83,27 +81,32 @@ const Dashboard = () => {
     internalApps: profileData?.info_block?.internal_application_count ?? 0,
     externalApps: profileData?.info_block?.external_application_count ?? 0,
     // proficiencyTests: profileData?.info_block?.proficiency_test ?? 0,
-    proficiencyTests: 0
+    proficiencyTests: 0,
   };
-
 
   const newJobs = profileData?.new_jobs?.mini_new_jobs ?? [];
 
-  const fullName = `${profileData?.profile?.first_name || " "} ${profileData?.profile?.second_name || ""}`.trim();
+  const fullName = `${profileData?.profile?.first_name || " "} ${
+    profileData?.profile?.second_name || ""
+  }`.trim();
   const profileCompletion = profileData?.profile?.profile_completion ?? 0;
   const preferredJobTitle = profileData?.profile?.primary_job_title ?? "";
   const secondaryJobTitle = profileData?.profile?.secondary_job_title ?? "";
   const tertiaryJobTitle = profileData?.profile?.tertiary_job_title ?? "";
 
-  const jobTitles = [preferredJobTitle, secondaryJobTitle, tertiaryJobTitle].filter(Boolean);
+  const jobTitles = [
+    preferredJobTitle,
+    secondaryJobTitle,
+    tertiaryJobTitle,
+  ].filter(Boolean);
 
   const testSummaries = profileData?.test_summary?.tests ?? [];
 
-  const languages = testSummaries.map(test => ({
+  const languages = testSummaries.map((test) => ({
     language: test.languages,
     grade: test.grade ?? 0,
     proficiency: test.proficiency_level ?? "Unknown",
-    attemptsLeft: test.remaining_attempts ?? 0
+    attemptsLeft: test.remaining_attempts ?? 0,
   }));
 
   const statusList = [
@@ -121,19 +124,16 @@ const Dashboard = () => {
 
   const jobs = useMemo(() => {
     return newJobs.length > 0
-      ? newJobs.map(job => ({
-        title: job.title ?? "Unknown Title",
-        company: job.company ?? "Unknown Company",
-        location: job.location ?? "Unknown Location",
-        profileMatch: job.profile_match ?? 0
-      }))
+      ? newJobs.map((job) => ({
+          title: job.title ?? "Unknown Title",
+          company: job.company ?? "Unknown Company",
+          location: job.location ?? "Unknown Location",
+          profileMatch: job.profile_match ?? 0,
+        }))
       : [];
   }, [newJobs]);
 
-
   const [animatedCompletions, setAnimatedCompletions] = useState([]);
-
-
 
   useEffect(() => {
     if (jobs.length === 0) return;
@@ -155,7 +155,7 @@ const Dashboard = () => {
         }
 
         // Update only if there's a change
-        setAnimatedCompletions(prev => {
+        setAnimatedCompletions((prev) => {
           const updated = [...prev];
           if (updated[index] !== Math.round(current)) {
             updated[index] = Math.round(current);
@@ -172,96 +172,130 @@ const Dashboard = () => {
     };
   }, [jobs]);
 
-
-
-  if (loading ) {
-    return <div className='flex justify-center items-center w-full h-full'><Loader /></div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center w-full h-full">
+        <Loader />
+      </div>
+    );
   }
-  if (error) return <div className="text-red-500 flex justify-center items-center mt-64">{error}</div>;
+  if (error)
+    return (
+      <div className="text-red-500 flex justify-center items-center mt-64">
+        {error}
+      </div>
+    );
 
   const handleStatusClick = () => {
-    navigate('/user/settings');
+    navigate("/user/settings");
   };
 
   return (
-    <div className=" flex flex-col gap-5 bg-gray-100 p-5 ps-7">
-
+    <div className="flex flex-col gap-5 bg-gray-100 p-5 ps-7">
       <div className="w-full">
-        <div className="lg:flex justify-center gap-x-5 gap-y-6">
-
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
           {/* ✅ Total Applications */}
-          <div className="relative flex bg-gradient-to-br from-[#FFC2B0] to-[#FF9AA2] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl max-[1260px]:text-sm">
+          <div className="relative flex bg-gradient-to-br from-[#FFC2B0] to-[#FF9AA2] h-[120px] w-full text-black p-4 rounded-xl">
             <div className="flex flex-col justify-start items-start gap-5">
-              <p className="font-bold">Total Applied</p>
-              <h3 className="font-bold text-lg">{infoBlock.totalApplications}</h3>
+              <p className="text-sm md:text-base font-bold">Total Applied</p>
+              <h3 className="font-bold text-lg">
+                {infoBlock.totalApplications}
+              </h3>
             </div>
             <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
-              <img width="22px" height="22px" className="p-1" src={total_app_icon} alt="" />
+              <img
+                width="22px"
+                height="22px"
+                className="p-1"
+                src={total_app_icon}
+                alt=""
+              />
             </div>
           </div>
 
           {/* ✅ Weekly Applied */}
-          <div className="relative flex bg-gradient-to-br from-[#FDA67B] to-[#FF9D6B] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl max-[1260px]:text-sm">
+          <div className="relative flex bg-gradient-to-br from-[#FDA67B] to-[#FF9D6B] h-[120px] w-full text-black p-4 rounded-xl">
             <div className="flex flex-col justify-start items-start gap-5">
-              <p className="font-bold">Weekly Applied</p>
-              <h3 className="font-bold text-lg">{infoBlock.weeklyApplications}</h3>
+              <p className="text-sm md:text-base font-bold">Weekly Applied</p>
+              <h3 className="font-bold text-lg">
+                {infoBlock.weeklyApplications}
+              </h3>
             </div>
             <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
-              <img width="24px" height="24px" className="p-1" src={jobs_available_icon} alt="" />
+              <img
+                width="24px"
+                height="24px"
+                className="p-1"
+                src={jobs_available_icon}
+                alt=""
+              />
             </div>
           </div>
 
           {/* ✅ Recommended Jobs */}
-          <div className="relative flex bg-gradient-to-br from-[#BDE4FB] to-[#A3C7FD] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl max-[1260px]:text-sm">
+          <div className="relative flex bg-gradient-to-br from-[#BDE4FB] to-[#A3C7FD] h-[120px] w-full text-black p-4 rounded-xl">
             <div className="flex flex-col justify-start items-start gap-5">
-              <p className="font-bold">Recommended Jobs</p>
+              <p className="text-sm md:text-base font-bold">Recommended Jobs</p>
               <h3 className="font-bold text-lg">{infoBlock.topJobs}</h3>
             </div>
             <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
-              <img width="24px" height="24px" className="p-1" src={selectable_jobs_icon} alt="" />
+              <img
+                width="24px"
+                height="24px"
+                className="p-1"
+                src={selectable_jobs_icon}
+                alt=""
+              />
             </div>
           </div>
 
           {/* ✅ Package Info */}
-          <div onClick={() => setShowPackagePopup(true)} className="relative flex bg-gradient-to-br from-[#6FE297] to-[#48D77A] h-[120px] w-[22%] max-w-[400px] min-w-[200px] text-black p-4 rounded-xl cursor-pointer max-[1260px]:text-sm">
+          <div
+            onClick={() => setShowPackagePopup(true)}
+            className="relative flex bg-gradient-to-br from-[#6FE297] to-[#48D77A] h-[120px] w-full text-black p-4 rounded-xl cursor-pointer"
+          >
             <div className="flex flex-col justify-start items-start gap-1">
-              <p className="font-bold">Package</p>
+              <p className="text-sm md:text-base font-bold">Package</p>
               <div className="flex gap-1">
-                <p className="text-sm font-semibold">{infoBlock.internalApps}</p> /
-                <p className="text-sm font-semibold">{infoBlock.externalApps}</p>
+                <p className="text-sm font-semibold">
+                  {infoBlock.internalApps}
+                </p>{" "}
+                /
+                <p className="text-sm font-semibold">
+                  {infoBlock.externalApps}
+                </p>
               </div>
               <h3 className="font-semibold">
-                {infoBlock.tier.charAt(0).toUpperCase() + infoBlock.tier.slice(1)}
+                {infoBlock.tier.charAt(0).toUpperCase() +
+                  infoBlock.tier.slice(1)}
               </h3>
             </div>
             <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
-              <img width="26px" height="26px" className="p-1" src={total_experience_icon} alt="" />
+              <img
+                width="26px"
+                height="26px"
+                className="p-1"
+                src={total_experience_icon}
+                alt=""
+              />
             </div>
           </div>
-
         </div>
       </div>
 
-
-
-
-
       {/* Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-
         {/* Grid - 1 */}
         <div className="flex flex-col lg:col-span-2 space-y-2">
-
           {/* Box - 1 */}
           <div className="flex flex-col gap-2 border rounded-xl p-5 bg-white space-y-3">
-
             {/* Profile Header Section */}
             <div className="flex items-center justify-between">
               {/* Image + Name/Title */}
               <div className="flex items-center space-x-4">
                 <img
                   src={profileImage || profile}
-                  alt=''
+                  alt=""
                   className="w-14 h-14 rounded-full bg-white object-cover  border border-black"
                 />
                 <div className="flex flex-col">
@@ -290,7 +324,9 @@ const Dashboard = () => {
                       strokeWidth="4"
                       fill="none"
                       strokeDasharray="150"
-                      strokeDashoffset={150 - (150 * (profileCompletion ?? 0)) / 100}
+                      strokeDashoffset={
+                        150 - (150 * (profileCompletion ?? 0)) / 100
+                      }
                       strokeLinecap="round"
                       transform="rotate(-90 28 28)"
                     />
@@ -299,9 +335,10 @@ const Dashboard = () => {
                     {profileCompletion}%
                   </div>
                 </div>
-                <span className="text-xs font-medium text-gray-600">Profile Complete</span>
+                <span className="text-xs font-medium text-gray-600">
+                  Profile Complete
+                </span>
               </div>
-
             </div>
 
             {/* Divider */}
@@ -309,13 +346,13 @@ const Dashboard = () => {
 
             {/* Designation */}
             <div className="flex flex-col h-[100px] overflow-y-auto scrollbar-custom gap-2">
-              <h2 className='font-bold  text-[15px]'>Job Search Titles:</h2>
+              <h2 className="font-bold  text-[15px]">Job Search Titles:</h2>
 
               <div className="flex flex-wrap gap-2">
                 {jobTitles.map((title, index) => (
                   <p
                     key={index}
-                    className='text-sm font-medium px-3.5 py-1.5 rounded-xl bg-[#F8F8F8] w-fit'
+                    className="text-sm font-medium px-3.5 py-1.5 rounded-xl bg-[#F8F8F8] w-fit"
                   >
                     {title}
                   </p>
@@ -325,7 +362,7 @@ const Dashboard = () => {
 
             {/* Status */}
             <div className="flex flex-col gap-2">
-              <h2 className='font-bold text-[15px]'>To do List:</h2>
+              <h2 className="font-bold text-[15px]">To do List:</h2>
 
               <div className="flex flex-col gap-2 px-3 py-3 h-[98px] rounded-lg bg-[#F8F8F8] overflow-y-auto scrollbar-custom">
                 {statusList.map((item, index) => (
@@ -340,90 +377,95 @@ const Dashboard = () => {
                     }}
                     className="flex gap-3 cursor-pointer w-fit"
                   >
-                    <img width="18px" src={item.isComplete ? complete : incomplete} alt="" />
-                    <p className='font-medium text-sm'>{item.label}</p>
+                    <img
+                      width="18px"
+                      src={item.isComplete ? complete : incomplete}
+                      alt=""
+                    />
+                    <p className="font-medium text-sm">{item.label}</p>
                   </div>
                 ))}
               </div>
             </div>
-
           </div>
 
+          <div className="relative">
+            {/* Coming Soon Overlay */}
+            <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-fit font-semibold text-center text-[#2c6472] flex items-center z-[2] bg-gray-300/90 px-6 py-3 rounded-lg overflow-hidden shadow-md shine-effect hover:scale-105 transition-all duration-200">
+              Coming Soon
+            </p>
 
-          {/* <img src={lock} className='absolute top-[78%] left-[33%] w-14 h-14 z-10' alt="" /> */}
-          <p className="absolute top-[83%] left-[30%] w-fit font-semibold text-center text-[#2c6472] flex items-center z-10 bg-gray-300/80 px-4 py-2 rounded-lg overflow-hidden shine-effect hover:scale-105 transition-all duration-200">
-            Coming Soon
-          </p>
-
-
-          {/* Box - 2 */}
-          <div className="border relative rounded-xl p-5 bg-white opacity-40 blur-0 space-y-3 ">
-
-
-            <h2 className='font-bold text-[15px]'>Proficiency Test Details</h2>
-
-            <div className="flex items-center gap-4">
-
-              <p className='text-sm'>Remaining Attempts:</p>
-              <span className='font-bold'>2 / 5</span>
-              <div className="flex gap-2">
-                <div className="w-4 h-4 rounded-full bg-[#2c6472]"></div>
-                <div className="w-4 h-4 rounded-full bg-[#2c6472]"></div>
-                <div className="w-4 h-4 rounded-full bg-[#0000001A]"></div>
-                <div className="w-4 h-4 rounded-full bg-[#0000001A]"></div>
-                <div className="w-4 h-4 rounded-full bg-[#0000001A]"></div>
+            {/* Box - 2 */}
+            <div className="border relative rounded-xl p-5 bg-white opacity-40 pointer-events-none space-y-3">
+              <h2 className="font-bold text-[15px]">
+                Proficiency Test Details
+              </h2>
+              <div className="flex items-center gap-4">
+                <p className="text-sm">Remaining Attempts:</p>
+                <span className="font-bold">2 / 5</span>
+                <div className="flex gap-2">
+                  <div className="w-4 h-4 rounded-full bg-[#2c6472]"></div>
+                  <div className="w-4 h-4 rounded-full bg-[#2c6472]"></div>
+                  <div className="w-4 h-4 rounded-full bg-[#0000001A]"></div>
+                  <div className="w-4 h-4 rounded-full bg-[#0000001A]"></div>
+                  <div className="w-4 h-4 rounded-full bg-[#0000001A]"></div>
+                </div>
               </div>
 
+              <div className="flex flex-col gap-2">
+                <div className="flex text-sm items-center">
+                  <p className="font-semibold w-40">Language:</p>
+                  <select
+                    className="px-2 py-1 bg-[#0000000F] rounded-md text-sm font-semibold outline-none"
+                    value={selectedLanguageIndex}
+                    onChange={(e) =>
+                      setSelectedLanguageIndex(Number(e.target.value))
+                    }
+                    disabled
+                  >
+                    {languages.map((lang, index) => (
+                      <option key={index} value={index}>
+                        {lang.language}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex text-sm">
+                  <p className="font-semibold w-40">Grade:</p>
+                  <p className="font-semibold">
+                    {languages[selectedLanguageIndex]?.grade}
+                  </p>
+                </div>
+
+                <div className="flex text-sm">
+                  <p className="font-semibold w-40">Proficiency Level:</p>
+                  <p className="font-semibold">
+                    {languages[selectedLanguageIndex]?.proficiency}
+                  </p>
+                </div>
+
+                <div className="flex text-sm">
+                  <p className="font-semibold w-40">Attempts Left:</p>
+                  <p className="font-semibold">
+                    {languages[selectedLanguageIndex]?.attemptsLeft}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="flex flex-col gap-2">
-              {/* Language Dropdown - dynamic switcher */}
-              <div className="flex text-sm items-center">
-                <p className='font-semibold w-40'>Language:</p>
-                <select
-                  className="px-2 py-1 bg-[#0000000F] rounded-md text-sm font-semibold outline-none"
-                  value={selectedLanguageIndex}
-                  onChange={(e) => setSelectedLanguageIndex(Number(e.target.value))}
-                >
-                  {languages.map((lang, index) => (
-                    <option key={index} value={index}>
-                      {lang.language}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Dynamically Show Grade */}
-              <div className="flex text-sm">
-                <p className='font-semibold w-40'>Grade:</p>
-                <p className='font-semibold'>{languages[selectedLanguageIndex]?.grade}</p>
-              </div>
-
-              {/* Proficiency Level */}
-              <div className="flex text-sm">
-                <p className='font-semibold w-40'>Proficiency Level:</p>
-                <p className='font-semibold'>{languages[selectedLanguageIndex]?.proficiency}</p>
-              </div>
-
-              {/* Attempts Left */}
-              <div className="flex text-sm">
-                <p className='font-semibold w-40'>Attempts Left:</p>
-                <p className='font-semibold'>{languages[selectedLanguageIndex]?.attemptsLeft}</p>
-              </div>
-            </div>
-
-
           </div>
-
         </div>
 
         {/* Grid - 2 */}
         <div className="lg:col-span-3 space-y-2">
-
           {/* Box - 3 */}
           <div className="flex flex-col gap-2.5 border rounded-xl p-5 bg-white space-y-3">
             <div className="flex justify-between">
-              <h2 className='font-bold text-[15px]'>New Jobs </h2>
-              <Link to='/user/my-jobs/internal'> <p className='text-[#2c6472] font-medium' >View All</p></Link>
+              <h2 className="font-bold text-[15px]">New Jobs </h2>
+              <Link to="/user/my-jobs/internal">
+                {" "}
+                <p className="text-[#2c6472] font-medium">View All</p>
+              </Link>
             </div>
 
             {jobs.length > 0 ? (
@@ -431,16 +473,25 @@ const Dashboard = () => {
                 <React.Fragment key={index}>
                   <div className="flex justify-between">
                     <div className="flex flex-col gap-1">
-                      <h2 className='font-semibold text-[#2c6472]'>{job.title}</h2>
-                      <p className='font-medium text-sm'>{job.company}</p>
-                      <p className='text-sm'>{job.location}</p>
+                      <h2 className="font-semibold text-[#2c6472]">
+                        {job.title}
+                      </h2>
+                      <p className="font-medium text-sm">{job.company}</p>
+                      <p className="text-sm">{job.location}</p>
                     </div>
 
                     {/* Profile Completion Circle */}
                     <div className="flex flex-col items-center mr-5">
                       <div className="relative w-14 h-14">
                         <svg className="absolute top-0 left-0 w-full h-full">
-                          <circle cx="28" cy="28" r="24" stroke="#E5E7EB" strokeWidth="4" fill="none" />
+                          <circle
+                            cx="28"
+                            cy="28"
+                            r="24"
+                            stroke="#E5E7EB"
+                            strokeWidth="4"
+                            fill="none"
+                          />
                           <circle
                             cx="28"
                             cy="28"
@@ -462,7 +513,9 @@ const Dashboard = () => {
                           {animatedCompletions[index]}%
                         </div>
                       </div>
-                      <span className="text-xs font-medium text-gray-600 mt-1">Profile Match</span>
+                      <span className="text-xs font-medium text-gray-600 mt-1">
+                        Profile Match
+                      </span>
                     </div>
                   </div>
 
@@ -479,36 +532,36 @@ const Dashboard = () => {
           </div>
 
           {/* Box - 4 */}
-          <div className="border h-[220px] rounded-xl p-5 bg-white space-y-3">
+          <div className="border md:h-[220px] rounded-xl p-5 bg-white space-y-3">
             <div className="flex justify-between">
               <div className="flex gap-4">
-                <h2 className='font-bold text-[15px]'>Announcements</h2>
+                <h2 className="font-bold text-[15px]">Announcements</h2>
                 <img src={announcements} alt="" />
               </div>
               <div className="">
-                <Link to="/user/announcements"><p className='text-[#2c6472] font-medium' >View All</p></Link>
+                <Link to="/user/announcements">
+                  <p className="text-[#2c6472] font-medium">View All</p>
+                </Link>
               </div>
             </div>
 
             <p className="text-[#000000A1] font-medium text-sm">
-              <span className="text-[#2c6472] font-semibold mr-2">
-                {new Date().toLocaleDateString('en-IN', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
+              <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
+                {new Date().toLocaleDateString("en-IN", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
                 })}
               </span>
-              - The new version of <span className="text-[#2c6472] font-semibold">JSE AI</span> brings major
-              improvements across the platform. With advanced AI matching, optimized
-              performance, and a refreshed UI, the app is now smarter and faster than ever
-              before. These upgrades aim to make your job search smoother and more
-              effective.
+              - The new version of{" "}
+              <span className="text-[#2c6472] font-semibold">JSE AI</span>{" "}
+              brings major improvements across the platform. With advanced AI
+              matching, optimized performance, and a refreshed UI, the app is
+              now smarter and faster than ever before. These upgrades aim to
+              make your job search smoother and more effective.
             </p>
-
           </div>
-
         </div>
-
       </div>
 
       {showPackagePopup && (
@@ -522,10 +575,8 @@ const Dashboard = () => {
           </div>
         </div>
       )}
-
-
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

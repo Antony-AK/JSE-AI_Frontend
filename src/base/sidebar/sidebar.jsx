@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ChevronDown, ChevronUp, Settings as SettingsIcon } from "lucide-react";
-import logo from '../../assets/jsenewlogoblack.png';
+
 import lock_icon from "../../assets/lock_icon.png"
 
 import dashboard_icon from '../../assets/dashboard-icon.svg';
@@ -31,7 +31,8 @@ import profile_active_icon from '../../assets/profile-active-icon.svg';
 import upgrade_icon from '../../assets/upgrade-icon.svg';
 import upgrade_active_icon from '../../assets/upgrade-active-icon.svg';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
+
   const { pathname } = useLocation();
   const [openJobs, setOpenJobs] = useState(false); // Toggle for My Jobs
 
@@ -94,12 +95,24 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="fixed top-0 w-[264px] h-screen bg-white border-r flex flex-col">
-      <div className="flex justify-center items-center mt-[12px] mr-5">
-       <Link to="/user/dashboard"><img className="w-20 h-9 object-cover" src={logo} alt="" /></Link>
-      </div><br /><br />
 
-      <hr className="transform -translate-y-[34px] border-gray-200" />
+    <>
+
+    {isOpen && (
+      <div
+        className="fixed inset-0 z-40 md:hidden"
+        onClick={onClose}
+      ></div>
+    )}
+
+    <aside
+      className={`
+        fixed top-16 w-[264px] h-[calc(100vh-64px)] pt-8 bg-white border-r flex-col overflow-y-auto hide-scrollbar z-50
+        transform transition-transform duration-300 ease-in-out
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        md:translate-x-0 md:flex
+      `}
+    >
 
       <div className="flex-1 -mt-3">
         <ul className="space-y-2 pl-2 text-lg text-gray-400">
@@ -205,6 +218,8 @@ const Sidebar = () => {
         </ul>
       </div><br />
     </aside>
+
+    </>
   );
 };
 

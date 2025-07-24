@@ -153,7 +153,7 @@ const Languages = () => {
 
 
   return (
-    <div className='w-full  p-5 ml-5  text-black'>
+    <div className='w-full p-3 md:p-10 text-black'>
 
       {addedCompanies.length > 0 && (
         <div className="flex absolute items-center justify-end w-[85%] mt-2">
@@ -168,11 +168,11 @@ const Languages = () => {
       <div className="flex flex-col">
 
         <div>
-          <p className=' flex font-semibold text-[#2c6472]'>STEP 5 OF 8</p>
+          <p className='flex font-semibold text-[#2c6472] w-fit'>STEP 5 OF 8</p>
         </div>
 
         <div>
-          <h1 className='text-2xl font-semibold mt-7'>Add the languages you know.</h1>
+          <h1 className='font-bold sm:text-lg md:text-xl mt-7'>Add the languages you know.</h1>
         </div>
 
 
@@ -188,10 +188,10 @@ const Languages = () => {
 
 
 
-        <form className="flex flex-col mt-5 ms-6 " onSubmit={handleAddCertificate}>
+        <form className="flex flex-col mt-5 md:p-5" onSubmit={handleAddCertificate}>
           {/* Language Input */}
           <div className="relative mb-2">
-            <label className="mb-3 block font-medium text-lg ">
+            <label className="mb-3 block text-sm sm:text-base md:text-lg font-medium">
               Language <span className='text-red-500 ms-1'>*</span>
             </label>
             <input
@@ -201,7 +201,7 @@ const Languages = () => {
               placeholder=" "
               value={formData.language}
               onChange={handleChange}
-              className={`w-[70%] h-[64px] flex mb-1 px-4 py-6 border text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
+              className={`w-[90%] md:max-w-[90%] h-[64px] flex mb-1 px-4 py-4 md:py-6 border md:text-lg shadow-sm rounded-lg focus:outline-none focus:ring-1 
               ${errors.language ? 'border-red-500 animate-shake' : 'border-gray-300 focus:ring-[#2c6472]'}`}
             />
             {errors.language && (
@@ -211,14 +211,14 @@ const Languages = () => {
 
           {/* Proficiency */}
           <div className="mb-2 ms-1">
-            <p className="  text-lg font-medium mb-3">Proficiency <span className='text-red-500 ms-1'>*</span></p>
+            <p className="text-sm sm:text-base md:text-lg font-medium mb-3">Proficiency <span className='text-red-500 ms-1'>*</span></p>
             <div className="flex flex-col gap-5">
               {[
                 { label: 'Beginner (A1, A2)', value: 'beginner' },
                 { label: 'Intermediate (B1, B2)', value: 'intermediate' },
                 { label: 'Fluent / Native (C1, C2)', value: 'fluent' }, // or use 'native' if needed
               ].map((level) => (
-                <label key={level.value} className="flex items-center cursor-pointer">
+                <label key={level.value} className="flex items-center cursor-pointer text-sm sm:text-base md:text-lg font-medium">
                   <input
                     type="radio"
                     name="proficiency"
@@ -238,11 +238,11 @@ const Languages = () => {
 
 
           {/* Buttons */}
-          <div className="flex w-[70%] justify-between items-center gap-4 mt-4 mb-10">
+          <div className="flex w-[90%] justify-between items-center gap-4 my-10">
             <button
               type="submit"
               disabled={loading}
-              className={`py-2 w-[180px] h-[43px] font-semibold mt-1 transition-transform duration-200 ease-in-out
+              className={`py-2 w-[180px] h-[43px] text-sm sm:text-base md:text-lg font-semibold  mt-2 transition-transform duration-200 ease-in-out
                 ${loading ? 'bg-white cursor-not-allowed' : 'bg-white text-[#2c6472] hover:scale-95'}`}
             >
               + Add Another
@@ -252,9 +252,9 @@ const Languages = () => {
               type="button"
               onClick={handleNext}
               disabled={loading}
-              className={`teal-button px-6 py-2 h-[40px] rounded-xl transition-transform duration-200 ease-in-out
+              className={`teal-button px-6 py-2 w-[180px] h-[40px] rounded-xl transition-transform duration-200 ease-in-out
                 flex items-center justify-center
-                ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white w-[150px]`}
+                ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white w-[150px] text-sm md:text-base`}
             >
               {loading ? (
                 <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
@@ -268,7 +268,7 @@ const Languages = () => {
 
 
       {/* Footer appears after scrolling all content */}
-      <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm mt-8">
+      <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-[13px] md:text-sm mt-8">
         <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
         AI is not perfect. Make sure your data is accurate before saving.            </div>
 

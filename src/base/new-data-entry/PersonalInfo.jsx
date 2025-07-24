@@ -260,7 +260,7 @@ const PersonalInfo = () => {
   };
 
   return (
-    <div className='p-10 pt-14 flex flex-col gap-5 w-[100%] min-h-screen overflow-y-auto'>
+    <div className='p-3 md:p-10 pt-14 flex flex-col gap-5 w-[100%] min-h-screen overflow-y-auto'>
 
       {/* <div className="flex items-center -mt-10 cursor-pointer">
         <img src={right_arrow} className='w-2.5 h-3.5 object-cover' alt="" />
@@ -269,16 +269,16 @@ const PersonalInfo = () => {
 
       <p className='text-[#2c6472] font-semibold -mt-10'>STEP 1 OF 8</p>
 
-      <h2 className='font-bold text-xl '>Let's start with your personal information.</h2>
+      <h2 className='font-bold sm:text-lg md:text-xl'>Let's start with your personal information.</h2>
 
-      <form onSubmit={handleSubmit} className="p-5 pt-2  flex flex-col gap-5 w-[80%]">
+      <form onSubmit={handleSubmit} className="md:p-5 pt-2  flex flex-col gap-5 w-full">
 
         {/* Name */}
-        <div className="flex justify-start gap-10 text-lg w-full">
-          <div className="flex flex-col gap-2 w-[50%]">
-            <label className='font-medium' htmlFor="first_name">First Name <span className='text-red-500'>*</span></label>
+        <div className="flex flex-col sm:flex-row justify-start gap-5 md:gap-10 w-full">
+          <div className="flex flex-col gap-2 w-full sm:w-[50%]">
+            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="first_name">First Name <span className='text-red-500'>*</span></label>
             <input
-              className={`px-5 py-3 rounded-lg border ${errors.first_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+              className={`px-5 py-3 rounded-lg md:text-lg border ${errors.first_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
               value={formData.first_name}
               onChange={handleChange}
               type="text"
@@ -286,10 +286,10 @@ const PersonalInfo = () => {
             />
             {errors.first_name && <span className="text-red-500 text-sm">{errors.first_name}</span>}
           </div>
-          <div className="flex flex-col gap-2 w-[50%]">
-            <label className='font-medium' htmlFor="second_name">Last Name <span className='text-red-500'>*</span></label>
+          <div className="flex flex-col gap-2 w-full sm:w-[50%]">
+            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="second_name">Last Name <span className='text-red-500'>*</span></label>
             <input
-              className={`px-5 py-3 rounded-lg border ${errors.second_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+              className={`px-5 py-3 rounded-lg md:text-lg border ${errors.second_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
               value={formData.second_name}
               onChange={handleChange}
               type="text"
@@ -300,10 +300,10 @@ const PersonalInfo = () => {
         </div>
 
         {/* Email */}
-        <div className="flex flex-col gap-2 text-lg">
-          <label className='font-medium' htmlFor="email">Email Address <span className='text-red-500'>*</span></label>
+        <div className="flex flex-col gap-2">
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="email">Email Address <span className='text-red-500'>*</span></label>
           <input
-            className={`px-5 py-3 rounded-lg border ${errors.email ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+            className={`px-5 py-3 rounded-lg md:text-lg border ${errors.email ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
             value={formData.email}
             onChange={handleChange}
             type="email"
@@ -314,10 +314,10 @@ const PersonalInfo = () => {
         </div>
 
         {/* Phone */}
-        <div className="flex flex-col gap-2 text-lg">
-          <label className='font-medium' htmlFor="phone">Phone Number <span className='text-red-500'>*</span></label>
+        <div className="flex flex-col gap-2">
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="phone">Phone Number <span className='text-red-500'>*</span></label>
           <input
-            className={`px-5 py-3 rounded-lg border ${errors.phone ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+            className={`px-5 py-3 rounded-lg md:text-lg border ${errors.phone ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
             value={formData.phone}
             onChange={handleChange}
             type="tel"
@@ -328,10 +328,10 @@ const PersonalInfo = () => {
         </div>
 
         {/* Linked in */}
-        <div className="flex flex-col gap-2 text-lg">
-          <label className='font-medium' htmlFor="linkedin_profile">linkedIn Profile <span className='text-red-500'>*</span></label>
+        <div className="flex flex-col gap-2">
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="linkedin_profile">linkedIn Profile <span className='text-red-500'>*</span></label>
           <input
-            className={`px-5 py-3 rounded-lg border ${errors.linkedin_profile ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
+            className={`px-5 py-3 rounded-lg md:text-lg border ${errors.linkedin_profile ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
             value={formData.linkedin_profile}
             onChange={handleChange}
             type="text"
@@ -348,9 +348,9 @@ const PersonalInfo = () => {
 
           {externalLinks.map((link, index) => (
             <div className="flex flex-col gap-2 w-[100%] mx-auto" key={index}>
-              <label className='font-medium'>{link.type.charAt(0).toUpperCase() + link.type.slice(1)} Link</label>
+              <label className='text-sm sm:text-base md:text-lg font-medium'>{link.type.charAt(0).toUpperCase() + link.type.slice(1)} Link</label>
               <input
-                className='px-5 py-3 rounded-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]'
+                className='px-5 py-3 rounded-lg md:text-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]'
                 type="text"
                 // placeholder={`Enter your ${link.type} URL`}
                 value={link.url}
@@ -363,10 +363,10 @@ const PersonalInfo = () => {
 
 
         {/* Country */}
-        <div className="flex flex-col gap-2 text-lg">
-          <label className='font-medium' htmlFor="country">Country</label>
+        <div className="flex flex-col gap-2">
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="country">Country</label>
           <input
-            className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]'
+            className='px-5 py-3 rounded-lg md:text-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]'
             value="Germany"
             onChange={handleChange}
             type="text"
@@ -377,10 +377,10 @@ const PersonalInfo = () => {
         </div>
 
         {/* State */}
-        <div className="flex flex-col gap-2 text-lg">
-          <label className='font-medium' htmlFor="state">State</label>
+        <div className="flex flex-col gap-2">
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="state">State</label>
           <input
-            className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]'
+            className='px-5 py-3 rounded-lg md:text-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]'
             value={formData.state}
             onChange={handleChange}
             type="text"
@@ -388,10 +388,10 @@ const PersonalInfo = () => {
         </div>
 
         {/* City */}
-        <div className="flex flex-col gap-2 text-lg">
-          <label className='font-medium' htmlFor="city">City</label>
+        <div className="flex flex-col gap-2">
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="city">City</label>
           <input
-            className='px-5 py-3 rounded-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]'
+            className='px-5 py-3 rounded-lg md:text-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]'
             value={formData.city}
             onChange={handleChange}
             type="text"
@@ -407,7 +407,7 @@ const PersonalInfo = () => {
             disabled={loading}
             className={`rounded-xl px-6 py-2 mb-10 flex items-center justify-center
               ${loading ? 'bg-[#2C6472]/70 cursor-not-allowed' : 'bg-[#2C6472]'}
-              text-white transition-all w-[150px] h-[40px]`}
+              text-white transition-all w-[170px] h-[40px] text-sm md:text-lg`}
           >
             {loading ? (
               <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
@@ -432,7 +432,7 @@ const PersonalInfo = () => {
       )}
 
       {/* Footer appears after scrolling all content */}
-      <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm mt-8">
+      <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-[13px] md:text-sm mt-8">
         <img src={warning} className="w-5  h-5 object-cover" alt="" />
         AI is not perfect. Make sure your data is accurate before saving.
       </div>

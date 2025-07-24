@@ -208,27 +208,27 @@ const Certificates = () => {
 
 
     return (
-        <div className='w-full  p-5 ml-5  text-black'>
-            <div className="flex flex-col mt-5">
+        <div className='w-full p-3 md:p-10 text-black'>
+            <div className="flex flex-col">
                 <div className='flex w-full justify-end items-center'>
 
 
                     {/* {certificateList.length > 0 && ( */}
                         <div
-                            className="mr-10 flex items-center justify-center text-center cursor-pointer transition-transform duration-200 ease-in-out"
+                            className="flex items-center justify-center text-center cursor-pointer transition-transform duration-200 ease-in-out"
                             onClick={() => navigate('/user/onboarding/jobtitles')}
                         >
                             <p className='cursor-pointer text-lg font-medium text-[#00000057]'>Skip</p>
                         </div>
-                    {/* )} */}
-                </div>
 
-                <div className="p-2">
-                <p className="w-fit font-semibold text-[#2c6472] -mt-8">STEP 6 OF 8</p>
                 </div>
 
                 <div>
-                    <h1 className='text-2xl font-semibold mt-3 mb-4'>List your certificates / Awards.</h1>
+                    <p className="w-fit font-semibold text-[#2c6472] -mt-6 mb-3">STEP 6 OF 8</p>
+                </div>
+
+                <div>
+                    <h1 className='mt-3 mb-4 font-bold sm:text-lg md:text-xl'>List your certificates / Awards.</h1>
                 </div>
 
                 {certificateList.length > 0 && (
@@ -253,29 +253,29 @@ const Certificates = () => {
 
 
 
-                <form className="flex flex-col gap-3 mt-5 ms-6" onSubmit={handleAddCertificate}>
+                <form className="flex flex-col gap-3 mt-5 md:ms-6" onSubmit={handleAddCertificate}>
                     {/* Certificate Name */}
-                    <div className="mb-4">
-                        <label className="block font-medium text-lg">Certificate Name <span className="text-red-500">*</span></label>
+                    <div className="flex flex-col gap-2 mb-4">
+                        <label className="text-sm sm:text-base md:text-lg font-medium">Certificate Name <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             name="certificate_name"
                             value={formData.certificate_name}
                             onChange={handleChange}
-                            className={`w-[70%] px-4 py-4 flex border rounded-lg ${errors.certificate_name ? 'border-red-500 animate-shake' : 'border-gray-300'}`}
+                            className={`w-full md:w-[70%] px-4 py-3 md:py-4 flex border md:text-lg rounded-lg ${errors.certificate_name ? 'border-red-500 animate-shake' : 'border-gray-300'}`}
                         />
                         {errors.certificate_name && <span className="text-red-500 text-sm">{errors.certificate_name}</span>}
                     </div>
 
                     {/* Certificate Type Dropdown */}
-                    <div className="mb-4">
-                        <label className="block font-medium text-lg">Certificate Type <span className="text-red-500">*</span></label>
+                    <div className="flex flex-col gap-2 mb-4">
+                        <label className="text-sm sm:text-base md:text-lg font-medium">Certificate Type <span className="text-red-500">*</span></label>
                         <select
                             name="certificate_type"
                             value={formData.certificate_type}
                             onChange={handleChange}
                             className={`
-                             w-[70%] px-4 py-4 border rounded-lg text-gray-700
+                             w-full md:w-[70%] px-4 py-3 md:py-4 border md:text-lg rounded-lg text-gray-700
                              transition-all duration-200 ease-in-out z-10 flex
                              ${errors.certificate_type ? 'border-red-500 animate-shake' : 'border-gray-300 focus:border-[#2c6472]'}
                             bg-white  
@@ -292,21 +292,21 @@ const Certificates = () => {
                     </div>
 
                     {/* Provider */}
-                    <div className="mb-4">
-                        <label className="block font-medium text-lg">Company</label>
+                    <div className="flex flex-col gap-2 mb-4">
+                        <label className="text-sm sm:text-base md:text-lg font-medium">Company</label>
                         <input
                             type="text"
                             name="provider"
                             value={formData.provider}
                             onChange={handleChange}
-                            className={`w-[70%] px-4 py-4 border rounded-lg ${errors.provider ? 'border-red-500 animate-shake' : 'border-gray-300'}`}
+                            className={`w-full md:w-[70%] px-4 py-3 md:py-4 border md:text-lg rounded-lg ${errors.provider ? 'border-red-500 animate-shake' : 'border-gray-300'}`}
                         />
                         {errors.provider && <span className="text-red-500 text-sm">{errors.provider}</span>}
                     </div>
 
                     {/* Completion Date */}
-                    <div className="mb-4 w-[70%]">
-                        <label className="block font-medium text-lg">
+                    <div className="flex flex-col gap-2 mb-4 w-full md:w-[70%] text-sm md:text-lg">
+                        <label className="block font-medium">
                             Completion Date <span className="text-red-500">*</span>
                         </label>
 
@@ -331,7 +331,7 @@ const Certificates = () => {
 
 
                     {/* Buttons */}
-                    <div className="flex w-[70%]  justify-between items-center gap-4 mt-4 mb-10">
+                    <div className="flex md:w-[70%]  justify-between items-center gap-4 my-10">
                         <button
                             type="submit"
                             className=" py-2 w-[180px] bg-white text-[#2c6472]  h-[43px]  font-semibold cursor-pointer mt-1 hover:scale-95 transition-transform duration-200 ease-in-out"
@@ -345,7 +345,7 @@ const Certificates = () => {
                             disabled={loading}
                             className={`teal-button px-6 py-2 h-[40px] rounded-xl focus:outline-none transition-transform duration-200 ease-in-out
                                 flex items-center justify-center
-                                ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white w-[150px]`}
+                                ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white w-[150px] text-sm md:text-base`}
                         >
                             {loading ? (
                                 <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
@@ -369,7 +369,7 @@ const Certificates = () => {
                 </div>
             )}
 
-            <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm mt-8">
+            <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-[13px] md:text-sm mt-8">
                 <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
                 AI is not perfect. Make sure your data is accurate before saving.            </div>
         </div>
