@@ -7,21 +7,21 @@ import { Link } from 'react-router-dom'
 
 const DataOnboarding = () => {
     return (
-        <div className="flex flex-col md:flex-row h-screen bg-white">
+        <div className="flex p-5 flex-col md:flex-row h-screen bg-white">
             {/* Left Sidebar */}
-            <div className="w-full md:w-[30%] p-5 md:pl-7 bg-gradient-to-b from-[#2E8095] to-[#2C6472] text-white flex flex-col items-center md:items-start">
+            <div className="w-full md:w-[30%] p-5 md:pl-7 bg-gradient-to-b from-[#2E8095] to-[#2C6472] text-white flex flex-col items-center  md:items-start">
                 <div className="flex items-center md:mb-10">
                     <img className='w-24 h-10 object-fill' src={logo} alt="JobFusion Logo" />
                 </div>
-                <div className="mt-5 md:mt-40 text-center md:text-left">
-                    <p className='font-semibold sm:text-2xl md:text-3xl'>Just a few steps away from landing your dream job</p>
-                    <p className='text-sm sm:text-base md:text-lg mt-5 text-white/90'>Start building your profile and unlock new career opportunities.</p>
+                <div className="mt-5 md:mt-40  text-center md:text-left">
+                    <p className='font-semibold sm:text-2xl w-72 md:w-full mx-auto md:text-3xl'>Just a few steps away from landing your dream job</p>
+                    <p className='hidden md:block text-sm sm:text-base md:text-lg mt-5 text-white/90'>Start building your profile and unlock new career opportunities.</p>
                 </div>
             </div>
 
             {/* Right Content Area */}
             <div className="w-full md:w-[70%] flex flex-col items-center text-black p-5 md:p-10">
-                <div className="w-full flex flex-col items-center mt-10">
+                <div className="w-full flex flex-col items-center mt-20 md:mt-16">
                     <h1 className='font-semibold text-lg sm:text-2xl md:text-3xl text-center'>Build your job profile in just a few steps.</h1>
                     <p className='mt-3 text-sm md:text-base text-center'>Select an option that works best for you.</p>
                 </div>

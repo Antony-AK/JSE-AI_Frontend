@@ -86,9 +86,7 @@ const Dashboard = () => {
 
   const newJobs = profileData?.new_jobs?.mini_new_jobs ?? [];
 
-  const fullName = `${profileData?.profile?.first_name || " "} ${
-    profileData?.profile?.second_name || ""
-  }`.trim();
+  const fullName = `${profileData?.profile?.first_name || " "}`.trim();
   const profileCompletion = profileData?.profile?.profile_completion ?? 0;
   const preferredJobTitle = profileData?.profile?.primary_job_title ?? "";
   const secondaryJobTitle = profileData?.profile?.secondary_job_title ?? "";
@@ -300,7 +298,7 @@ const Dashboard = () => {
                 />
                 <div className="flex flex-col">
                   <h3 className="text-[15px] font-bold">{fullName}</h3>
-                  <p className="text-sm text-gray-500">{preferredJobTitle}</p>
+                  <p className="text-[12px] sm:text-sm text-gray-500">{preferredJobTitle}</p>
                 </div>
               </div>
 

@@ -425,10 +425,11 @@ const MyApplication = () => {
     }
 
     // ✅ Both selected => fetch all jobs
-    if (hasEnglish && hasGerman) {
+    if (hasEnglish && hasGerman && selectedLanguages.length === 2) {
       fetchSelectedJobs(validOffset);
       return;
     }
+
 
     // ✅ Only one selected — call language-specific fetch
     if (hasEnglish) {
@@ -762,7 +763,7 @@ const MyApplication = () => {
             setIsFilterActive(true);
             setIsFetching(false); // ✅ hide loader after fetch
           }}
-            setIsFetching={setIsFetching} // 👈 pass this prop!
+          setIsFetching={setIsFetching} // 👈 pass this prop!
         />
 
         <motion.div

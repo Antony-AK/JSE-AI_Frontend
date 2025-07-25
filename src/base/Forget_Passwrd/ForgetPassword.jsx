@@ -55,17 +55,17 @@ const ForgetPassword = () => {
             className="absolute object-cover p-1"
           />
         </div>
-        <p className="text-center text-sm mt-4">
+        <p className=" hidden md:block text-center text-sm mt-4">
           Unlock your next opportunity <br />
           Your dream job is just a click away
         </p>
       </div>
 
       {/* Left Panel (Form) */}
-      <div className="flex w-full md:w-1/2 h-full justify-center pt-14 md:pt-0 md:items-center p-6 md:p-8 bg-white">
+      <div className="flex w-full md:w-1/2 h-full justify-center pt-32 md:pt-0 md:items-center p-6 md:p-8 bg-white">
         <div className="w-full max-w-md">
-          <h2 className="text-xl md:text-2xl font-semibold text-center mb-4">Forget Password</h2>
-          <h4 className="text-center text-sm md:text-base mb-8">
+          <h2 className="text-xl md:text-2xl font-semibold text-center mb-6 md:mb-4">Forget Password</h2>
+          <h4 className="text-center text-sm md:text-base mb-10 md:mb-8">
             We’ll send a verification code to this email if it matches an existing{" "}
             <span className="text-[#2c6472] font-semibold text-lg">JSE AI</span>{" "}
             <span className="text-black text-base font-medium">account</span>
@@ -77,22 +77,22 @@ const ForgetPassword = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full h-12 px-4 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 ring-[#2c6472] transition-all"
+              className="w-full h-14 px-4  text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 ring-[#2c6472] transition-all"
               placeholder="Enter your registered email"
             />
           </div>
 
           {/* Buttons */}
-          <div className="mt-10 flex gap-3 w-full md:w-3/4 mx-auto">
+          <div className="mt-10 flex justify-evenly gap-3 w-full  mx-auto">
             <button
               onClick={() => navigate('/user/login')}
-              className="w-1/2 py-3 bg-white text-[#2c6472] rounded-2xl border-2 border-[#2c6472] font-semibold hover:bg-[#1f4d59]/5 transition-all"
+              className="w-1/3 py-2 bg-white text-[#2c6472] rounded-2xl border-2 border-[#2c6472] font-semibold hover:bg-[#1f4d59]/5 transition-all"
             >
               Back
             </button>
             <button
               onClick={handleSubmit}
-              className="w-1/2 py-3 bg-[#2c6472] text-white rounded-2xl font-semibold hover:bg-[#1f4d59] transition-all"
+              className="w-1/3 py-2 bg-[#2c6472] text-white rounded-2xl font-semibold hover:bg-[#1f4d59] transition-all"
             >
               {loading ? "Sending..." : "Verify"}
             </button>

@@ -166,7 +166,7 @@ const Login = () => {
         </div>
 
         {/* Right Panel */}
-        <div className="flex md:flex-1 flex-col justify-center items-center bg-[#2c6472] text-white p-8 py-10">
+        <div className="flex md:flex-1 flex-col justify-center items-center bg-[#2c6472] text-white p-8 ">
           <div className="flex flex-col  items-center mb-3">
             <h3 className="text-center text-xl md:text-3xl ms-4 mb-2 font-medium">Welcome Back!</h3>
             <img
@@ -184,7 +184,7 @@ const Login = () => {
               className='absolute object-cover me-2 p-2'
             />
           </div>
-          <div> <p className=" text-center items-center text-sm  mt-4">
+          <div> <p className="hidden md:block  text-center items-center text-sm  mt-4">
             Unlock your next opportunity<br />
             Your dream job is just a click away        </p>
           </div>

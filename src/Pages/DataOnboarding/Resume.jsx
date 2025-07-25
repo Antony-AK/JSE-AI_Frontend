@@ -121,15 +121,15 @@ const Resume = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen md:p-5">
+    <div className="flex flex-col md:flex-row h-screen p-5">
       {/* Left Sidebar */}
-      <div className="w-full md:w-[30%] md:h-[99.5%] p-5 pl-7 bg-gradient-to-b from-[#2E8095] to-[#2C6472] text-white">
+      <div className="w-full md:w-[30%] md:h-[99.5%] p-5 pl-7 bg-gradient-to-b from-[#2E8095] to-[#2C6472] flex md:flex-none flex-col items-center md:items-start text-white">
         <div className="flex items-center mb-5 md:mb-10">
           <img className='w-24 h-10 object-fill' src={logo} alt="JobFusion Logo" />
         </div>
-        <div className="items-center md:mt-40">
-          <p className='font-semibold text-xl sm:text-2xl md:text-3xl'>Just a few steps away from landing your dream job</p>
-          <p className='md:text-lg mt-5 text-white/90'>Start building your profile and unlock new career opportunities.</p>
+        <div className="items-center text-center md:text-start md:mt-40">
+          <p className='font-semibold w-72 md:w-full sm:text-2xl md:text-3xl'>Just a few steps away from landing your dream job</p>
+          <p className='hidden md:block md:text-lg mt-5 text-white/90'>Start building your profile and unlock new career opportunities.</p>
         </div>
       </div>
 
@@ -140,7 +140,7 @@ const Resume = () => {
           <div
             onDrop={handleDrop}
             onDragOver={handleDragOver}
-            className="border-2 border-[#2c6472] border-dotted rounded-lg w-[80%] md:w-[70%] h-[350px] p-6 text-center bg-gray-100"
+            className="border-2 border-[#2c6472] border-dotted rounded-lg w-[80%] md:w-[70%] md:h-[350px] p-6 text-center bg-gray-100"
           >
             <input
               type="file"

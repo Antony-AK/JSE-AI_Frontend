@@ -666,7 +666,7 @@ const Skills = () => {
 
                     <div className='text-xs my-5 flex items-center justify-start text-center'><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
 
-                    <div className="flex w-full md:max-w-[560px] justify-end items-center gap-4 mt-8">
+                    <div className="flex w-full md:max-w-[660px]  justify-end items-center gap-4 mt-8">
                         <button
                             type="button"
                             onClick={handleNext}

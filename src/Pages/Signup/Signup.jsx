@@ -461,7 +461,7 @@ const togglePasswordVisibility = (field) => {
             className="absolute object-cover me-2 p-2"
           />
         </div>
-        <p className=" text-center text-sm  mt-4">
+        <p className="hidden md:block text-center text-sm  mt-4">
           Unlock your next opportunity
           <br />
           Your dream job is just a click away{" "}
