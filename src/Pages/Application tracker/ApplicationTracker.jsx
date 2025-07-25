@@ -250,12 +250,37 @@ const ApplicationTracker = () => {
       </div>
 
       {loading ? (
-        <p>Loading applications...</p>
-      ) : applications.length === 0 ? (
-        <p className="w-[60%] mx-auto flex-col mt-32 flex items-center  text-center text-gray-600 text-base">
-          <span className='text-red-500 mb-5 flex flex-1'>No applications found.</span><br /> Please generate your CV and Cover Letter, then search and apply for jobs using the job link to start tracking your application progress.
-        </p>
-      ) : (
+        <div className="flex flex-col gap-4 animate-pulse">
+          {[...Array(3)].map((_, index) => (
+            <div
+              key={index}
+              className="bg-white border rounded-lg shadow-sm px-6 py-4 w-full flex flex-col gap-3 animate-pulse"
+            >
+              {/* Title + Company + Location */}
+              <div className="h-5 w-1/3 bg-gray-300 rounded mb-2"></div>
+              <div className="h-4 w-1/4 bg-gray-200 rounded mb-2"></div>
+              <div className="h-3 w-1/2 bg-gray-200 rounded mb-4"></div>
+
+              {/* Description */}
+              <div className="h-3 w-full bg-gray-100 rounded mb-1"></div>
+              <div className="h-3 w-4/5 bg-gray-100 rounded mb-1"></div>
+              <div className="h-3 w-3/5 bg-gray-100 rounded"></div>
+
+              {/* Buttons (fake skeleton buttons) */}
+              <div className="flex gap-2 mt-4">
+                <div className="h-8 w-28 bg-gray-200 rounded"></div>
+                <div className="h-8 w-28 bg-gray-200 rounded"></div>
+                <div className="h-8 w-28 bg-gray-200 rounded"></div>
+                <div className="h-10 w-44 bg-gray-300 rounded"></div>
+              </div>
+            </div>
+
+          ))}
+        </div>) : applications.length === 0 ? (
+          <p className="w-[60%] mx-auto flex-col mt-32 flex items-center  text-center text-gray-600 text-base">
+            <span className='text-red-500 mb-5 flex flex-1'>No applications found.</span><br /> Please generate your CV and Cover Letter, then search and apply for jobs using the job link to start tracking your application progress.
+          </p>
+        ) : (
 
         applications.map(({
           job_id,
@@ -282,7 +307,7 @@ const ApplicationTracker = () => {
             requiredSkills={skills || 'N/A'}
             profileMatch={match_score || 0}
             status={status || 'pending'}
-            selectedDate={selected_date} 
+            selectedDate={selected_date}
             onDelete={() =>
               setApplications(prev => prev.filter(app => app.job_id !== job_id))
             }

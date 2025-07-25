@@ -142,7 +142,7 @@ const DocumentEditor = () => {
                     </div>
 
                     <div style={{ transform: 'scale(0.85)', transformOrigin: 'top left' }}>
-                        <div ref={cvPreviewRef} className="h-full w-[794px] py-5 flex bg-white mx-auto overflow-hidden scrollbar-custom">
+                        <div ref={cvPreviewRef} className="min-h-[1123px] w-[794px] py-5 flex bg-white mx-auto overflow-hidden scrollbar-custom">
 
                             <ExternalModernDeedy
                                 personalInfo={cvPersonalInfo}

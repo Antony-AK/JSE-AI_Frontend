@@ -45,6 +45,8 @@ const MyApplication = () => {
   const [selectedTitle, setSelectedTitle] = useState('');
   const [activeMenuIndex, setActiveMenuIndex] = useState(null);
   const [selectedLanguages, setSelectedLanguages] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
+
 
   const selectedJobRef = useRef(null);
   const filterDropdownRef = useRef(null);
@@ -290,6 +292,8 @@ const MyApplication = () => {
       const errMsg = error.response?.data?.message || "⚠ Failed to fetch jobs.";
       setError(errMsg);
       setJobLoading(false); // ✅ stop loader
+      setIsFetching(false); // ✅ stop small loader
+
     }
   };
 
@@ -443,7 +447,8 @@ const MyApplication = () => {
 
   const fetchJobsByLanguage = async (lang, customOffset = 0) => {
     try {
-      setLoading(true);
+      setIsFetching(true); // 🔄 Light loader on filter
+
       const token = sessionStorage.getItem("authToken");
       let jobs = [];
 
@@ -526,10 +531,12 @@ const MyApplication = () => {
       });
 
       setOffset(customOffset);
-      setLoading(false);
+      setIsFetching(false); // ✅ stop small loader
+
     } catch (error) {
       console.error("Error fetching jobs by language:", error);
-      setLoading(false);
+      setIsFetching(false); // ✅ stop small loader
+
     }
   };
 
@@ -711,15 +718,15 @@ const MyApplication = () => {
   const jobsToRender = isFilterActive ? filteredJobs : selectedJobs;
 
 
- const isColdLoading = (loading || jobLoading) && selectedJobs.length === 0;
+  const isColdLoading = (loading || jobLoading) && selectedJobs.length === 0;
 
-if (isColdLoading) {
-  return (
-    <div className="flex items-center justify-center h-screen">
-      <Loader />
-    </div>
-  );
-}
+  if (isColdLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader />
+      </div>
+    );
+  }
 
 
   return (
@@ -753,8 +760,9 @@ if (isColdLoading) {
             });
             setSelectedTitle(title);
             setIsFilterActive(true);
-
+            setIsFetching(false); // ✅ hide loader after fetch
           }}
+            setIsFetching={setIsFetching} // 👈 pass this prop!
         />
 
         <motion.div
@@ -961,6 +969,12 @@ if (isColdLoading) {
 
               <div className="w-full mb-5 -space-y-6 rounded-xl bg-white border border-gray-400/20 "><br />
 
+                {isFetching && (
+                  <div className="w-full py-4 flex justify-center items-center">
+                    <Loader className="w-6 h-6 text-teal-700" />
+                    <p className="text-gray-500 text-sm">Filtering jobs...</p>
+                  </div>
+                )}
 
                 <div className="h-[720px] overflow-x-hidden  overflow-y-auto scrollbar-custom">
                   {jobsToRender.map((job, index) => (
@@ -1102,7 +1116,6 @@ if (isColdLoading) {
                 <br />
                 <div className="flex justify-center items-center gap-2 pt-14  flex-wrap">
                   {/* Prev Button */}
-                  {/* Prev Button */}
                   <button
                     onClick={() => {
                       const prevOffset = getOffsetFromUrl(pagination.prev);
@@ -1139,15 +1152,8 @@ if (isColdLoading) {
                   >
                     Next
                   </button>
-
-
                 </div>
-
                 <br />
-
-
-
-
               </div>
             </div>
 

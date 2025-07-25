@@ -348,6 +348,7 @@ const Skills = () => {
         const method = hasDataRef.current ? 'PUT' : 'POST';
 
         try {
+            setLoading(true);
             const response = await fetch(apiUrl, {
                 method,
                 headers: {
@@ -374,6 +375,9 @@ const Skills = () => {
 
         } catch (error) {
             console.error("❌ Network or server error:", error);
+        }
+        finally {
+            setLoading(false); // ✅ stop loading if needed (especially if you *don’t* navigate)
         }
     };
 

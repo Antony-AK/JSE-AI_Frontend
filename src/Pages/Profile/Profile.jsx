@@ -59,6 +59,8 @@ const Profile = () => {
   const [isLoadingPersonalInfo, setIsLoadingPersonalInfo] = useState(true);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
   const [isLoadingJobProfile, setIsLoadingJobProfile] = useState(true);
+  const [isProfileLoading, setIsProfileLoading] = useState(true);
+
 
 
     useEffect(() => {
@@ -75,6 +77,15 @@ const Profile = () => {
       </div>
     );
   }
+
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    setIsProfileLoading(false); // ✅ stop loading after 2s
+  }, 200);
+
+  return () => clearTimeout(timer); // cleanup
+}, []);
+
 
 
   useEffect(() => {
@@ -268,8 +279,15 @@ const Profile = () => {
   const handleJobTitleUpdateForm = () => setShowJobTitleUpdateForm(true);
   const handleProjectUpdateForm = () => setShowProjectUpdateForm(true);
 
+if (isProfileLoading) {
   return (
-    <div className='flex flex-col gap-3 bg-gray-100 px-6 py-4'>
+   <Loader/>
+  );
+}
+
+
+  return (
+    <div className='flex flex-col w-[calc(100%-64px)] gap-3 bg-gray-100 px-6 py-4'>
       {/* 💠 Dashboard Summary Section */}
       <div className="bg-[#215D69] rounded-md text-white p-6 mb-2 flex flex-col gap-5">
 
