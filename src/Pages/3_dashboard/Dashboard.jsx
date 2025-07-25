@@ -335,7 +335,7 @@ const Dashboard = () => {
                     {profileCompletion}%
                   </div>
                 </div>
-                <span className="text-xs font-medium text-gray-600">
+                <span className="text-xs font-medium text-gray-600 whitespace-nowrap">
                   Profile Complete
                 </span>
               </div>
@@ -476,8 +476,8 @@ const Dashboard = () => {
                       <h2 className="font-semibold text-[#2c6472]">
                         {job.title}
                       </h2>
-                      <p className="font-medium text-sm">{job.company}</p>
-                      <p className="text-sm">{job.location}</p>
+                      <p className="font-medium text-[13px] md:text-sm">{job.company}</p>
+                      <p className="text-[13px] md:text-sm">{job.location}</p>
                     </div>
 
                     {/* Profile Completion Circle */}
@@ -513,7 +513,7 @@ const Dashboard = () => {
                           {animatedCompletions[index]}%
                         </div>
                       </div>
-                      <span className="text-xs font-medium text-gray-600 mt-1">
+                      <span className="text-xs md:text-xs font-medium text-gray-600 mt-1 whitespace-nowrap">
                         Profile Match
                       </span>
                     </div>

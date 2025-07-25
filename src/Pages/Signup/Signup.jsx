@@ -179,11 +179,11 @@ const togglePasswordVisibility = (field) => {
   }, []);
 
   return (
-    <div className="flex min-h-screen relative">
+    <div className="flex flex-col-reverse md:flex-row min-h-screen relative">
       {/* Left Panel */}
       <div className="flex flex-1 flex-col justify-evenly items-center p-8 bg-white ">
         <div className="max-w-lg w-full mt-5">
-          <h2 className="text-3xl font-semibold text-center ">
+          <h2 className="text-xl md:text-3xl font-semibold text-center">
             Create account
           </h2>
           <br />
@@ -280,15 +280,15 @@ const togglePasswordVisibility = (field) => {
             </div>
 
             {/* Password Fields */}
-            <div className="flex space-x-2">
+            <div className="flex flex-col md:flex-row md:space-x-2">
               {/* Create Password */}
-              <div className="w-1/2">
+              <div className="w-full md:w-1/2">
                 <label className="mb-1 ms-3 mt-3 block text-gray-500 text-sm">
                   Create Password
                 </label>
 
                 {/* Wrap input + icon in their own relative div */}
-                <div className="relative  h-[52px]">
+                <div className="relative h-[52px]">
                   <input
                     id="password"
                     type={showPassword.password ? "password" : "text"}
@@ -318,8 +318,8 @@ const togglePasswordVisibility = (field) => {
 
 
               {/* Confirm Password */}
-              <div className="w-1/2">
-                <label className="mb-1 ms-3 mt-3 block text-gray-500 text-sm">
+              <div className="w-full md:w-1/2">
+                <label className="mb-1 md:ms-3 mt-3 block text-gray-500 text-sm">
                   Confirm Password
                 </label>
 
@@ -444,14 +444,14 @@ const togglePasswordVisibility = (field) => {
       </div>
 
       {/* Right Panel */}
-      <div className="hidden md:flex w-1/2 flex-col items-center justify-center bg-[#2c6472] text-white px-8">
-        <h3 className="text-3xl font-medium mb-1 ms-4 text-center">
+      <div className="flex w-full md:w-1/2 flex-col items-center justify-center bg-[#2c6472] text-white px-8 py-8">
+        <h3 className="text-xl md:text-3xl font-medium mb-1 ms-4 text-center">
           Welcome to
         </h3>
-        <div className="flex items-center mb-3 -ms-2">
-          <img src={logo} className="h-12 w-28" />
+        <div className="flex items-center md:mb-3 -ms-2">
+          <img src={logo} className="h-10 md:h-12 w-24 md:w-28" />
         </div>
-        <div className="relative mb-5 flex justify-center items-center ms-4">
+        <div className="hidden relative mb-5 md:flex justify-center items-center ms-4">
           <img src={frame} alt="" className="relative object-cover " />
           <DotLottieReact
             src="https://lottie.host/47dbe349-fbbc-4772-9026-56f4ed8832c8/G4VcaYQkF2.lottie"
@@ -470,7 +470,7 @@ const togglePasswordVisibility = (field) => {
 
       {showVerificationPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-8 text-center border-b-[#2c6472] border-b-8">
+          <div className="bg-white w-[80%] md:w-auto rounded-lg shadow-lg p-8 text-center border-b-[#2c6472] border-b-8">
             <h2 className="text-xl font-semibold mb-4 text-[#2c6472]">
               Check Your Email 📬
             </h2>
