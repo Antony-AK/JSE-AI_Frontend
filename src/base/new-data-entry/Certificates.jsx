@@ -282,10 +282,10 @@ const Certificates = () => {
                              cursor-pointer outline-none
                            `}
                         >
-                            <option value="" disabled className="text-gray-400 bg-white">Select Type</option>
-                            <option value="certification" className="bg-white">Certification</option>
-                            <option value="participation" className="bg-white">Participation</option>
-                            <option value="completion" className="bg-white">Completion</option>
+                            <option value="" disabled className="text-gray-400 text-sm py-2 bg-white">Select Type</option>
+                            <option value="certification" className="text-sm py-2 bg-white">Certification</option>
+                            <option value="participation" className="text-sm py-2 bg-white">Participation</option>
+                            <option value="completion" className="text-sm py-2 bg-white">Completion</option>
                         </select>
 
                         {errors.certificate_type && <span className="text-red-500 text-sm">{errors.certificate_type}</span>}

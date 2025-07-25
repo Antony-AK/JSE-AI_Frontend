@@ -79,12 +79,12 @@ const Login = () => {
 
 
   return (
-    <div className="flex flex-col min-h-screen ">
-      <div className="flex flex-1">
+    <div className="flex flex-col min-h-screen bg-white">
+      <div className="flex flex-col-reverse md:flex-row md:flex-1">
         {/* Left Panel */}
-        <div className="flex flex-1 justify-center items-center p-8 bg-white">
+        <div className="flex flex-1 justify-center items-center p-8 py-14 bg-white">
           <div className="max-w-lg w-full">
-            <h2 className="text-3xl font-semibold text-center mb-2">Login now</h2><br /><br />
+            <h2 className="text-xl md:text-3xl font-semibold text-center mb-2">Login now</h2><br /><br />
 
             {/* <button className="w-full h-[52px] flex items-center justify-center border border-gray-300 py-3 rounded-md mb-1 hover:bg-[#2c6472]/5 hover:border-[#2c6472] transition">
               <img src={google} className="mr-4 text-xl text-gray-600" />
@@ -166,15 +166,15 @@ const Login = () => {
         </div>
 
         {/* Right Panel */}
-        <div className="hidden md:flex flex-1 flex-col justify-center items-center bg-[#2c6472] text-white p-8">
+        <div className="flex md:flex-1 flex-col justify-center items-center bg-[#2c6472] text-white p-8 py-10">
           <div className="flex flex-col  items-center mb-3">
-            <h3 className="text-center  text-2xl ms-4 font-medium">Welcome Back!</h3>
+            <h3 className="text-center text-xl md:text-3xl ms-4 mb-2 font-medium">Welcome Back!</h3>
             <img
               src={logo}
-              className="h-12 w-28"
+              className="h-10 md:h-12 w-24 md:w-28"
             />
           </div>
-          <div className='relative mb-5 flex justify-center items-center ms-4'>
+          <div className='hidden relative mb-5 md:flex justify-center items-center ms-4'>
             <img src={frame} alt="" className='relative object-cover ' />
             <DotLottieReact
               src="https://lottie.host/47dbe349-fbbc-4772-9026-56f4ed8832c8/G4VcaYQkF2.lottie"
