@@ -216,10 +216,10 @@ const WorkExperience = () => {
   return (
     <div className='p-3 md:p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen overflow-y-auto'>
       <div
-        className="flex items-center justify-end w-[95%] mt-2"
+        className="flex items-center justify-end w-[95%]"
       >
         <div
-          className="cursor-pointer px-4 rounded transition"
+          className="cursor-pointer rounded transition"
           onClick={() => navigate('/user/onboarding/education')}
         >
           <p className="text-lg font-medium text-[#00000057]">Skip</p>
@@ -227,7 +227,7 @@ const WorkExperience = () => {
       </div>
 
 
-      <p className='text-[#2c6472] font-semibold -mt-10 w-fit'>STEP 2 OF 8</p>
+      <p className='text-[#2c6472] font-semibold -mt-11 w-fit'>STEP 2 OF 8</p>
 
       <h2 className='font-bold sm:text-lg md:text-xl'>Highlight your Work Experience.</h2>
 

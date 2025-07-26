@@ -218,7 +218,7 @@ const Certificates = () => {
                             className="flex items-center justify-center text-center cursor-pointer transition-transform duration-200 ease-in-out"
                             onClick={() => navigate('/user/onboarding/jobtitles')}
                         >
-                            <p className='cursor-pointer text-lg font-medium text-[#00000057]'>Skip</p>
+                            <p className='cursor-pointer md:text-lg font-medium text-[#00000057]'>Skip</p>
                         </div>
 
                 </div>
@@ -232,7 +232,7 @@ const Certificates = () => {
                 </div>
 
                 {certificateList.length > 0 && (
-                    <div className="flex gap-3 px-6 py-4 -m-3 w-[90%] rounded-lg overflow-x-auto hide-scrollbar snap-x snap-mandatory">
+                    <div className="flex gap-3 px-3 md:px-6 py-4 -m-3 w-[90%] rounded-lg overflow-x-auto hide-scrollbar snap-x snap-mandatory">
                         {certificateList
                             .filter((cert) => cert.certificate_name.trim() !== '')
                             .map((cert) => (
@@ -244,7 +244,7 @@ const Certificates = () => {
             ${activeId === cert.id ? 'bg-[#2c6472] text-white' : 'bg-[#F4F4F4] text-[#2c6472]'}
             hover:bg-[#2c6472] hover:text-white`}
                                 >
-                                    <p className="text-base font-bold truncate w-full">{cert.certificate_name}</p>
+                                    <p className="text-sm md:text-base font-bold truncate w-full">{cert.certificate_name}</p>
                                     <p className="text-xs font-medium opacity-90 truncate w-full">{cert.provider || 'No Company'}</p>
                                 </div>
                             ))}
