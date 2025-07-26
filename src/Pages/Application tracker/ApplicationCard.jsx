@@ -29,9 +29,28 @@ const ApplicationCard = ({
   const [clDataToDownload, setClDataToDownload] = useState(null);
   const [startDownload, setStartDownload] = useState(false);
 
-
+  const [animatedValue, setAnimatedValue] = useState(0);
 
   const [showMenu, setShowMenu] = useState(false);
+
+  useEffect(() => {
+    let start = 0;
+    const end = profileMatch || 0; // final value
+    const duration = 1000; // 1 second
+    const stepTime = 16; // ~60fps
+    const increment = end / (duration / stepTime);
+
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        start = end;
+        clearInterval(timer);
+      }
+      setAnimatedValue(Math.round(start));
+    }, stepTime);
+
+    return () => clearInterval(timer);
+  }, [profileMatch]);
 
   // Helper to check if we can go to the next status
   const canUpdateTo = (targetStatus) => {
@@ -245,7 +264,7 @@ const ApplicationCard = ({
         </div>
 
         {/* Buttons */}
-        <div className="flex w-[1050px] gap-2.5 mt-4 ms-10 ">
+        <div className="flex gap-2.5 mt-4 ms-10 ">
           {statusOrder.map((statusOption, index) => {
             const currentIndex = statusOrder.findIndex(
               (s) => s.toLowerCase() === activeStatus.toLowerCase()
@@ -337,14 +356,14 @@ const ApplicationCard = ({
               strokeWidth="5"
               fill="none"
               strokeDasharray="188.5" // 2 * π * r = 2 * 3.14 * 30
-              strokeDashoffset={188.5 - (188.5 * (profileMatch ?? 0)) / 100}
+              strokeDashoffset={188.5 - (188.5 * animatedValue) / 100}
               strokeLinecap="round"
               transform="rotate(-90 40 40)"
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-gray-800">
-            {Math.round(profileMatch ?? 0)}%       
-               </div>
+            {animatedValue}%    
+          </div>
         </div>
         <span className="text-xs mt-2 w-28 font-medium text-gray-600">Profile Complete</span>
       </div>

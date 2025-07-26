@@ -177,7 +177,26 @@ const Dashboard = () => {
       : [];
   }, [newJobs]);
 
-  const [animatedCompletions, setAnimatedCompletions] = useState([]);
+  const [animatedValue, setAnimatedValue] = useState(0); // for the profile completion progress bar
+
+  const [animatedCompletions, setAnimatedCompletions] = useState([]); // for the mini job match progress bar
+
+   useEffect(() => {
+    let current = 0;
+    const step = profileCompletion / (500 / 5); 
+
+    const interval = setInterval(() => {
+      current += step;
+      if (current >= profileCompletion) {
+        current = profileCompletion;
+        clearInterval(interval);
+      }
+      setAnimatedValue(Math.round(current));
+    }, 5);
+
+    return () => clearInterval(interval);
+  }, [profileCompletion]);
+
 
   useEffect(() => {
     if (jobs.length === 0) return;
@@ -189,7 +208,7 @@ const Dashboard = () => {
 
     jobs.forEach((job, index) => {
       let current = 0;
-      const step = job.profileMatch / (500 / 5); // duration = 500ms, interval = 5ms
+      const step = job.profileMatch / (500 / 5);
 
       const interval = setInterval(() => {
         current += step;
@@ -440,15 +459,16 @@ const Dashboard = () => {
                         strokeWidth="4"
                         fill="none"
                         strokeDasharray="150"
-                        strokeDashoffset={
-                          150 - (150 * (profileCompletion ?? 0)) / 100
-                        }
+                        strokeDashoffset={150 - (150 * animatedValue) / 100}
                         strokeLinecap="round"
                         transform="rotate(-90 28 28)"
+                        style={{
+                          transition: "stroke-dashoffset 0.3s ease-out", // smooth circle fill
+                        }}
                       />
                     </svg>
                     <div className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-gray-800">
-                      {profileCompletion}%
+                      {animatedValue}%
                     </div>
                   </div>
                   <span className="text-xs font-medium text-gray-600 whitespace-nowrap">

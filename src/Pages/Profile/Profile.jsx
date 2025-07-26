@@ -63,11 +63,8 @@ const Profile = () => {
   const [isLoadingMiniInfo, setIsLoadingMiniInfo] = useState(true);
   const [isLoadingMiniProfile, setIsLoadingMiniProfile] = useState(true);
   const [animatedInternal, setAnimatedInternal] = useState(0);
-const [animatedExternal, setAnimatedExternal] = useState(0);
-const [animatedProficiency, setAnimatedProficiency] = useState(0);
-  
-
-
+  const [animatedExternal, setAnimatedExternal] = useState(0);
+  const [animatedProficiency, setAnimatedProficiency] = useState(0);
 
 
   useEffect(() => {
@@ -296,74 +293,56 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
   const handleJobTitleUpdateForm = () => setShowJobTitleUpdateForm(true);
   const handleProjectUpdateForm = () => setShowProjectUpdateForm(true);
 
-useEffect(() => {
-  if (isLoadingMiniInfo) return;
-
-  const duration = 500; // total animation duration (ms)
-  const intervalTime = 5; // update interval
-  const totalSteps = duration / intervalTime;
-
-  const animatedValues = [
-    {
-      target: (internal / maxInternal) * 100,
-      setter: setAnimatedInternal,
-      shouldAnimate: maxInternal > 0,
-    },
-    {
-      target: (external / maxExternal) * 100,
-      setter: setAnimatedExternal,
-      shouldAnimate: maxExternal > 0,
-    },
-    {
-      target: (proficiency / maxProficiency) * 100,
-      setter: setAnimatedProficiency,
-      shouldAnimate: maxProficiency > 0,
-    },
-  ];
-
-  const intervals = [];
-
-  animatedValues.forEach(({ target, setter, shouldAnimate }) => {
-    if (!shouldAnimate) {
-      setter(0);
-      return;
+  useEffect(() => {
+    if (!isLoadingMiniInfo) {
+      let start = 0;
+      const end = Math.round((internal / maxInternal) * 100);
+      const step = end / 60; // ~1s
+      const interval = setInterval(() => {
+        start += step;
+        if (start >= end) {
+          start = end;
+          clearInterval(interval);
+        }
+        setAnimatedInternal(Math.round(start));
+      }, 16);
+      return () => clearInterval(interval);
     }
+  }, [isLoadingMiniInfo, internal, maxInternal]);
 
-    let current = 0;
-    const step = target / totalSteps;
+  useEffect(() => {
+    if (!isLoadingMiniInfo) {
+      let start = 0;
+      const end = Math.round((external / maxExternal) * 100);
+      const step = end / 60;
+      const interval = setInterval(() => {
+        start += step;
+        if (start >= end) {
+          start = end;
+          clearInterval(interval);
+        }
+        setAnimatedExternal(Math.round(start));
+      }, 16);
+      return () => clearInterval(interval);
+    }
+  }, [isLoadingMiniInfo, external, maxExternal]);
 
-    const interval = setInterval(() => {
-      current += step;
-      if (current >= target) {
-        current = target;
-        clearInterval(interval);
-      }
-      setter(Math.round(current));
-    }, intervalTime);
-
-    intervals.push(interval);
-  });
-
-  return () => {
-    intervals.forEach(clearInterval);
-  };
-}, [
-  isLoadingMiniInfo,
-  internal,
-  external,
-  proficiency,
-  maxInternal,
-  maxExternal,
-  maxProficiency,
-]);
-
-
-
-console.log("internal:", internal, "maxInternal:", maxInternal);
-console.log("external:", external, "maxExternal:", maxExternal);
-console.log("proficiency:", proficiency, "maxProficiency:", maxProficiency);
-
-
+  useEffect(() => {
+    if (!isLoadingMiniInfo) {
+      let start = 0;
+      const end = Math.round((proficiency / maxProficiency) * 100);
+      const step = end / 60;
+      const interval = setInterval(() => {
+        start += step;
+        if (start >= end) {
+          start = end;
+          clearInterval(interval);
+        }
+        setAnimatedProficiency(Math.round(start));
+      }, 16);
+      return () => clearInterval(interval);
+    }
+  }, [isLoadingMiniInfo, proficiency, maxProficiency]);
 
   if (isProfileLoading) {
     return (
@@ -413,9 +392,9 @@ console.log("proficiency:", proficiency, "maxProficiency:", maxProficiency);
                   strokeDashoffset={
                     isLoadingMiniInfo
                       ? 226.2
-                      : 226.2 - (226.2 * animatedInternal) / maxInternal
+                      : 226.2 - (226.2 * animatedInternal) / 100
                   }
-
+                  style={{ transition: "stroke-dashoffset 1s ease-out" }}
                   strokeLinecap="round"
                   transform="rotate(-90 40 40)"
                 />
@@ -454,7 +433,7 @@ console.log("proficiency:", proficiency, "maxProficiency:", maxProficiency);
                   strokeDashoffset={
                     isLoadingMiniInfo
                       ? 226.2
-                      : 226.2 - (226.2 * animatedExternal) / maxExternal
+                      : 226.2 - (226.2 * animatedExternal) / 100
                   }
 
                   strokeLinecap="round"
@@ -496,7 +475,7 @@ console.log("proficiency:", proficiency, "maxProficiency:", maxProficiency);
                   strokeDashoffset={
                     isLoadingMiniInfo || maxProficiency === 0
                       ? 226.2
-                      : 226.2 - (226.2 * animatedProficiency) / maxProficiency
+                      : 226.2 - (226.2 * animatedProficiency) / 100
                   }
 
                   strokeLinecap="round"
@@ -578,7 +557,7 @@ console.log("proficiency:", proficiency, "maxProficiency:", maxProficiency);
                 strokeDashoffset={
                   isLoadingMiniProfile
                     ? 150
-                    : 150 - (150 * (profileCompletion ?? 0)) / 100
+                    : 150 - (150 * (animatedScore ?? 0)) / 100
                 }
 
                 strokeLinecap="round"
