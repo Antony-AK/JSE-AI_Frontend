@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext  } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import profile1 from "../../assets/profile1.png";
@@ -16,6 +16,7 @@ import Loader from "../../base/loader/Loader";
 import { useMemo } from "react";
 import { useProfileImage } from "../../base/ProfileEditor/ProfileImageContext";
 import PackagePopup from "../../base/PackagePopup/PackagePopup";
+import { JobContext } from "../6_my_jobs/JobContext";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -52,6 +53,8 @@ const Dashboard = () => {
   const [loadingChecklist, setLoadingChecklist] = useState(true);
   const [loadingJobs, setLoadingJobs] = useState(true);
   const [loadingTests, setLoadingTests] = useState(true);
+  const { fetchSelectedJobs } = useContext(JobContext);
+
 
 
 
@@ -122,6 +125,17 @@ const Dashboard = () => {
         setLoadingTests(false);
       });
   }, []);
+
+  useEffect(() => {
+  // 👇 Only fetch if it's not already cached
+  const cachedJobs = sessionStorage.getItem("jobCache");
+  if (!cachedJobs) {
+    console.log("📦 Job cache not found. Fetching...");
+    fetchSelectedJobs();
+  } else {
+    console.log("✅ Job cache exists. Skipping fetch.");
+  }
+}, []);
 
 
   const fullName = `${profile?.first_name || ""} ${profile?.second_name || ""}`.trim();

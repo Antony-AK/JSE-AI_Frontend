@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown } from "react-icons/fa"; // dropdown arrow icon
 import axios from "axios";
@@ -20,18 +20,36 @@ import JobSearchTitleDropdown from "../../base/LanguageModelPopup/JobTitleDropdo
 import LimitReachedModal from '../6_my_jobs/MyJobsPopUp/LimitReachedModel.jsx';
 import SkeletonJobApplicationTracker from "../../base/InternalDesignComponent/InternalDesignLoader.jsx";
 import InternalRightDesignLoader from "../../base/InternalDesignComponent/InternalRightDesignLoader.jsx";
+import { JobContext } from "./JobContext.jsx";
 
 const MyApplication = () => {
   const navigate = useNavigate();
+  const {
+    selectedJobs,
+    setSelectedJobs,
+    selectedJob,
+    setSelectedJob,
+    pagination,
+    setPagination,
+    offset,
+    setOffset,
+    jobLoading,
+    setJobLoading,
+    fetchSelectedJobs,
+    selectedJobRef,
+  } = useContext(JobContext);
+  const perPage = pagination?.per_page || 20; // fallback to 20
+
+
 
   const [showLimitModal, setShowLimitModal] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState('');
   const searchTimeoutRef = useRef(null);
 
-  const [selectedJobs, setSelectedJobs] = useState([]);
+  // const [selectedJobs, setSelectedJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedJob, setSelectedJob] = useState(null);
+  // const [selectedJob, setSelectedJob] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -50,7 +68,7 @@ const MyApplication = () => {
   const [isFetching, setIsFetching] = useState(false);
 
 
-  const selectedJobRef = useRef(null);
+  // const selectedJobRef = useRef(null);
   const filterDropdownRef = useRef(null);
   const customDropdownRef = useRef(null);
   const languageDropdownRef = useRef(null);
@@ -146,17 +164,16 @@ const MyApplication = () => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
-  const [offset, setOffset] = useState(0);
-  const [pagination, setPagination] = useState({
-    current: 1,
-    per_page: 20,
-    total: 0,
-    next: null,
-    prev: null,
-  });
-  const perPage = pagination.per_page; // or hardcode 10 if it's fixed
-  const hasFetched = useRef(false);
-  const [jobLoading, setJobLoading] = useState(false);
+  // const [offset, setOffset] = useState(0);
+  // const [pagination, setPagination] = useState({
+  //   current: 1,
+  //   per_page: 20,
+  //   total: 0,
+  //   next: null,
+  //   prev: null,
+  // });
+  // const perPage = pagination.per_page; 
+  // const [jobLoading, setJobLoading] = useState(false);
 
 
 
@@ -169,135 +186,6 @@ const MyApplication = () => {
 
   const token = sessionStorage.getItem("authToken");
 
-  const fetchSelectedJobs = async (customOffset = offset) => {
-    const cachedJobs = sessionStorage.getItem("jobCache");
-    const cachedPagination = sessionStorage.getItem("jobPagination");
-    const savedSelectedJobId = sessionStorage.getItem("selectedJobId");
-
-    let usedCache = false;
-
-    if (cachedJobs && cachedPagination) {
-      const parsedJobs = JSON.parse(cachedJobs);
-      const parsedPagination = JSON.parse(cachedPagination);
-
-      setSelectedJobs(parsedJobs);
-      setPagination(parsedPagination);
-
-      const jobToSelect = parsedJobs.find((job) => job.id === savedSelectedJobId);
-      setSelectedJob(jobToSelect || parsedJobs[0]);
-
-      usedCache = true; // 🧠 mark cache as used
-    }
-
-    // 👇 Only show loading spinner if cache wasn't used
-    if (!usedCache) {
-      setJobLoading(true);
-    }
-
-    try {
-      const token = sessionStorage.getItem("authToken");
-
-      const response = await axios.get(`${BASE_URL}/api/jobs`, {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { offset: customOffset, limit: perPage },
-      });
-
-
-      const fetchedJobs = response.data.jobs || [];
-      const paginationInfo = response.data.pagination || {};
-      const totalItems = paginationInfo.total || 0;
-      const currentPage = Math.floor(customOffset / perPage) + 1;
-
-      const mappedJobs = fetchedJobs
-        .filter(job => job && typeof job === "object")
-        .map((job) => {
-
-          return {
-            id: job.job_id || job.id, // 👉 Use backend ID only
-            jobTitle: job.job_title || job.title || "Untitled Job",
-            title: job.title || job.job_title,
-            companyName: job.company || "Unknown Company",
-            company: job.company || "Unknown Company",
-            location: job.location || "Location not specified",
-            postedDate: job.posted_date || "Not specified",
-            description: job.description?.slice(0, 100) + "...",
-            Description: job.description || "No description available",
-            matchValue: job.match_score || 50,
-            skillData: [
-              {
-                label: "Required Skills",
-                value: job.skills ? job.skills.split(",").map((s) => s.trim()) : [],
-              },
-              {
-                label: "Your Skills",
-                value: Array.isArray(job.user_skills) ? job.user_skills : [],
-              },
-              {
-                label: "Job Type",
-                value: job.job_type || "Not specified",
-              },
-            ],
-            selected: job.selected || false,
-            cvGenerated: job.cv_generated || false,
-            coverLetterGenerated: job.cover_letter_generated || false,
-            viewLink: job.view_link || "#",
-          };
-        });
-
-      // 🧠 Store in session for next visit
-      sessionStorage.setItem("jobCache", JSON.stringify(mappedJobs));
-      sessionStorage.setItem("jobPagination", JSON.stringify({
-        current: currentPage,
-        total: totalItems,
-        per_page: paginationInfo.per_page || perPage,
-        next: paginationInfo.next || null,
-        prev: paginationInfo.prev || null,
-      }));
-      sessionStorage.setItem("jobPaginationOffset", customOffset);
-
-
-
-
-      setSelectedJobs(mappedJobs);
-
-      // 🧠 Restore previously selected job from sessionStorage
-      const savedSelectedJobId = sessionStorage.getItem("selectedJobId");
-      if (savedSelectedJobId) {
-        const jobToSelect = mappedJobs.find((job) => job.id === savedSelectedJobId);
-        setSelectedJob(jobToSelect || mappedJobs[0]); // fallback to first
-      } else {
-        setSelectedJob(mappedJobs[0]);
-      }
-
-      setTimeout(() => {
-        if (selectedJobRef.current) {
-          selectedJobRef.current.scrollIntoView({
-            behavior: "smooth",
-            block: "center", // 👈 scrolls to center of the list
-          });
-        }
-      }, 300); // wait for DOM to fully render
-
-
-
-      setPagination({
-        current: currentPage,
-        total: totalItems,
-        per_page: paginationInfo.per_page || perPage,
-        next: paginationInfo.next || null,
-        prev: paginationInfo.prev || null,
-      });
-
-      setOffset(customOffset);
-      setJobLoading(false); // ✅ stop loader
-    } catch (error) {
-      const errMsg = error.response?.data?.message || "⚠ Failed to fetch jobs.";
-      setError(errMsg);
-      setJobLoading(false); // ✅ stop loader
-      setIsFetching(false); // ✅ stop small loader
-
-    }
-  };
 
   const handleSearchJobs = async (query) => {
     if (!query.trim()) {
@@ -588,6 +476,31 @@ const MyApplication = () => {
       handleLanguageSelect(savedLang || "english", type);
       return;
     }
+
+  if (type === "cv" || type === "cl") {
+  const storedJobs = JSON.parse(sessionStorage.getItem("selectedJobs") || "[]");
+
+  const updatedJobs = storedJobs.map((job) => {
+    if (job.id === selectedJob.id) {
+      return {
+        ...job,
+        ...(type === "cv" ? { cvGenerated: true } : { coverLetterGenerated: true }),
+      };
+    }
+    return job;
+  });
+
+  // ✅ Update sessionStorage
+  sessionStorage.setItem("selectedJobs", JSON.stringify(updatedJobs));
+
+  // ✅ Update selectedJobs state if you're tracking it
+  setSelectedJobs && setSelectedJobs(updatedJobs);
+
+  // ✅ Update selectedJob from updated array
+  const updatedSelected = updatedJobs.find((job) => job.id === selectedJob.id);
+  setSelectedJob(updatedSelected);
+}
+
 
     if (savedLang) {
       handleLanguageSelect(savedLang, type);
@@ -973,144 +886,144 @@ const MyApplication = () => {
               <div className="w-full mb-5 -space-y-6 rounded-xl bg-white border border-gray-400/20 "><br />
 
                 {isFetching ? (
-                 <SkeletonJobApplicationTracker/>
+                  <SkeletonJobApplicationTracker />
                 ) : (
                   <div className="h-[720px] overflow-x-hidden  overflow-y-auto scrollbar-custom">
                     {jobsToRender.map((job, index) => (
                       <div
                         key={index}
-                      onClick={() => {
-                        setSelectedJob(job);
-                        sessionStorage.setItem("selectedJobId", job.id); // 🧠 save selected job
-                        sessionStorage.setItem("jobPaginationOffset", offset); // 🆕 Save offset
+                        onClick={() => {
+                          setSelectedJob(job);
+                          sessionStorage.setItem("selectedJobId", job.id); // 🧠 save selected job
+                          sessionStorage.setItem("jobPaginationOffset", offset); // 🆕 Save offset
 
-                      }}
-                      ref={selectedJob?.id === job.id ? selectedJobRef : null} // 💡 Only add ref to selected job
-                      className={`flex items-start h-48 bg-white  relative justify-between border-y rounded-s-xl border-gray-400/20 px-4  py-5  transition-transform ease-in-out duration-200 cursor-pointer ${selectedJob === job ? " border-l-4 border-teal-700 bg-[#2c6472]/10 transition-transform ease-in-out duration-200" : ""
-                        }`}
-                    >
-                      <div className="flex flex-col min-w-[400px] items-start space-x-10 justify-center ms-3 mb-2">
-                        <div className="space-y-2">
-                          <h3 className="text-base w-96 font-semibold text-[#2C6472] h-12 overflow-y-hidden">{job.jobTitle}</h3>
-                          <p className="text-sm   text-gray-600">{job.companyName}</p>
-                          <p className="text-sm mb-5 text-gray-500">{job.location}</p>
+                        }}
+                        ref={selectedJob?.id === job.id ? selectedJobRef : null} // 💡 Only add ref to selected job
+                        className={`flex items-start h-48 bg-white  relative justify-between border-y rounded-s-xl border-gray-400/20 px-4  py-5  transition-transform ease-in-out duration-200 cursor-pointer ${selectedJob === job ? " border-l-4 border-teal-700 bg-[#2c6472]/10 transition-transform ease-in-out duration-200" : ""
+                          }`}
+                      >
+                        <div className="flex flex-col min-w-[400px] items-start space-x-10 justify-center ms-3 mb-2">
+                          <div className="space-y-2">
+                            <h3 className="text-base w-96 font-semibold text-[#2C6472] h-12 overflow-y-hidden">{job.jobTitle}</h3>
+                            <p className="text-sm   text-gray-600">{job.companyName}</p>
+                            <p className="text-sm mb-5 text-gray-500">{job.location}</p>
+                          </div>
+
+                          <div className="flex absolute flex-col gap-2 mt-40 -left-3 ">
+                            {job?.skillData?.slice(0, 2).map((item, index) => (
+                              <div
+                                key={index}
+                                className="grid grid-cols-[120px_1fr] gap-2 text-sm"
+                              >
+                                <span className="font-medium text-black">
+                                  {item.label}
+                                </span>
+                                <span className="text-gray-500 w-64 overflow-hidden h-5 leading-snug break-words">
+                                  {Array.isArray(item.value) && (item.label === "Required Skills" || item.label === "Your Skills")
+                                    ? item.value.slice(0, 3).join(', ')
+                                    : item.value}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+
+
+
+
                         </div>
-
-                        <div className="flex absolute flex-col gap-2 mt-40 -left-3 ">
-                          {job?.skillData?.slice(0, 2).map((item, index) => (
-                            <div
-                              key={index}
-                              className="grid grid-cols-[120px_1fr] gap-2 text-sm"
+                        <div className="flex  flex-col justify-start mr-2 items-center"><br />
+                          <div className="relative gap-1 w-24 h-16">
+                            <svg
+                              viewBox="0 0 100 100"
+                              className="absolute top-0 left-0 w-full h-full"
                             >
-                              <span className="font-medium text-black">
-                                {item.label}
-                              </span>
-                              <span className="text-gray-500 w-64 overflow-hidden h-5 leading-snug break-words">
-                                {Array.isArray(item.value) && (item.label === "Required Skills" || item.label === "Your Skills")
-                                  ? item.value.slice(0, 3).join(', ')
-                                  : item.value}
-                              </span>
+                              {/* Background circle */}
+                              <circle
+                                cx="50"
+                                cy="50"
+                                r="45"
+                                stroke="#E5E7EB"  // Light Gray Background
+                                strokeWidth="7"
+                                fill="none"
+                              />
+                              {/* Foreground circle (Progress) */}
+                              <circle
+                                cx="50"
+                                cy="50"
+                                r="45"
+                                stroke="#2C6472"  // Your nice teal color
+                                strokeWidth="7"
+                                fill="none"
+                                strokeDasharray="282"  // Circumference of the circle (2πr)
+                                strokeDashoffset={282 - (282 * job.matchValue || 0) / 100}
+                                strokeLinecap="round"
+                                transform="rotate(-90 50 50)"  // Rotate to start from top
+                              />
+                            </svg>
+
+                            {/* Center text */}
+                            <div className="absolute inset-0 flex m-2 items-center justify-center text-[13px]  font-semibold text-gray-800">
+                              {job.matchValue || 0}%
                             </div>
-                          ))}
+                          </div>
+
+                          <span className="text-sm text-black mt-3 ">Profile Match</span>
                         </div>
-
-
-
-
-                      </div>
-                      <div className="flex  flex-col justify-start mr-2 items-center"><br />
-                        <div className="relative gap-1 w-24 h-16">
-                          <svg
-                            viewBox="0 0 100 100"
-                            className="absolute top-0 left-0 w-full h-full"
+                        <div className="absolute top-2 right-3">
+                          <button
+                            className="text-gray-500 font-medium text-xl hover:bg-gray-200 rounded-full w-7"
+                            onClick={(e) => {
+                              e.stopPropagation(); // prevent parent click
+                              setActiveMenuIndex(activeMenuIndex === index ? null : index);
+                            }}
                           >
-                            {/* Background circle */}
-                            <circle
-                              cx="50"
-                              cy="50"
-                              r="45"
-                              stroke="#E5E7EB"  // Light Gray Background
-                              strokeWidth="7"
-                              fill="none"
-                            />
-                            {/* Foreground circle (Progress) */}
-                            <circle
-                              cx="50"
-                              cy="50"
-                              r="45"
-                              stroke="#2C6472"  // Your nice teal color
-                              strokeWidth="7"
-                              fill="none"
-                              strokeDasharray="282"  // Circumference of the circle (2πr)
-                              strokeDashoffset={282 - (282 * job.matchValue || 0) / 100}
-                              strokeLinecap="round"
-                              transform="rotate(-90 50 50)"  // Rotate to start from top
-                            />
-                          </svg>
+                            ⋮
+                          </button>
 
-                          {/* Center text */}
-                          <div className="absolute inset-0 flex m-2 items-center justify-center text-[13px]  font-semibold text-gray-800">
-                            {job.matchValue || 0}%
-                          </div>
-                        </div>
+                          {activeMenuIndex === index && (
+                            <div className="absolute -right-2 mt-2 bg-white border border-gray-200 shadow-md rounded-md z-5 w-24">
+                              <button
+                                className="w-fit text-left px-4 py-2 text-sm hover:bg-gray-100"
+                                onClick={async (e) => {
+                                  e.stopPropagation();
 
-                        <span className="text-sm text-black mt-3 ">Profile Match</span>
-                      </div>
-                      <div className="absolute top-2 right-3">
-                        <button
-                          className="text-gray-500 font-medium text-xl hover:bg-gray-200 rounded-full w-7"
-                          onClick={(e) => {
-                            e.stopPropagation(); // prevent parent click
-                            setActiveMenuIndex(activeMenuIndex === index ? null : index);
-                          }}
-                        >
-                          ⋮
-                        </button>
+                                  const token = sessionStorage.getItem("authToken");
+                                  if (!token) {
+                                    alert("You need to be logged in to save jobs!");
+                                    return;
+                                  }
 
-                        {activeMenuIndex === index && (
-                          <div className="absolute -right-2 mt-2 bg-white border border-gray-200 shadow-md rounded-md z-5 w-24">
-                            <button
-                              className="w-fit text-left px-4 py-2 text-sm hover:bg-gray-100"
-                              onClick={async (e) => {
-                                e.stopPropagation();
-
-                                const token = sessionStorage.getItem("authToken");
-                                if (!token) {
-                                  alert("You need to be logged in to save jobs!");
-                                  return;
-                                }
-
-                                try {
-                                  const response = await axios.post(
-                                    `${BASE_URL}/saved-jobs`,
-                                    { job_id: job.job_id || job.id }, // make sure jobId is correct
-                                    {
-                                      headers: {
-                                        Authorization: `Bearer ${token}`,
-                                        "Content-Type": "application/json"
+                                  try {
+                                    const response = await axios.post(
+                                      `${BASE_URL}/saved-jobs`,
+                                      { job_id: job.job_id || job.id }, // make sure jobId is correct
+                                      {
+                                        headers: {
+                                          Authorization: `Bearer ${token}`,
+                                          "Content-Type": "application/json"
+                                        }
                                       }
-                                    }
-                                  );
+                                    );
 
-                                  console.log("✅ Job saved:", response.data);
-                                  toast.success("Job saved successfully!");
-                                } catch (err) {
-                                  console.error("❌ Failed to save job:", err.response?.data || err.message);
-                                  toast.error("Failed to save job. Try again.");
-                                } finally {
-                                  setActiveMenuIndex(null); // close the dropdown after action
-                                }
-                              }}
-                            >
-                              Save Job
-                            </button>
-                          </div>
-                        )}
+                                    console.log("✅ Job saved:", response.data);
+                                    toast.success("Job saved successfully!");
+                                  } catch (err) {
+                                    console.error("❌ Failed to save job:", err.response?.data || err.message);
+                                    toast.error("Failed to save job. Try again.");
+                                  } finally {
+                                    setActiveMenuIndex(null); // close the dropdown after action
+                                  }
+                                }}
+                              >
+                                Save Job
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
 
-                </div> )  }
+                  </div>)}
 
                 <br />
                 <div className="flex justify-center items-center gap-2 pt-14  flex-wrap">
@@ -1155,178 +1068,185 @@ const MyApplication = () => {
                 <br />
               </div>
             </div>
-  
-          <div className="flex mb-5 py-3 w-[46%] mt-5 h-[870px] bg-white border border-gray-400/20 rounded-xl"><br />
-               {isFetching ? (
-                 <InternalRightDesignLoader/>
-                ) : (
-              <div className="w-full flex flex-col items-center p-6 space-y-4 overflow-y-auto  scrollbar-custom  rounded-xl bg-white">
-                {selectedJob && (
-                  <>
-                    <div className="flex justify-between  items-start"><br />
-                      <div className="flex gap-4  ">
+
+            <div className="flex mb-5 py-3 w-[46%] mt-5 h-[870px] bg-white border border-gray-400/20 rounded-xl"><br />
+              {isFetching ? (
+                <InternalRightDesignLoader />
+              ) : (
+                <div className="w-full flex flex-col items-center p-6 space-y-4 overflow-y-auto  scrollbar-custom  rounded-xl bg-white">
+                  {selectedJob && (
+                    <>
+                      <div className="flex justify-between  items-start"><br />
+                        <div className="flex gap-4  ">
+                          <div>
+                            <p className="text-gray-600 font-semibold text-xl">{selectedJob.companyName}</p>
+                            <h2 className="text-xl 2xl:text-2xl font-semibold text-[#2C6472]">{selectedJob.jobTitle}</h2>
+                            <p className="text-sm text-gray-500">{selectedJob.location}</p>
+                          </div>
+                        </div>
+                        <div className="flex  flex-col justify-start -mt-6 items-center"><br />
+                          <div className="relative w-16 h-16">
+                            <svg
+                              viewBox="0 0 100 100"
+                              className="absolute top-0 left-0 w-full h-full"
+                            >
+                              {/* Background circle */}
+                              <circle
+                                cx="50"
+                                cy="50"
+                                r="45"
+                                stroke="#E5E7EB"  // Light Gray Background
+                                strokeWidth="7"
+                                fill="none"
+                              />
+                              {/* Foreground circle (Progress) */}
+                              <circle
+                                cx="50"
+                                cy="50"
+                                r="45"
+                                stroke="#2C6472"  // Your nice teal color
+                                strokeWidth="7"
+                                fill="none"
+                                strokeDasharray="282"  // Circumference of the circle (2πr)
+                                strokeDashoffset={282 - (282 * selectedJob.matchValue) / 100}
+                                strokeLinecap="round"
+                                transform="rotate(-90 50 50)"  // Rotate to start from top
+                              />
+                            </svg>
+
+                            {/* Center text */}
+                            <div className="absolute inset-0 flex items-center text-[13px] justify-center font-semibold text-gray-800">
+                              {selectedJob.matchValue}%
+                            </div>
+                          </div>
+
+                          <span className="text-sm w-[100px]  text-black mt-3 ">Profile Match</span>
+                        </div><br />
+                      </div><br />
+
+
+                      <div className="flex flex-col  gap-2 mt-2  pr-2">
+                        {selectedJob?.skillData?.slice(0, 2).map((item, index) => {
+                          const skills = Array.isArray(item.value) ? item.value : [];
+                          const isExpanded = expandedSections[item.label];
+                          const displaySkills = isExpanded ? skills : skills.slice(0, 2);
+
+                          return (
+                            <div
+                              key={index}
+                              className="grid grid-cols-[120px_1fr] mb-3 gap-2 text-sm"
+                            >
+                              <span className="font-semibold text-black">{item.label}</span>
+
+                              <div className="text-gray-500 w-full  leading-snug break-words">
+                                <span>
+                                  {displaySkills.join(", ")}
+                                </span>
+
+                                {skills.length > 2 && (
+                                  <button
+                                    onClick={() => toggleExpand(item.label)}
+                                    className="ml-2 text-[#2C6472] underline font-medium text-xs hover:text-teal-800"
+                                  >
+                                    {isExpanded ? "Less..." : "More..."}
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      <div className="flex w-full gap-5 mt-4">
+                        {["cv", "cl"].map((type) => {
+                          const isGenerated =
+                            type === "cv"
+                              ? selectedJob?.cvGenerated
+                              : selectedJob?.coverLetterGenerated;
+
+                          const label = isGenerated ? `${type.toUpperCase()} Generated` : type.toUpperCase();
+
+                          return (
+                            <button
+                              key={type}
+                              onClick={() => handleGenerateClick(type)}
+                              className={`px-7 py-2 text-sm font-medium rounded-3xl transition-transform duration-200 ease-linear w-[240px] h-[47px] flex items-center justify-center ${isGenerated
+                                  ? "bg-[#2C6472]/70 text-white border  "
+                                  : "bg-[#2C6472] text-white border border-[#2C6472] hover:bg-white hover:text-[#2C6472] hover:scale-105"
+                                }`}
+                            >
+                              {label}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <br />
+
+                      <div className="flex w-[100%] mx-auto items-center  gap-5  ">
+
+                        <button
+                          className="flex gap-2 mx-auto justify-center  items-center font-semibold text-[#2C6472] rounded-3xl text-sm bg-[#F4F4F4F4] underline border w-full h-[47px] hover:border-[#2C6472] px-4  transition  hover:bg-white hover:text-[#2C6472] hover:scale-105"
+                          onClick={() => handleGetJobURL(selectedJob.id)}
+                        >
+                          Go to Job Link
+                          <img src={link_icon} alt="" />
+                        </button>
+
+                        <LanguageSelectModel
+                          isOpen={showLangModal}
+                          onClose={() => setShowLangModal(false)}
+                          onSelect={handleLanguageSelect}
+                        />
+
+
+
+                      </div><br />
+
+
+                      <div className="">
                         <div>
-                          <p className="text-gray-600 font-semibold text-xl">{selectedJob.companyName}</p>
-                          <h2 className="text-xl 2xl:text-2xl font-semibold text-[#2C6472]">{selectedJob.jobTitle}</h2>
-                          <p className="text-sm text-gray-500">{selectedJob.location}</p>
-                        </div>
-                      </div>
-                      <div className="flex  flex-col justify-start -mt-6 items-center"><br />
-                        <div className="relative w-16 h-16">
-                          <svg
-                            viewBox="0 0 100 100"
-                            className="absolute top-0 left-0 w-full h-full"
-                          >
-                            {/* Background circle */}
-                            <circle
-                              cx="50"
-                              cy="50"
-                              r="45"
-                              stroke="#E5E7EB"  // Light Gray Background
-                              strokeWidth="7"
-                              fill="none"
-                            />
-                            {/* Foreground circle (Progress) */}
-                            <circle
-                              cx="50"
-                              cy="50"
-                              r="45"
-                              stroke="#2C6472"  // Your nice teal color
-                              strokeWidth="7"
-                              fill="none"
-                              strokeDasharray="282"  // Circumference of the circle (2πr)
-                              strokeDashoffset={282 - (282 * selectedJob.matchValue) / 100}
-                              strokeLinecap="round"
-                              transform="rotate(-90 50 50)"  // Rotate to start from top
-                            />
-                          </svg>
+                          <h4 className="text-lg font-semibold text-gray-800">About</h4><br />
+                          <p className="text-sm text-justify text-gray-700">{selectedJob.description}</p>
+                        </div><br />
 
-                          {/* Center text */}
-                          <div className="absolute inset-0 flex items-center text-[13px] justify-center font-semibold text-gray-800">
-                            {selectedJob.matchValue}%
-                          </div>
+                        <div>
+                          <h4 className="text-lg font-semibold text-gray-800">Description</h4><br />
+                          <p className="text-sm text-gray-700">{selectedJob.Description}</p>
                         </div>
 
-                        <span className="text-sm w-[100px]  text-black mt-3 ">Profile Match</span>
-                      </div><br />
-                    </div><br />
-
-
-                    <div className="flex flex-col gap-2 mt-2  pr-2">
-                      {selectedJob?.skillData?.slice(0, 2).map((item, index) => {
-                        const skills = Array.isArray(item.value) ? item.value : [];
-                        const isExpanded = expandedSections[item.label];
-                        const displaySkills = isExpanded ? skills : skills.slice(0, 2);
-
-                        return (
-                          <div
-                            key={index}
-                            className="grid grid-cols-[120px_1fr] mb-3 gap-2 text-sm"
-                          >
-                            <span className="font-semibold text-black">{item.label}</span>
-
-                            <div className="text-gray-500 w-full leading-snug break-words">
-                              <span>
-                                {displaySkills.join(", ")}
-                              </span>
-
-                              {skills.length > 2 && (
-                                <button
-                                  onClick={() => toggleExpand(item.label)}
-                                  className="ml-2 text-[#2C6472] underline font-medium text-xs hover:text-teal-800"
-                                >
-                                  {isExpanded ? "Less..." : "More..."}
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    <div className="flex  w-full gap-5 mt-4">
-                      <button
-                        onClick={() => handleGenerateClick("cv")}
-                        className="px-7 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[240px] h-[47px] text-white items-center justify-center rounded-3xl transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105"
-                      >
-                        CV
-                      </button>
-
-                      <button
-                        onClick={() => handleGenerateClick("cl")}
-
-                        className="px-7 py-2 border text-sm font-medium border-[#2C6472] bg-[#2C6472] w-[240px] h-[47px] text-white rounded-3xl transition-transform duration-200 ease-linear hover:bg-white hover:text-[#2C6472] hover:scale-105"
-                      >
-                        CL
-                      </button>
-
-                    </div>
-                    <br />
-
-                    <div className="flex w-[100%] mx-auto items-center  gap-5  ">
-
-                      <button
-                        className="flex gap-2 mx-auto justify-center  items-center font-semibold text-[#2C6472] rounded-3xl text-sm bg-[#F4F4F4F4] underline border w-full h-[47px] hover:border-[#2C6472] px-4  transition  hover:bg-white hover:text-[#2C6472] hover:scale-105"
-                        onClick={() => handleGetJobURL(selectedJob.id)}
-                      >
-                        Go to Job Link
-                        <img src={link_icon} alt="" />
-                      </button>
-
-                      <LanguageSelectModel
-                        isOpen={showLangModal}
-                        onClose={() => setShowLangModal(false)}
-                        onSelect={handleLanguageSelect}
-                      />
-
-
-
-                    </div><br />
-
-
-                    <div className="">
-                      <div>
-                        <h4 className="text-lg font-semibold text-gray-800">About</h4><br />
-                        <p className="text-sm text-justify text-gray-700">{selectedJob.description}</p>
-                      </div><br />
-
-                      <div>
-                        <h4 className="text-lg font-semibold text-gray-800">Description</h4><br />
-                        <p className="text-sm text-gray-700">{selectedJob.Description}</p>
-                      </div>
-
-                      <div><br />
-                        <div className="flex flex-col gap-2 mt-2">
-                          {selectedJob?.skillData && (
-                            <div className="space-y-6">
-                              {/* Loop through skillData */}
-                              {selectedJob.skillData.map((item, index) => (
-                                <div key={index}>
-                                  <h4 className="text-lg font-semibold text-gray-800">{item.label}</h4>
-                                  <div className="flex flex-col gap-2 mt-2">
-                                    {/* Check if it's an array (for skills) or just a string (for salary) */}
-                                    {Array.isArray(item.value) ? (
-                                      <ul className="list-disc pl-5">
-                                        {item.value.map((val, i) => (
-                                          <li key={i} className="text-gray-700">{val}</li>
-                                        ))}
-                                      </ul>
-                                    ) : (
-                                      <p className="text-gray-700">{item.value}</p>
-                                    )}
+                        <div><br />
+                          <div className="flex flex-col gap-2 mt-2">
+                            {selectedJob?.skillData && (
+                              <div className="space-y-6">
+                                {/* Loop through skillData */}
+                                {selectedJob.skillData.map((item, index) => (
+                                  <div key={index}>
+                                    <h4 className="text-lg font-semibold text-gray-800">{item.label}</h4>
+                                    <div className="flex flex-col gap-2 mt-2">
+                                      {/* Check if it's an array (for skills) or just a string (for salary) */}
+                                      {Array.isArray(item.value) ? (
+                                        <ul className="list-disc pl-5">
+                                          {item.value.map((val, i) => (
+                                            <li key={i} className="text-gray-700">{val}</li>
+                                          ))}
+                                        </ul>
+                                      ) : (
+                                        <p className="text-gray-700">{item.value}</p>
+                                      )}
+                                    </div>
                                   </div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
+                                ))}
+                              </div>
+                            )}
 
-                        </div>
-                      </div><br />
+                          </div>
+                        </div><br />
 
-                    </div>
-                  </>
-                )}
-              </div> )}
+                      </div>
+                    </>
+                  )}
+                </div>)}
 
             </div>
           </div>

@@ -62,6 +62,9 @@ const Profile = () => {
   const [isProfileLoading, setIsProfileLoading] = useState(true);
   const [isLoadingMiniInfo, setIsLoadingMiniInfo] = useState(true);
   const [isLoadingMiniProfile, setIsLoadingMiniProfile] = useState(true);
+  const [animatedInternal, setAnimatedInternal] = useState(0);
+const [animatedExternal, setAnimatedExternal] = useState(0);
+const [animatedProficiency, setAnimatedProficiency] = useState(0);
   
 
 
@@ -238,7 +241,6 @@ useEffect(() => {
   console.log("Profile Data:", profileCompletion);
 
 
-
   if (error) {
     return (
       <div className="text-red-500 text-center mt-10">{error}</div>
@@ -294,6 +296,75 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
   const handleJobTitleUpdateForm = () => setShowJobTitleUpdateForm(true);
   const handleProjectUpdateForm = () => setShowProjectUpdateForm(true);
 
+useEffect(() => {
+  if (isLoadingMiniInfo) return;
+
+  const duration = 500; // total animation duration (ms)
+  const intervalTime = 5; // update interval
+  const totalSteps = duration / intervalTime;
+
+  const animatedValues = [
+    {
+      target: (internal / maxInternal) * 100,
+      setter: setAnimatedInternal,
+      shouldAnimate: maxInternal > 0,
+    },
+    {
+      target: (external / maxExternal) * 100,
+      setter: setAnimatedExternal,
+      shouldAnimate: maxExternal > 0,
+    },
+    {
+      target: (proficiency / maxProficiency) * 100,
+      setter: setAnimatedProficiency,
+      shouldAnimate: maxProficiency > 0,
+    },
+  ];
+
+  const intervals = [];
+
+  animatedValues.forEach(({ target, setter, shouldAnimate }) => {
+    if (!shouldAnimate) {
+      setter(0);
+      return;
+    }
+
+    let current = 0;
+    const step = target / totalSteps;
+
+    const interval = setInterval(() => {
+      current += step;
+      if (current >= target) {
+        current = target;
+        clearInterval(interval);
+      }
+      setter(Math.round(current));
+    }, intervalTime);
+
+    intervals.push(interval);
+  });
+
+  return () => {
+    intervals.forEach(clearInterval);
+  };
+}, [
+  isLoadingMiniInfo,
+  internal,
+  external,
+  proficiency,
+  maxInternal,
+  maxExternal,
+  maxProficiency,
+]);
+
+
+
+console.log("internal:", internal, "maxInternal:", maxInternal);
+console.log("external:", external, "maxExternal:", maxExternal);
+console.log("proficiency:", proficiency, "maxProficiency:", maxProficiency);
+
+
+
   if (isProfileLoading) {
     return (
       <ProfileDesign />
@@ -342,7 +413,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
                   strokeDashoffset={
                     isLoadingMiniInfo
                       ? 226.2
-                      : 226.2 - (226.2 * internal) / maxInternal
+                      : 226.2 - (226.2 * animatedInternal) / maxInternal
                   }
 
                   strokeLinecap="round"
@@ -353,7 +424,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
                 {isLoadingMiniInfo ? (
                   <span className="animate-pulse text-xs">--%</span>
                 ) : (
-                  `${Math.round((internal / maxInternal) * 100)}%`
+                  `${animatedInternal}%`
                 )}
               </div>
             </div>
@@ -383,7 +454,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
                   strokeDashoffset={
                     isLoadingMiniInfo
                       ? 226.2
-                      : 226.2 - (226.2 * external) / maxExternal
+                      : 226.2 - (226.2 * animatedExternal) / maxExternal
                   }
 
                   strokeLinecap="round"
@@ -394,7 +465,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
                 {isLoadingMiniInfo ? (
                   <span className="animate-pulse text-xs">--%</span>
                 ) : (
-                  `${Math.round((external / maxExternal) * 100)}%`
+                  `${animatedExternal}%`
                 )}
               </div>
             </div>
@@ -425,7 +496,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
                   strokeDashoffset={
                     isLoadingMiniInfo || maxProficiency === 0
                       ? 226.2
-                      : 226.2 - (226.2 * proficiency) / maxProficiency
+                      : 226.2 - (226.2 * animatedProficiency) / maxProficiency
                   }
 
                   strokeLinecap="round"
@@ -437,7 +508,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
                 {isLoadingMiniInfo || maxProficiency === 0 ? (
                   <span className="animate-pulse text-xs">--%</span>
                 ) : (
-                  `${Math.round((proficiency / maxProficiency) * 100)}%`
+                  `${animatedProficiency}%`
                 )}
 
               </div>

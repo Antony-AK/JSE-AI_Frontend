@@ -13,22 +13,26 @@ import { Menu, X } from "lucide-react";
 const Navbar = ({ onMenuToggle }) => {
   const menuRef = useRef(null);
 
-  const [firstName, setFirstName] = useState("User");
+  const [firstName, setFirstName] = useState(() => {
+    return sessionStorage.getItem("firstName") || "User";
+  });
   const [menuOpen, setMenuOpen] = useState(false);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { profileImage } = useProfileImage(); // 👈 use context
+  const hasFetchedUser = useRef(false);
+
 
   const token = sessionStorage.getItem("authToken");
-  const isDashboard = location.pathname === "/user/dashboard"; 
+  const isDashboard = location.pathname === "/user/dashboard";
 
   useEffect(() => {
-  if (!token) {
-    console.warn("No token found. Redirecting to login...");
-    navigate("/user/login");
-  }
-}, [token, navigate]);
+    if (!token) {
+      console.warn("No token found. Redirecting to login...");
+      navigate("/user/login");
+    }
+  }, [token, navigate]);
 
   const fetchUserInfo = async () => {
     if (!token) {
@@ -37,17 +41,18 @@ const Navbar = ({ onMenuToggle }) => {
     }
 
     try {
-    const response = await axios.get(`${BASE_URL}/new-dashboard/mini-profile`, {
+      const response = await axios.get(`${BASE_URL}/new-dashboard/mini-profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-     const data = response.data;
+      const data = response.data;
 
-    const name = data?.profile?.first_name;
+      const name = data?.profile?.first_name;
 
       if (name) {
+              sessionStorage.setItem("firstName", name);
         setFirstName(name);
       } else {
         console.warn("First name not found in profile data. Using default.");
@@ -58,7 +63,10 @@ const Navbar = ({ onMenuToggle }) => {
   };
 
   useEffect(() => {
-    fetchUserInfo();
+    if (!hasFetchedUser.current) {
+      fetchUserInfo();
+      hasFetchedUser.current = true;
+    }
   }, []);
 
   useEffect(() => {
@@ -119,7 +127,7 @@ const Navbar = ({ onMenuToggle }) => {
           </div>
 
           {/* <div className="w-px h-16 bg-gray-200 ml-[47px]"></div> */}
-          
+
           <h1 className="hidden md:block text-xl font-bold text-gray-800 ml-20">{getPageTitle()}</h1>
         </div>
         <div
@@ -142,9 +150,8 @@ const Navbar = ({ onMenuToggle }) => {
             src={arrow_down}
             alt=""
             onClick={() => setMenuOpen(!menuOpen)}
-            className={`w-8 h-8 mt-1 p-2 rounded-full hover:bg-[#407684]/20 transform duration-200 ease-linear ${
-              menuOpen ? "rotate-180" : "rotate-0"
-            }`}
+            className={`w-8 h-8 mt-1 p-2 rounded-full hover:bg-[#407684]/20 transform duration-200 ease-linear ${menuOpen ? "rotate-180" : "rotate-0"
+              }`}
           />
           <AnimatePresence>
             {menuOpen && (
