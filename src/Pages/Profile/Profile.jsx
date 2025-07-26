@@ -287,7 +287,7 @@ if (isProfileLoading) {
 
 
   return (
-    <div className='flex flex-col w-[calc(100%-64px)] gap-3 bg-gray-100 px-6 py-4'>
+    <div className='flex flex-col w-[calc(99vw-264px)] gap-3 bg-gray-100 px-6 py-4'>
       {/* 💠 Dashboard Summary Section */}
       <div className="bg-[#215D69] rounded-md text-white p-6 mb-2 flex flex-col gap-5">
 

@@ -459,7 +459,7 @@ const SavedJob = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="flex items-center flex-col h-screen bg-gray-50 px-6 ms-2 w-full max-w-[1440px] mx-auto">
+    <div className="flex items-center flex-col h-screen bg-gray-50 px-6 w-[calc(99vw-264px)]">
 
 
 
@@ -686,7 +686,7 @@ const SavedJob = () => {
               </div>
             </div>
 
-            <div className="flex mb-5 py-3 w-1/2 mt-5 h-[870px] bg-white border border-gray-400/20 rounded-xl"><br />
+            <div className="flex mb-5 py-3 w-[46%] mt-5 h-[870px] bg-white border border-gray-400/20 rounded-xl"><br />
               <div className="w-full flex flex-col items-center p-6 space-y-4 overflow-y-auto  scrollbar-custom  rounded-xl bg-white">
                 {selectedJob && (
                   <>

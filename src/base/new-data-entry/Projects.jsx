@@ -254,24 +254,23 @@ if (finalList.length > 0 && hasWorkExperience === true) {
   return (
     <div className='p-3 md:p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen '>
 
-      <div className="flex justify-end mt-5 items-center w-[95%]">
-        {showSkip  &&(
-          <div
-            className="flex items-center p-4 pt-0 cursor-pointer"
-            onClick={() => navigate('/user/onboarding/languages')}
-          >
-            <p className='ml-2 text-lg font-medium text-[#00000057]'>Skip</p>
-          </div>
-        )}
-      </div>
+    <div className="flex justify-between items-center md:w-[95%] mt-">
+      <p className='text-[#2c6472] font-semibold w-fit pb-3'>STEP 4 OF 8</p>
 
-
-      <p className='text-[#2c6472] font-semibold -mt-10 w-fit'>STEP 4 OF 8</p>
+      {showSkip && (
+        <div
+          className="flex items-center p-4 pt-0 cursor-pointer"
+          onClick={() => navigate('/user/onboarding/languages')}
+        >
+          <p className='ml-2 md:text-lg font-medium text-[#00000057]'>Skip</p>
+        </div>
+      )}
+    </div>      
 
       <h2 className='font-bold sm:text-lg md:text-xl'>Share your past project experience.</h2>
 
       {projectList.length > 0 && (
-        <div className="flex gap-3 px-6 py-4 -m-3 w-[90%] rounded-lg overflow-x-auto hide-scrollbar snap-x snap-mandatory">
+        <div className="flex gap-3 px-3 md:px-6 py-4 -m-3 md:w-[90%] rounded-lg overflow-x-auto hide-scrollbar snap-x snap-mandatory">
           {projectList
             .filter((proj) => proj.project_name.trim() !== '')
             .map((proj) => (

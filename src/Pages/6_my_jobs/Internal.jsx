@@ -731,7 +731,7 @@ const MyApplication = () => {
 
 
   return (
-    <div className="flex items-center flex-col h-screen bg-gray-50 px-6 ms-2 w-full max-w-[1440px] mx-auto">
+    <div className="flex items-center flex-col h-screen bg-gray-50 px-6 w-[calc(99vw-264px)]">
       <div className="flex items-center w-full gap-5 py-4 relative">
         <div className="w-[40%] relative">
           <input
@@ -847,7 +847,7 @@ const MyApplication = () => {
           {/* Dropdown Content */}
 
           <div
-            className="  left-0 w-52 -top-4 bg-white border border-gray-300 rounded-md  overflow-hidden"
+            className=" left-0 w-52 -top-4 bg-white border border-gray-300 rounded-md  overflow-hidden"
           >
             <button onClick={fetchRecommendedJobs} // 👈 this is the hook
               className="w-full px-2 py-1.5 text-[13px] text-black font-medium hover:bg-gray-100 text-center">
@@ -891,7 +891,7 @@ const MyApplication = () => {
           <div className="flex flex-1 border-t border-gray-300 -mt-5  gap-5">
             <div className="flex flex-col w-[54%]">
 
-              <div className="p-5 flex justify-between pt-4">
+              <div className=" p-5 flex justify-between pt-4">
                 <div>
                   {filteredJobs.length > 0 ? (
                     <div className="flex items-center gap-4">
@@ -977,7 +977,7 @@ const MyApplication = () => {
                   </div>
                 )}
 
-                <div className="h-[720px] overflow-x-hidden  overflow-y-auto scrollbar-custom">
+                <div className="h-[720px] overflow-x-hidden overflow-y-auto scrollbar-custom">
                   {jobsToRender.map((job, index) => (
                     <div
                       key={index}
@@ -1158,7 +1158,7 @@ const MyApplication = () => {
               </div>
             </div>
 
-            <div className="flex mb-5 py-3 w-1/2 mt-5 h-[870px] bg-white border border-gray-400/20 rounded-xl"><br />
+            <div className="flex mb-5 py-3 w-[46%] mt-5 h-[870px] bg-white border border-gray-400/20 rounded-xl"><br />
               <div className="w-full flex flex-col items-center p-6 space-y-4 overflow-y-auto  scrollbar-custom  rounded-xl bg-white">
                 {selectedJob && (
                   <>
