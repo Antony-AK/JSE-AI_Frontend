@@ -37,16 +37,15 @@ const Navbar = ({ onMenuToggle }) => {
     }
 
     try {
-      const response = await fetch(`${BASE_URL}/jobprofile`, {
+    const response = await axios.get(`${BASE_URL}/new-dashboard/mini-profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      const data = await response.json();
+     const data = response.data;
 
-      // ✅ Now accessing from nested "profile" object
-      const name = data?.seeker?.personal_info?.first_name;
+    const name = data?.profile?.first_name;
 
       if (name) {
         setFirstName(name);

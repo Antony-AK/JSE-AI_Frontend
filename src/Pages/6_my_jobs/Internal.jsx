@@ -18,6 +18,8 @@ import LanguageSelectModel from "../../base/LanguageModelPopup/LanguageSelectMod
 import JobTitleDropdown from "../../base/LanguageModelPopup/JobTitleDropdown .jsx";
 import JobSearchTitleDropdown from "../../base/LanguageModelPopup/JobTitleDropdown .jsx";
 import LimitReachedModal from '../6_my_jobs/MyJobsPopUp/LimitReachedModel.jsx';
+import SkeletonJobApplicationTracker from "../../base/InternalDesignComponent/InternalDesignLoader.jsx";
+import InternalRightDesignLoader from "../../base/InternalDesignComponent/InternalRightDesignLoader.jsx";
 
 const MyApplication = () => {
   const navigate = useNavigate();
@@ -731,7 +733,7 @@ const MyApplication = () => {
 
 
   return (
-    <div className="flex items-center flex-col h-screen bg-gray-50 px-6 ms-2 w-full max-w-[1440px] mx-auto">
+    <div className="flex items-center flex-col h-screen bg-gray-50 w-[calc(99vw-264px)] px-6  ">
       <div className="flex items-center w-full gap-5 py-4 relative">
         <div className="w-[40%] relative">
           <input
@@ -970,17 +972,13 @@ const MyApplication = () => {
 
               <div className="w-full mb-5 -space-y-6 rounded-xl bg-white border border-gray-400/20 "><br />
 
-                {isFetching && (
-                  <div className="w-full py-4 flex justify-center items-center">
-                    <Loader className="w-6 h-6 text-teal-700" />
-                    <p className="text-gray-500 text-sm">Filtering jobs...</p>
-                  </div>
-                )}
-
-                <div className="h-[720px] overflow-x-hidden  overflow-y-auto scrollbar-custom">
-                  {jobsToRender.map((job, index) => (
-                    <div
-                      key={index}
+                {isFetching ? (
+                 <SkeletonJobApplicationTracker/>
+                ) : (
+                  <div className="h-[720px] overflow-x-hidden  overflow-y-auto scrollbar-custom">
+                    {jobsToRender.map((job, index) => (
+                      <div
+                        key={index}
                       onClick={() => {
                         setSelectedJob(job);
                         sessionStorage.setItem("selectedJobId", job.id); // 🧠 save selected job
@@ -1112,7 +1110,7 @@ const MyApplication = () => {
                     </div>
                   ))}
 
-                </div>
+                </div> )  }
 
                 <br />
                 <div className="flex justify-center items-center gap-2 pt-14  flex-wrap">
@@ -1157,8 +1155,11 @@ const MyApplication = () => {
                 <br />
               </div>
             </div>
-
-            <div className="flex mb-5 py-3 w-1/2 mt-5 h-[870px] bg-white border border-gray-400/20 rounded-xl"><br />
+  
+          <div className="flex mb-5 py-3 w-[46%] mt-5 h-[870px] bg-white border border-gray-400/20 rounded-xl"><br />
+               {isFetching ? (
+                 <InternalRightDesignLoader/>
+                ) : (
               <div className="w-full flex flex-col items-center p-6 space-y-4 overflow-y-auto  scrollbar-custom  rounded-xl bg-white">
                 {selectedJob && (
                   <>
@@ -1325,7 +1326,8 @@ const MyApplication = () => {
                     </div>
                   </>
                 )}
-              </div>
+              </div> )}
+
             </div>
           </div>
 

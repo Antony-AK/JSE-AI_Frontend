@@ -14,6 +14,8 @@ const ApplicationTracker = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatuses, setSelectedStatuses] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('');
+  const [showLoader, setShowLoader] = useState(false);
+
 
   const filterRef = useRef(null);
 
@@ -55,6 +57,12 @@ const ApplicationTracker = () => {
 
   const fetchAllApplications = async (page = 1, query = '') => {
     setLoading(true);
+  setShowLoader(false);
+
+    let timer = setTimeout(() => {
+     setShowLoader(true);
+    }, 2000);
+
     try {
       const token = sessionStorage.getItem("authToken");
 
@@ -77,12 +85,18 @@ const ApplicationTracker = () => {
     } catch (error) {
       console.error("❌ Error fetching all apps:", error.response?.data || error.message);
     } finally {
+      clearTimeout(timer);        // ❌ cancel timer
+      setShowLoader(false);
       setLoading(false);
     }
+
+ 
   };
 
   const fetchFilteredApplications = async (status, page = 1, query = '') => {
     setLoading(true);
+    let timer = setTimeout(() => setShowLoader(true), 2000);
+
     try {
       const token = sessionStorage.getItem("authToken");
 
@@ -106,6 +120,8 @@ const ApplicationTracker = () => {
     } catch (error) {
       console.error(`❌ Error fetching filtered apps:`, error.response?.data || error.message);
     } finally {
+      clearTimeout(timer);        // ❌ cancel timer
+      setShowLoader(false);
       setLoading(false);
     }
   };
@@ -249,7 +265,7 @@ const ApplicationTracker = () => {
         </div>
       </div>
 
-      {loading ? (
+      {loading && showLoader ? (
         <div className="flex flex-col gap-4 animate-pulse">
           {[...Array(3)].map((_, index) => (
             <div
@@ -276,7 +292,7 @@ const ApplicationTracker = () => {
             </div>
 
           ))}
-        </div>) : applications.length === 0 ? (
+        </div>) : !loading && applications.length === 0 ? (
           <p className="w-[60%] mx-auto flex-col mt-32 flex items-center  text-center text-gray-600 text-base">
             <span className='text-red-500 mb-5 flex flex-1'>No applications found.</span><br /> Please generate your CV and Cover Letter, then search and apply for jobs using the job link to start tracking your application progress.
           </p>
@@ -317,7 +333,7 @@ const ApplicationTracker = () => {
 
       }
 
-      {pagination.total_pages > 0 && (
+      {pagination.total_pages >= 2 && (
         <div className="flex justify-center items-center gap-4 mt-6">
           <button
             className="px-3 py-1 rounded bg-[#2c6472] text-white hover:bg-[#2c6472]/80 text-sm"

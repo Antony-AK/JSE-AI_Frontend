@@ -3,7 +3,6 @@ import axios from 'axios';
 import profile from '../../assets/profile1.png'
 import defaultImage from '../../assets/profile1.png'
 import edit from '../../assets/edit-icon.svg'
-import Loader from '../../base/loader/Loader';
 import WorkExpUpdateForm from '../../UpdateProfile/WorkExpUpdateForm';
 import EducationUpdateForm from '../../UpdateProfile/EducationUpdateForm';
 import CertificatesUpdateForm from '../../UpdateProfile/CertificatesUpdateForm';
@@ -16,6 +15,7 @@ import ProjectUpdateForm from '../../UpdateProfile/ProjectsUpdateForm';
 import ProfileImageModal from '../../base/ProfileEditor/ProfileImageModel';
 import { useProfileImage } from '../../base/ProfileEditor/ProfileImageContext';
 import { useNavigate } from 'react-router-dom';
+import ProfileDesign from '../../base/InternalDesignComponent/ProfileDesign';
 
 
 
@@ -60,31 +60,35 @@ const Profile = () => {
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
   const [isLoadingJobProfile, setIsLoadingJobProfile] = useState(true);
   const [isProfileLoading, setIsProfileLoading] = useState(true);
+  const [isLoadingMiniInfo, setIsLoadingMiniInfo] = useState(true);
+  const [isLoadingMiniProfile, setIsLoadingMiniProfile] = useState(true);
+  
 
 
 
-    useEffect(() => {
-  if (!token) {
-    navigate('/user/login');
-  }
-}, []);
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/user/login');
+    }
+  }, []);
 
   if (!token) {
     return (
       <div className="flex justify-center items-center h-screen text-center text-red-600 font-semibold">
-        You’re not logged in, buddy 😢 <br />
+        You’re not logged in, <br />
         <span className="text-sm text-gray-500">Please log in again to access your dashboard.</span>
       </div>
     );
   }
 
   useEffect(() => {
-  const timer = setTimeout(() => {
-    setIsProfileLoading(false); // ✅ stop loading after 2s
-  }, 200);
+    const timer = setTimeout(() => {
+      setIsProfileLoading(false); // ✅ stop loading after 2s
+    }, 300);
 
-  return () => clearTimeout(timer); // cleanup
-}, []);
+    return () => clearTimeout(timer); // cleanup
+  }, []);
 
 
 
@@ -92,24 +96,35 @@ const Profile = () => {
 
     const headers = { Authorization: `Bearer ${token}` };
 
-
     // Fetch each section separately
-    const fetchJobProfile = async () => {
+    const fetchMiniInfo = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/jobprofile`, { headers });
-        setProfileData(res.data);
-        const seeker = res.data?.seeker || {};
-        setProfileCompletion(seeker?.profile_completion ?? 0);
-        setSubscriptionTier(seeker?.subscription_tier ?? 'basic');
-        setInternalAppCount(seeker?.internal_application_count ?? 0);
-        setExternalAppCount(seeker?.external_application_count ?? 0);
-        setProficiencyScore(seeker?.proficicency_test ?? 0);
+        const res = await axios.get(`${BASE_URL}/new-dashboard/mini-info`, { headers });
+        const data = res.data?.info_block || {};
+
+        setSubscriptionTier(data.subscription_tier ?? 'Free');
+        setInternalAppCount(data.internal_application_count ?? 0);
+        setExternalAppCount(data.external_application_count ?? 0);
+        setProficiencyScore(data.proficiency_tests?.length ?? 0);
       } catch (err) {
-        console.error("JobProfile Error:", err);
+        console.error("Mini Info Error:", err);
       } finally {
-        setIsLoadingJobProfile(false);
+        setIsLoadingMiniInfo(false); // ✅ separate loading
       }
     };
+
+    const fetchMiniProfile = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/new-dashboard/mini-profile`, { headers });
+        setProfileData(res.data?.profile);
+        setProfileCompletion(res.data?.profile?.profile_completion ?? 0);
+      } catch (err) {
+        console.error("Mini Profile Error:", err);
+      } finally {
+        setIsLoadingMiniProfile(false); // ✅ separate loading
+      }
+    };
+
 
     const fetchPersonalInfo = async () => {
       try {
@@ -178,7 +193,8 @@ const Profile = () => {
     };
 
     // call all at once 🔁
-    fetchJobProfile();
+    fetchMiniInfo();
+    fetchMiniProfile();
     fetchPersonalInfo();
     fetchWorkExp();
     fetchEducation();
@@ -195,30 +211,31 @@ const Profile = () => {
     }
   }, [profileData]);
 
-  useEffect(() => {
-    if (!profileData?.profile_completion) return;
+useEffect(() => {
+  if (typeof profileCompletion !== 'number' || profileCompletion <= 0) return;
 
-    let start = 0;
-    const end = profileData?.profile_completion;
-    const duration = 500;
-    const frameRate = 10;
-    const increment = (end / duration) * frameRate;
+  let start = 0;
+  const end = Math.min(profileCompletion, 100);
+  const duration = 500;
+  const frameRate = 10;
+  const increment = (end / duration) * frameRate;
 
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= end) {
-        start = end;
-        clearInterval(timer);
-      }
-      setAnimatedScore(Math.floor(start));
-    }, frameRate);
+  const timer = setInterval(() => {
+    start += increment;
+    if (start >= end) {
+      start = end;
+      clearInterval(timer);
+    }
+    setAnimatedScore(Math.floor(start));
+  }, frameRate);
 
-    return () => clearInterval(timer);
-  }, [profileData]);
+  return () => clearInterval(timer);
+}, [profileCompletion]);
+
 
   console.log("Loading:", loading);
   console.log("Error:", error);
-  console.log("Profile Data:", profileData);
+  console.log("Profile Data:", profileCompletion);
 
 
 
@@ -230,7 +247,7 @@ const Profile = () => {
 
 
   // Full Name
-  const fullName = `${personalInfo?.first_name || ""} ${personalInfo?.second_name || ""}`.trim();
+const fullName = `${profileData?.first_name || ""} ${profileData?.second_name || ""}`.trim();
 
   // Address
   const address = personalInfo?.city || "";
@@ -243,19 +260,17 @@ const Profile = () => {
 
 
   // Titles
-  const primaryTitle = seeker?.primary_title || "";
+const primaryTitle = profileData?.primary_job_title || "Not Provided";
 
-  const tier = seeker?.subscription_tier ?? 'Basic';
-  const internal = seeker?.internal_application_count ?? 0;
-  const external = seeker?.external_application_count ?? 0;
-  const proficiency = seeker?.proficicency_test ?? 0;
+  const tier = subscriptionTier ?? 'Free';
+  const internal = internalAppCount ?? 0;
+  const external = externalAppCount ?? 0;
+  const proficiency = proficiencyScore ?? 0;
+
 
   const maxInternal = tier === 'free' ? 5 : 15;
   const maxExternal = tier === 'free' ? 2 : 15;
   const maxProficiency = 0;
-
-
-
 
 
   const handleClose = () => {
@@ -279,15 +294,14 @@ const Profile = () => {
   const handleJobTitleUpdateForm = () => setShowJobTitleUpdateForm(true);
   const handleProjectUpdateForm = () => setShowProjectUpdateForm(true);
 
-if (isProfileLoading) {
-  return (
-   <Loader/>
-  );
-}
+  if (isProfileLoading) {
+    return (
+      <ProfileDesign />
+    );
+  }
 
-
   return (
-    <div className='flex flex-col w-[calc(100%-64px)] gap-3 bg-gray-100 px-6 py-4'>
+    <div className='flex flex-col w-[calc(99vw-264px)] gap-3 bg-gray-100 px-6 py-4'>
       {/* 💠 Dashboard Summary Section */}
       <div className="bg-[#215D69] rounded-md text-white p-6 mb-2 flex flex-col gap-5">
 
@@ -295,7 +309,7 @@ if (isProfileLoading) {
         <div className="flex  gap-2">
           <p className="text-sm font-semibold">Package : </p>
           <h2 className="text-lg font-bold -mt-1 capitalize">
-            {isLoadingJobProfile ? (
+            {isLoadingMiniInfo ? (
               <span className="animate-pulse text-sm">Loading...</span>
             ) : (
               seeker?.subscription_tier ?? 'Basic'
@@ -308,7 +322,7 @@ if (isProfileLoading) {
           <div className="flex flex-col w-96  justify-center items-center gap-2">
             <p className="text-sm font-medium">Internal Applications</p>
             <p className="text-sm font-semibold">
-              {isLoadingJobProfile ? (
+              {isLoadingMiniInfo ? (
                 <span className="animate-pulse text-sm">-- / --</span>
               ) : (
                 `${internal}/${maxInternal}`
@@ -326,7 +340,7 @@ if (isProfileLoading) {
                   fill="none"
                   strokeDasharray="226.2"
                   strokeDashoffset={
-                    isLoadingJobProfile
+                    isLoadingMiniInfo
                       ? 226.2
                       : 226.2 - (226.2 * internal) / maxInternal
                   }
@@ -336,7 +350,7 @@ if (isProfileLoading) {
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">
-                {isLoadingJobProfile ? (
+                {isLoadingMiniInfo ? (
                   <span className="animate-pulse text-xs">--%</span>
                 ) : (
                   `${Math.round((internal / maxInternal) * 100)}%`
@@ -349,7 +363,7 @@ if (isProfileLoading) {
           <div className="flex flex-col justify-center items-center gap-2 w-96">
             <p className="text-sm font-medium text-white">External Applications</p>
             <p className="text-sm font-semibold text-white">
-              {isLoadingJobProfile ? (
+              {isLoadingMiniInfo ? (
                 <span className="animate-pulse text-sm">-- / --</span>
               ) : (
                 `${external}/${maxExternal}`
@@ -367,7 +381,7 @@ if (isProfileLoading) {
                   fill="none"
                   strokeDasharray="226.2"
                   strokeDashoffset={
-                    isLoadingJobProfile
+                    isLoadingMiniInfo
                       ? 226.2
                       : 226.2 - (226.2 * external) / maxExternal
                   }
@@ -377,7 +391,7 @@ if (isProfileLoading) {
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center text-sm font-bold text-white">
-                {isLoadingJobProfile ? (
+                {isLoadingMiniInfo ? (
                   <span className="animate-pulse text-xs">--%</span>
                 ) : (
                   `${Math.round((external / maxExternal) * 100)}%`
@@ -391,7 +405,7 @@ if (isProfileLoading) {
             <p className="text-sm font-medium text-white">Proficiency Test</p>
             <p className="text-sm font-semibold text-white">
               {/* {proficiency}/{maxProficiency} */}
-              {isLoadingJobProfile ? (
+              {isLoadingMiniInfo ? (
                 <span className="animate-pulse text-sm">-- / --</span>
               ) : (
                 `${proficiency}/${maxProficiency}`
@@ -409,7 +423,7 @@ if (isProfileLoading) {
                   fill="none"
                   strokeDasharray="226.2"
                   strokeDashoffset={
-                    isLoadingJobProfile || maxProficiency === 0
+                    isLoadingMiniInfo || maxProficiency === 0
                       ? 226.2
                       : 226.2 - (226.2 * proficiency) / maxProficiency
                   }
@@ -420,7 +434,7 @@ if (isProfileLoading) {
               </svg>
               <div className="absolute inset-0 flex items-center justify-center text-sm font-bold text-white">
                 {/* {Math.round((proficiency / maxProficiency) * 100)}% */}
-                {isLoadingJobProfile || maxProficiency === 0 ? (
+                {isLoadingMiniInfo || maxProficiency === 0 ? (
                   <span className="animate-pulse text-xs">--%</span>
                 ) : (
                   `${Math.round((proficiency / maxProficiency) * 100)}%`
@@ -449,18 +463,18 @@ if (isProfileLoading) {
 
           <div>
             <h2 className="font-bold">
-              {isLoadingPersonalInfo ? (
+              {isLoadingMiniProfile ? (
                 <span className="animate-pulse text-sm"></span>
               ) : (
                 fullName
               )}
             </h2>
             <p>
-              {isLoadingJobProfile ? (
+              {isLoadingMiniProfile ? (
                 <span className="animate-pulse text-sm"></span>
               ) : (
-                profileData?.seeker?.primary_title
-              )}
+                primaryTitle
+                )}
             </p>
           </div>
         </div>
@@ -491,9 +505,9 @@ if (isProfileLoading) {
                 fill="none"
                 strokeDasharray="150"
                 strokeDashoffset={
-                  isLoadingJobProfile
+                  isLoadingMiniProfile
                     ? 150
-                    : 150 - (150 * (profileData?.seeker?.profile_completion ?? 0)) / 100
+                    : 150 - (150 * (profileCompletion ?? 0)) / 100
                 }
 
                 strokeLinecap="round"
@@ -501,10 +515,10 @@ if (isProfileLoading) {
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-gray-800">
-              {isLoadingJobProfile ? (
+              {isLoadingMiniProfile ? (
                 <span className="animate-pulse text-xs">--%</span>
               ) : (
-                profileData?.profile_completion ? `${animatedScore}%` : "--%"
+                profileCompletion ? `${animatedScore}%` : "--%"
               )}
             </div>
           </div>
