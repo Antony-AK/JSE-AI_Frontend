@@ -478,27 +478,12 @@ const MyApplication = () => {
     }
 
   if (type === "cv" || type === "cl") {
-  const storedJobs = JSON.parse(sessionStorage.getItem("selectedJobs") || "[]");
-
-  const updatedJobs = storedJobs.map((job) => {
-    if (job.id === selectedJob.id) {
-      return {
-        ...job,
-        ...(type === "cv" ? { cvGenerated: true } : { coverLetterGenerated: true }),
-      };
-    }
-    return job;
-  });
-
-  // ✅ Update sessionStorage
-  sessionStorage.setItem("selectedJobs", JSON.stringify(updatedJobs));
-
-  // ✅ Update selectedJobs state if you're tracking it
-  setSelectedJobs && setSelectedJobs(updatedJobs);
-
-  // ✅ Update selectedJob from updated array
-  const updatedSelected = updatedJobs.find((job) => job.id === selectedJob.id);
-  setSelectedJob(updatedSelected);
+  setSelectedJob((prev) => ({
+    ...prev,
+    ...(type === "cv"
+      ? { cvGenerated: true }
+      : { coverLetterGenerated: true }),
+  }));
 }
 
 
