@@ -142,7 +142,7 @@ const ApplicationTracker = () => {
   }, [selectedStatus, pagination.current]);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 flex flex-col gap-6">
+    <div className="min-h-screen bg-gray-100 p-6 flex flex-col gap-6 w-[calc(99vw-264px)]">
       {/* Top Search + Filter Bar */}
       <div className="flex flex-wrap items-center  gap-4 w-full p-4 rounded-md shadow-sm">
 
