@@ -276,7 +276,7 @@ const MyApplication = () => {
         ],
         selected: job.selected || false,
         cvGenerated: job.cv_generated || false,
-        coverLetterGenerated: job.cover_letter_generated || false,
+        coverLetterGenerated: job.cl_generated || false,
         viewLink: job.view_link || "#",
       }));
 
@@ -385,6 +385,7 @@ const MyApplication = () => {
         description: job.description?.slice(0, 100) + "...",
         Description: job.description || "No description available",
         matchValue: job.match_score || 50,
+        linkViewed: job.link_viewed || false, // 👈 Add this line!
         skillData: [
           {
             label: "Required Skills",
@@ -477,14 +478,14 @@ const MyApplication = () => {
       return;
     }
 
-  if (type === "cv" || type === "cl") {
-  setSelectedJob((prev) => ({
-    ...prev,
-    ...(type === "cv"
-      ? { cvGenerated: true }
-      : { coverLetterGenerated: true }),
-  }));
-}
+    if (type === "cv" || type === "cl") {
+      setSelectedJob((prev) => ({
+        ...prev,
+        ...(type === "cv"
+          ? { cvGenerated: true }
+          : { coverLetterGenerated: true }),
+      }));
+    }
 
 
     if (savedLang) {
@@ -608,8 +609,6 @@ const MyApplication = () => {
 
 
 
-
-
   const getOffsetFromUrl = (url) => {
     if (!url) return 0;
     const params = new URLSearchParams(url.split("?")[1]);
@@ -631,7 +630,7 @@ const MyApplication = () => {
 
 
   return (
-    <div className="flex items-center flex-col h-screen bg-gray-50 w-[calc(99vw-264px)] px-6  ">
+    <div className="flex items-center flex-col h-[90vh] bg-gray-50  overflow-y-auto hide-scrollbar w-[calc(99vw-264px)] px-6  ">
       <div className="flex items-center w-full gap-5 py-4 relative">
         <div className="w-[40%] relative">
           <input
@@ -760,7 +759,7 @@ const MyApplication = () => {
       </div>
 
 
-      <div className="flex flex-col w-full min-h-screen bg-gray-40">
+      <div className="flex flex-col w-full  bg-gray-40">
         <br />
         {jobLoading ? (
           <div className="flex justify-center items-center  w-full">
@@ -873,7 +872,7 @@ const MyApplication = () => {
                 {isFetching ? (
                   <SkeletonJobApplicationTracker />
                 ) : (
-                  <div className="h-[720px] overflow-x-hidden  overflow-y-auto scrollbar-custom">
+                  <div className="h-[485px] overflow-x-hidden overflow-y-auto hide-scrollbar  ">
                     {jobsToRender.map((job, index) => (
                       <div
                         key={index}
@@ -912,10 +911,8 @@ const MyApplication = () => {
                             ))}
                           </div>
 
-
-
-
                         </div>
+
                         <div className="flex  flex-col justify-start mr-2 items-center"><br />
                           <div className="relative gap-1 w-24 h-16">
                             <svg
@@ -954,6 +951,20 @@ const MyApplication = () => {
 
                           <span className="text-sm text-black mt-3 ">Profile Match</span>
                         </div>
+                        {/* ✅ CV/CL Generated Badges */}
+                        <div className="absolute bottom-3 right-1.5 flex gap-1">
+                          {job?.cvGenerated && (
+                            <span className="text-[9px] bg-gray-100 border text-[#2C6472] font-semibold px-2 py-[2px] rounded-full">
+                              CV Generated
+                            </span>
+                          )}
+                          {job?.coverLetterGenerated && (
+                            <span className="text-[9px] bg-gray-100 border text-[#2C6472] font-semibold px-2 py-[2px] rounded-full">
+                              CL Generated
+                            </span>
+                          )}
+                        </div>
+
                         <div className="absolute top-2 right-3">
                           <button
                             className="text-gray-500 font-medium text-xl hover:bg-gray-200 rounded-full w-7"
@@ -1008,10 +1019,7 @@ const MyApplication = () => {
                       </div>
                     ))}
 
-                  </div>)}
-
-                <br />
-                <div className="flex justify-center items-center gap-2 pt-14  flex-wrap">
+                      <div className="flex justify-center items-center gap-2 pt-14 pb-5 flex-wrap">
                   {/* Prev Button */}
                   <button
                     onClick={() => {
@@ -1050,15 +1058,18 @@ const MyApplication = () => {
                     Next
                   </button>
                 </div>
+
+                  </div>)}
+              
                 <br />
               </div>
             </div>
 
-            <div className="flex mb-5 py-3 w-[46%] mt-5 h-[870px] bg-white border border-gray-400/20 rounded-xl"><br />
+            <div className="flex mb-5 py-3 w-[46%] mt-5 h-[570px] pb-5 bg-white border border-gray-400/20 rounded-xl"><br />
               {isFetching ? (
                 <InternalRightDesignLoader />
               ) : (
-                <div className="w-full flex flex-col items-center p-6 space-y-4 overflow-y-auto  scrollbar-custom  rounded-xl bg-white">
+                <div className="w-full flex flex-col items-center p-6 space-y-4 overflow-y-auto  scrollbar-custom rounded-xl bg-white">
                   {selectedJob && (
                     <>
                       <div className="flex justify-between  items-start"><br />
@@ -1156,8 +1167,8 @@ const MyApplication = () => {
                               key={type}
                               onClick={() => handleGenerateClick(type)}
                               className={`px-7 py-2 text-sm font-medium rounded-3xl transition-transform duration-200 ease-linear w-[240px] h-[47px] flex items-center justify-center ${isGenerated
-                                  ? "bg-[#2C6472]/70 text-white border  "
-                                  : "bg-[#2C6472] text-white border border-[#2C6472] hover:bg-white hover:text-[#2C6472] hover:scale-105"
+                                ? "bg-[#2C6472]/50 text-white border  "
+                                : "bg-[#2C6472] text-white border border-[#2C6472] hover:bg-white hover:text-[#2C6472] hover:scale-105"
                                 }`}
                             >
                               {label}
@@ -1184,9 +1195,9 @@ const MyApplication = () => {
                           onSelect={handleLanguageSelect}
                         />
 
-
-
-                      </div><br />
+                      </div>
+              
+                      <br />
 
 
                       <div className="">

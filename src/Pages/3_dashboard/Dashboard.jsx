@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext  } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import profile1 from "../../assets/profile1.png";
@@ -72,7 +72,7 @@ const Dashboard = () => {
           userId: data.user_id || "",
           totalApplications: data.total_applications || 0,
           weeklyApplications: data.weekly_applications_count || 0,
-          topJobs: data.top_jobs || 0,
+          topJobs: data.top_jobs_count || 0,
           internalApps: data.internal_application_count || 0,
           externalApps: data.external_application_count || 0,
           tier: data.subscription_tier || "Free",
@@ -127,15 +127,15 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-  // 👇 Only fetch if it's not already cached
-  const cachedJobs = sessionStorage.getItem("jobCache");
-  if (!cachedJobs) {
-    console.log("📦 Job cache not found. Fetching...");
-    fetchSelectedJobs();
-  } else {
-    console.log("✅ Job cache exists. Skipping fetch.");
-  }
-}, []);
+    // 👇 Only fetch if it's not already cached
+    const cachedJobs = sessionStorage.getItem("jobCache");
+    if (!cachedJobs) {
+      console.log("📦 Job cache not found. Fetching...");
+      fetchSelectedJobs();
+    } else {
+      console.log("✅ Job cache exists. Skipping fetch.");
+    }
+  }, []);
 
 
   const fullName = `${profile?.first_name || ""} ${profile?.second_name || ""}`.trim();
@@ -181,9 +181,9 @@ const Dashboard = () => {
 
   const [animatedCompletions, setAnimatedCompletions] = useState([]); // for the mini job match progress bar
 
-   useEffect(() => {
+  useEffect(() => {
     let current = 0;
-    const step = profileCompletion / (500 / 5); 
+    const step = profileCompletion / (500 / 5);
 
     const interval = setInterval(() => {
       current += step;
@@ -756,7 +756,7 @@ const Dashboard = () => {
 
           {/* Box - 4 */}
           {loadingInfo ? (
-            <div className="border md:h-[220px] rounded-xl p-5 bg-white space-y-3 animate-pulse">
+            <div className="border md:h-[220px] rounded-xl p-5 bg-white   space-y-3 animate-pulse">
               <div className="flex justify-between">
                 <div className="flex gap-4 items-center">
                   <div className="w-24 h-4 bg-gray-300 rounded-md" />
@@ -777,7 +777,7 @@ const Dashboard = () => {
               </div>
             </div>
           ) : (
-            <div className="border md:h-[220px] rounded-xl p-5 bg-white space-y-3">
+            <div className="border md:h-[220px] overflow-y-auto hide-scrollbar  rounded-xl p-5 bg-white space-y-3">
               <div className="flex justify-between">
                 <div className="flex gap-4">
                   <h2 className="font-bold text-[15px]">Announcements</h2>
@@ -789,7 +789,17 @@ const Dashboard = () => {
                   </Link>
                 </div>
               </div>
-
+              <p className="text-[#000000A1] font-medium text-sm">
+                <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
+                  27 Jul 2025
+                </span>
+                - We're excited to share that{" "}
+                <span className="text-[#2c6472] font-semibold">JSE AI</span>{" "}
+                is now <span className="font-semibold text-[#2c6472]">95% optimized</span> for peak performance. Pages now load almost instantly,
+                reducing waiting times to nearly zero. These enhancements ensure a seamless
+                and ultra-fast experience, helping you focus more on your goals and less on
+                the load.
+              </p>
               <p className="text-[#000000A1] font-medium text-sm">
                 <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
                   17 Jul 2025
@@ -801,6 +811,7 @@ const Dashboard = () => {
                 now smarter and faster than ever before. These upgrades aim to
                 make your job search smoother and more effective.
               </p>
+
             </div>
           )}
         </div>

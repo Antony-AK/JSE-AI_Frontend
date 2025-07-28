@@ -7,6 +7,8 @@ const ExplorePlans = () => {
 
     const [data, setData] = useState(null);
     const [selected, setSelected] = useState("monthly");
+    const [loadingPlans, setLoadingPlans] = useState(true); // 🆕
+
 
     const token = sessionStorage.getItem("authToken");
 
@@ -18,17 +20,29 @@ const ExplorePlans = () => {
             return;
         }
 
-        fetch(`${BASE_URL}/settings/explore-plans`, {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
+        const fetchPlans = async () => {
+            setLoadingPlans(true); // 🔄 Start loading
+            try {
+                const res = await fetch(`${BASE_URL}/settings/explore-plans`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                const result = await res.json();
+                setData(result);
+            } catch (err) {
+                console.error("Failed to fetch plans", err);
+            } finally {
+                setLoadingPlans(false); // ✅ Stop loading
             }
-        })
-            .then(res => res.json())
-            .then(setData)
-            .catch(err => console.error("Failed to fetch plans", err));
+        };
+
+        fetchPlans();
     }, []);
+
 
     const handlePlanSelect = async (planId) => {
         try {
@@ -167,9 +181,18 @@ const ExplorePlans = () => {
         { name: 'Support', monthly: [false, false, false, true], quarterly: [false, false, false, true] },
     ];
 
-    const activePlan =
-        data?.plans?.monthly?.find(p => p.status === "active" || p.status === "cancel") ||
-        data?.plans?.quarterly?.find(p => p.status === "active" || p.status === "cancel");
+   const activePlan = (() => {
+  if (!data?.plans) return null;
+
+  const allPlans = [
+    ...(data.plans.monthly ?? []),
+    ...(data.plans.quarterly ?? []),
+  ];
+
+  return allPlans.find(
+    (p) => p.status === "active" || p.status === "cancel"
+  );
+})();
 
 
 
@@ -180,7 +203,14 @@ const ExplorePlans = () => {
             <div className="flex flex-col gap-5">
                 <h2 className="text-lg font-bold">Active Plan</h2>
 
-                {activePlan ? (
+                {loadingPlans ? (
+                    // 👻 Skeleton while loading
+                    <div className="flex flex-col h-[120px] gap-3 rounded-xl animate-pulse bg-[#2c6472] p-5">
+                        <div className="h-5 w-24 bg-gray-400 rounded-md"></div>
+                        <div className="h-4 w-52 bg-gray-400 rounded-md"></div>
+                        <div className="h-3 w-36 bg-gray-400 rounded-md"></div>
+                    </div>
+                ) : activePlan ? (
                     <div className="flex flex-col h-[120px] gap-1 rounded-xl bg-[#2c6472] p-5">
                         <h2 className="text-white text-lg font-semibold capitalize">
                             {activePlan.plan.charAt(0).toUpperCase() + activePlan.plan.slice(1)}
@@ -247,7 +277,18 @@ const ExplorePlans = () => {
                         return null;
                     })()}
 
-                    {data?.plans?.[selected]?.length > 0 ? (
+                    {loadingPlans ? (
+                        // 👻 Skeletons for plan cards
+                        <div className="flex gap-24">
+                            {[1, 2, 3, 4].map((_, i) => (
+                                <div key={i} className="flex-1 flex flex-col gap-4 animate-pulse">
+                                    <div className="h-5 w-20 bg-gray-300 rounded-md"></div>
+                                    <div className="h-4 w-32 bg-gray-300 rounded-md"></div>
+                                    <div className="h-8 w-24 bg-gray-300 rounded-md"></div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (<>{data?.plans?.[selected]?.length > 0 ? (
                         data.plans[selected].map((plan, i) => {
                             const isActive = plan.status === "active";
                             const isComing = plan.status === "coming soon";
@@ -320,7 +361,9 @@ const ExplorePlans = () => {
                     ) : (
                         <p className="text-sm text-gray-500 text-center flex-1">No plans available.</p>
                     )}
-                </div>
+                    </>
+                    )}
+                      </div>
 
             </div>
 

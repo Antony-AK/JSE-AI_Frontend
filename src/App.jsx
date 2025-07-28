@@ -45,6 +45,7 @@ import PaymentCancel from './Pages/PaymentDesign/PaymentCancel.jsx';
 import Landing from './Landing/Main/Landing.jsx';
 import ScreenSizeBlocker from './base/ScreenBlocker/ScreenSizeBlocker.jsx';
 import ProtectedRoute from './routes/ProtectedRoute.jsx';
+import ExplorePlans from './Pages/Settings/ExplorePlans.jsx';
 
 const AppRoutesContent = () => {
     const location = useLocation();
@@ -106,6 +107,9 @@ const AppRoutesContent = () => {
                                 </ProtectedRoute>} />
                                 <Route path="/user/settings" element={<ProtectedRoute>
                                     <Settings />
+                                </ProtectedRoute>} />
+                                <Route path="/user/explore-plans" element={<ProtectedRoute>
+                                    <ExplorePlans />
                                 </ProtectedRoute>} />
                                 <Route path="/test1" element={<Test1 />} />
                                 <Route path="/verification" element={<VerificationPage />} />

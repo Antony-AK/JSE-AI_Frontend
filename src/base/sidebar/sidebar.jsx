@@ -34,10 +34,12 @@ import upgrade_active_icon from '../../assets/upgrade-active-icon.svg';
 const Sidebar = ({ isOpen, onClose }) => {
 
   const { pathname } = useLocation();
-  const [openJobs, setOpenJobs] = useState(false); // Toggle for My Jobs
+const [openJobs, setOpenJobs] = useState(pathname.startsWith("/user/my-jobs"));
 
   // inside your Sidebar component
   const [openUpcoming, setOpenUpcoming] = useState(false);
+  
+  
 
 
   const menuItems = [

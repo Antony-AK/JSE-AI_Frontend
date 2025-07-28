@@ -5,7 +5,7 @@ const ProfileDesign = () => {
      <div className='flex flex-col w-[calc(99vw-264px)] gap-3 bg-gray-100 px-6 py-4 animate-pulse'>
 
       {/* 💠 Dashboard Summary Section */}
-      <div className="bg-[#215D69] rounded-md text-white p-6 mb-2 flex flex-col gap-5">
+      <div className="bg-[#215D69] rounded-md text-white p-7 mb-2 flex flex-col gap-5">
         <div className="flex gap-2">
           <div className="h-4 w-20 bg-white/40 rounded"></div>
         </div>
@@ -17,7 +17,7 @@ const ProfileDesign = () => {
               <div className="h-4 w-32 bg-white/50 rounded"></div>
               <div className="h-4 w-16 bg-white/30 rounded"></div>
               <div className="w-20 h-20 rounded-full border-4 border-white/40"></div>
-              <div className="h-4 w-12 bg-white/40 rounded"></div>
+              {/* <div className="h-4 w-12 bg-white/40 rounded"></div> */}
             </div>
           ))}
 

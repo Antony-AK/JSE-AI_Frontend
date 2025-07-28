@@ -61,6 +61,7 @@ export const JobProvider = ({ children }) => {
         description: job.description?.slice(0, 100) + "...",
         Description: job.description || "No description available",
         matchValue: job.match_score || 50,
+        linkViewed: !!job?.link_viewed,
         skillData: [
           {
             label: "Required Skills",
@@ -77,7 +78,7 @@ export const JobProvider = ({ children }) => {
         ],
         selected: job.selected || false,
         cvGenerated: job.cv_generated || false,
-        coverLetterGenerated: job.cover_letter_generated || false,
+        coverLetterGenerated: job.cl_generated || false,
         viewLink: job.view_link || "#",
       }));
 
@@ -128,7 +129,7 @@ export const JobProvider = ({ children }) => {
   return (
     <JobContext.Provider
       value={{
-         selectedJobs,
+        selectedJobs,
         setSelectedJobs,
         selectedJob,
         setSelectedJob,
