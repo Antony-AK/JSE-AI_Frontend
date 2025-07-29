@@ -3,6 +3,8 @@ import right_arrow from "../../assets/arrow-right.svg";
 import { BASE_URL } from "../../utils/api";
 import { motion, AnimatePresence } from "framer-motion";
 import arrow_down from "../../assets/arrow-down-drop.png"; // 👈 your dropdown arrow
+import { setLanguage } from "../../utils/i18n"
+
 
 const Preferences = () => {
   const [preferences, setPreferences] = useState(null);
@@ -12,14 +14,19 @@ const Preferences = () => {
 
   const langMap = {
     english: "en",
-    // german: "de",
+    german: "de",
   };
 
-  const handleLanguageChange = (e) => {
-    const updated = { ...preferences, language: e.target.value };
-    setPreferences(updated);
-    handleUpdate(updated);
-  };
+ const handleLanguageChange = (e) => {
+  const lang = e.target.value;
+  setLanguage(lang); // 🧠 set in global util
+  const updated = { ...preferences, language: lang };
+  setPreferences(updated);
+  handleUpdate(updated);
+
+  // Reload the whole app to reflect language change globally
+  window.location.reload();
+};
 
   useEffect(() => {
     const fetchPreferences = async () => {
@@ -148,8 +155,7 @@ const Preferences = () => {
                 transition={{ duration: 0.2, ease: "easeInOut" }}
                 className="absolute right-0 mt-2 w-full bg-white border border-gray-200 rounded shadow-lg z-10 overflow-hidden"
               >
-                {/* {["english", "german"].map((lang) => ( */}
-                {["english"].map((lang) => (
+                {["english", "german"].map((lang) => (
                   <div
                     key={lang}
                     className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${

@@ -5,13 +5,14 @@ import { toast } from 'react-toastify';
 import { BASE_URL } from '../utils/api';
 import Calendar from '../base/Calender/Calender';
 import { format } from 'date-fns';
+import { t } from "../utils/i18n";
 
 const CertificatesUpdateForm = ({ onclose }) => {
 
   const [addLoading, setAddLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
-  
+
   const [certificates, setCertificates] = useState([]);
   const [formData, setFormData] = useState({
     certificate_name: '',
@@ -131,7 +132,7 @@ const CertificatesUpdateForm = ({ onclose }) => {
     <div className='fixed inset-0 bg-white bg-opacity-70 z-50 flex items-center justify-center'>
       <div className='w-[700px] h-[620px] bg-white flex flex-col shadow rounded-xl px-10 py-5'>
         <div className="flex justify-between w-full mt-3 mb-7">
-          <h3 className='text-lg font-semibold'>Certificates & Courses</h3>
+          <h3 className='text-lg font-semibold'>{t("certificates_and_courses")}</h3>
           <p onClick={onclose} className='text-lg font-semibold cursor-pointer hover:scale-95'>X</p>
         </div>
 
@@ -166,7 +167,7 @@ const CertificatesUpdateForm = ({ onclose }) => {
 
         <div className="flex flex-col gap-4 mt-5">
           <div className="flex flex-col">
-            <label className='text-sm text-gray-600'>Certificate Name <span className='text-red-500'>*</span></label>
+            <label className='text-sm text-gray-600'>{t("certificate_name")} <span className='text-red-500'>*</span></label>
             <input
               type="text"
               name="certificate_name"
@@ -177,22 +178,22 @@ const CertificatesUpdateForm = ({ onclose }) => {
           </div>
 
           <div className="flex flex-col">
-            <label className='text-sm text-gray-600'>Certificate Type <span className='text-red-500'>*</span></label>
+            <label className='text-sm text-gray-600'>{t("certificate_type")} <span className='text-red-500'>*</span></label>
             <select
               name="certificate_type"
               value={formData.certificate_type}
               onChange={handleChange}
               className='border border-gray-300 px-4 py-3 rounded-md focus:outline-none focus:ring-1 focus:ring-[#2c6472]'
             >
-              <option value="">Select Type</option>
-              <option value="certification">Certification</option>
-              <option value="participation">Participation</option>
-              <option value="completion">Completion</option>
+              <option value="">{t("select_type")}</option>
+              <option value="certification">{t("certification")}</option>
+              <option value="participation">{t("participation")}</option>
+              <option value="completion">{t("completion")}</option>
             </select>
           </div>
 
           <div className="flex flex-col">
-            <label className='text-sm text-gray-600'>Provider</label>
+            <label className='text-sm text-gray-600'>{t("provider")}</label>
             <input
               type="text"
               name="provider"
@@ -203,15 +204,15 @@ const CertificatesUpdateForm = ({ onclose }) => {
           </div>
 
           <div className="flex flex-col">
-            <label className='text-sm text-gray-600'>Completion Date <span className='text-red-500'>*</span></label>
+            <label className='text-sm text-gray-600'>{t("completion_date")} <span className='text-red-500'>*</span></label>
             <Calendar
               selectedDate={formData.completion_date ? new Date(formData.completion_date) : null}
               onDateChange={(date) =>
                 setFormData((prev) => ({
-                ...prev,
-                completion_date: format(date, 'yyyy-MM-dd'),
+                  ...prev,
+                  completion_date: format(date, 'yyyy-MM-dd'),
                 }))
-                }
+              }
             />
           </div>
 
@@ -220,31 +221,29 @@ const CertificatesUpdateForm = ({ onclose }) => {
             <button
               onClick={activeId === null && !addLoading ? handleAddCertificate : null}
               disabled={activeId !== null || addLoading}
-              className={`text-sm flex items-center gap-2 font-semibold hover:scale-95 transition ${
-                activeId !== null || addLoading ? 'text-gray-400 cursor-not-allowed' : 'text-[#2c6472]'
-              }`}
+              className={`text-sm flex items-center gap-2 font-semibold hover:scale-95 transition ${activeId !== null || addLoading ? 'text-gray-400 cursor-not-allowed' : 'text-[#2c6472]'
+                }`}
             >
               {addLoading ? (
                 <div className="w-4 h-4 border-[2.5px] border-[#2c6472] border-t-transparent rounded-full animate-spin" />
               ) : (
                 <span className="text-lg font-bold">+</span>
               )}
-              Add Certificate
+              {t("add_certificate")}
             </button>
 
             <button
               onClick={activeId !== null && !deleteLoading ? handleDeleteCertificate : null}
               disabled={activeId === null || deleteLoading}
-              className={`text-sm flex items-center gap-2 font-semibold hover:scale-95 transition ${
-                activeId === null || deleteLoading ? 'text-gray-400 cursor-not-allowed' : 'text-red-500'
-              }`}
+              className={`text-sm flex items-center gap-2 font-semibold hover:scale-95 transition ${activeId === null || deleteLoading ? 'text-gray-400 cursor-not-allowed' : 'text-red-500'
+                }`}
             >
               {deleteLoading ? (
                 <div className="w-4 h-4 border-[2.5px] border-red-500 border-t-transparent rounded-full animate-spin" />
               ) : (
                 <img src={trash} alt="trash icon" className="w-4 h-4 mr-1" />
               )}
-              Remove
+              {t("remove_certificate")}
             </button>
           </div>
 
@@ -252,15 +251,15 @@ const CertificatesUpdateForm = ({ onclose }) => {
             <button
               onClick={activeId !== null && !updateLoading ? handleUpdateCertificate : null}
               disabled={activeId === null || updateLoading}
-              className={`w-32 text-sm px-3 py-2 rounded-xl transition ${
-                activeId !== null && !updateLoading ? 'bg-[#2c6472] text-white' : 'bg-gray-300 cursor-not-allowed'
-              }`}
+              className={`w-32 text-sm px-3 py-2 rounded-xl transition ${activeId !== null && !updateLoading ? 'bg-[#2c6472] text-white' : 'bg-gray-300 cursor-not-allowed'
+                }`}
             >
               {updateLoading ? (
                 <div className="w-4 h-4 mx-auto border-[2.5px] border-[#2c6472] border-t-transparent rounded-full animate-spin" />
               ) : (
-                "Save Changes"
+                <span>{t("save_changes")}</span>
               )}
+
             </button>
           </div>
         </div>

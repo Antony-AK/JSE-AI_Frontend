@@ -1,0 +1,14 @@
+{
+  "certificates_and_courses": "Certificates & Courses",
+  "certificate_name": "Certificate Name",
+  "certificate_type": "Certificate Type",
+  "select_type": "Select Type",
+  "certification": "Certification",
+  "participation": "Participation",
+  "completion": "Completion",
+  "provider": "Provider",
+  "completion_date": "Completion Date",
+  "add_certificate": "Add Certificate",
+  "remove_certificate": "Remove",
+  "save_changes": "Save Changes"
+}

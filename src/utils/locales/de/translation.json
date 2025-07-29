@@ -1,0 +1,14 @@
+{
+  "certificates_and_courses": "Zertifikate & Kurse",
+  "certificate_name": "Zertifikatsname",
+  "certificate_type": "Zertifikatstyp",
+  "select_type": "Typ auswählen",
+  "certification": "Zertifizierung",
+  "participation": "Teilnahme",
+  "completion": "Abschluss",
+  "provider": "Anbieter",
+  "completion_date": "Abschlussdatum",
+  "add_certificate": "Zertifikat hinzufügen",
+  "remove_certificate": "Entfernen",
+  "save_changes": "Änderungen speichern"
+}
