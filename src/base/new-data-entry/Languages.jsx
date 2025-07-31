@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { t } from "../../utils/i18n";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import right_arrow from "../../assets/left-arrow.png";
@@ -29,13 +30,11 @@ const Languages = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!formData.language.trim()) {
-      newErrors.language = "Language name is required";
+      newErrors.language = t("languages.errors.language_required");
     }
     if (!formData.proficiency) {
-      newErrors.proficiency = "Proficiency level is required";
-      toast.error(
-        errors.response?.data.issue || "Please select a proficiency level"
-      );
+      newErrors.proficiency = t("languages.errors.proficiency_required");
+      toast.error(t("languages.errors.proficiency_required_toast"));
     }
 
     setErrors(newErrors);
@@ -54,7 +53,7 @@ const Languages = () => {
     const token = sessionStorage.getItem("authToken");
     if (!token) {
       navigate("/user/login");
-      toast.error("User not found. Please log in");
+      toast.error(t("languages.toast.noUser"));
       return;
     }
 
@@ -88,7 +87,7 @@ const Languages = () => {
       setAddedCompanies((prev) => [...prev, formData.language]);
     } catch (err) {
       console.error("Error uploading language:", err);
-      toast.error("Failed to upload language.");
+      toast.error(t("languages.toast.uploadFailed"));
     } finally {
       setLoading(false);
     }
@@ -100,7 +99,7 @@ const Languages = () => {
 
     const token = sessionStorage.getItem("authToken");
     if (!token) {
-      toast.error("User not found. Please log in.");
+      toast.error(t("languages.toast.noUser"));
       return;
     }
 
@@ -131,7 +130,7 @@ const Languages = () => {
       navigate("/user/onboarding/certificates");
     } catch (err) {
       console.error("Error uploading language:", err);
-      toast.error(errors.response?.data.issue || "Failed to upload language.");
+      toast.error(errors.response?.data.issue || t("languages.toast.uploadFailed"));
     } finally {
       setLoading(false);
     }
@@ -140,14 +139,14 @@ const Languages = () => {
   return (
     <div className="w-full p-3 md:p-10 text-black">
       <div className="flex justify-between items-center w-[95%] mt-2">
-        <p className="font-semibold text-[#2c6472]">STEP 5 OF 8</p>
+        <p className="font-semibold text-[#2c6472]">{t("languages.step")}</p>
 
         {addedCompanies.length > 0 && (
           <div
             className="cursor-pointer px-4 py-2 rounded transition"
             onClick={() => navigate("/user/onboarding/certificates")}
           >
-            <p className="md:text-lg font-medium text-[#00000057]">Skip</p>
+            <p className="md:text-lg font-medium text-[#00000057]">{t("common.skip")}</p>
           </div>
         )}
       </div>
@@ -155,7 +154,7 @@ const Languages = () => {
       <div className="flex flex-col">
         <div>
           <h1 className="font-bold sm:text-lg md:text-xl mt-7">
-            Add the languages you know.
+            {t("languages.title")}
           </h1>
         </div>
 
@@ -181,7 +180,7 @@ const Languages = () => {
           {/* Language Input */}
           <div className="relative mb-2">
             <label className="mb-3 block text-sm sm:text-base md:text-lg font-medium">
-              Language <span className="text-red-500 ms-1">*</span>
+              {t("languages.language")} <span className="text-red-500 ms-1">*</span>
             </label>
             <input
               id="language"
@@ -208,13 +207,13 @@ const Languages = () => {
           {/* Proficiency */}
           <div className="mb-2 ms-1">
             <p className="text-sm sm:text-base md:text-lg font-medium mb-3">
-              Proficiency <span className="text-red-500 ms-1">*</span>
+              {t("languages.proficiency")} <span className="text-red-500 ms-1">*</span>
             </p>
             <div className="flex flex-col gap-5">
               {[
-                { label: "Beginner (A1, A2)", value: "beginner" },
-                { label: "Intermediate (B1, B2)", value: "intermediate" },
-                { label: "Fluent / Native (C1, C2)", value: "fluent" }, // or use 'native' if needed
+                { label: t("languages.levels.beginner"), value: "beginner" },
+                { label: t("languages.levels.intermediate"), value: "intermediate" },
+                { label: t("languages.levels.fluent"), value: "fluent" },
               ].map((level) => (
                 <label
                   key={level.value}
@@ -237,9 +236,9 @@ const Languages = () => {
 
           <div className="text-xs flex items-center justify-start text-center  ">
             <p>
-              <span className="font-medium">Please note:</span>
+              <span className="font-medium">{t("common.pleaseNote")}</span>
               <span className="text-[#2c6472] ms-1">
-                Enter your details carefully , you can only edit them later.
+                {t("languages.editLaterNote")}
               </span>
             </p>
           </div>
@@ -249,32 +248,32 @@ const Languages = () => {
             <button
               type="submit"
               disabled={loading}
-              className={`py-2 w-[180px] h-[43px] text-sm sm:text-base md:text-lg font-semibold  mt-2 transition-transform duration-200 ease-in-out
+              className={`py-2 h-[43px] text-sm sm:text-base md:text-lg font-semibold  mt-2 transition-transform duration-200 ease-in-out
                 ${
                   loading
                     ? "bg-white cursor-not-allowed"
                     : "bg-white text-[#2c6472] hover:scale-95"
                 }`}
             >
-              + Add Another
+              + {t("common.addAnother")}
             </button>
 
             <button
               type="button"
               onClick={handleNext}
               disabled={loading}
-              className={`teal-button px-6 py-2 w-[180px] h-[40px] rounded-xl transition-transform duration-200 ease-in-out
+              className={`teal-button px-6 py-2 h-[40px] rounded-xl transition-transform duration-200 ease-in-out
                 flex items-center justify-center
                 ${
                   loading
                     ? "bg-[#2c6472]/70 cursor-not-allowed"
                     : "bg-[#2c6472]"
-                } text-white w-[150px] text-sm md:text-base`}
+                } text-white text-sm md:text-base`}
             >
               {loading ? (
                 <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
               ) : (
-                "Save & Next"
+                t("common.saveNext")
               )}
             </button>
           </div>
@@ -284,7 +283,7 @@ const Languages = () => {
       {/* Footer appears after scrolling all content */}
       <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-[13px] md:text-sm mt-8">
         <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
-        AI is not perfect. Make sure your data is accurate before saving.{" "}
+        {t("languages.footerNote")}
       </div>
     </div>
   );

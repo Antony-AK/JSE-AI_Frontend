@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { t } from "../../utils/i18n";
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -7,8 +8,6 @@ import Calendar from '../Calender/Calender';
 import { format } from 'date-fns';
 import warning from "../../assets/carbon_warning.png"
 import { isValid } from 'date-fns';
-
-
 
 const Education = () => {
 
@@ -113,21 +112,22 @@ const Education = () => {
         const newErrors = {};
         const { institution, city, degree, field_of_study, start_date, enddate, currentstudy } = formData;
 
-        if (!institution.trim()) newErrors.institution = "Institution is required";
-        if (!city.trim()) newErrors.city = "City / Country is required";
-        if (!degree.trim()) newErrors.degree = "Degree is required";
-        if (!field_of_study.trim()) newErrors.field_of_study = "Field of Study is required";
-        if (!start_date) newErrors.start_date = "Start date is required";
+
+        if (!institution.trim()) newErrors.institution = t("education.errors.institution");
+        if (!city.trim()) newErrors.city = t("education.errors.city");
+        if (!degree.trim()) newErrors.degree = t("education.errors.degree");
+        if (!field_of_study.trim()) newErrors.field_of_study = t("education.errors.field_of_study");
+        if (!start_date) newErrors.start_date = t("education.errors.start_date_required");
 
         const start = new Date(start_date);
         const end = new Date(enddate);
         const today = new Date();
 
         if (!currentstudy) {
-            if (!enddate) newErrors.enddate = "End date is required";
-            else if (start > end) newErrors.enddate = "End date cannot be before start date";
+            if (!enddate) newErrors.enddate = t("education.errors.end_date_required");
+            else if (start > end) newErrors.enddate = t("education.errors.end_date_invalid");
         } else {
-            if (start > today) newErrors.start_date = "Start date cannot be after today";
+            if (start > today) newErrors.start_date = t("education.errors.start_date_future");
         }
 
         return newErrors;
@@ -143,7 +143,7 @@ const Education = () => {
         try {
             if (!token) {
                 navigate('/user/login');
-                toast.error("Please log in first.");
+                toast.error(t("education.toast.noUser"));
                 return;
             }
 
@@ -229,7 +229,7 @@ const Education = () => {
 
         } catch (err) {
             console.error("❌ API Error:", err.response?.data || err.message);
-            toast.error(err.response?.data?.issue || "Something went wrong!");
+            toast.error(err.response?.data?.issue || t("education.toast.submitFailed"));
         } finally {
             setLoading(false);
         }
@@ -243,18 +243,18 @@ const Education = () => {
 
             <div className="flex items-center justify-between md:pr-10">
 
-                <p className='text-[#2c6472] font-semibold w-fit text-left'>STEP 3 OF 8</p>                
+                <p className='text-[#2c6472] font-semibold w-fit text-left'>{t("education.step")}</p>                
                 {educationList.length > 0 && (
                     <div className="flex justify-end items-center">
                         <div className="flex items-center cursor-pointer" onClick={() => navigate('/user/onboarding/projects')}>
-                            <p className='ml-2 md:text-lg font-medium text-[#00000057]'>Skip</p>
+                            <p className='ml-2 md:text-lg font-medium text-[#00000057]'>{t("common.skip")}</p>
                         </div>
                     </div>
                 )}
 
             </div>
 
-            <h2 className='font-bold sm:text-lg md:text-xl'>Add your academic story.</h2>
+            <h2 className='font-bold sm:text-lg md:text-xl'>{t("education.title")}</h2>
 
             {educationList.length > 0 && (
                 <div className="flex gap-3 px-3 md:px-6 py-4 -m-3 rounded-lg overflow-x-auto hide-scrollbar snap-x snap-mandatory">
@@ -281,7 +281,7 @@ const Education = () => {
 
                 {/* Institution */}
                 <div className="flex flex-col gap-2">
-                    <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="institution">School, University or Institution <span className='text-red-500'>*</span></label>
+                    <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="institution">{t("education.institution")} <span className='text-red-500'>*</span></label>
                     <input
                         className={`px-5 py-3 rounded-lg md:text-lg border ${errors.institution ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
                         type="text"
@@ -294,7 +294,7 @@ const Education = () => {
 
                 {/* City */}
                 <div className="flex flex-col gap-2">
-                    <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="city">City / Country <span className='text-red-500'>*</span></label>
+                    <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="city">{t("education.city")} <span className='text-red-500'>*</span></label>
                     <input
                         className={`px-5 py-3 rounded-lg md:text-lg border ${errors.city ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
                         type="text"
@@ -307,7 +307,7 @@ const Education = () => {
 
                 {/* Degree */}
                 <div className="flex flex-col gap-2">
-                    <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="degree">Degree, Qualification, or Major <span className='text-red-500'>*</span></label>
+                    <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="degree">{t("education.degree")} <span className='text-red-500'>*</span></label>
                     <input
                         className={`px-5 py-3 rounded-lg md:text-lg border ${errors.degree ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
                         type="text"
@@ -320,7 +320,7 @@ const Education = () => {
 
                 {/* Field */}
                 <div className="flex flex-col gap-2">
-                    <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="field_of_study">Field of Study <span className='text-red-500'>*</span></label>
+                    <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="field_of_study">{t("education.field")} <span className='text-red-500'>*</span></label>
                     <input
                         className={`px-5 py-3 rounded-lg md:text-lg border ${errors.field_of_study ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
                         type="text"
@@ -334,7 +334,7 @@ const Education = () => {
                 {/* Start & End Date */}
                 <div className="flex justify-start gap-5 w-full">
                     <div className="flex flex-col gap-2 w-[50%]">
-                        <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="start_date">Start Date <span className='text-red-500'>*</span></label>
+                        <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="start_date">{t("education.startDate")} <span className='text-red-500'>*</span></label>
                         <Calendar
                             selectedDate={tryParseDate(formData.start_date)}
                             onDateChange={(date) =>
@@ -349,7 +349,7 @@ const Education = () => {
                     </div>
                     <div className="flex flex-col gap-2 w-[50%]">
                         <label className="text-sm sm:text-base md:text-lg font-medium" htmlFor="enddate">
-                            End Date {!formData.currentstudy && <span className="text-red-500">*</span>}
+                            {t("education.endDate")} {!formData.currentstudy && <span className="text-red-500">*</span>}
                         </label>
 
                         {formData.currentstudy ? (
@@ -357,7 +357,7 @@ const Education = () => {
                                 disabled
                                 type="text"
                                 value=""
-                                placeholder="Currently Studying"
+                                placeholder={t("education.currentlyStudyingPlaceholder")}
                                 className="w-full px-5 py-3 rounded-lg border border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed"
                             />
                         ) : (
@@ -386,12 +386,12 @@ const Education = () => {
                         checked={formData.currentstudy}
                         onChange={handleChange}
                     />
-                    <label className='font-medium text-sm sm:text-base md:text-lg' htmlFor="currentstudy">I'm currently studying</label>
+                    <label className='font-medium text-sm sm:text-base md:text-lg' htmlFor="currentstudy">{t("education.currentlyStudying")}</label>
                 </div>
 
                 {/* Additional Description */}
                 <div className="flex flex-col gap-2">
-                    <label className="text-sm sm:text-base md:text-lg font-medium" htmlFor="description">Additional Description <span className='text-[#0000009c]'>(Optional)</span></label>
+                    <label className="text-sm sm:text-base md:text-lg font-medium" htmlFor="description">{t("education.description")} <span className='text-[#0000009c]'>{t("common.optional")}</span></label>
                     <textarea
                         id="description"
                         className="px-5 py-3 rounded-lg md:text-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472] resize-none"
@@ -401,12 +401,12 @@ const Education = () => {
                     ></textarea>
                 </div>
 
-                <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+                <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>{t("common.pleaseNote")}</span><span className='text-[#2c6472] ms-1'>{t("education.editLaterNote")}</span></p></div>
 
 
                 <div className="flex justify-between mt-7">
                     <div className="cursor-pointer" onClick={() => handleSubmit(false)}>
-                        <p className='md:text-lg text-[#2C6472] font-semibold mt-2'>+ Add Another</p>
+                        <p className='md:text-lg text-[#2C6472] font-semibold mt-2'>+ {t("common.addAnother")}</p>
                     </div>
                     <button
                         type="button"
@@ -414,12 +414,12 @@ const Education = () => {
                         disabled={loading}
                         className={`rounded-xl px-6 py-2 mb-10 flex items-center justify-center
                             ${loading ? 'bg-[#2C6472]/70 cursor-not-allowed' : 'bg-[#2C6472]'}
-                            text-white transition-all w-[150px] h-[40px] text-sm md:text-base`}
+                            text-white transition-all h-[40px] text-sm md:text-base`}
                     >
                         {loading ? (
                             <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
                         ) : (
-                            'Save & Next'
+                            t("common.saveNext")
                         )}
                     </button>
                 </div>
@@ -438,7 +438,7 @@ const Education = () => {
             {/* Footer appears after scrolling all content */}
             <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-[13px] md:text-sm mt-8">
                 <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
-                AI is not perfect. Make sure your data is accurate before saving.
+                {t("education.footerNote")}
             </div>
 
         </div>

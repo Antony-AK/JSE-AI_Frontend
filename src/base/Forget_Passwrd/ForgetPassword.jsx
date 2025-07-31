@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { t } from "../../utils/i18n";
 import { Player } from '@lottiefiles/react-lottie-player';
 import animationData from "../../assets/Animation - 1745282599914.json";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
@@ -42,7 +43,7 @@ const ForgetPassword = () => {
       {/* Right Panel (Blue) - Shows on Top for Mobile */}
       <div className="flex w-full md:w-1/2 flex-col justify-center items-center bg-[#2c6472] text-white p-6 md:p-8">
         <div className="flex flex-col items-center mb-4">
-          <h3 className="text-center text-xl md:text-2xl font-medium">Welcome Back!</h3>
+          <h3 className="text-center text-xl md:text-2xl font-medium">{t("forgetPassword.welcomeBack")}</h3>
           <img src={logo} className="h-10 w-24 mt-2" alt="Logo" />
         </div>
         <div className="hidden md:flex relative mb-6 justify-center items-center">
@@ -56,19 +57,16 @@ const ForgetPassword = () => {
           />
         </div>
         <p className=" hidden md:block text-center text-sm mt-4">
-          Unlock your next opportunity <br />
-          Your dream job is just a click away
+          {t("forgetPassword.tagline")}
         </p>
       </div>
 
       {/* Left Panel (Form) */}
       <div className="flex w-full md:w-1/2 h-full justify-center pt-32 md:pt-0 md:items-center p-6 md:p-8 bg-white">
         <div className="w-full max-w-md">
-          <h2 className="text-xl md:text-2xl font-semibold text-center mb-6 md:mb-4">Forget Password</h2>
+          <h2 className="text-xl md:text-2xl font-semibold text-center mb-6 md:mb-4">{t("forgetPassword.title")}</h2>
           <h4 className="text-center text-sm md:text-base mb-10 md:mb-8">
-            We’ll send a verification code to this email if it matches an existing{" "}
-            <span className="text-[#2c6472] font-semibold text-lg">JSE AI</span>{" "}
-            <span className="text-black text-base font-medium">account</span>
+            {t("forgetPassword.subtitle")}
           </h4>
 
           {/* Email Input */}
@@ -78,7 +76,7 @@ const ForgetPassword = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full h-14 px-4  text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 ring-[#2c6472] transition-all"
-              placeholder="Enter your registered email"
+              placeholder={t("forgetPassword.emailPlaceholder")}
             />
           </div>
 
@@ -88,13 +86,13 @@ const ForgetPassword = () => {
               onClick={() => navigate('/user/login')}
               className="w-1/3 py-2 bg-white text-[#2c6472] rounded-2xl border-2 border-[#2c6472] font-semibold hover:bg-[#1f4d59]/5 transition-all"
             >
-              Back
+              {t("forgetPassword.backButton")}
             </button>
             <button
               onClick={handleSubmit}
               className="w-1/3 py-2 bg-[#2c6472] text-white rounded-2xl font-semibold hover:bg-[#1f4d59] transition-all"
             >
-              {loading ? "Sending..." : "Verify"}
+              {loading ? t("forgetPassword.sending") : t("forgetPassword.verifyButton")}
             </button>
           </div>
         </div>

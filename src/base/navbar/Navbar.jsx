@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { t } from "../../utils/i18n";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import logo from "../../assets/jsenewlogoblack.png";
@@ -168,7 +169,7 @@ const Navbar = ({ onMenuToggle }) => {
                   className="flex items-center gap-4 px-4 py-2 rounded-md transition"
                 >
                   <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">
-                    Settings
+                    {t("navbar.settings")}
                   </span>
                 </Link>
 
@@ -178,7 +179,7 @@ const Navbar = ({ onMenuToggle }) => {
                   onClick={handleLogout}
                   className="text-red-800 hover:bg-red-600 hover:text-white transform duration-200 ease-linear font-medium px-3 py-1"
                 >
-                  Logout
+                  {t("navbar.logout")}
                 </motion.button>
               </motion.div>
             )}
@@ -191,10 +192,10 @@ const Navbar = ({ onMenuToggle }) => {
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center animate-fade-in">
           <div className="bg-white rounded shadow-2xl px-10 py-8 w-[92%] max-w-md text-center border-b-8 border-[#2c6472]">
             <h2 className="text-2xl font-bold text-[#2c6472] mb-4">
-              Logged Out Successfully
+              {t("navbar.logoutSuccess")}
             </h2>
             <p className="text-gray-600 w-full ">
-              Thanks for visiting - we’ll see you again soon!
+              {t("navbar.logoutMessage")}
             </p>
             {/* <div className="w-10 h-1 bg-[#2c6472] mx-auto rounded-full animate-pulse"></div> */}
           </div>

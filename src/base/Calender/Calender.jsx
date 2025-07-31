@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { t } from "../../utils/i18n";
 import {
   format,
   startOfMonth,
@@ -12,6 +13,7 @@ import { isValid } from 'date-fns';
 
 
 const Calendar = ({ selectedDate, onDateChange }) => {
+
   const [showCalendar, setShowCalendar] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const calendarRef = useRef(null);
@@ -64,7 +66,7 @@ const Calendar = ({ selectedDate, onDateChange }) => {
         readOnly
         onClick={() => setShowCalendar(true)}
         value={selectedDate && isValid(selectedDate) ? format(selectedDate, 'yyyy-MM-dd') : ''}
-        placeholder="Pick a date"
+        placeholder={t("calendar.placeholder")}
         className="w-full px-5 py-3 rounded-lg border border-gray-300 outline-none focus:ring-2 ring-[#2c6472] text-gray-600 cursor-pointer"
       />
 

@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { t } from "../../utils/i18n"; 
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png';
 import { jobskills } from '../../assets/data';
 import { BASE_URL } from '../../utils/api';
 import warning from "../../assets/carbon_warning.png"
-
-
 
 const JobTitles = () => {
 
@@ -78,12 +77,12 @@ const JobTitles = () => {
  const addSkill = (jobtitle) => {
   jobtitle = jobtitle?.trim();
   if (!jobtitle || !sortedJobTitles.includes(jobtitle)) {
-    toast.error("Please select a valid job title.");
+    toast.error(t("jobtitles.errors.invalid_jobtitle"));
     return;
   }
 
   if (isDuplicate(jobtitle)) {
-    toast.error('This job title was already added!');
+    toast.error(t("jobtitles.errors.duplicate_jobtitle"));
     return;
   }
 
@@ -94,7 +93,7 @@ const JobTitles = () => {
   } else if (!formData.tertiary_title) {
     setFormData((prev) => ({ ...prev, tertiary_title: jobtitle }));
   } else {
-    toast.error('You can only add up to 3 job titles.');
+    toast.error(t("jobtitles.errors.max_titles"));
     return;
   }
 
@@ -143,8 +142,8 @@ const JobTitles = () => {
     ].filter(Boolean).length;
 
     if (selectedCount < 3) {
-      toast.error("Please select 3 job titles.");
-      newErrors.primary_title = 'You must select 3 job titles.';
+      toast.error(t("jobtitles.select_three"));
+      newErrors.primary_title = t("jobtitles.must_select_three");
     }
 
     setErrors(newErrors);
@@ -160,7 +159,7 @@ const JobTitles = () => {
       addSkill(pendingTitleToAdd);
       setPendingTitleToAdd(null);
     } else {
-      toast.error("Not a valid job title.");
+      toast.error(t("jobtitles.errors.invalid_jobtitle"));
       setPendingTitleToAdd(null);
     }
   }
@@ -183,7 +182,7 @@ const JobTitles = () => {
     if (!validateForm()) return;
 
     if (!accepted) {
-      toast.error('Please accept the condition.');
+      toast.error(t("jobtitles.errors.accept_condition"));
       return;
     }
 
@@ -244,17 +243,17 @@ const JobTitles = () => {
     <div className='w-full p-3 md:p-10 text-black'>
       <div className='flex flex-col'>
 
-        <p className='text-[#2c6472] font-semibold w-fit'>STEP 7 OF 8</p>
+        <p className='text-[#2c6472] font-semibold w-fit'>{t("jobtitles.step")}</p>
 
-        <h1 className='font-bold sm:text-lg md:text-xl mt-7'>Your designation defines your position.</h1>
+        <h1 className='font-bold sm:text-lg md:text-xl mt-7'>{t("jobtitles.title")}</h1>
 
         <form className='md:ms-6' onSubmit={handleNext}>
           <div className='flex flex-col mt-5 mb-4'>
             <label className='mb-3 block text-sm sm:text-base md:text-lg font-medium'>
-              Job Search Postions <span className='text-red-500 ms-1'>*</span>
+              {t("jobtitles.label")} <span className='text-red-500 ms-1'>*</span>
             </label>
             <p className='text-sm sm:text-base md:text-lg font-medium text-gray-500 mb-2'>
-              Job Search titles you're interested in , Select upto 3 titles.
+              {t("jobtitles.subtitle")}
             </p>
           </div>
 
@@ -302,7 +301,7 @@ const JobTitles = () => {
               }}
 
 
-              placeholder='Search or select job title...'
+              placeholder={t("jobtitles.placeholder")}
             />
 
 
@@ -325,7 +324,7 @@ const JobTitles = () => {
                 ))}
 
                 {getFilteredTitles(searchTerms.primary_title).length === 0 && (
-                  <li className='px-4 py-2 text-gray-400'>No matching titles</li>
+                  <li className='px-4 py-2 text-gray-400'>{t("jobtitles.no_matching")}</li>
                 )}
               </ul>
             )}
@@ -371,7 +370,7 @@ const JobTitles = () => {
                 onChange={(e) => setAccepted(e.target.checked)}
               />
               <span className="text-sm text-red-500">
-                Please enter your job title accurately. This cannot be changed once saved.
+                {t("jobtitles.checkbox")}
               </span>
             </label>
           </div>
@@ -383,12 +382,12 @@ const JobTitles = () => {
               disabled={loading}
               className={`teal-button px-6 py-2 h-[40px] rounded-xl focus:outline-none transition-transform duration-200 ease-in-out
                 flex items-center justify-center
-                ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white w-[150px] text-sm md:text-base`}
+                ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white text-sm md:text-base`}
             >
               {loading ? (
                 <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
               ) : (
-                'Save & Next'
+                t("common.saveNext")
               )}
             </button>
           </div>
@@ -407,7 +406,7 @@ const JobTitles = () => {
       {/* Footer appears after scrolling all content */}
       <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-[13px] md:text-sm mt-8">
         <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
-        AI is not perfect. Make sure your data is accurate before saving.            </div>
+         {t("jobtitles.footerNote")}</div>
     </div>
   );
 };

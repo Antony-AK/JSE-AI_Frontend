@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { t } from "../../utils/i18n";
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import { Player } from '@lottiefiles/react-lottie-player';
@@ -67,11 +68,11 @@ const Login = () => {
       }
 
       } else {
-        toast.error(data.issue || 'Error occurred. Try again.');
+        toast.error(data.issue || t("login.errors.login_failed"));
         setLoading(false); // ✅ Stop loading on error
       }
     } catch (err) {
-      toast.error('Network error: ' + err.message);
+      toast.error(t("login.errors.network_error") + err.message);
       setLoading(false); // ✅ Stop loading on error
     }
   };
@@ -84,7 +85,7 @@ const Login = () => {
         {/* Left Panel */}
         <div className="flex flex-1 justify-center items-center p-8 py-14 bg-white">
           <div className="max-w-lg w-full">
-            <h2 className="text-xl md:text-3xl font-semibold text-center mb-2">Login now</h2><br /><br />
+            <h2 className="text-xl md:text-3xl font-semibold text-center mb-2">{t("login.title")}</h2><br /><br />
 
             {/* <button className="w-full h-[52px] flex items-center justify-center border border-gray-300 py-3 rounded-md mb-1 hover:bg-[#2c6472]/5 hover:border-[#2c6472] transition">
               <img src={google} className="mr-4 text-xl text-gray-600" />
@@ -101,7 +102,7 @@ const Login = () => {
               <div className="relative -mt-5">
                 <label className="mb-1 ms-3 block  text-gray-500 text-sm">
 
-                  Email
+                  {t("login.email")}
                 </label>
                 <input
                   id="email"
@@ -120,7 +121,7 @@ const Login = () => {
               <div className="relative">
                 <label className="mb-1 ms-3 block  text-gray-500 text-sm">
 
-                  Password
+                  {t("login.password")}
                 </label>
                 <input
                   id='password'
@@ -143,7 +144,7 @@ const Login = () => {
 
               <div className="text-right text-sm text-[#2c6472]">
                 <Link to="/user/forgot-password" className="hover:underline font-semibold">
-                  Forgot password?
+                  {t("login.forgot_password")}
                 </Link>
               </div>
 
@@ -152,14 +153,14 @@ const Login = () => {
                 className="teal-button w-half h-[50px] bg-[#2c6472] text-white py-2 mt-4 rounded-md font-semibold hover:bg-[#24525f] transition"
                 disabled={loading}
               >
-                Login
+                {t("login.login")}
               </button><br />
             </form>
 
             <p className="text-center text-sm -mt-2">
-              Don’t have an account?{' '}
+              {t("login.no_account")}{" "}
               <Link to="/user/signup" className="text-[#2c6472] font-semibold hover:underline">
-                Sign up
+                {t("login.signup")}
               </Link>
             </p>
           </div>
@@ -168,7 +169,7 @@ const Login = () => {
         {/* Right Panel */}
         <div className="flex md:flex-1 flex-col justify-center items-center bg-[#2c6472] text-white p-8 ">
           <div className="flex flex-col  items-center mb-3">
-            <h3 className="text-center text-xl md:text-3xl ms-4 mb-2 font-medium">Welcome Back!</h3>
+            <h3 className="text-center text-xl md:text-3xl ms-4 mb-2 font-medium">{t("login.right_panel.welcome")}</h3>
             <img
               src={logo}
               className="h-10 md:h-12 w-24 md:w-28"
@@ -185,8 +186,9 @@ const Login = () => {
             />
           </div>
           <div> <p className="hidden md:block  text-center items-center text-sm  mt-4">
-            Unlock your next opportunity<br />
-            Your dream job is just a click away        </p>
+            {t("login.right_panel.subtitle_line1")}<br />
+            {t("login.right_panel.subtitle_line2")}
+        </p>
           </div>
         </div>
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { t } from "../../utils/i18n";
 import { useLocation } from "react-router-dom";
 import tick from "../../assets/tick.svg";
 import logo from "../../assets/jsenewlogo.png";
@@ -19,17 +20,18 @@ import skills from "../../assets/skills-icon.svg";
 import skills_active from "../../assets/skills-icon-active.svg";
 
 const sidebarItems = [
-  { slug: "personal-information", label: "Personal Information", icon: personal_icon, activeIcon: personal_icon },
-  { slug: "work-experience", label: "Work Experience", icon: work_exp, activeIcon: work_exp_active },
-  { slug: "education", label: "Education", icon: education, activeIcon: education_active },
-  { slug: "projects", label: "Projects", icon: project, activeIcon: project_active },
-  { slug: "languages", label: "Languages", icon: languages, activeIcon: languages_active },
-  { slug: "certificates", label: "Certificates / Awards", icon: certificates, activeIcon: certificates_active },
-  { slug: "jobtitles", label: "Designation", icon: designation, activeIcon: designation_active },
-  { slug: "skills", label: "Skills", icon: skills, activeIcon: skills_active },
+  { slug: "personal-information", label: "data_entry_sidebar.personalInformation", icon: personal_icon, activeIcon: personal_icon },
+  { slug: "work-experience", label: "data_entry_sidebar.workExperience", icon: work_exp, activeIcon: work_exp_active },
+  { slug: "education", label: "data_entry_sidebar.education", icon: education, activeIcon: education_active },
+  { slug: "projects", label: "data_entry_sidebar.projects", icon: project, activeIcon: project_active },
+  { slug: "languages", label: "data_entry_sidebar.languages", icon: languages, activeIcon: languages_active },
+  { slug: "certificates", label: "data_entry_sidebar.certificates", icon: certificates, activeIcon: certificates_active },
+  { slug: "jobtitles", label: "data_entry_sidebar.designation", icon: designation, activeIcon: designation_active },
+  { slug: "skills", label: "data_entry_sidebar.skills", icon: skills, activeIcon: skills_active },
 ];
 
 const DataEntrySidebar = () => {
+
   const location = useLocation();
   const pathParts = location.pathname.split("/");
   const slug = pathParts[pathParts.length - 1];
@@ -75,7 +77,7 @@ const DataEntrySidebar = () => {
               <div className="w-10 h-10 flex justify-center items-center rounded-full bg-white">
                 <img width="15px" src={iconToUse} alt={`${item.label} Icon`} />
               </div>
-              <p className="hidden md:block">{item.label}</p>
+              <p className="hidden md:block">{t(item.label)}</p>
             </div>
           );
         })}
