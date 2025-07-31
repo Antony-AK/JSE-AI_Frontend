@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { t } from "../../utils/i18n";
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png'
@@ -6,8 +7,6 @@ import { BASE_URL } from '../../utils/api';
 import Calendar from '../Calender/Calender';
 import { format } from 'date-fns';
 import warning from "../../assets/carbon_warning.png"
-
-
 
 const Certificates = () => {
 
@@ -48,21 +47,11 @@ const Certificates = () => {
         }
     }, []);
 
-
-
-
-
-
     const handleSelectCertificate = (cert) => {
         setFormData(cert);
         setActiveId(cert.id);
         setErrors({});
     };
-
-
-
-
-
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -74,9 +63,9 @@ const Certificates = () => {
 
     const validateForm = () => {
         const newErrors = {};
-        if (!formData.certificate_name.trim()) newErrors.certificate_name = 'Certificate name is required';
-        if (!formData.certificate_type.trim()) newErrors.certificate_type = 'Certificate type is required';
-        if (!formData.completion_date.trim()) newErrors.completion_date = 'Completion date is required';
+        if (!formData.certificate_name.trim()) newErrors.certificate_name = t("certificates.errors.certificate_name");
+        if (!formData.certificate_type.trim()) newErrors.certificate_type = t("certificates.errors.certificate_type");
+        if (!formData.completion_date.trim()) newErrors.completion_date = t("certificates.errors.completion_date");
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -89,7 +78,7 @@ const Certificates = () => {
         const token = sessionStorage.getItem('authToken');
         if (!token) {
             navigate('/user/login');
-            toast.error("User not found. Please log in.");
+            toast.error(t("certificates.toast.noUser"));
             return;
         }
 
@@ -138,7 +127,7 @@ const Certificates = () => {
 
         } catch (error) {
             console.error("Error uploading certificate:", error);
-            toast.error("Failed to upload certificate." + error.message);
+            toast.error(t("certificates.toast.uploadFailed") + " " + error.message);
         } finally {
             setLoading(false);
         }
@@ -152,7 +141,7 @@ const Certificates = () => {
         const token = sessionStorage.getItem('authToken');
         if (!token) {
             navigate('/user/login');
-            toast.error('User not found. Please log in');
+            toast.error(t("certificates.toast.noUser"));
             return;
         }
 
@@ -199,7 +188,7 @@ const Certificates = () => {
 
         } catch (error) {
             console.error("Error uploading certificate:", error);
-            toast.error("Failed to upload certificate. \n\n" + error.issue);
+            toast.error(t("certificates.toast.uploadFailed") + "\n\n" + (error.issue || ""));
         } finally {
             setLoading(false);
         }
@@ -218,17 +207,17 @@ const Certificates = () => {
                             className="flex items-center justify-center text-center cursor-pointer transition-transform duration-200 ease-in-out"
                             onClick={() => navigate('/user/onboarding/jobtitles')}
                         >
-                            <p className='cursor-pointer md:text-lg font-medium text-[#00000057]'>Skip</p>
+                            <p className='cursor-pointer md:text-lg font-medium text-[#00000057]'>{t("common.skip")}</p>
                         </div>
 
                 </div>
 
                 <div>
-                    <p className="w-fit font-semibold text-[#2c6472] -mt-6 mb-3">STEP 6 OF 8</p>
+                    <p className="w-fit font-semibold text-[#2c6472] -mt-6 mb-3">{t("certificates.step")}</p>
                 </div>
 
                 <div>
-                    <h1 className='mt-3 mb-4 font-bold sm:text-lg md:text-xl'>List your certificates / Awards.</h1>
+                    <h1 className='mt-3 mb-4 font-bold sm:text-lg md:text-xl'>{t("certificates.title")}</h1>
                 </div>
 
                 {certificateList.length > 0 && (
@@ -256,7 +245,7 @@ const Certificates = () => {
                 <form className="flex flex-col gap-3 mt-5 md:ms-6" onSubmit={handleAddCertificate}>
                     {/* Certificate Name */}
                     <div className="flex flex-col gap-2 mb-4">
-                        <label className="text-sm sm:text-base md:text-lg font-medium">Certificate Name <span className="text-red-500">*</span></label>
+                        <label className="text-sm sm:text-base md:text-lg font-medium">{t("certificates.certificate_name")} <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             name="certificate_name"
@@ -269,7 +258,7 @@ const Certificates = () => {
 
                     {/* Certificate Type Dropdown */}
                     <div className="flex flex-col gap-2 mb-4">
-                        <label className="text-sm sm:text-base md:text-lg font-medium">Certificate Type <span className="text-red-500">*</span></label>
+                        <label className="text-sm sm:text-base md:text-lg font-medium">{t("certificates.certificate_type")} <span className="text-red-500">*</span></label>
                         <select
                             name="certificate_type"
                             value={formData.certificate_type}
@@ -282,10 +271,10 @@ const Certificates = () => {
                              cursor-pointer outline-none
                            `}
                         >
-                            <option value="" disabled className="text-gray-400 text-sm py-2 bg-white">Select Type</option>
-                            <option value="certification" className="text-sm py-2 bg-white">Certification</option>
-                            <option value="participation" className="text-sm py-2 bg-white">Participation</option>
-                            <option value="completion" className="text-sm py-2 bg-white">Completion</option>
+                            <option value="" disabled>{t("certificates.types.select")}</option>
+                            <option value="certification">{t("certificates.types.certification")}</option>
+                            <option value="participation">{t("certificates.types.participation")}</option>
+                            <option value="completion">{t("certificates.types.completion")}</option>
                         </select>
 
                         {errors.certificate_type && <span className="text-red-500 text-sm">{errors.certificate_type}</span>}
@@ -293,7 +282,7 @@ const Certificates = () => {
 
                     {/* Provider */}
                     <div className="flex flex-col gap-2 mb-4">
-                        <label className="text-sm sm:text-base md:text-lg font-medium">Company</label>
+                        <label className="text-sm sm:text-base md:text-lg font-medium">{t("certificates.provider")}</label>
                         <input
                             type="text"
                             name="provider"
@@ -307,7 +296,7 @@ const Certificates = () => {
                     {/* Completion Date */}
                     <div className="flex flex-col gap-2 mb-4 w-full md:w-[70%] text-sm md:text-lg">
                         <label className="block font-medium">
-                            Completion Date <span className="text-red-500">*</span>
+                            {t("certificates.completion_date")} <span className="text-red-500">*</span>
                         </label>
 
                         <Calendar
@@ -325,7 +314,7 @@ const Certificates = () => {
                         )}
                     </div>
 
-                    <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+                    <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>{t("common.pleaseNote")}</span><span className='text-[#2c6472] ms-1'>{t("certificates.editLaterNote")}</span></p></div>
 
 
 
@@ -336,7 +325,7 @@ const Certificates = () => {
                             type="submit"
                             className=" py-2 w-[180px] bg-white text-[#2c6472]  h-[43px]  font-semibold cursor-pointer mt-1 hover:scale-95 transition-transform duration-200 ease-in-out"
                         >
-                            +Add Another
+                            + {t("common.addAnother")}
                         </button>
 
                         <button
@@ -345,12 +334,12 @@ const Certificates = () => {
                             disabled={loading}
                             className={`teal-button px-6 py-2 h-[40px] rounded-xl focus:outline-none transition-transform duration-200 ease-in-out
                                 flex items-center justify-center
-                                ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white w-[150px] text-sm md:text-base`}
+                                ${loading ? 'bg-[#2c6472]/70 cursor-not-allowed' : 'bg-[#2c6472]'} text-white text-sm md:text-base`}
                         >
                             {loading ? (
                                 <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
                             ) : (
-                                'Save & Next'
+                                t("common.saveNext")
                             )}
                         </button>
                     </div>
@@ -371,7 +360,7 @@ const Certificates = () => {
 
             <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-[13px] md:text-sm mt-8">
                 <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
-                AI is not perfect. Make sure your data is accurate before saving.            </div>
+                {t("certificates.footerNote")}</div>
         </div>
     )
 }

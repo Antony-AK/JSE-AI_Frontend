@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { t } from "../../utils/i18n";
 import { toast } from 'react-toastify';
 import { data, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -117,10 +118,10 @@ const WorkExperience = () => {
   const validate = () => {
     const newErrors = {};
 
-    if (!formData.job_title.trim()) newErrors.job_title = 'Role is required';
-    if (!formData.company_name.trim()) newErrors.company_name = 'Company is required';
-    if (!formData.location.trim()) newErrors.location = 'Location is required';
-    if (!formData.start_date) newErrors.start_date = 'Start date is required';
+    if (!formData.job_title.trim()) newErrors.job_title = t("workExperience.errors.role");
+    if (!formData.company_name.trim()) newErrors.company_name = t("workExperience.errors.company");
+    if (!formData.location.trim()) newErrors.location = t("workExperience.errors.location");
+    if (!formData.start_date) newErrors.start_date = t("workExperience.errors.startDate");
 
     const start = formData.start_date ? new Date(formData.start_date) : null;
     const end = formData.enddate ? new Date(formData.enddate) : null;
@@ -128,14 +129,13 @@ const WorkExperience = () => {
 
     if (!formData.currentwork) {
       if (!formData.enddate) {
-        newErrors.enddate = "End date is required.";
+        newErrors.enddate = t("workExperience.errors.endDateRequired");
       } else if (start && end && start > end) {
-        newErrors.enddate = "End date cannot be before start date.";
+        newErrors.enddate = t("workExperience.errors.endDateBeforeStart");
       }
     }
-
     if (formData.currentwork && start && start > today) {
-      newErrors.start_date = "Start date cannot be after current date";
+      newErrors.start_date = t("workExperience.errors.startDateInFuture");
     }
 
     return newErrors;
@@ -153,7 +153,7 @@ const WorkExperience = () => {
       try {
         if (!token) {
           navigate('/user/login');
-          toast.error("User not found. Please log in.");
+          toast.error(t("workExperience.toast.noUser"));
           return;
         }
 
@@ -204,7 +204,7 @@ const WorkExperience = () => {
 
       } catch (error) {
         console.error("❌ API Error:", error.response?.data || error.message);
-        toast.error(error.response?.data.issue || "Submission failed. Please try again.");
+        toast.error(error.response?.data.issue || t("workExperience.toast.submitFailed"));
       } finally {
         setLoading(false);
       }
@@ -222,14 +222,14 @@ const WorkExperience = () => {
           className="cursor-pointer rounded transition"
           onClick={() => navigate('/user/onboarding/education')}
         >
-          <p className="text-lg font-medium text-[#00000057]">Skip</p>
+          <p className="text-lg font-medium text-[#00000057]">{t("common.skip")}</p>
         </div>
       </div>
 
 
-      <p className='text-[#2c6472] font-semibold -mt-11 w-fit'>STEP 2 OF 8</p>
+      <p className='text-[#2c6472] font-semibold -mt-11 w-fit'>{t("workExperience.stepIndicator")}</p>
 
-      <h2 className='font-bold sm:text-lg md:text-xl'>Highlight your Work Experience.</h2>
+      <h2 className='font-bold sm:text-lg md:text-xl'>{t("workExperience.title")}</h2>
 
       {experiences.length > 0 && (
         <div className="flex gap-3 px-6 py-4 -m-3 w-[90%] rounded-lg overflow-x-auto hide-scrollbar snap-x snap-mandatory">
@@ -253,7 +253,7 @@ const WorkExperience = () => {
 
         {/* Role */}
         <div className="flex flex-col gap-2">
-          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="job_title">Role <span className='text-red-500'>*</span></label>
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="job_title">{t("workExperience.role")} <span className='text-red-500'>*</span></label>
           <input
             className={`px-5 py-3 rounded-lg md:text-lg border ${errors.job_title ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
             type="text"
@@ -267,7 +267,7 @@ const WorkExperience = () => {
         {/* company_name & Location */}
         <div className="flex flex-col sm:flex-row justify-start gap-5 w-full">
           <div className="flex flex-col gap-2 w-full sm:w-[50%]">
-            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="company_name">Company <span className='text-red-500'>*</span></label>
+            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="company_name">{t("workExperience.company")} <span className='text-red-500'>*</span></label>
             <input
               className={`px-5 py-3 rounded-lg md:text-lg border ${errors.company_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
               type="text"
@@ -278,7 +278,7 @@ const WorkExperience = () => {
             {errors.company_name && <p className='text-red-500 text-sm'>{errors.company_name}</p>}
           </div>
           <div className="flex flex-col gap-2 w-full sm:w-[50%]">
-            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="location">Location <span className='text-red-500'>*</span></label>
+            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="location">{t("workExperience.location")} <span className='text-red-500'>*</span></label>
             <input
               className={`px-5 py-3 rounded-lg md:text-lg border ${errors.location ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
               type="text"
@@ -294,7 +294,7 @@ const WorkExperience = () => {
         <div className="flex justify-start gap-5 w-full">
           <div className="flex flex-col gap-2 w-[50%] md:text-lg">
             <p className="text-sm sm:text-base md:text-lg font-medium">
-              Start Date <span className="text-red-500">*</span>
+              {t("workExperience.startDate")} <span className="text-red-500">*</span>
             </p>
             <Calendar
               selectedDate={tryParseDate(formData.start_date)}
@@ -320,14 +320,14 @@ const WorkExperience = () => {
 
           <div className="flex flex-col gap-2 w-[50%] md:text-lg">
             <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="enddate">
-              End Date {!formData.currentwork && <span className='text-red-500'>*</span>}
+              {t("workExperience.endDate")} {!formData.currentwork && <span className='text-red-500'>*</span>}
             </label>
             {formData.currentwork ? (
               <input
                 disabled
                 type="text"
                 value=""
-                placeholder="Currently working"
+                placeholder={t("workExperience.currentlyWorkingPlaceholder")}
                 className="w-full px-5 py-3 rounded-lg border border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed"
               />
             ) : (
@@ -366,12 +366,12 @@ const WorkExperience = () => {
             checked={formData.currentwork}
             onChange={handleChange}
           />
-          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="currentwork">I'm currently working</label>
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="currentwork">{t("workExperience.currentlyWorking")}</label>
         </div>
 
         {/* Work Description */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm sm:text-base md:text-lg font-medium" htmlFor="key_responsibilities">Work Description <span className='text-[#0000009c]'>(Optional)</span></label>
+          <label className="text-sm sm:text-base md:text-lg font-medium" htmlFor="key_responsibilities">{t("workExperience.description")} <span className='text-[#0000009c]'>{t("workExperience.optional")}</span></label>
           <textarea
             id="key_responsibilities"
             className="px-5 py-3 rounded-lg md:text-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472] resize-none"
@@ -381,7 +381,7 @@ const WorkExperience = () => {
           ></textarea>
         </div>
 
-        <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+        <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>{t("workExperience.noteLabel")}</span><span className='text-[#2c6472] ms-1'>{t("workExperience.note")}</span></p></div>
 
 
         <div className="flex justify-between mt-7">
@@ -393,7 +393,7 @@ const WorkExperience = () => {
               }
             }}
           >
-            <p className='mt-2 md:text-lg text-[#2C6472] font-semibold'>+ Add Another</p>
+            <p className='mt-2 md:text-lg text-[#2C6472] font-semibold'>+ {t("common.addAnother")}</p>
           </div>
           <button
             type="button"
@@ -403,12 +403,12 @@ const WorkExperience = () => {
             disabled={loading}
             className={`rounded-xl px-6 py-2 mb-10 flex items-center justify-center 
               ${loading ? 'bg-[#2C6472]/70 cursor-not-allowed' : 'bg-[#2C6472]'} 
-              text-white transition-all w-[150px] h-[40px] text-sm md:text-base`}
+              text-white transition-all h-[40px] text-sm md:text-base`}
           >
             {loading ? (
               <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
             ) : (
-              'Save & Next'
+              t("common.saveNext")
             )}
           </button>
         </div>
@@ -427,7 +427,7 @@ const WorkExperience = () => {
       {/* Footer appears after scrolling all content */}
       <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-sm md:text-base mt-8">
         <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
-        More experience you give the better the result of JSE Ai
+        {t("workExperience.footerWarning")}
       </div>
 
     </div>

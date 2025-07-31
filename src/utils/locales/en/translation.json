@@ -1,4 +1,341 @@
 {
+  "signup": {
+    "title": "Create Your Account",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "password": "Create Password",
+    "confirm_password": "Confirm Password",
+    "signup": "Sign Up",
+    "login": "Login",
+    "already_have_account": "Already have an account?",
+    "note_label": "Note:",
+    "note_message": "We’ll use your information only for improving your job search experience.",
+    "errors": {
+      "password_hint": "Password must be at least 8 characters, include a number and a special character.",
+      "password_mismatch": "Passwords do not match.",
+      "accept_terms": "You must accept Terms & Conditions to continue.",
+      "invalid_password": "Please enter a valid password.",
+      "signup_failed": "Signup failed. Please try again."
+    },
+    "right_panel": {
+      "welcome": "Welcome to",
+      "subtitle_line1": "Unlock your next opportunity",
+      "subtitle_line2": "Your dream job is just a click away"
+    },
+    "verification": {
+      "title": "Check Your Email 📬",
+      "message": "We've sent you a verification link. Please verify before login!"
+    }
+  },
+  "login": {
+    "title": "Login now",
+    "email": "Email",
+    "password": "Password",
+    "forgot_password": "Forgot password?",
+    "login": "Login",
+    "no_account": "Don’t have an account?",
+    "signup": "Sign up",
+    "right_panel": {
+      "welcome": "Welcome Back!",
+      "subtitle_line1": "Unlock your next opportunity",
+      "subtitle_line2": "Your dream job is just a click away"
+    },
+    "errors": {
+      "invalid_credentials": "Invalid email or password.",
+      "network_error": "Network error: Please try again.",
+      "login_failed": "Login failed. Please try again."
+    }
+  },
+  "dataOnboarding": {
+    "sidebar": {
+      "title": "Just a few steps away from landing your dream job",
+      "subtitle": "Start building your profile and unlock new career opportunities."
+    },
+    "main": {
+      "title": "Build your job profile in just a few steps.",
+      "subtitle": "Select an option that works best for you."
+    },
+    "options": {
+      "createProfile": "Create a Profile from Scratch",
+      "uploadResume": "Upload Resume",
+      "importLinkedin": "Import from LinkedIn"
+    }
+  },
+  "resume": {
+    "sidebar": {
+      "title": "Just a few steps away from landing your dream job",
+      "subtitle": "Start building your profile and unlock new career opportunities."
+    },
+    "main": {
+      "uploadTitle": "Upload your resume",
+      "uploadText": "Click to Upload or drag and drop",
+      "fileInfo": "PDF, TXT - Max file size 4MB",
+      "extracting": "Extracting, please wait...",
+      "cancel": "Cancel",
+      "allow": "Allow"
+    },
+    "errors": {
+      "unsupported_file": "Unsupported file type. Please upload a PDF or TXT.",
+      "file_too_large": "File too large. Max size allowed is 4MB.",
+      "no_file": "Please upload a valid resume file.",
+      "not_logged_in": "You're not logged in. Please login.",
+      "no_data_extracted": "Resume uploaded, but no data was extracted. Try another file.",
+      "upload_failed": "Failed to upload resume or extract data."
+    },
+    "success": {
+      "uploaded": "Resume uploaded and data extracted!"
+    }
+  },
+  "data_entry_sidebar": {
+    "personalInformation": "Personal Information",
+    "workExperience": "Work Experience",
+    "education": "Education",
+    "projects": "Projects",
+    "languages": "Languages",
+    "certificates": "Certificates / Awards",
+    "designation": "Designation",
+    "skills": "Skills"
+  },
+  "calendar": {
+    "placeholder": "Pick a date"
+  },
+  "forgetPassword": {
+    "welcomeBack": "Welcome Back!",
+    "tagline": "Unlock your next opportunity\nYour dream job is just a click away",
+    "title": "Forget Password",
+    "subtitle": "We’ll send a verification code to this email if it matches an existing JSE AI account",
+    "emailPlaceholder": "Enter your registered email",
+    "backButton": "Back",
+    "verifyButton": "Verify",
+    "sending": "Sending..."
+  },
+  "navbar": {
+    "settings": "Settings",
+    "logout": "Logout",
+    "logoutSuccess": "Logged Out Successfully",
+    "logoutMessage": "Thanks for visiting - we’ll see you again soon!"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "myJobs": "My Jobs",
+    "internal": "Internal",
+    "external": "External",
+    "applicationTracker": "Application Tracker",
+    "savedJobs": "Saved Jobs",
+    "proficiencyTest": "Proficiency Test",
+    "selfDevelopment": "Self Development",
+    "personalTracker": "Personal Tracker",
+    "jobProfile": "Job Profile",
+    "upgrade": "Upgrade"
+  },
+  "personalInfo": {
+    "stepIndicator": "STEP 1 OF 8",
+    "title": "Let's start with your personal information.",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "linkedin": "LinkedIn Profile",
+    "country": "Country",
+    "state": "State",
+    "city": "City",
+    "noteLabel": "Please note:",
+    "note": " Name, Email & Phone Number cannot be changed.",
+    "saveNext": "Save & Next",
+    "saveSuccess": "Personal information saved successfully!",
+    "aiWarning": "AI is not perfect. Make sure your data is accurate before saving.",
+    "errors": {
+      "firstName": "First name is required",
+      "lastName": "Last name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email format",
+      "phone": "Phone number is required",
+      "linkedin": "LinkedIn is required"
+    },
+    "toast": {
+      "noUser": "No user found. Please log in again.",
+      "submitFailed": "Failed to submit. Please try again."
+    }
+  },
+  "workExperience": {
+    "stepIndicator": "STEP 2 OF 8",
+    "title": "Highlight your Work Experience.",
+    "role": "Role",
+    "company": "Company",
+    "location": "Location",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "currentlyWorking": "I'm currently working",
+    "currentlyWorkingPlaceholder": "Currently working",
+    "description": "Work Description",
+    "optional": "(Optional)",
+    "noteLabel": "Please note:",
+    "note": "Enter your details carefully, you can only edit them later.",
+    "addAnother": "Add Another",
+    "saveNext": "Save & Next",
+    "footerWarning": "More experience you give the better the result of JSE AI",
+    "errors": {
+      "role": "Role is required",
+      "company": "Company is required",
+      "location": "Location is required",
+      "startDate": "Start date is required",
+      "endDateRequired": "End date is required.",
+      "endDateBeforeStart": "End date cannot be before start date.",
+      "startDateInFuture": "Start date cannot be after current date"
+    },
+    "toast": {
+      "noUser": "User not found. Please log in.",
+      "submitFailed": "Submission failed. Please try again."
+    }
+  },
+  "education": {
+    "step": "STEP 3 OF 8",
+    "title": "Add your academic story.",
+    "institution": "School, University or Institution",
+    "city": "City / Country",
+    "degree": "Degree, Qualification, or Major",
+    "field": "Field of Study",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "currentlyStudying": "Currently Studying",
+    "description": "Additional Description",
+    "editLaterNote": "Enter your details carefully, you can only edit them later.",
+    "footerNote": "AI is not perfect. Make sure your data is accurate before saving.",
+    "currentlyStudyingPlaceholder": "Currently Studying",
+    "errors": {
+      "institution": "Institution is required",
+      "city": "City / Country is required",
+      "degree": "Degree is required",
+      "field_of_study": "Field of Study is required",
+      "start_date_required": "Start date is required",
+      "start_date_future": "Start date cannot be after today",
+      "end_date_required": "End date is required",
+      "end_date_invalid": "End date cannot be before start date"
+    },
+    "toast": {
+      "noUser": "Please log in first.",
+      "submitFailed": "Something went wrong! Please try again."
+    }
+  },
+  "projects": {
+    "step": "STEP 4 OF 8",
+    "title": "Share your past project experience.",
+    "project_name": "Project Name",
+    "institution": "University / Company Name",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "currentlyDoing": "I'm currently doing",
+    "description": "Project Description",
+    "editLaterNote": "Enter your details carefully, you can only edit them later.",
+    "footerNote": "More projects you provide, the better JSE AI results.",
+    "currentlyDoingPlaceholder": "Currently working",
+    "errors": {
+      "project_name": "Project name is required",
+      "start_date_required": "Start date is required",
+      "start_date_future": "Start date cannot be after today",
+      "end_date_required": "End date is required",
+      "end_date_invalid": "End date cannot be before start date"
+    },
+    "toast": {
+      "noUser": "User not found. Please log in.",
+      "submitFailed": "Submission failed. Please try again."
+    }
+  },
+  "languages": {
+    "step": "STEP 5 OF 8",
+    "title": "Add the languages you know.",
+    "language": "Language",
+    "language_placeholder": "Enter language name",
+    "proficiency": "Proficiency",
+    "levels": {
+      "beginner": "Beginner (A1, A2)",
+      "intermediate": "Intermediate (B1, B2)",
+      "fluent": "Fluent / Native (C1, C2)"
+    },
+    "editLaterNote": "Enter your details carefully, you can only edit them later.",
+    "footerNote": "AI is not perfect. Make sure your data is accurate before saving.",
+    "errors": {
+      "language_required": "Language name is required",
+      "proficiency_required": "Proficiency level is required",
+      "proficiency_required_toast": "Please select a proficiency level",
+      "upload_failed": "Failed to upload language."
+    },
+    "toast": {
+      "noUser": "User not found. Please log in.",
+      "uploadFailed": "Failed to upload language."
+    }
+  },
+  "certificates": {
+    "step": "STEP 6 OF 8",
+    "title": "List your certificates / awards.",
+    "certificate_name": "Certificate Name",
+    "certificate_type": "Certificate Type",
+    "provider": "Company",
+    "completion_date": "Completion Date",
+    "types": {
+      "select": "Select Type",
+      "certification": "Certification",
+      "participation": "Participation",
+      "completion": "Completion"
+    },
+    "editLaterNote": "Enter your details carefully, you can only edit them later.",
+    "footerNote": "AI is not perfect. Make sure your data is accurate before saving.",
+    "errors": {
+      "certificate_name": "Certificate name is required",
+      "certificate_type": "Certificate type is required",
+      "completion_date": "Completion date is required",
+      "upload_failed": "Failed to upload certificate."
+    },
+    "toast": {
+      "noUser": "User not found. Please log in.",
+      "uploadFailed": "Failed to upload certificate.",
+      "saved": "Certificate saved successfully!"
+    }
+  },
+  "jobtitles": {
+    "step": "STEP 7 OF 8",
+    "title": "Your designation defines your position.",
+    "label": "Job Search Positions",
+    "subtitle": "Job titles you're interested in. Select up to 3 titles.",
+    "checkbox": "Please enter your job title accurately. This cannot be changed once saved.",
+    "footerNote": "AI is not perfect. Make sure your data is accurate before saving.",
+    "placeholder": "Search or select job title...",
+    "no_matching": "No matching titles",
+    "select_three": "Please select three job titles.",
+    "must_select_three": "You must select at least 3 job titles.",
+    "errors": {
+      "invalid_jobtitle": "Please select a valid job title.",
+      "duplicate_jobtitle": "This job title was already added!",
+      "max_titles": "You can only add up to 3 job titles.",
+      "select_three": "Please select 3 job titles.",
+      "must_select_three": "You must select 3 job titles.",
+      "accept_condition": "Please accept the condition.",
+      "upload_failed": "Failed to upload job titles."
+    }
+  },
+  "skills": {
+    "step": "STEP 8 OF 8",
+    "title": "Add your key skills.",
+    "general_label": "General Skills",
+    "job_label": "Job Specific Skills",
+    "checkbox": "Please enter only relevant skills. Adding unrelated may affect the quality of your profile.",
+    "editLaterNote": "Enter your details carefully, you can only edit them later.",
+    "go_dashboard": "Go to Dashboard",
+    "footerNote": "AI is not perfect. Make sure your data is accurate before saving.",
+    "errors": {
+      "general_required": "Please add at least one general skill.",
+      "job_required": "Please add at least one job-specific skill.",
+      "skill_exists": "This skill is already added.",
+      "accept_condition": "Please accept the condition."
+    }
+  },
+  "common": {
+    "skip": "Skip",
+    "addAnother": "Add Another",
+    "saveNext": "Save & Next",
+    "optional": "(Optional)",
+    "pleaseNote": "Please note:"
+  },
   "certificates_and_courses": "Certificates & Courses",
   "certificate_name": "Certificate Name",
   "certificate_type": "Certificate Type",

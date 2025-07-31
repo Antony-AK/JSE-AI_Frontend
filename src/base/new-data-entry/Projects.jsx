@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { t } from "../../utils/i18n";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../utils/api'
@@ -151,27 +152,28 @@ useEffect(() => {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.project_name.trim()) newErrors.project_name = 'Project name is required';
-    if (!formData.start_date) newErrors.start_date = 'Start date is required';
-    if (!formData.currentdo && !formData.end_date) newErrors.end_date = 'End date is required';
-
     const start = new Date(formData.start_date);
     const end = new Date(formData.end_date);
     const today = new Date();
 
-    if (!formData.start_date) {
-      newErrors.start_date = "Start date is required.";
+    // Project name
+    if (!formData.project_name.trim()) {
+      newErrors.project_name = t('projects.errors.project_name');
     }
 
+    // Start date
+    if (!formData.start_date) {
+      newErrors.start_date = t('projects.errors.start_date_required');
+    } else if (start > today) {
+      newErrors.start_date = t('projects.errors.start_date_future');
+    }
+
+    // End date
     if (!formData.currentdo) {
       if (!formData.end_date) {
-        newErrors.end_date = "End date is required.";
+        newErrors.end_date = t('projects.errors.end_date_required');
       } else if (start > end) {
-        newErrors.end_date = "End date cannot be before start date.";
-      }
-    } else {
-      if (start > today) {
-        newErrors.start_date = "Start date cannot be after the current date.";
+        newErrors.end_date = t('projects.errors.end_date_invalid');
       }
     }
 
@@ -187,7 +189,7 @@ useEffect(() => {
       try {
         if (!token) {
           navigate('/user/login');
-          toast.error("User not found. Please log in.");
+          toast.error(t("projects.toast.noUser"));
           return;
         }
 
@@ -244,7 +246,7 @@ if (finalList.length > 0 && hasWorkExperience === true) {
         }
       } catch (error) {
         console.error("❌ API Error:", error.response?.data || error.message);
-        toast.error(error.response?.data.issue || "Submission failed. Please try again.");
+        toast.error(error.response?.data.issue || t("projects.toast.submitFailed"));
       } finally {
         setLoading(false);
       }
@@ -255,19 +257,19 @@ if (finalList.length > 0 && hasWorkExperience === true) {
     <div className='p-3 md:p-10 pt-2 flex flex-col gap-5 w-[100%] min-h-screen '>
 
     <div className="flex justify-between items-center md:w-[95%] mt-">
-      <p className='text-[#2c6472] font-semibold w-fit pb-3'>STEP 4 OF 8</p>
+      <p className='text-[#2c6472] font-semibold w-fit pb-3'>{t('projects.step')}</p>
 
       {showSkip && (
         <div
           className="flex items-center p-4 pt-0 cursor-pointer"
           onClick={() => navigate('/user/onboarding/languages')}
         >
-          <p className='ml-2 md:text-lg font-medium text-[#00000057]'>Skip</p>
+          <p className='ml-2 md:text-lg font-medium text-[#00000057]'>{t('common.skip')}</p>
         </div>
       )}
     </div>      
 
-      <h2 className='font-bold sm:text-lg md:text-xl'>Share your past project experience.</h2>
+      <h2 className='font-bold sm:text-lg md:text-xl'>{t('projects.title')}</h2>
 
       {projectList.length > 0 && (
         <div className="flex gap-3 px-3 md:px-6 py-4 -m-3 md:w-[90%] rounded-lg overflow-x-auto hide-scrollbar snap-x snap-mandatory">
@@ -293,7 +295,7 @@ if (finalList.length > 0 && hasWorkExperience === true) {
 
         {/* Project Name */}
         <div className="flex flex-col gap-2">
-          <label className='text-sm sm:text-base md:text-lg  font-medium' htmlFor="project_name">Project Name <span className='text-red-500'>*</span></label>
+          <label className='text-sm sm:text-base md:text-lg  font-medium' htmlFor="project_name">{t('projects.project_name')} <span className='text-red-500'>*</span></label>
           <input
             className={`px-5 py-3 rounded-lg md:text-lg border ${errors.project_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
             type="text"
@@ -306,7 +308,7 @@ if (finalList.length > 0 && hasWorkExperience === true) {
 
         {/* Company Name */}
         <div className="flex flex-col gap-2">
-          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="institution">University / Company Name <span className='text-red-500'>*</span></label>
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="institution">{t('projects.institution')} <span className='text-red-500'>*</span></label>
           <input
             className={`px-5 py-3 rounded-lg md:text-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472]`}
             type="text"
@@ -319,7 +321,7 @@ if (finalList.length > 0 && hasWorkExperience === true) {
         {/* Start & End Date */}
         <div className="flex justify-start gap-5 w-full">
           <div className="flex flex-col gap-2 w-[50%]">
-            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="start_date">Start Date <span className='text-red-500'>*</span></label>
+            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="start_date">{t('projects.startDate')} <span className='text-red-500'>*</span></label>
             <Calendar
               selectedDate={tryParseDate(formData.start_date)}
               onDateChange={(date) =>
@@ -332,13 +334,13 @@ if (finalList.length > 0 && hasWorkExperience === true) {
             {errors.start_date && <p className='text-red-500 text-sm'>{errors.start_date}</p>}
           </div>
           <div className="flex flex-col gap-2 w-[50%]">
-            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="end_date">End Date {!formData.currentdo && <span className='text-red-500'>*</span>}</label>
+            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="end_date">{t('projects.endDate')} {!formData.currentdo && <span className='text-red-500'>*</span>}</label>
             {formData.currentdo ? (
               <input
                 disabled
                 type="text"
                 value=""
-                placeholder="Currently doing"
+                placeholder={t("projects.currentlyDoingPlaceholder")}
                 className="w-full px-5 py-3 rounded-lg border border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed"
               />
             ) : (
@@ -366,12 +368,12 @@ if (finalList.length > 0 && hasWorkExperience === true) {
             checked={formData.currentdo}
             onChange={handleChange}
           />
-          <label className='font-medium text-sm sm:text-base md:text-lg' htmlFor="currentdo">I'm currently doing</label>
+          <label className='font-medium text-sm sm:text-base md:text-lg' htmlFor="currentdo">{t('projects.currentlyDoing')}</label>
         </div>
 
         {/* Project Description */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm sm:text-base md:text-lg font-medium" htmlFor="project_description">Project Description</label>
+          <label className="text-sm sm:text-base md:text-lg font-medium" htmlFor="project_description">{t('projects.description')}</label>
           <textarea
             id="project_description"
             className="px-5 py-3 rounded-lg md:text-lg border border-[rgba(0,0,0,0.14)] outline-none focus:border-[#2c6472] resize-none"
@@ -381,12 +383,12 @@ if (finalList.length > 0 && hasWorkExperience === true) {
           ></textarea>
         </div>
 
-        <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+        <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>{t('common.pleaseNote')}</span><span className='text-[#2c6472] ms-1'>{t('projects.editLaterNote')}</span></p></div>
 
 
         <div className="flex justify-between mt-7">
           <div className="cursor-pointer" onClick={() => handleSubmit(false)}>
-            <p className='md:text-lg text-[#2C6472] font-semibold mt-2'>+ Add Another</p>
+            <p className='md:text-lg text-[#2C6472] font-semibold mt-2'>+ {t('common.addAnother')}</p>
           </div>
           <button
             type="button"
@@ -394,12 +396,12 @@ if (finalList.length > 0 && hasWorkExperience === true) {
             disabled={loading}
             className={`rounded-xl px-6 py-2 mb-10 flex items-center justify-center
               ${loading ? 'bg-[#2C6472]/70 cursor-not-allowed' : 'bg-[#2C6472]'}
-              text-white transition-all w-[150px] h-[40px] text-sm md:text-base`}
+              text-white transition-all h-[40px] text-sm md:text-base`}
           >
             {loading ? (
               <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
             ) : (
-              'Save & Next'
+              t('common.saveNext')
             )}
           </button>
         </div>
@@ -418,7 +420,7 @@ if (finalList.length > 0 && hasWorkExperience === true) {
       {/* Footer appears after scrolling all content */}
       <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-[13px] md:text-sm mt-8">
         <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
-        More Projects you give the better the result of JSE Ai
+        {t('projects.footerNote')}
       </div>
 
     </div>

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { t } from "../../utils/i18n";
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import right_arrow from '../../assets/left-arrow.png'
@@ -7,7 +8,6 @@ import { jobskills } from '../../assets/data';
 import { generalskills } from '../../assets/data';
 import { BASE_URL } from '../../utils/api';
 import warning from "../../assets/carbon_warning.png"
-
 
 const Skills = () => {
     const navigate = useNavigate();
@@ -26,12 +26,8 @@ const Skills = () => {
     const [triggerAddSkill, setTriggerAddSkill] = useState(false);
     const [highlightIndex, setHighlightIndex] = useState(0);
 
-
-
-
     const generalInputRef = useRef(null);
     const jobInputRef = useRef(null);
-
 
     const allSkills = Object.values(jobskills).flatMap(job => job.skills);
     const [dynamicSkills, setDynamicSkills] = useState(allSkills);
@@ -41,14 +37,12 @@ const Skills = () => {
     const [highlightIndexGeneral, setHighlightIndexGeneral] = useState(0);
     const [highlightIndexJob, setHighlightIndexJob] = useState(0);
 
-
     const dropdownRef = useRef(null);
 
     const [formData, setFormData] = useState({
         generalSkills: [],
         jobSpecificSkills: [],
     });
-
 
     const apiUrl = `${BASE_URL}/keyskills`;
     const jobtitleapiurl = `${BASE_URL}/jobtitles`;
@@ -59,7 +53,6 @@ const Skills = () => {
         jobTitle.secondary_title,
         jobTitle.tertiary_title,
     ].filter(Boolean);
-
 
     const fetchjobtitle = async () => {
         if (!token) {
@@ -107,10 +100,6 @@ const Skills = () => {
         }
     }, [selectedTitle]);
 
-
-
-
-
     useEffect(() => {
         fetchjobtitle();
     }, []);
@@ -126,9 +115,6 @@ const Skills = () => {
         console.log("Updated hasExistingData:", hasExistingData);
     }, [hasExistingData]);
 
-
-
-
     const filteredSkills = (() => {
         if (dropdownType === "job") {
             return (dynamicSkills || []).filter(skill =>
@@ -142,9 +128,6 @@ const Skills = () => {
         }
         return [];
     })();
-
-
-
 
     useEffect(() => {
         console.log("jobTitle", jobTitle);
@@ -193,11 +176,6 @@ const Skills = () => {
         }
     }, [highlightIndexJob, dropdownType]);
 
-
-
-
-
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -215,7 +193,7 @@ const Skills = () => {
             : formData.jobSpecificSkills.includes(skill);
 
         if (alreadyExists) {
-            toast.error("This skill is already added.");
+            toast.error(t("skills.errors.skill_exists"));
             return;
         }
 
@@ -258,7 +236,7 @@ const Skills = () => {
                 : formData.jobSpecificSkills.includes(term);
 
         if (alreadyExists) {
-            toast.error("This skill was already added.");
+            toast.error(t("skills.errors.skill_exists"));
             return;
         }
 
@@ -311,11 +289,11 @@ const Skills = () => {
         const newErrors = {};
 
         if (formData.generalSkills.length === 0) {
-            newErrors.generalSkills = "Please add at least one general skill.";
+            newErrors.generalSkills = t("skills.errors.general_required");
         }
 
         if (formData.jobSpecificSkills.length === 0) {
-            newErrors.jobSpecificSkills = "Please add at least one job-specific skill.";
+            newErrors.jobSpecificSkills = t("skills.errors.job_required");
         }
 
         setErrors(newErrors);
@@ -329,7 +307,7 @@ const Skills = () => {
         if (!validateForm()) return;
 
         if (!accepted) {
-            toast.error('Please accept the condition.');
+            toast.error(t("skills.errors.accept_condition"));
             return;
         }
 
@@ -381,9 +359,6 @@ const Skills = () => {
         }
     };
 
-
-
-
     // 🔁 Hook to handle click outside
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -401,23 +376,22 @@ const Skills = () => {
     }, []);
 
 
-    return (
+    return ( 
         <div className='w-full min-h-screen p-3 md:p-10 text-black'>
             <div className="flex flex-col">
 
-
                 <div>
-                    <p className='text-[#2c6472] font-semibold w-fit'>STEP 8 OF 8</p>
+                    <p className='text-[#2c6472] font-semibold w-fit'>{t("skills.step")}</p>
                 </div>
 
                 <div>
-                    <h1 className='font-bold sm:text-lg md:text-xl mt-7'>Add your key skills.</h1>
+                    <h1 className='font-bold sm:text-lg md:text-xl mt-7'>{t("skills.title")}</h1>
                 </div>
 
                 <form className='md:ms-6' >
                     <div className="flex flex-col mt-5 ">
                         <label className="mb-3 block text-sm sm:text-base md:text-lg font-medium">
-                            General Skills <span className='text-red-500 ms-1'>*</span>
+                            {t("skills.general_label")} <span className='text-red-500 ms-1'>*</span>
                         </label>
                     </div>
 
@@ -436,8 +410,6 @@ const Skills = () => {
                                         setDropdownType("general");
                                         setErrors((prev) => ({ ...prev, generalSkills: null }));
                                         setHighlightIndex(0); // reset highlight to first
-
-
                                     }}
                                     onKeyDown={(e) => {
                                         const currentList = filteredSkills;
@@ -471,7 +443,6 @@ const Skills = () => {
                                             setHighlightIndexGeneral(0); // reset index
                                         }
                                     }}
-
 
                                     onFocus={() => {
                                         setShowDropdown(true);
@@ -526,14 +497,11 @@ const Skills = () => {
                             ))}
                         </div>
 
-
-
                     </div>
-
 
                     <div className='mt-8'>
                         <label className="mb-3 block  text-sm sm:text-base md:text-lg font-medium">
-                            Job Specific Skills <span className='text-red-500 ms-1'>*</span>
+                            {t("skills.job_label")} <span className='text-red-500 ms-1'>*</span>
                         </label>
                         <div className="expereince-title flex gap-4  mb-5 overflow-x-auto hide-scrollbar snap-x snap-mandatory">
 
@@ -646,8 +614,6 @@ const Skills = () => {
                         ))}
                     </div>
 
-
-
                     <div className="flex gap-3 items-start mt-5">
                         <label htmlFor="primary_title" className="flex items-start gap-3 cursor-pointer">
                             <input
@@ -659,12 +625,12 @@ const Skills = () => {
                                 onChange={(e) => setAccepted(e.target.checked)}
                             />
                             <span className="text-xs md:text-sm text-gray-500 mb-3">
-                                Please enter only relevant skills. Adding unrelated may affect the quality of your profile.
+                                {t("skills.checkbox")}
                             </span>
                         </label>
                     </div>
 
-                    <div className='text-xs my-5 flex items-center justify-start text-center'><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472] ms-1'>Enter your details carefully , you can  only edit them later.</span></p></div>
+                    <div className='text-xs my-5 flex items-center justify-start text-center'><p><span className='font-medium'>{t("common.pleaseNote")}</span><span className='text-[#2c6472] ms-1'>{t("skills.editLaterNote")}</span></p></div>
 
                     <div className="flex w-full md:max-w-[660px]  justify-end items-center gap-4 mt-8">
                         <button
@@ -678,21 +644,18 @@ const Skills = () => {
                             {loading ? (
                                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                             ) : (
-                                'Go to Dashboard'
+                                t("skills.go_dashboard")
                             )}
                         </button>
                     </div>
 
                 </form>
-
-
             </div>
 
             {/* Footer appears after scrolling all content */}
             <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-[13px] md:text-sm mt-8">
                 <img src={warning} className="w-5 ms-5 h-5 object-cover" alt="" />
-                AI is not perfect. Make sure your data is accurate before saving.            </div>
-
+                {t("skills.footerNote")}</div>
         </div>
     )
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { t } from "../../utils/i18n";
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -186,20 +187,15 @@ const PersonalInfo = () => {
   const validate = () => {
     const newErrors = {};
 
-    if (!formData.first_name.trim()) newErrors.first_name = "First name is required";
-    if (!formData.second_name.trim()) newErrors.second_name = "Last name is required";
-
+    if (!formData.first_name.trim()) newErrors.first_name = t("personalInfo.errors.firstName");
+    if (!formData.second_name.trim()) newErrors.second_name = t("personalInfo.errors.lastName");
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = t("personalInfo.errors.emailRequired");
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
+      newErrors.email = t("personalInfo.errors.emailInvalid");
     }
-
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required";
-    }
-
-    if (!formData.linkedin_profile.trim()) newErrors.linkedin_profile = "LinkedIn is required";
+    if (!formData.phone.trim()) newErrors.phone = t("personalInfo.errors.phone");
+    if (!formData.linkedin_profile.trim()) newErrors.linkedin_profile = t("personalInfo.errors.linkedin");
 
     return newErrors;
   };
@@ -217,7 +213,7 @@ const PersonalInfo = () => {
       try {
         const token = sessionStorage.getItem('authToken');
         if (!token) {
-          toast.error("No User found. Please login again.");
+          toast.error(t("personalInfo.toast.noUser"));
           return;
         }
 
@@ -250,7 +246,7 @@ const PersonalInfo = () => {
 
       } catch (error) {
         console.error("❌ Error submitting form:", JSON.stringify(error.response?.data, null, 2));
-        toast.error(error.response?.data.issue || "Failed to submit. Please try again.");
+        toast.error(error.response?.data.issue || t("personalInfo.toast.submitFailed"));
       } finally {
         setLoading(false);
       }
@@ -267,16 +263,16 @@ const PersonalInfo = () => {
         <p className='ml-2 text-lg font-medium' onClick={() => navigate('/user/dataonboarding')}>Back</p>
       </div> */}
 
-      <p className='text-[#2c6472] font-semibold -mt-10'>STEP 1 OF 8</p>
+      <p className='text-[#2c6472] font-semibold -mt-10'>{t("personalInfo.stepIndicator")}</p>
 
-      <h2 className='font-bold sm:text-lg md:text-xl'>Let's start with your personal information.</h2>
+      <h2 className='font-bold sm:text-lg md:text-xl'>{t("personalInfo.title")}</h2>
 
       <form onSubmit={handleSubmit} className="md:p-5 pt-2  flex flex-col gap-5 w-full">
 
         {/* Name */}
         <div className="flex flex-col sm:flex-row justify-start gap-5 md:gap-10 w-full">
           <div className="flex flex-col gap-2 w-full sm:w-[50%]">
-            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="first_name">First Name <span className='text-red-500'>*</span></label>
+            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="first_name">{t("personalInfo.firstName")} <span className='text-red-500'>*</span></label>
             <input
               className={`px-5 py-3 rounded-lg md:text-lg border ${errors.first_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
               value={formData.first_name}
@@ -287,7 +283,7 @@ const PersonalInfo = () => {
             {errors.first_name && <span className="text-red-500 text-sm">{errors.first_name}</span>}
           </div>
           <div className="flex flex-col gap-2 w-full sm:w-[50%]">
-            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="second_name">Last Name <span className='text-red-500'>*</span></label>
+            <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="second_name">{t("personalInfo.lastName")} <span className='text-red-500'>*</span></label>
             <input
               className={`px-5 py-3 rounded-lg md:text-lg border ${errors.second_name ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
               value={formData.second_name}
@@ -301,7 +297,7 @@ const PersonalInfo = () => {
 
         {/* Email */}
         <div className="flex flex-col gap-2">
-          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="email">Email Address <span className='text-red-500'>*</span></label>
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="email">{t("personalInfo.email")} <span className='text-red-500'>*</span></label>
           <input
             className={`px-5 py-3 rounded-lg md:text-lg border ${errors.email ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
             value={formData.email}
@@ -315,7 +311,7 @@ const PersonalInfo = () => {
 
         {/* Phone */}
         <div className="flex flex-col gap-2">
-          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="phone">Phone Number <span className='text-red-500'>*</span></label>
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="phone">{t("personalInfo.phone")} <span className='text-red-500'>*</span></label>
           <input
             className={`px-5 py-3 rounded-lg md:text-lg border ${errors.phone ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
             value={formData.phone}
@@ -329,7 +325,7 @@ const PersonalInfo = () => {
 
         {/* Linked in */}
         <div className="flex flex-col gap-2">
-          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="linkedin_profile">linkedIn Profile <span className='text-red-500'>*</span></label>
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="linkedin_profile">{t("personalInfo.linkedin")} <span className='text-red-500'>*</span></label>
           <input
             className={`px-5 py-3 rounded-lg md:text-lg border ${errors.linkedin_profile ? 'border-red-500 animate-shake' : 'border-[rgba(0,0,0,0.14)]'} outline-none focus:border-[#2c6472]`}
             value={formData.linkedin_profile}
@@ -364,7 +360,7 @@ const PersonalInfo = () => {
 
         {/* Country */}
         <div className="flex flex-col gap-2">
-          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="country">Country</label>
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="country">{t("personalInfo.country")}</label>
           <input
             className='px-5 py-3 rounded-lg md:text-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]'
             value="Germany"
@@ -378,7 +374,7 @@ const PersonalInfo = () => {
 
         {/* State */}
         <div className="flex flex-col gap-2">
-          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="state">State</label>
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="state">{t("personalInfo.state")}</label>
           <input
             className='px-5 py-3 rounded-lg md:text-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]'
             value={formData.state}
@@ -389,7 +385,7 @@ const PersonalInfo = () => {
 
         {/* City */}
         <div className="flex flex-col gap-2">
-          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="city">City</label>
+          <label className='text-sm sm:text-base md:text-lg font-medium' htmlFor="city">{t("personalInfo.city")}</label>
           <input
             className='px-5 py-3 rounded-lg md:text-lg border border-[rgba(0, 0, 0, 0.14)] outline-none focus:border-[#2c6472]'
             value={formData.city}
@@ -399,7 +395,7 @@ const PersonalInfo = () => {
           />
         </div>
 
-        <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>Please note:</span><span className='text-[#2c6472]'> Name ,Email & Phone Number cannot be changed.</span></p></div>
+        <div className='text-xs flex items-center justify-start text-center  '><p><span className='font-medium'>{t("personalInfo.noteLabel")}</span><span className='text-[#2c6472]'> {t("personalInfo.note")}</span></p></div>
 
         <div className="flex justify-end mt-7">
           <button
@@ -407,12 +403,12 @@ const PersonalInfo = () => {
             disabled={loading}
             className={`rounded-xl px-6 py-2 mb-10 flex items-center justify-center
               ${loading ? 'bg-[#2C6472]/70 cursor-not-allowed' : 'bg-[#2C6472]'}
-              text-white transition-all w-[170px] h-[40px] text-sm md:text-lg`}
+              text-white transition-all  h-[40px] text-sm md:text-lg`}
           >
             {loading ? (
               <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin"></div>
             ) : (
-              'Save & Next'
+              t("common.saveNext")
             )}
           </button>
         </div>
@@ -425,7 +421,7 @@ const PersonalInfo = () => {
       {showSavePopup && (
         <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 bg-white border-b-4 border-[#2C6472] text-black rounded-md shadow-lg transform transition-all duration-500 ease-in-out animate-toast-in`}>
           <div className="relative px-3 py-1">
-            <span>✅ PersonalInfo saved successfully!</span>
+            <span>✅ {t("personalInfo.saveSuccess")}</span>
             <div className="absolute bottom-0 left-0 h-[3px] bg-white animate-progress w-full" />
           </div>
         </div>
@@ -434,7 +430,7 @@ const PersonalInfo = () => {
       {/* Footer appears after scrolling all content */}
       <div className="flex justify-start gap-2 text-[#2c6472] font-medium text-[13px] md:text-sm mt-8">
         <img src={warning} className="w-5  h-5 object-cover" alt="" />
-        AI is not perfect. Make sure your data is accurate before saving.
+        {t("personalInfo.aiWarning")}
       </div>
 
     </div>

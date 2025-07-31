@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { t } from "../../utils/i18n";
 import { Link, useLocation } from "react-router-dom";
 import { ChevronDown, ChevronUp, Settings as SettingsIcon } from "lucide-react";
 
@@ -47,20 +48,20 @@ const [openJobs, setOpenJobs] = useState(pathname.startsWith("/user/my-jobs"));
       to: "/user/dashboard",
       defaultIcon: dashboard_icon,
       activeIcon: dashboard_active_icon,
-      label: "Dashboard"
+      label: t("sidebar.dashboard")
     },
     {
-      label: "My Jobs",
+      label: t("sidebar.myJobs"),
       defaultIcon: my_application_icon,
       activeIcon: my_application_active_icon,
       children: [
         {
           to: "/user/my-jobs/internal",
-          label: "Internal"
+          label: t("sidebar.internal")
         },
         {
           to: "/user/my-jobs/external",
-          label: "External"
+          label: t("sidebar.external")
         }
       ]
     },
@@ -68,31 +69,31 @@ const [openJobs, setOpenJobs] = useState(pathname.startsWith("/user/my-jobs"));
       to: "/user/application-tracker",
       defaultIcon: application_tracker_icon,
       activeIcon: application_tracker_active_icon,
-      label: "Application Tracker"
+      label: t("sidebar.applicationTracker")
     },
     {
       to: "/user/saved-jobs",
       defaultIcon: saved_jobs_icon,
       activeIcon: saved_jobs_active_icon,
-      label: "Saved Jobs"
+      label: t("sidebar.savedJobs")
     },
     {
       to: "/user/proficiency-test",
       defaultIcon: proficiency_test,
       activeIcon: active_proficiency_test,
-      label: "Proficiency Test"
+      label: t("sidebar.proficiencyTest")
     },
     {
       to: "/user/self-development",
       defaultIcon: self_development,
       activeIcon: self_development_active,
-      label: "Self Development"
+      label: t("sidebar.selfDevelopment")
     },
     {
       to: "/user/personal-tracker",
       defaultIcon: personal_tracker,
       activeIcon: personal_tracker_active,
-      label: "Personal Tracker"
+      label: t("sidebar.personalTracker")
     }
   ];
 
@@ -138,7 +139,7 @@ const [openJobs, setOpenJobs] = useState(pathname.startsWith("/user/my-jobs"));
                           alt="My Jobs"
                           className="w-5 h-5"
                         />
-                        <span className="text-[14px] font-semibold">My Jobs</span>
+                        <span className="text-[14px] font-semibold">{t("sidebar.myJobs")}</span>
                       </div>
                       {openJobs ? (
                         <ChevronUp className="w-4 h-4  text-gray-500" />
@@ -198,7 +199,7 @@ const [openJobs, setOpenJobs] = useState(pathname.startsWith("/user/my-jobs"));
                 alt="Profile"
                 className="w-5 h-5"
               />
-              <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">Job Profile</span>
+              <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">{t("sidebar.jobProfile")}</span>
             </Link>
           </li>
 
@@ -213,7 +214,7 @@ const [openJobs, setOpenJobs] = useState(pathname.startsWith("/user/my-jobs"));
                 alt="Upgrade"
                 className="w-5 h-5"
               />
-              <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">Upgrade</span>
+              <span className="text-[15px] font-semibold text-[rgba(0, 0, 0, 0.25)]">{t("sidebar.upgrade")}</span>
             </Link>
           </li>
 

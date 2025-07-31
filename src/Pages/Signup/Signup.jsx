@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { t } from "../../utils/i18n";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { Player } from "@lottiefiles/react-lottie-player";
@@ -57,7 +58,7 @@ const Signup = () => {
       const isLongEnough = newValue.length >= 8;
 
       if (!isLongEnough || !hasSpecialChar || !hasNumber) {
-        setPasswordError("(Min 8 chars, with number & symbol.)");
+        setPasswordError(t("signup.errors.password_hint"));
       } else {
         setPasswordError("");
       }
@@ -78,12 +79,12 @@ const togglePasswordVisibility = (field) => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords don't match!");
+      toast.error(t("signup.errors.password_mismatch"));
       return;
     }
 
     if (!agreedToSecond) {
-      toast.error("Please accept the terms to continue.");
+      toast.error(t("signup.errors.accept_terms"));
       return;
     }
 
@@ -91,9 +92,7 @@ const togglePasswordVisibility = (field) => {
     if (!formData.password || passwordError) {
       setShakePassword(true);
       setTimeout(() => setShakePassword(false), 400);
-      toast.error(
-        "Password must be atleast 8 characters with a number & a special symbol!"
-      );
+      toast.error(t("signup.errors.invalid_password"));
 
       return;
     }
@@ -138,7 +137,7 @@ const togglePasswordVisibility = (field) => {
       } else {
         console.error("Signup failed");
         setLoading(false);
-        toast.error("Signup failed, please try again.");
+        toast.error(t("signup.errors.signup_failed"));
       }
     } catch (error) {
       console.error(
@@ -184,7 +183,7 @@ const togglePasswordVisibility = (field) => {
       <div className="flex flex-1 flex-col justify-evenly items-center p-8 bg-white ">
         <div className="max-w-lg w-full mt-5">
           <h2 className="text-xl md:text-3xl font-semibold text-center">
-            Create account
+            {t("signup.title")}
           </h2>
           <br />
           <br />
@@ -207,7 +206,7 @@ const togglePasswordVisibility = (field) => {
             {/* email Field */}
             <div className="relative -mt-5">
               <label className="mb-1 ms-3 block  text-gray-500 text-sm">
-                Email
+                {t("signup.email")}
               </label>
               <input
                 id="email"
@@ -224,7 +223,7 @@ const togglePasswordVisibility = (field) => {
             {/* Phone Number Field */}
             <div ref={dropdownRef} className="relative">
               <label className="mb-1 ms-3 block text-gray-500 text-sm">
-                Phone Number
+                {t("signup.phone")}
               </label>
 
               {/* Flag + Code box */}
@@ -284,7 +283,7 @@ const togglePasswordVisibility = (field) => {
               {/* Create Password */}
               <div className="w-full md:w-1/2">
                 <label className="mb-1 ms-3 mt-3 block text-gray-500 text-sm">
-                  Create Password
+                  {t("signup.password")}
                 </label>
 
                 {/* Wrap input + icon in their own relative div */}
@@ -320,7 +319,7 @@ const togglePasswordVisibility = (field) => {
               {/* Confirm Password */}
               <div className="w-full md:w-1/2">
                 <label className="mb-1 md:ms-3 mt-3 block text-gray-500 text-sm">
-                  Confirm Password
+                  {t("signup.confirm_password")}
                 </label>
 
                 <div className="relative h-[52px]">
@@ -416,28 +415,28 @@ const togglePasswordVisibility = (field) => {
               type="submit"
               className="teal-button w-full h-[50px] bg-[#2c6472]  hover:bg-[#24525f] text-white py-3 mt-5 rounded-md"
             >
-              Sign Up
+              {t("signup.signup")}
             </button>
           </form>
           <br />
 
           {/* Switch to Login */}
           <div className=" text-center mb-5 text-sm me-2 text-gray-600">
-            Already have an account?{" "}
+            {t("signup.already_have_account")}{" "}
             <Link
               to="/user/login"
               className="text-[#2c6472] font-semibold hover:underline"
             >
-              Login
+              {t("signup.login")}
             </Link>
           </div>
         </div>{" "}
         <div className="text-xs flex items-center justify-center text-center  ">
           <p>
-            <span className="font-medium">Please note:</span>
+            <span className="font-medium">{t("signup.note_label")}</span>
             <span className="text-[#2c6472]">
               {" "}
-              Email and Phone number cannot be changed.
+              {t("signup.note_message")}
             </span>
           </p>
         </div>
@@ -446,7 +445,7 @@ const togglePasswordVisibility = (field) => {
       {/* Right Panel */}
       <div className="flex w-full md:w-1/2 flex-col items-center justify-center bg-[#2c6472] text-white px-8 py-8">
         <h3 className="text-xl md:text-3xl font-medium mb-1 ms-4 text-center">
-          Welcome to
+          {t("signup.right_panel.welcome")}
         </h3>
         <div className="flex items-center md:mb-3 -ms-2">
           <img src={logo} className="h-10 md:h-12 w-24 md:w-28" />
@@ -462,9 +461,9 @@ const togglePasswordVisibility = (field) => {
           />
         </div>
         <p className="hidden md:block text-center text-sm  mt-4">
-          Unlock your next opportunity
+          {t("signup.right_panel.subtitle_line1")}
           <br />
-          Your dream job is just a click away{" "}
+          {t("signup.right_panel.subtitle_line2")}
         </p>
       </div>
 
@@ -472,10 +471,10 @@ const togglePasswordVisibility = (field) => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white w-[80%] md:w-auto rounded-lg shadow-lg p-8 text-center border-b-[#2c6472] border-b-8">
             <h2 className="text-xl font-semibold mb-4 text-[#2c6472]">
-              Check Your Email 📬
+              {t("signup.verification.title")}
             </h2>
             <p className="text-gray-700 ">
-              We've sent you a verification link. Please verify before login!
+              {t("signup.verification.message")}
             </p>
           </div>
         </div>
