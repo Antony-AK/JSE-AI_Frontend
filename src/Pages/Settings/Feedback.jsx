@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from '../../utils/api';
+import { t } from '../../utils/i18n';
+
 
 const Feedback = () => {
   const [selected, setSelected] = useState('Bug');
@@ -10,7 +12,7 @@ const Feedback = () => {
 
   const handleSubmit = async () => {
     if (!message.trim()) {
-      toast.warn("Please enter your message ✍️");
+      toast.warn("Please enter your message ");
       return;
     }
 
@@ -36,13 +38,13 @@ const Feedback = () => {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result?.message || "Something went wrong 😓");
+        throw new Error(result?.message || "Something went wrong ");
       }
 
-      toast.success(result?.issue || "Feedback received, thank you! 🙌");
+      toast.success(result?.issue || "Feedback received, thank you! ");
       setMessage("");
     } catch (err) {
-      toast.error(err.message || "Something went wrong 💀");
+      toast.error(err.message || "Something went wrong ");
     } finally {
       setLoading(false);
     }
@@ -60,14 +62,14 @@ const Feedback = () => {
                 ? 'bg-[#2c6472] text-white hover:scale-105 duration-200'
                 : 'bg-transparent text-[#2c6472] hover:scale-105 duration-200'}`}
           >
-            {type}
+             {t(`feedback.type.${type.toLowerCase()}`)}
           </button>
         ))}
       </div>
 
       <textarea
         className="border border-gray-300 rounded-md w-1/2 h-56 p-3 placeholder-gray-400 focus:outline-none resize-none"
-        placeholder={`Describe your ${selected.toLowerCase()}...`}
+        placeholder={t("feedback.placeholder", { type: selected.toLowerCase() })}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
       />
@@ -78,7 +80,7 @@ const Feedback = () => {
         className={`w-32 text-white text-sm font-medium border border-[#2c6472] rounded-lg py-1.5 px-2 transition-all duration-200
           ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#2c6472] hover:scale-105'}`}
       >
-        {loading ? "Submitting..." : "Submit"}
+        {loading ? t("feedback.submitting") : t("feedback.submit")}
       </button>
     </div>
   );

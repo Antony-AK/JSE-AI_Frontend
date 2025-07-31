@@ -21,6 +21,7 @@ import LimitReachedModal from '../6_my_jobs/MyJobsPopUp/LimitReachedModel.jsx';
 import SkeletonJobApplicationTracker from "../../base/InternalDesignComponent/InternalDesignLoader.jsx";
 import InternalRightDesignLoader from "../../base/InternalDesignComponent/InternalRightDesignLoader.jsx";
 import { JobContext } from "./JobContext.jsx";
+import { t } from "../../utils/i18n.js";
 
 const MyApplication = () => {
   const navigate = useNavigate();
@@ -631,7 +632,7 @@ const MyApplication = () => {
 
   return (
     <div className="flex items-center flex-col h-[90vh] bg-gray-50  overflow-y-auto hide-scrollbar w-[calc(99vw-264px)] px-6  ">
-      <div className="flex items-center w-full gap-5 py-4 relative">
+      <div className="flex items-center w-[81%] ms-10 h-20 gap-5 z-50 bg-gray-50 py-4 fixed">
         <div className="w-[40%] relative">
           <input
             type="text"
@@ -678,7 +679,8 @@ const MyApplication = () => {
             onClick={toggleLanguageDropdown}
             className="w-full flex justify-between items-center"
           >
-            Languages
+            {t("internal.languageLabel")}
+
             <motion.img
               src={arrow_down}
               alt=""
@@ -706,7 +708,7 @@ const MyApplication = () => {
                     checked={selectedLanguages.includes("en")}
                     onChange={(e) => handleLanguageToggle("en")}
                   />
-                  <span>English</span>
+                  <span>{t("internal.languageEnglish")}</span>
                 </label>
 
                 {/* German Checkbox */}
@@ -717,7 +719,7 @@ const MyApplication = () => {
                     checked={selectedLanguages.includes("de")}
                     onChange={(e) => handleLanguageToggle("de")}
                   />
-                  <span>German</span>
+                  <span>{t("internal.languageGerman")}</span>
                 </label>
 
               </motion.div>
@@ -750,7 +752,7 @@ const MyApplication = () => {
           >
             <button onClick={fetchRecommendedJobs} // 👈 this is the hook
               className="w-full px-2 py-1.5 text-[13px] text-black font-medium hover:bg-gray-100 text-center">
-              Recommended Jobs
+              {t("internal.recommendedJobs")}
             </button>
             {/* Add more items below if you want */}
           </div>
@@ -759,20 +761,20 @@ const MyApplication = () => {
       </div>
 
 
-      <div className="flex flex-col w-full  bg-gray-40">
+      <div className="flex flex-col w-full relative mt-20  bg-gray-40">
         <br />
         {jobLoading ? (
           <div className="flex justify-center items-center  w-full">
             <div className="flex flex-col items-center">
-              <p className="text-gray-600 text-base font-medium">Fetching jobs, please wait...</p>
+              <p className="text-gray-600 text-base font-medium"> {t("internal.fetchingJobs")}</p>
             </div>
           </div>
         ) : jobsToRender.length === 0 ? (
           <div className="absolute top-1/2 left-[calc(264px+40%)] transform -translate-x-1/2 -translate-y-1/2 text-center">
             <h2 className="text-2xl font-bold text-gray-700 mb-2">
-              No {(selectedTitle?.charAt(0).toUpperCase() + selectedTitle?.slice(1))} jobs found
+              {t("internal.noJobsFound", { title: selectedTitle?.charAt(0).toUpperCase() + selectedTitle?.slice(1) })}
             </h2>
-            <p className="text-gray-500">Please check back later.</p>
+            <p className="text-gray-500">{t("internal.checkBackLater")}</p>
             <button
               onClick={() => {
                 setFilteredJobs([]);
@@ -783,7 +785,7 @@ const MyApplication = () => {
               }}
               className="text-sm text-red-600 underline  mt-6 hover:text-blue-800 transition"
             >
-              Clear Filter
+             {t("jobs.clearFilter")}
             </button>
           </div>
         ) : (
@@ -811,13 +813,13 @@ const MyApplication = () => {
                         }}
                         className="text-sm text-red-600 underline  mt-6 hover:text-blue-800 transition"
                       >
-                        Clear Filter
+                        {t("jobs.clearFilter")}
                       </button>
                     </div>
                   ) : (
                     <>
-                      <h2 className="text-sm font-semibold">Showing {pagination.total} Jobs</h2>
-                      <p className="text-sm text-gray-400 mt-1">Based on your preferences</p>
+                      <h2 className="text-sm font-semibold">{t("trackers.showingJobs", { count: pagination.total })}</h2>
+                      <p className="text-sm text-gray-400 mt-1">{t("trackers.basedOnPreferences")}</p>
                     </>
                   )}
                 </div>
@@ -872,7 +874,7 @@ const MyApplication = () => {
                 {isFetching ? (
                   <SkeletonJobApplicationTracker />
                 ) : (
-                  <div className="h-[485px] overflow-x-hidden overflow-y-auto hide-scrollbar  ">
+                  <div className=" overflow-x-hidden overflow-y-auto hide-scrollbar  ">
                     {jobsToRender.map((job, index) => (
                       <div
                         key={index}
@@ -979,7 +981,7 @@ const MyApplication = () => {
                           {activeMenuIndex === index && (
                             <div className="absolute -right-2 mt-2 bg-white border border-gray-200 shadow-md rounded-md z-5 w-24">
                               <button
-                                className="w-fit text-left px-4 py-2 text-sm hover:bg-gray-100"
+                                className="w-fit  px-4 py-2 text-sm text-center hover:bg-gray-100"
                                 onClick={async (e) => {
                                   e.stopPropagation();
 
@@ -1011,7 +1013,7 @@ const MyApplication = () => {
                                   }
                                 }}
                               >
-                                Save Job
+                                {t("jobs.saveJob")}
                               </button>
                             </div>
                           )}
@@ -1019,57 +1021,57 @@ const MyApplication = () => {
                       </div>
                     ))}
 
-                      <div className="flex justify-center items-center gap-2 pt-14 pb-5 flex-wrap">
-                  {/* Prev Button */}
-                  <button
-                    onClick={() => {
-                      const prevOffset = getOffsetFromUrl(pagination.prev);
-                      fetchSelectedJobs(prevOffset);
-                    }}
-                    disabled={!pagination.prev}
-                    className={`px-3 py-1 rounded-md font-medium text-sm ${pagination.prev
-                      ? "bg-[#2C6472] text-white hover:bg-teal-900"
-                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                      }`}
-                  >
-                    Prev
-                  </button>
+                    <div className="flex justify-center items-center gap-2 pt-14 pb-5 flex-wrap">
+                      {/* Prev Button */}
+                      <button
+                        onClick={() => {
+                          const prevOffset = getOffsetFromUrl(pagination.prev);
+                          fetchSelectedJobs(prevOffset);
+                        }}
+                        disabled={!pagination.prev}
+                        className={`px-3 py-1 rounded-md font-medium text-sm ${pagination.prev
+                          ? "bg-[#2C6472] text-white hover:bg-teal-900"
+                          : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          }`}
+                      >
+                        Prev
+                      </button>
 
-                  {/* Page Info */}
-                  <div className="text-sm text-gray-600 ">
-                    Page <span className="font-semibold">{pagination.current}</span> of{" "}
-                    <span className="font-semibold">
-                      {Math.ceil(pagination.total / pagination.per_page)}
-                    </span>
-                  </div>
+                      {/* Page Info */}
+                      <div className="text-sm text-gray-600 ">
+                        Page <span className="font-semibold">{pagination.current}</span> of{" "}
+                        <span className="font-semibold">
+                          {Math.ceil(pagination.total / pagination.per_page)}
+                        </span>
+                      </div>
 
-                  {/* Next Button */}
-                  <button
-                    onClick={() => {
-                      const nextOffset = getOffsetFromUrl(pagination.next);
-                      fetchSelectedJobs(nextOffset);
-                    }}
-                    disabled={!pagination.next}
-                    className={`px-3 py-1 rounded-md font-medium text-sm ${pagination.next
-                      ? "bg-[#2C6472] text-white hover:bg-teal-900"
-                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                      }`}
-                  >
-                    Next
-                  </button>
-                </div>
+                      {/* Next Button */}
+                      <button
+                        onClick={() => {
+                          const nextOffset = getOffsetFromUrl(pagination.next);
+                          fetchSelectedJobs(nextOffset);
+                        }}
+                        disabled={!pagination.next}
+                        className={`px-3 py-1 rounded-md font-medium text-sm ${pagination.next
+                          ? "bg-[#2C6472] text-white hover:bg-teal-900"
+                          : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          }`}
+                      >
+                        Next
+                      </button>
+                    </div>
 
                   </div>)}
-              
+
                 <br />
               </div>
             </div>
 
-            <div className="flex mb-5 py-3 w-[46%] mt-5 h-[570px] pb-5 bg-white border border-gray-400/20 rounded-xl"><br />
+            <div className="flex mb-5 fixed py-3 w-[36%] right-5 mt-5 h-[570px] pb-5 bg-white border border-gray-400/20 rounded-xl"><br />
               {isFetching ? (
                 <InternalRightDesignLoader />
               ) : (
-                <div className="w-full flex flex-col items-center p-6 space-y-4 overflow-y-auto  scrollbar-custom rounded-xl bg-white">
+                <div className="   flex flex-col items-center p-6 space-y-4 overflow-y-auto  scrollbar-custom rounded-xl bg-white">
                   {selectedJob && (
                     <>
                       <div className="flex justify-between  items-start"><br />
@@ -1116,7 +1118,7 @@ const MyApplication = () => {
                             </div>
                           </div>
 
-                          <span className="text-sm w-[100px]  text-black mt-3 ">Profile Match</span>
+                          <span className="text-sm w-[100px]  text-black mt-3 "> Profile Match</span>
                         </div><br />
                       </div><br />
 
@@ -1185,7 +1187,7 @@ const MyApplication = () => {
                           className="flex gap-2 mx-auto justify-center  items-center font-semibold text-[#2C6472] rounded-3xl text-sm bg-[#F4F4F4F4] underline border w-full h-[47px] hover:border-[#2C6472] px-4  transition  hover:bg-white hover:text-[#2C6472] hover:scale-105"
                           onClick={() => handleGetJobURL(selectedJob.id)}
                         >
-                          Go to Job Link
+                          {t("trackers.goToJobLink")}
                           <img src={link_icon} alt="" />
                         </button>
 
@@ -1196,18 +1198,18 @@ const MyApplication = () => {
                         />
 
                       </div>
-              
+
                       <br />
 
 
                       <div className="">
                         <div>
-                          <h4 className="text-lg font-semibold text-gray-800">About</h4><br />
+                          <h4 className="text-lg font-semibold text-gray-800">{t("trackers.about")}</h4><br />
                           <p className="text-sm text-justify text-gray-700">{selectedJob.description}</p>
                         </div><br />
 
                         <div>
-                          <h4 className="text-lg font-semibold text-gray-800">Description</h4><br />
+                          <h4 className="text-lg font-semibold text-gray-800">{t("trackers.description")}</h4><br />
                           <p className="text-sm text-gray-700">{selectedJob.Description}</p>
                         </div>
 
@@ -1258,7 +1260,7 @@ const MyApplication = () => {
               alt="Loading..."
               className="w-52 h-52 mb-4"
             />
-            <p className="text-white text-xl font-semibold">Generating, please wait...</p>
+            <p className="text-white text-xl font-semibold">{t("trackers.generating")}</p>
           </div>
         </div>
       )}

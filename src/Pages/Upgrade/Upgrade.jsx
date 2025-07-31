@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify';
 import tick from '../../assets/tick.svg'
 import { BASE_URL } from '../../utils/api'
+import { t } from "../../utils/i18n"; // adjust path based on your project
+
 
 const Upgrade = () => {
 
@@ -77,44 +79,44 @@ const Upgrade = () => {
   const highlightsData = {
     monthly: [
       {
-        plan: 'Free',
+        plan: t("plans.free"),
         items: [
-          'Targeted Job',
-          'CV & CL Automation:5 included',
-          'External CV/CL:2 included',
-          'Application Tracker',
+          t("features.targetedJob"),
+          `${t("features.cvAutomation")}/${t("features.clAutomation")}: 5 included`,
+          `${t("features.externalCvCl")}: 2 included`,
+          t("features.applicationTracker"),
         ],
       },
       {
-        plan: 'Basic',
+        plan: t("plans.basic"),
         items: [
-          'CV & CL Automation: 150 Included',
-          'External CV/CL Automation: 20 Included',
-          'Recommended Jobs',
-          'Language Filter',
-          'Basic Support',
+          `${t("features.cvAutomation")}/${t("features.clAutomation")}: 150 Included`,
+          `${t("features.externalCvCl")}: 20 Included`,
+          t("features.recommendedJobs"),
+          t("features.languageFilter"),
+          t("features.basicSupport"),
         ],
       },
       {
-        plan: 'Advanced',
+        plan: t("plans.advanced"),
         items: [
-          'CV & CL Automation: 240 Included',
-          'External CV/CL Automation: 35',
-          'Job Research: 9 included',
-          'Language Test Free MCQ’s',
-          'Spoken Test',
-          'Priority Support',
+           `${t("features.cvAutomation")}/${t("features.clAutomation")}: 240 Included`,
+          `${t("features.externalCvCl")}: 35 Included`,
+          `${t("features.jobResearch")}: 9 Included`,
+          t("features.languageProficiency"),
+          t("features.spokenTest"),
+          t("features.prioritySupport"),
         ],
       },
       {
-        plan: 'Premium',
+        plan: t("plans.premium"),
         items: [
-          'CV & CL Automation: 360 Included',
-          'External CV/CL Automation: 75',
-          'Job Research: 15 Included',
-          'Learning Roadmap & Skills',
-          'Autofill Tools for External Jobforms',
-          'Priority Support',
+          `${t("features.cvAutomation")}/${t("features.clAutomation")}: 360 Included`,
+          `${t("features.externalCvCl")}: 75 Included`,
+          `${t("features.jobResearch")}: 15 Included`,
+          t("features.learningSkills"),
+          t("features.autofill"),
+          t("features.prioritySupport"),
         ],
       },
     ],
@@ -164,20 +166,20 @@ const Upgrade = () => {
   };
 
   const features = [
-    { name: 'Targeted Job', monthly: [true, true, true, true], quarterly: [true, true, true, true] },
-    { name: 'CV Automation', monthly: [5, 150, 240, 360], quarterly: [5, 450, 720, 1080] },
-    { name: 'CL Automation', monthly: [5, 150, 240, 360], quarterly: [5, 450, 720, 1080] },
-    { name: 'External CV/CL', monthly: [2, 20, 35, 75], quarterly: [2, 60, 105, 225] },
-    { name: 'Application Tracker', monthly: [true, true, true, true], quarterly: [true, true, true, true] },
-    { name: 'Job Suitability', monthly: [true, true, true, true], quarterly: [true, true, true, true] },
-    { name: 'Language Proficiency Test', monthly: [false, false, true, true], quarterly: [false, false, true, true] },
-    { name: 'Language Spoken Test', monthly: [false, false, '€10', 1], quarterly: [false, false, '€10', 3] },
-    { name: 'Language Filter', monthly: [false, true, true, true], quarterly: [false, true, true, true] },
-    { name: 'Recommended Jobs', monthly: [false, true, true, true], quarterly: [false, true, true, true] },
-    { name: 'Job Research', monthly: [false, false, 3, 5], quarterly: [false, false, 9, 15] },
-    { name: 'Learning Skills', monthly: [false, false, false, true], quarterly: [false, false, false, true] },
-    { name: 'Autofill tools', monthly: [false, false, false, true], quarterly: [false, false, false, true] },
-    { name: 'Support', monthly: [false, false, false, true], quarterly: [false, false, false, true] },
+    { name: t("features.targetedJob"), monthly: [true, true, true, true], quarterly: [true, true, true, true] },
+    { name: t("features.cvAutomation"), monthly: [5, 150, 240, 360], quarterly: [5, 450, 720, 1080] },
+    { name: t("features.clAutomation"), monthly: [5, 150, 240, 360], quarterly: [5, 450, 720, 1080] },
+    { name: t("features.externalCvCl"), monthly: [2, 20, 35, 75], quarterly: [2, 60, 105, 225] },
+    { name: t("features.applicationTracker"), monthly: [true, true, true, true], quarterly: [true, true, true, true] },
+    { name: t("features.jobSuitability"), monthly: [true, true, true, true], quarterly: [true, true, true, true] },
+    { name: t("features.targetedJob"), monthly: [false, false, true, true], quarterly: [false, false, true, true] },
+    { name: t("features.languageProficiency"), monthly: [false, false, '€10', 1], quarterly: [false, false, '€10', 3] },
+    { name: t("features.languageFilter"), monthly: [false, true, true, true], quarterly: [false, true, true, true] },
+    { name: t("features.recommendedJobs"), monthly: [false, true, true, true], quarterly: [false, true, true, true] },
+    { name: t("features.jobResearch"), monthly: [false, false, 3, 5], quarterly: [false, false, 9, 15] },
+    { name: t("features.learningSkills"), monthly: [false, false, false, true], quarterly: [false, false, false, true] },
+    { name: t("features.autofill"), monthly: [false, false, false, true], quarterly: [false, false, false, true] },
+    { name: t("features.support"), monthly: [false, false, false, true], quarterly: [false, false, false, true] },
   ];
 
   const activePlan = (() => {
@@ -198,7 +200,7 @@ const Upgrade = () => {
 
       {/* Active Plans */}
       <div className="flex flex-col gap-5">
-        <h2 className="text-lg font-bold">Active Plan</h2>
+        <h2 className="text-lg font-bold">{t("upgrade.activePlan")}</h2>
 
         {loadingPlans ? (
           // 👻 Skeleton while loading
@@ -214,7 +216,7 @@ const Upgrade = () => {
             </h2>
             <p className="text-white text-base">
               {activePlan.plan === "free"
-                ? "Enjoy free features at no cost"
+                ? t("upgrade.enjoyFree")
                 : `Enjoy ${activePlan.plan} plan benefits`
               }
             </p>
@@ -223,7 +225,7 @@ const Upgrade = () => {
             </p>
           </div>
         ) : (
-          <p className="text-sm text-gray-500">No active plan found.</p>
+          <p className="text-sm text-gray-500">{t("upgrade.noActivePlan")}</p>
         )}
 
 
@@ -232,7 +234,7 @@ const Upgrade = () => {
 
       {/* All Plans */}
       <div className="flex flex-col gap-5">
-        <h2 className='text-lg font-bold'>All Plans</h2>
+        <h2 className='text-lg font-bold'>{t("upgrade.allPlans")}</h2>
 
         <div className="flex border border-[#2F6C73] rounded-2xl w-fit overflow-hidden mx-auto mb-5">
           <button
@@ -242,7 +244,7 @@ const Upgrade = () => {
               : "text-[#2F6C73] bg-white"
               }`}
           >
-            Monthly
+            {t("upgrade.monthly")}
           </button>
           <button
             onClick={() => setSelected("quarterly")}
@@ -251,8 +253,8 @@ const Upgrade = () => {
               : "text-[#2F6C73] bg-white"
               }`}
           >
-            <p className="text-[10px] leading-none">Save 10%</p>
-            <h2 className="text-sm font-medium">Quarterly</h2>
+            <p className="text-[10px] leading-none">{t("upgrade.save")}</p>
+            <h2 className="text-sm font-medium">{t("upgrade.quarterly")}</h2>
           </button>
         </div>
 
@@ -267,8 +269,8 @@ const Upgrade = () => {
             if (!hasFree && hasBasic) {
               return (
                 <div className="flex-1 flex flex-col gap-4">
-                  <h2 className="font-bold text-lg capitalize">Free</h2>
-                  <p className=" text-base flex text-gray-500"><span className='text-center flex justify-center items-center -mt-5 text-3xl me-1'>.</span>Expired</p>
+                  <h2 className="font-bold text-lg capitalize">{t("plans.free")}</h2>
+                  <p className=" text-base flex text-gray-500"><span className='text-center flex justify-center items-center -mt-5 text-3xl me-1'>.</span>{t("upgrade.expired")}</p>
                 </div>
               );
             }
@@ -288,14 +290,14 @@ const Upgrade = () => {
             </div>
           ) : (<>{data?.plans?.[selected]?.length > 0 ? (
             data.plans[selected].map((plan, i) => {
-              const isActive = plan.status === "active";
+              const isActive = plan.status === "cancel";
               const isComing = plan.status === "coming soon";
               const isUpgrade = plan.status === "upgrade";
 
               const btn = isComing
-                ? { label: "Coming Soon", style: "bg-transparent text-[#2c6472] border-[#00000047] cursor-not-allowed opacity-50", disabled: true }
+                ? { label: t("upgrade.comingSoon"), style: "bg-transparent text-[#2c6472] border-[#00000047] cursor-not-allowed opacity-50", disabled: true }
                 : isUpgrade
-                  ? { label: "Upgrade", style: "text-white bg-[#2c6472] border-[#2c6472]" }
+                  ? { label: t("upgrade.upgrade"), style: "text-white bg-[#2c6472] border-[#2c6472]" }
                   : null;
 
               return (
@@ -337,7 +339,7 @@ const Upgrade = () => {
                       }}
                       className="text-sm flex items-center gap-2 text-[#2c6472] px-4 py-1 w-24 justify-center rounded-xl border-2 border-[#2c6472] cursor-pointer hover:bg-[#2c6472]/5"
                     >
-                      Cancel
+                      {t("upgrade.cancel")}
                     </button>
                   )}
 
@@ -367,7 +369,7 @@ const Upgrade = () => {
 
       {/* Highlights */}
       <div className="bg-[#2C647221] flex flex-col gap-5 mt-10 p-5">
-        <h2 className='font-semibold pl-5'>Highlights</h2>
+        <h2 className='font-semibold pl-5'>{t("upgrade.highlights")}</h2>
 
         <div className="flex">
           <div className="flex-1"></div>
@@ -387,7 +389,7 @@ const Upgrade = () => {
       {/* Features */}
       <div className="w-full flex flex-col gap-2 text-sm font-medium">
 
-        <h2 className='text-lg font-bold'>Features</h2>
+        <h2 className='text-lg font-bold'>{t("upgrade.features")}</h2>
 
         <div className="border border-b-gray-200 h-px my-3"></div>
 

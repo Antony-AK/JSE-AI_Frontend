@@ -11,17 +11,20 @@ import billing_icon from '../../assets/billing-icon.svg';
 import billing_active_icon from '../../assets/billing-active-icon.svg';
 import explore_icon from '../../assets/explore-icon.svg';
 import explore_active_icon from '../../assets/explore-active-icon.svg';
+import { t } from '../../utils/i18n'; // adjust the path based on your project
+
 
 const SettingsSidebar = ({ activeSection, setActiveSection }) => {
 
-  const sections = [
-    { name: 'General', icon: general_icon, activeIcon: general_active_icon },
-    { name: 'Preferences', icon: preferences_icon, activeIcon: preferences_active_icon },
-    { name: 'Notification', icon: notification_icon, activeIcon: notification_active_icon },
-    { name: 'Request & Feedback', icon: RequestFeedback_icon, activeIcon: RequestFeedback_active_icon },
-    { name: 'Billing', icon: billing_icon, activeIcon: billing_active_icon },
-    { name: 'Explore Plans', icon: explore_icon, activeIcon: explore_active_icon }
-  ];
+const sections = [
+  { key: 'general', name: 'General', icon: general_icon, activeIcon: general_active_icon },
+  { key: 'preferences', name: 'Preferences', icon: preferences_icon, activeIcon: preferences_active_icon },
+  { key: 'notification', name: 'Notification', icon: notification_icon, activeIcon: notification_active_icon },
+  { key: 'request_feedback', name: 'Request & Feedback', icon: RequestFeedback_icon, activeIcon: RequestFeedback_active_icon },
+  { key: 'billing', name: 'Billing', icon: billing_icon, activeIcon: billing_active_icon },
+  { key: 'explore_plans', name: 'Explore Plans', icon: explore_icon, activeIcon: explore_active_icon }
+];
+
 
   return (
     <div className='flex flex-col gap-5'>
@@ -43,7 +46,7 @@ const SettingsSidebar = ({ activeSection, setActiveSection }) => {
               activeSection === section.name ? 'text-white' : 'text-[#0000005E]'
             }`}
           >
-            {section.name}
+            {t(`settings.${section.key}`)}
           </h2>
         </div>
       ))}

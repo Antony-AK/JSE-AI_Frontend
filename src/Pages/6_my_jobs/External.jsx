@@ -6,6 +6,7 @@ import animationgif from '../../assets/Animations.gif';
 import LanguageSelectModel from "../../base/LanguageModelPopup/LanguageSelectModel.jsx";
 import { toast } from 'react-toastify';
 import LimitReachedModal from '../6_my_jobs/MyJobsPopUp/LimitReachedModel.jsx';
+import { t } from "../../utils/i18n.js";
 
 const External = () => {
 
@@ -107,7 +108,7 @@ const External = () => {
       ...storedPayload,
       job_language: lang,
       cl_format: "ExternalModernCL", // 🎯 Send the selected template format too
-      cv_format:"EuropassCV"
+      cv_format: "EuropassCV"
 
     };
 
@@ -152,35 +153,35 @@ const External = () => {
       <div className="max-w-lg mx-auto mt-10 px-4">
         <form onSubmit={handleSubmit} className="space-y-6">
           <Input
-            label="Company Name"
+            label={t("external.companyName")}
             name="companyName"
             value={formData.companyName}
-            placeholder="eg: Google"
+            placeholder={t("external.companyNamePlaceholder")}
             onChange={handleChange}
           />
           <Input
-            label="Job Title"
+            label={t("external.jobTitle")}
             name="jobTitle"
             value={formData.jobTitle}
-            placeholder="eg: UI Designer"
+            placeholder={t("external.jobTitlePlaceholder")}
             onChange={handleChange}
           />
           <Input
-            label="Job Link"
+            label={t("external.jobLink")}
             name="jobLink"
             value={formData.jobLink}
-            placeholder="eg: https://example.com"
+            placeholder={t("external.jobLinkPlaceholder")}
             onChange={handleChange}
           />
           <div>
-            <label className="block font-semibold text-gray-700 mb-2">Job Description</label>
+            <label className="block font-semibold text-gray-700 mb-2"> {t("external.jobDescription")}</label>
             <textarea
               name="jobDescription"
               rows="4"
               value={formData.jobDescription}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-md px-3 py-4 resize-none focus:outline-none focus:ring-2 focus:ring-[#2c6472]"
-              placeholder="Job description goes here..."
+              placeholder={t("external.jobDescriptionPlaceholder")}
             ></textarea>
           </div>
 
@@ -189,7 +190,7 @@ const External = () => {
               type="submit"
               className="bg-[#2c6472] text-white px-6 py-2 rounded-md hover:bg-[#24535f] transition flex items-center gap-2"
             >
-              Generate <span>✨</span>
+              {t("external.generate")} <span>✨</span>
             </button>
           </div>
         </form>
@@ -209,7 +210,8 @@ const External = () => {
               alt="Loading..."
               className="w-52 h-52 mb-4"
             />
-            <p className="text-white text-xl font-semibold">Generating, please wait...</p>
+            <p className="text-white text-xl font-semibold">  {t("external.generating")}
+            </p>
           </div>
         </div>
       )}
@@ -222,7 +224,7 @@ const External = () => {
 
     </div>
 
-    
+
   );
 };
 

@@ -5,6 +5,8 @@ import trash from "../assets/trash2.png";
 import { toast } from "react-toastify";
 import Calendar from "../base/Calender/Calender";
 import { format } from "date-fns";
+import { t } from '../utils/i18n';
+
 
 const ProjectUpdateForm = ({ onClose }) => {
 
@@ -240,7 +242,7 @@ const ProjectUpdateForm = ({ onClose }) => {
     <div className="fixed inset-0 bg-white bg-opacity-70 z-50 flex items-center justify-center">
       <div className="w-[700px] h-[640px] bg-white shadow rounded-xl px-10 py-5 overflow-y-auto hide-scrollbar">
         <div className="flex justify-between mb-6">
-          <h3 className="text-xl font-semibold">Update Projects</h3>
+          <h3 className="text-xl font-semibold">{t("projectForm.title")}</h3>
           <p
             onClick={onClose}
             className="text-lg font-semibold cursor-pointer hover:scale-95"
@@ -291,7 +293,7 @@ const ProjectUpdateForm = ({ onClose }) => {
           {/* Name */}
           <div className="flex flex-col gap-1">
             <label className="text-sm">
-              Project Name <span className="text-red-500">*</span>
+              {t("projectForm.projectName")} <span className="text-red-500">*</span>
             </label>
             <input
               id="project_name"
@@ -305,7 +307,7 @@ const ProjectUpdateForm = ({ onClose }) => {
 
           {/* Institution */}
           <div className="flex flex-col gap-1">
-            <label className="text-sm">University / Company</label>
+            <label className="text-sm">{t("projectForm.institution")}</label>
             <input
               id="institution"
               value={formData.institution}
@@ -318,7 +320,7 @@ const ProjectUpdateForm = ({ onClose }) => {
           <div className="flex gap-5">
             <div className="flex flex-col w-1/2">
               <label className="text-sm">
-                Start Date <span className="text-red-500">*</span>
+               {t("projectForm.startDate")} <span className="text-red-500">*</span>
               </label>
               <Calendar
                 selectedDate={
@@ -339,7 +341,7 @@ const ProjectUpdateForm = ({ onClose }) => {
 
             <div className="flex flex-col w-1/2">
               <label className="text-sm">
-                End Date{" "}
+                {t("projectForm.endDate")}{" "}
                 {!formData.currentdo && <span className="text-red-500">*</span>}
               </label>
 
@@ -372,13 +374,13 @@ const ProjectUpdateForm = ({ onClose }) => {
               className="w-4 h-4 accent-[#2c6472]"
             />
             <label htmlFor="currentdo" className="text-sm">
-              I currently do this
+              {t("projectForm.currentlyDoing")}
             </label>
           </div>
 
           {/* Description */}
           <div className="flex flex-col gap-1">
-            <label className="text-sm">Project Description</label>
+            <label className="text-sm">{t("projectForm.description")}</label>
             <textarea
               id="project_description"
               value={formData.project_description}
@@ -403,7 +405,7 @@ const ProjectUpdateForm = ({ onClose }) => {
               >
                 {!loadingAdd && "+"}
               </span>
-              Add Another
+              {t("projectForm.addAnother")}
             </button>
             <button
               type="button"
@@ -420,7 +422,7 @@ const ProjectUpdateForm = ({ onClose }) => {
               ) : (
                 <img src={trash} alt="delete" className="w-4 h-4" />
               )}
-              Remove
+              {t("projectForm.remove")}
             </button>
           </div>
 
@@ -437,7 +439,7 @@ const ProjectUpdateForm = ({ onClose }) => {
               {loadingUpdate ? (
                 <span className="w-4 h-4 border-[3px] border-white border-t-transparent rounded-full animate-spin"></span>
               ) : (
-                "Save Changes"
+                <span>{t("projectForm.saveChanges")}</span>
               )}
             </button>
           </div>

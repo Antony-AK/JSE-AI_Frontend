@@ -16,6 +16,7 @@ import ProfileImageModal from '../../base/ProfileEditor/ProfileImageModel';
 import { useProfileImage } from '../../base/ProfileEditor/ProfileImageContext';
 import { useNavigate } from 'react-router-dom';
 import ProfileDesign from '../../base/InternalDesignComponent/ProfileDesign';
+import { t } from "../../utils/i18n"
 
 
 
@@ -357,7 +358,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
 
         {/* 🔹 Package Info */}
         <div className="flex  gap-2">
-          <p className="text-sm font-semibold">Package : </p>
+          <p className="text-sm font-semibold">{t("dashboard.package")} : </p>
           <h2 className="text-lg font-bold -mt-1 capitalize">
             {isLoadingMiniInfo ? (
               <span className="animate-pulse text-sm">Loading...</span>
@@ -370,7 +371,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
         <div className='flex w-full h-[150px] rounded-md p-4 justify-between items-center'>
           {/* 🔹 Internal Applications */}
           <div className="flex flex-col w-96  justify-center items-center gap-2">
-            <p className="text-sm font-medium">Internal Applications</p>
+            <p className="text-sm font-medium">{t("dashboard.internalApplications")}</p>
             <p className="text-sm font-semibold">
               {isLoadingMiniInfo ? (
                 <span className="animate-pulse text-sm">-- / --</span>
@@ -411,7 +412,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
 
           {/* 🔹 External Applications */}
           <div className="flex flex-col justify-center items-center gap-2 w-96">
-            <p className="text-sm font-medium text-white">External Applications</p>
+            <p className="text-sm font-medium text-white">{t("dashboard.externalApplications")}</p>
             <p className="text-sm font-semibold text-white">
               {isLoadingMiniInfo ? (
                 <span className="animate-pulse text-sm">-- / --</span>
@@ -452,7 +453,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
 
           {/* 🔹 Proficiency Test */}
           <div className="flex flex-col justify-center items-center gap-2 w-96">
-            <p className="text-sm font-medium text-white">Proficiency Test</p>
+            <p className="text-sm font-medium text-white">{t("dashboard.proficiencyTest")}</p>
             <p className="text-sm font-semibold text-white">
               {/* {proficiency}/{maxProficiency} */}
               {isLoadingMiniInfo ? (
@@ -497,7 +498,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
       </div>
 
       <div className='w-full h-14 bg-white rounded-md flex justify-center items-center'>
-        <p className='text-[#2c6472] font-medium'><strong className='text-black'>Please Note: </strong>For better job results, ensure your profile details are filled correctly and completely.</p>
+        <p className='text-[#2c6472] font-medium'><strong className='text-black'>{t("dashboard.plsnote")} </strong>{t("dashboard.note")}</p>
       </div>
 
       <div className="flex justify-between py-3 px-5  w-full bg-white rounded-md">
@@ -572,16 +573,16 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
               )}
             </div>
           </div>
-          <span className="text-xs mt-2 font-bold text-gray-600">Profile Complete</span>
+          <span className="text-xs mt-2 font-bold text-gray-600">{t("dashboard.profileComplete")}</span>
         </div>
       </div>
 
       {/* Personal Information */}
       <div className="flex justify-between items-center py-5 px-6 w-full bg-white rounded-md">
         <div className='flex flex-col gap-3'>
-          <h2 className="text-sm font-bold">Personal Information</h2>
+          <h2 className="text-sm font-bold">{t("dashboard.personalInfo")}</h2>
           <p className='text-sm font-medium text-gray-500'>
-            Name: {isLoadingPersonalInfo ? (
+            {t("dashboard.name")}: {isLoadingPersonalInfo ? (
               <span className="animate-pulse"></span>
             ) : (
               fullName
@@ -589,7 +590,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
           </p>
 
           <p className='text-sm font-medium text-gray-500'>
-            Address: {isLoadingPersonalInfo ? (
+            {t("dashboard.address")}: {isLoadingPersonalInfo ? (
               <span className="animate-pulse"></span>
             ) : (
               address
@@ -597,7 +598,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
           </p>
 
           <p className='text-sm font-medium text-gray-500'>
-            LinkedIn: <span className='underline cursor-pointer'>
+            {t("dashboard.linkedin")}: <span className='underline cursor-pointer'>
               {isLoadingPersonalInfo ? (
                 <span className="animate-pulse"></span>
               ) : (
@@ -615,7 +616,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
       {/* Education */}
       <div className=" flex  justify-between items-center py-5 px-6 w-full bg-white rounded-md  ">
         <div className=' flex flex-col h-[200px] overflow-y-auto hide-scrollbar'>
-          <h2 className="text-sm font-bold">Education</h2>
+          <h2 className="text-sm font-bold">{t("dashboard.education")}</h2>
           {isLoadingEducation ? (
             <p className="text-gray-500 text-sm"></p>
           ) : (
@@ -623,15 +624,15 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
               education.map((edu, index) => (
                 <div key={index} className='flex flex-col gap-2 '>
                   <div className='w-full flex gap-2 mt-2'>
-                    <p className='text-sm font-medium text-gray-500'>Degree Title :</p>
+                    <p className='text-sm font-medium text-gray-500'>{t("dashboard.degreeTitle")} :</p>
                     <p className='text-sm font-medium text-gray-500'>{edu.degree}</p>
                   </div>
                   <div className='flex gap-2 mt-1'>
-                    <p className='text-sm font-medium text-gray-500'>Instution Name :</p>
+                    <p className='text-sm font-medium text-gray-500'>{t("dashboard.institutionName")} :</p>
                     <p className='text-sm font-medium text-gray-500'>{edu.institution}</p>
                   </div>
                   <div className='flex gap-2 mt-1'>
-                    <p className='text-sm font-medium text-gray-500'>Field of Study :</p>
+                    <p className='text-sm font-medium text-gray-500'>{t("dashboard.fieldOfStudy")} :</p>
                     <p className='text-sm font-medium text-gray-500'>{edu.field_of_study}</p>
                   </div>
                   <div className='flex gap-2 mt-1'>
@@ -643,7 +644,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
                 </div>
               ))
             ) : (
-              <p className='text-sm text-gray-400'>No education data available</p>
+              <p className='text-sm text-gray-400'>{t("dashboard.noEducation")}</p>
             )
           )}
         </div>
@@ -655,7 +656,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
       {/* Work Experience */}
       <div className="flex justify-between items-center py-5 px-6 w-full bg-white rounded-md">
         <div className='flex flex-col gap-2 h-[200px] overflow-y-auto hide-scrollbar'>
-          <h2 className="text-sm font-bold mb-1">Work Experience</h2>
+          <h2 className="text-sm font-bold mb-1">{t("dashboard.workExp")}</h2>
           {isLoadingWork ? (
             <p className="text-gray-500 text-sm"></p>
           ) : (
@@ -673,7 +674,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
                 </div>
               ))
             ) : (
-              <p className='text-sm text-gray-400'>No work experience added</p>
+              <p className='text-sm text-gray-400'>{t("dashboard.noWork")}</p>
             )
           )}
 
@@ -686,7 +687,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
       {/* Projects */}
       <div className="flex justify-between items-center py-5 px-6 w-full bg-white rounded-md">
         <div className='flex flex-col gap-2 h-[180px] overflow-y-auto hide-scrollbar'>
-          <h2 className="text-sm font-bold">Projects</h2>
+          <h2 className="text-sm font-bold">{t("dashboard.projects")}</h2>
           {isLoadingProjects ? (
             <p className="text-gray-500 text-sm"></p>
           ) : (
@@ -703,7 +704,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
                 </div>
               ))
             ) : (
-              <p className="text-sm text-gray-400">No projects added</p>
+              <p className="text-sm text-gray-400">{t("dashboard.noProjects")}</p>
             )
           )}
 
@@ -716,7 +717,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
       {/* Certificates and Courses */}
       <div className="flex justify-between items-center py-5 px-6 w-full bg-white rounded-md">
         <div className='flex flex-col h-24 gap-2 overflow-y-auto hide-scrollbar'>
-          <h2 className="text-sm font-bold">Certificates & Courses</h2>
+          <h2 className="text-sm font-bold">{t("dashboard.certificates")}</h2>
           {isLoadingCertificates ? (
             <p className="text-gray-500 text-sm"></p>
           ) : (
@@ -725,7 +726,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
                 <p key={index} className='text-sm font-medium text-gray-500'>• {cert.certificate_name}</p>
               ))
             ) : (
-              <p className="text-sm text-gray-400">No certificates added</p>
+              <p className="text-sm text-gray-400">{t("dashboard.noCertificates")}</p>
             )
           )}
 
@@ -738,7 +739,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
       {/* Languages */}
       <div className="flex justify-between items-center py-5 px-6 w-full bg-white rounded-md">
         <div className='flex flex-col gap-2 h-[130px] overflow-y-auto hide-scrollbar'>
-          <h2 className="text-sm font-bold">Languages</h2>
+          <h2 className="text-sm font-bold">{t("dashboard.languages")}</h2>
           {isLoadingLanguages ? (
             <p className="text-gray-500 text-sm"></p>
           ) : (
@@ -747,7 +748,7 @@ const primaryTitle = profileData?.primary_job_title || "Not Provided";
                 <p key={index} className='text-sm font-medium text-gray-500'>• {lang.language}</p>
               ))
             ) : (
-              <p className="text-sm text-gray-400">No languages added</p>
+              <p className="text-sm text-gray-400">{t("dashboard.noLanguages")}</p>
             )
           )}
 

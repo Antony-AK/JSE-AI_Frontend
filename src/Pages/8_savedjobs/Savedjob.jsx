@@ -1,6 +1,4 @@
-
 import React, { useState, useEffect, useRef } from "react";
-
 import axios from "axios";
 import link_icon from '../../assets/link-icon.svg'
 import { BASE_URL } from "../../utils/api.js";
@@ -11,7 +9,7 @@ import LanguageSelectModel from "../../base/LanguageModelPopup/LanguageSelectMod
 import LimitReachedModal from "../6_my_jobs/MyJobsPopUp/LimitReachedModel.jsx";
 import SkeletonJobApplicationTracker from "../../base/InternalDesignComponent/InternalDesignLoader.jsx";
 import InternalRightDesignLoader from "../../base/InternalDesignComponent/InternalRightDesignLoader.jsx";
-
+import { t } from "../../utils/i18n.js";
 
 const SavedJob = () => {
   const [showLimitModal, setShowLimitModal] = useState(false);
@@ -394,9 +392,9 @@ const SavedJob = () => {
         ) : selectedJobs.length === 0 ? (
           <div className="absolute top-1/2 left-[calc(264px+40%)] transform -translate-x-1/2 -translate-y-1/2 text-center">
             <h2 className="text-2xl font-bold text-gray-700 mb-2">
-              No jobs found
+             {t("trackers.noJobsFound")}
             </h2>
-            <p className="text-gray-500">Please check back later.</p>
+            <p className="text-gray-500">{t("trackers.checkBackLater")}</p>
           </div>
         ) : (
           <div className="flex flex-1  -mt-5  gap-5">
@@ -404,8 +402,8 @@ const SavedJob = () => {
 
               <div className="p-5 flex justify-between pt-4">
                 <div>
-                  <h2 className="text-sm font-semibold">Showing {pagination.total} Jobs</h2>
-                  <p className="text-sm text-gray-400 mt-1">Based on your preferences</p>
+                  <h2 className="text-sm font-semibold">{t("trackers.showingJobs", { count: pagination.total })}</h2>
+                  <p className="text-sm text-gray-400 mt-1">{t("trackers.basedOnPreferences")}</p>
                 </div>
 
 
@@ -495,18 +493,18 @@ const SavedJob = () => {
                           </div>
                         </div>
 
-                        <span className="text-sm text-black mt-3 ">Profile Match</span>
+                        <span className="text-sm text-black mt-3 ">{t("trackers.profileMatch")}</span>
                       </div>
                       {/* ✅ CV/CL Generated Badges */}
                       <div className="absolute bottom-3 right-1.5 flex gap-1">
                         {job?.cvGenerated && (
                           <span className="text-[9px] bg-gray-100 border text-[#2C6472] font-semibold px-2 py-[2px] rounded-full">
-                            CV Generated
+                           CV Generated
                           </span>
                         )}
                         {job?.coverLetterGenerated && (
                           <span className="text-[9px] bg-gray-100 border text-[#2C6472] font-semibold px-2 py-[2px] rounded-full">
-                            CL Generated
+                            Cl Generated
                           </span>
                         )}
                       </div>
@@ -565,7 +563,7 @@ const SavedJob = () => {
                               }}
 
                             >
-                              Remove
+                               {t("trackers.remove")}
                             </button>
                           </div>
                         )}
@@ -578,7 +576,6 @@ const SavedJob = () => {
 
                 <br />
                 <div className="flex justify-center items-center gap-2 pt-14  flex-wrap">
-                  {/* Prev Button */}
                   {/* Prev Button */}
                   <button
                     onClick={() => {
@@ -678,7 +675,7 @@ const SavedJob = () => {
                           </div>
                         </div>
 
-                        <span className="text-sm w-[100px]  text-black mt-3 ">Profile Match</span>
+                        <span className="text-sm w-[100px]  text-black mt-3 ">{t("trackers.profileMatch")}</span>
                       </div><br />
                     </div><br />
 
@@ -746,7 +743,7 @@ const SavedJob = () => {
                         className="flex gap-2 mx-auto justify-center  items-center font-semibold text-[#2C6472] rounded-3xl text-sm bg-[#F4F4F4F4] underline border w-full h-[47px] hover:border-[#2C6472] px-4  transition  hover:bg-white hover:text-[#2C6472] hover:scale-105"
                         onClick={() => handleGetJobURL(selectedJob.id)}
                       >
-                        Go to Job Link
+                        {t("trackers.goToJobLink")}
                         <img src={link_icon} alt="" />
                       </button>
 
@@ -756,19 +753,17 @@ const SavedJob = () => {
                         onSelect={handleLanguageSelect}
                       />
 
-
-
                     </div><br />
 
 
                     <div className="">
                       <div>
-                        <h4 className="text-lg font-semibold text-gray-800">About</h4><br />
+                        <h4 className="text-lg font-semibold text-gray-800">{t("trackers.about")}</h4><br />
                         <p className="text-sm text-justify text-gray-700">{selectedJob.description}</p>
                       </div><br />
 
                       <div>
-                        <h4 className="text-lg font-semibold text-gray-800">Description</h4><br />
+                        <h4 className="text-lg font-semibold text-gray-800">{t("trackers.description")}</h4><br />
                         <p className="text-sm text-gray-700">{selectedJob.Description}</p>
                       </div>
 
@@ -819,7 +814,7 @@ const SavedJob = () => {
               alt="Loading..."
               className="w-52 h-52 mb-4"
             />
-            <p className="text-white text-xl font-semibold">Generating, please wait...</p>
+            <p className="text-white text-xl font-semibold">{t("trackers.generating")}</p>
           </div>
         </div>
       )}

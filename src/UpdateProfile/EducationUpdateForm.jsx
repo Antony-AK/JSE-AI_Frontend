@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import Calendar from '../base/Calender/Calender';
 import { format } from 'date-fns';
 import { BASE_URL } from '../utils/api';
+import { t } from "../utils/i18n";
+
 
 const EducationUpdateForm = ({ onclose }) => {
     const apiUrl = `${BASE_URL}/academics`;
@@ -260,7 +262,7 @@ const EducationUpdateForm = ({ onclose }) => {
             <div className='w-full max-w-[700px] mt-5  bg-white flex flex-col shadow rounded-xl px-10 py-5 ' >
 
                 <div className="flex justify-between w-full mt-3 mb-7">
-                    <h3 className='text-lg font-semibold'>Education</h3>
+                    <h3 className='text-lg font-semibold'>{t("educations.title")}</h3>
                     <p onClick={onclose} className='text-lg font-semibold cursor-pointer transform ease-in-out duration-200 hover:scale-95'>X</p>
                 </div>
 
@@ -299,7 +301,7 @@ const EducationUpdateForm = ({ onclose }) => {
 
                 <div className="form-fields flex flex-col gap-4">
                     <div className="flex flex-col w-full gap-4">
-                        <label htmlFor="degree" className='text-[15px] text-gray-500'>Degree Title  <span className="text-red-500">*</span></label>
+                        <label htmlFor="degree" className='text-[15px] text-gray-500'>{t("educations.degree")} <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             name="degree"
@@ -312,7 +314,7 @@ const EducationUpdateForm = ({ onclose }) => {
 
                     <div className='flex gap-4'>
                         <div className="flex flex-col w-1/2 gap-3">
-                            <label htmlFor="institution" className='text-[15px] text-gray-500' >Institution Name  <span className="text-red-500">*</span></label>
+                            <label htmlFor="institution" className='text-[15px] text-gray-500' >{t("educations.institution")}   <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 name="institution"
@@ -323,7 +325,7 @@ const EducationUpdateForm = ({ onclose }) => {
                         </div>
 
                         <div className="flex flex-col w-1/2 gap-3">
-                            <label htmlFor="field_of_study" className='text-[15px] text-gray-500' >Field of Study  <span className="text-red-500">*</span></label>
+                            <label htmlFor="field_of_study" className='text-[15px] text-gray-500' >{t("educations.field")}  <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 name="field_of_study"
@@ -337,7 +339,7 @@ const EducationUpdateForm = ({ onclose }) => {
 
                     <div className='flex gap-4'>
                         <div className="flex flex-col w-1/2 gap-3">
-                            <label htmlFor="start_date" className='text-[15px] text-gray-500' >Start Date  <span className="text-red-500">*</span></label>
+                            <label htmlFor="start_date" className='text-[15px] text-gray-500' >{t("educations.startDate")} <span className="text-red-500">*</span></label>
                             <Calendar
                                 selectedDate={formData.start_date ? new Date(formData.start_date) : null}
                                 onDateChange={(date) =>
@@ -351,7 +353,7 @@ const EducationUpdateForm = ({ onclose }) => {
 
                         <div className="flex flex-col w-1/2 gap-3">
                             <label htmlFor="end_date" className='text-[15px] text-gray-500'>
-                                End Date {!formData.currentlyDoing && <span className="text-red-500">*</span>}
+                                {t("educations.endDate")} {!formData.currentlyDoing && <span className="text-red-500">*</span>}
                             </label>
                             {formData.currentlyDoing ? (
                                 <input
@@ -389,12 +391,13 @@ const EducationUpdateForm = ({ onclose }) => {
                             className="mr-2 accent-[#2c6472] w-4 h-4"
                         />
                         <label htmlFor="currentlyDoing" className="text-gray-600 text-sm">
-                            Currently Studing this
+                            {t("educations.currentlyDoing")}
+
                         </label>
                     </div>
 
                     <div className="flex flex-col w-full gap-4">
-                        <label htmlFor="achievements" className='text-[15px] text-gray-500'>Achivements</label>
+                        <label htmlFor="achievements" className='text-[15px] text-gray-500'>{t("educations.achievements")}</label>
                         <textarea
                             name="achievements"
                             onChange={handleChange}
@@ -417,7 +420,8 @@ const EducationUpdateForm = ({ onclose }) => {
                         ) : (
                             "+ "
                         )}
-                        Add Education
+                        {t("educations.add")}
+
                         </button>
                         <button
                           onClick={activeId !== null && !deleteLoading ? handleDeleteEducation : null}
@@ -435,7 +439,7 @@ const EducationUpdateForm = ({ onclose }) => {
                              className="w-4 h-3.5 mt-0.5 me-1 object-contain"
                             />
                         )}
-                            Remove
+                            {t("educations.remove")}
                         </button>
                     </div>
 
@@ -449,7 +453,7 @@ const EducationUpdateForm = ({ onclose }) => {
                             {loading ? (
                                 <div className="w-5 h-5 border-[3px] border-[#2c6472] border-t-transparent rounded-full animate-spin"></div>
                             ) : (
-                                "Save Changes"
+                                <span>{t("educations.save")}</span>
                             )}
                         </button>
                     </div>

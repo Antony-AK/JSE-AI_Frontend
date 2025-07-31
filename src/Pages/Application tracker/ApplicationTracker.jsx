@@ -6,6 +6,7 @@ import { FiSearch, FiX } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown } from "react-icons/fa";
 import filter_icon from "../../assets/filter-icon.svg"; // replace with your path
+import { t } from '../../utils/i18n';
 
 const ApplicationTracker = () => {
   const [applications, setApplications] = useState([]);
@@ -46,12 +47,14 @@ const ApplicationTracker = () => {
   };
 
 
-  const statusOptions = [
-    { label: "Applied", value: "applied" },
-    { label: "Interview", value: "interview" },
-    { label: "Selected", value: "selected" },
-    { label: "Rejected", value: "rejected" }
-  ];
+const statusOptions = [
+  { label: "Applied", value: "applied" },
+  { label: "Interview", value: "interview" },
+  { label: "Selected", value: "selected" },
+  { label: "Rejected", value: "rejected" }
+];
+
+
   const toggleDropdownfilter = () => setShowFilters((prev) => !prev);
 
 
@@ -147,11 +150,11 @@ const ApplicationTracker = () => {
       <div className="flex flex-wrap items-center  gap-4 w-full p-4 rounded-md shadow-sm">
 
         {/* Search + Clear */}
-        <div className="flex items-center gap-2 w-full max-w-sm">
-          <div className="relative w-full">
+        <div className="flex items-center gap-2 w-full max-w-md">
+          <div className="relative w-full ">
             <input
               type="text"
-              placeholder="Search jobs or companies..."
+              placeholder={t("tracker.searchPlaceholder")}
               className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -193,7 +196,7 @@ const ApplicationTracker = () => {
                   }
                 }}
               >
-                Clear
+                {t("tracker.clear")}
               </button>
             )}
           </div>
@@ -209,7 +212,7 @@ const ApplicationTracker = () => {
             className="flex items-center gap-x-2 px-4 py-1.5 bg-white font-medium text-[13px] rounded text-black hover:scale-105 shadow-md"
           >
             <img src={filter_icon} alt="filter icon" className="w-4 h-4" />
-            Filter
+            {t("tracker.filter")}
             <motion.span
               animate={{ rotate: showFilters ? 180 : 0 }}
               transition={{ duration: 0.3 }}
@@ -250,7 +253,7 @@ const ApplicationTracker = () => {
                       onClick={() => setSelectedStatus('')}
                       className="text-[12px] text-red-500 mt-1 hover:underline"
                     >
-                      Clear Filter
+                     {t("tracker.clearFilter")}
                     </button>
                   )}
 
@@ -294,7 +297,8 @@ const ApplicationTracker = () => {
           ))}
         </div>) : !loading && applications.length === 0 ? (
           <p className="w-[60%] mx-auto flex-col mt-32 flex items-center  text-center text-gray-600 text-base">
-            <span className='text-red-500 mb-5 flex flex-1'>No applications found.</span><br /> Please generate your CV and Cover Letter, then search and apply for jobs using the job link to start tracking your application progress.
+            <span className='text-red-500 mb-5 flex flex-1'>{t("tracker.noApps")}</span><br /> {t("tracker.instructions")}
+
           </p>
         ) : (
 
@@ -340,11 +344,11 @@ const ApplicationTracker = () => {
             onClick={() => setPagination(prev => ({ ...prev, current: Math.max(prev.current - 1, 1) }))}
             disabled={pagination.current === 1}
           >
-            Prev
+            {t("tracker.prev")}
           </button>
 
           <span className="text-sm font-medium">
-            Page {pagination.current} of {pagination.total_pages}
+            {t("tracker.page")} {pagination.current} of {pagination.total_pages}
           </span>
 
           <button
@@ -352,7 +356,7 @@ const ApplicationTracker = () => {
             onClick={() => setPagination(prev => ({ ...prev, current: Math.min(prev.current + 1, pagination.total_pages) }))}
             disabled={pagination.current === pagination.total_pages}
           >
-            Next
+            {t("tracker.next")}
           </button>
         </div>
       )}

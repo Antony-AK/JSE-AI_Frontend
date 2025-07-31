@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify'; // ✅ FIXED toast issue
 import { BASE_URL } from '../utils/api';
+import { t } from "../utils/i18n";
+
 
 const LanguageUpdateForm = ({ onclose }) => {
 
@@ -187,7 +189,7 @@ const LanguageUpdateForm = ({ onclose }) => {
     <div className='fixed inset-0 bg-white bg-opacity-70 z-50 flex items-center justify-center'>
       <div className='w-[700px] h-[570px] bg-white flex flex-col shadow rounded-xl px-10 py-5'>
         <div className="flex justify-between w-full mt-3  mb-7">
-          <h3 className='text-lg font-semibold'>Languages</h3>
+          <h3 className='text-lg font-semibold'>{t("language.title")}</h3>
           <p onClick={onclose} className='text-lg font-semibold cursor-pointer hover:scale-95'>X</p>
         </div>
 
@@ -226,7 +228,7 @@ const LanguageUpdateForm = ({ onclose }) => {
           {/* Language Field */}
           <div className="flex flex-col w-full gap-2">
             <label htmlFor="language" className='text-[15px] text-gray-500'>
-              Language <span className="text-red-500">*</span>
+              {t("language.language_label")} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -241,13 +243,13 @@ const LanguageUpdateForm = ({ onclose }) => {
           <div className='flex gap-4'>
             <div className="flex flex-col w-full gap-2">
               <label className='text-[15px] text-gray-500'>
-                Proficiency <span className="text-red-500">*</span>
+                {t("language.proficiency_label")} <span className="text-red-500">*</span>
               </label>
               <div className="flex flex-col gap-4 ms-3">
                 {[
-                  { label: 'Beginner (A1, A2)', value: 'beginner' },
-                  { label: 'Intermediate (B1, B2)', value: 'intermediate' },
-                  { label: 'Fluent / Native (C1, C2)', value: 'fluent' },
+                  { label: t("language.level.beginner"), value: 'beginner' },
+                  { label: t("language.level.intermediate"), value: 'intermediate' },
+                  { label: t("language.level.fluent"), value: 'fluent' },
                 ].map((level) => (
                   <label key={level.value} className="flex items-center text-sm text-gray-500">
                     <input
@@ -270,31 +272,29 @@ const LanguageUpdateForm = ({ onclose }) => {
             <button
               onClick={activeId === null && !loading ? handleAddLanguage : null}
               disabled={activeId !== null || loading}
-              className={`text-sm flex items-center gap-2 font-medium hover:scale-105 transition ${
-                activeId !== null || loading ? 'text-gray-500/60 cursor-not-allowed' : 'text-[#2c6472]'
-              }`}
+              className={`text-sm flex items-center gap-2 font-medium hover:scale-105 transition ${activeId !== null || loading ? 'text-gray-500/60 cursor-not-allowed' : 'text-[#2c6472]'
+                }`}
             >
               {loading ? (
                 <div className="w-4 h-4 border-[2.5px] border-[#2c6472] border-t-transparent rounded-full animate-spin" />
               ) : (
                 <span className="text-lg font-bold">+</span>
               )}
-              Add Language
+              {t("language.add_button")}
             </button>
 
             <button
               onClick={activeId !== null && !deleteLoading ? handleDeleteLanguage : null}
               disabled={activeId === null || deleteLoading}
-              className={`text-sm flex items-center gap-2 font-medium hover:scale-105 transition ${
-                activeId === null || deleteLoading ? 'text-gray-500/60 cursor-not-allowed' : 'text-red-500'
-              }`}
+              className={`text-sm flex items-center gap-2 font-medium hover:scale-105 transition ${activeId === null || deleteLoading ? 'text-gray-500/60 cursor-not-allowed' : 'text-red-500'
+                }`}
             >
               {deleteLoading ? (
                 <div className="w-4 h-4 border-[2.5px] border-red-500 border-t-transparent rounded-full animate-spin" />
               ) : (
                 <img src={trash} alt="trash icon" className="w-4 h-3.5 object-contain" />
               )}
-              Remove
+              {t("language.remove_button")}
             </button>
           </div>
 
@@ -302,14 +302,13 @@ const LanguageUpdateForm = ({ onclose }) => {
             <button
               onClick={activeId !== null && !saveLoading ? handleUpdateLanguage : null}
               disabled={activeId === null || saveLoading}
-              className={`flex justify-center items-center ${
-                activeId !== null && !saveLoading ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 text-white/50 cursor-not-allowed'
-              } w-32 text-sm px-2 py-2 rounded-xl mb-2 hover:scale-105 transition`}
+              className={`flex justify-center items-center ${activeId !== null && !saveLoading ? 'bg-[#2c6472] text-white' : 'bg-gray-500/20 text-black cursor-not-allowed'
+                } w-32 text-sm px-2 py-2 rounded-xl mb-2 hover:scale-105 transition`}
             >
               {saveLoading ? (
                 <div className="w-4 h-4 border-[2.5px] border-[#2c6472] border-t-transparent rounded-full animate-spin" />
               ) : (
-                "Save Changes"
+                <span>{t("language.save_button")}</span>
               )}
             </button>
           </div>

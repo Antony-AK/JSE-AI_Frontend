@@ -1,4 +1,6 @@
 import React from 'react';
+import { t } from '../../utils/i18n'; // adjust the import based on your structure
+
 
 const InProgress = () => {
   return (
@@ -14,9 +16,9 @@ const InProgress = () => {
       >
         🚧
       </div>
-      <h1 className="text-3xl font-bold text-gray-800 mb-2">We're working on it</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('inProgress.title')}</h1>
       <p className="text-gray-600 max-w-md mx-auto">
-        This feature is currently under development. Please check back soon!
+        {t('inProgress.description')}
       </p>
 
       <style>{`

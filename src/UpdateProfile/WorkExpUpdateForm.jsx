@@ -5,6 +5,7 @@ import axios from "axios";
 import Calendar from '../base/Calender/Calender';
 import { format } from 'date-fns';
 import { BASE_URL } from '../utils/api';
+import { t } from '../utils/i18n';
 
 const WorkExpUpdateForm = ({ onclose }) => {
 
@@ -275,7 +276,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
             <div className='w-[700px] bg-white flex flex-col shadow rounded-xl px-10 py-5'>
 
                 <div className="flex justify-between w-full mb-7 mt-3">
-                    <h3 className='text-lg font-semibold'>Work Experience</h3>
+                    <h3 className='text-lg font-semibold'>{t("workExperiences.title")}</h3>
                     <p onClick={onclose} className='text-lg font-semibold cursor-pointer hover:scale-95'>X</p>
                 </div>
 
@@ -315,7 +316,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
 
                 <div className="form-fields flex flex-col gap-4">
                     <div className="flex flex-col w-full gap-2">
-                        <label htmlFor="job_title" className='text-[15px] text-gray-500'>Job Title <span className="text-red-500">*</span></label>
+                        <label htmlFor="job_title" className='text-[15px] text-gray-500'>{t("workExperiences.jobTitle")} <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             name="job_title"
@@ -328,7 +329,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
 
                     <div className='flex gap-4'>
                         <div className="flex flex-col w-1/2 gap-2">
-                            <label htmlFor="company_name" className='text-[15px] text-gray-500'>Company Name <span className="text-red-500">*</span></label>
+                            <label htmlFor="company_name" className='text-[15px] text-gray-500'>{t("workExperiences.companyName")}  <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 name="company_name"
@@ -340,7 +341,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
                         </div>
 
                         <div className="flex flex-col w-1/2 gap-2">
-                            <label htmlFor="location" className='text-[15px] text-gray-500'>Location <span className="text-red-500">*</span></label>
+                            <label htmlFor="location" className='text-[15px] text-gray-500'>{t("workExperiences.location")} <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 name="location"
@@ -354,7 +355,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
 
                     <div className='flex gap-4'>
                         <div className="flex flex-col w-1/2 gap-2">
-                            <label htmlFor="start_date" className='text-[15px] text-gray-500'>Start Date <span className="text-red-500">*</span></label>
+                            <label htmlFor="start_date" className='text-[15px] text-gray-500'>{t("workExperiences.startDate")} <span className="text-red-500">*</span></label>
                             <Calendar
                                 selectedDate={formData.start_date ? new Date(formData.start_date) : null}
                                 onDateChange={(date) =>
@@ -368,13 +369,13 @@ const WorkExpUpdateForm = ({ onclose }) => {
 
                         <div className="flex flex-col w-1/2 gap-2">
                             <label htmlFor="end_date" className="text-[15px] text-gray-500">
-                                End Date {!formData.currentlyWorking && <span className="text-red-500">*</span>}
+                                {t("workExperiences.endDate")} {!formData.currentlyWorking && <span className="text-red-500">*</span>}
                             </label>
 
                             {formData.currentlyWorking ? (
                                 <input
                                     type="text"
-                                    value="Currently Working"
+                                    value={t("workExperiences.currentlyWorking")}
                                     disabled
                                     className="w-full px-4 py-3 rounded-md border border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed"
                                 />
@@ -405,11 +406,11 @@ const WorkExpUpdateForm = ({ onclose }) => {
                                 }))
                             }
                         />
-                        Currently Working Here
+                        {t("workExperiences.currentlyWorking")}
                     </label>
 
                     <div className="flex flex-col w-full gap-2">
-                        <label htmlFor="key_responsibilities" className='text-[15px] text-gray-500'>Key Responsibilities </label>
+                        <label htmlFor="key_responsibilities" className='text-[15px] text-gray-500'>{t("workExperiences.responsibilities")}</label>
                         <textarea
                             name="key_responsibilities"
                             value={formData.key_responsibilities}
@@ -431,7 +432,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
                             ) : (
                                 "+"
                             )}
-                            Add More Experience
+                            {t("workExperiences.addExperience")}
                         </button>
                         <button
                             onClick={activeId !== null && !deleteLoading ? handleDeleteExperience : null}
@@ -444,7 +445,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
                             ) : (
                                 <img src={trash} alt="trash icon" className="w-4 h-3.5 object-contain" />
                             )}
-                            Remove
+                            {t("workExperiences.remove")}
                         </button>
                     </div>
 
@@ -458,7 +459,7 @@ const WorkExpUpdateForm = ({ onclose }) => {
                             {saveLoading ? (
                                 <div className="w-5 h-5 border-[3px] border-[#2c6472] border-t-transparent rounded-full animate-spin"></div>
                             ) : (
-                                "Save Changes"
+                                t("workExperiences.saveChanges")
                             )}
                         </button>
                     </div>

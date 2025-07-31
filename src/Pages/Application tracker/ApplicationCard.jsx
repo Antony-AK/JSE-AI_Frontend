@@ -4,6 +4,7 @@ import { Download, MoreVertical } from "lucide-react";
 import { BASE_URL } from "../../utils/api";
 import axios from "axios";
 import DownloadHandler from "./DownloadHandler";
+import { t } from "../../utils/i18n"; 
 
 const ApplicationCard = ({
   jobId,
@@ -214,7 +215,7 @@ const ApplicationCard = ({
               onClick={() => setShowFullDesc(!showFullDesc)}
               className="text-[#2c6472] mt-1 text-sm font-medium hover:underline"
             >
-              {showFullDesc ? 'Show less ▲' : 'Show more ▼'}
+              {showFullDesc ? 'Show less' : 'Show more..'}
             </button>
           )}
         </div>
@@ -223,7 +224,7 @@ const ApplicationCard = ({
         <div className="mt-3 space-y-2">
           {/* Your Skills */}
           <p className="text-sm font-semibold text-black">
-            Your skills
+            {t("applicationCard.yourSkills")}
             <span className="font-normal text-gray-600 ml-2">
               {(showAllYourSkills ? yourSkillList : yourSkillList.slice(0, 2)).join(', ')}
               {yourSkillList.length > 2 && (
@@ -239,7 +240,7 @@ const ApplicationCard = ({
 
           {/* Required Skills */}
           <p className="text-sm font-semibold text-black">
-            Required skills
+            {t("applicationCard.requiredSkills")}
             <span className="font-normal text-gray-600 ml-2">
               {(showAllRequiredSkills ? requiredSkillList : requiredSkillList.slice(0, 2)).join(', ')}
               {requiredSkillList.length > 2 && (
@@ -253,7 +254,7 @@ const ApplicationCard = ({
             </span>
           </p>
           <p className="text-gray-600 mt-1 text-sm">
-            <strong className="text-black font-semibold me-1">Selected Date:  </strong>
+            <strong className="text-black font-semibold me-1">{t("applicationCard.selectedDate")}:  </strong>
             {selectedDate ? new Date(selectedDate).toLocaleDateString('en-GB', {
               day: '2-digit',
               month: 'long',
@@ -322,7 +323,7 @@ const ApplicationCard = ({
               : 'bg-gray-200 text-gray-400 border-gray-400 cursor-not-allowed'
               }`}
           >
-            Job Research
+            {t("applicationCard.jobResearch")}
           </button>
 
 
@@ -330,7 +331,7 @@ const ApplicationCard = ({
             className="bg-[#306b74] hover:bg-[#285962] text-white w-[210px] px-4 py-2 rounded-md text-base font-medium flex items-center justify-center transition duration-200">
             <Download className="w-5 h-5 mb-1" />
             <span className="leading-tight ms-4 flex text-sm items-start flex-col ">
-              Download<br /><span className="">CV & Cover Letter</span>
+              Download<br /><span className="">Cv & Cover letter</span>
             </span>
           </button>
         </div>
@@ -365,15 +366,15 @@ const ApplicationCard = ({
             {animatedValue}%    
           </div>
         </div>
-        <span className="text-xs mt-2 w-28 font-medium text-gray-600">Profile Complete</span>
+        <span className="text-xs mt-2 w-28 font-medium text-gray-600">{	t("applicationCard.profileComplete")}</span>
       </div>
 
       {showConfirmation && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
           <div className="bg-white p-6 rounded-lg shadow-xl w-[500px] text-center">
-            <h2 className="text-lg font-semibold text-gray-800 mb-3">Are you sure?</h2>
+            <h2 className="text-lg font-semibold text-gray-800 mb-3">{t("applicationCard.confirmTitle")}</h2>
             <p className=" text-gray-600 mb-5">
-              Once you change the status to <span className="font-semibold text-[#2c6472]">{pendingStatus}</span>, it cannot be changed again.
+              {t("applicationCard.confirmMessage")} <span className="font-semibold text-[#2c6472]">{pendingStatus}</span>, it cannot be changed again.
             </p>
             <div className="flex justify-center gap-4">
 
@@ -384,7 +385,7 @@ const ApplicationCard = ({
                 }}
                 className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300"
               >
-                Cancel
+                {t("applicationCard.cancel")}
               </button>
 
               <button
@@ -395,7 +396,7 @@ const ApplicationCard = ({
                 }}
                 className="bg-[#2c6472] text-white px-4 py-2 rounded-md hover:bg-[#234d56]"
               >
-                Okay
+                {t("applicationCard.okay")}
               </button>
             </div>
           </div>
@@ -425,7 +426,7 @@ const ApplicationCard = ({
                   handleDeleteApplication();
                 }}
               >
-                Remove
+                {t("applicationCard.remove")}
               </button>
             </motion.div>
           )}

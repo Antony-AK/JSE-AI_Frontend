@@ -3,6 +3,8 @@ import { toast } from 'react-toastify';
 // import trash from "../assets/trash2.png";
 import axios from 'axios';
 import { BASE_URL } from '../utils/api'
+import { t } from '../utils/i18n';
+
 
 const PersonalnfoUpdateForm = ({ onclose }) => {
 
@@ -119,14 +121,14 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
         <div className='fixed inset-0 bg-white overflow-y-auto hide-scrollbar bg-opacity-70 z-50 flex items-center justify-center'>
             <div className='w-[700px] h-[90%] mt-10 mb-10 bg-white flex flex-col shadow rounded-xl px-10 py-5 scrollbar-custom'>
                 <div className="flex justify-between w-full mt-3">
-                    <h3 className='text-lg font-semibold'>Personal Information</h3>
+                    <h3 className='text-lg font-semibold'>{t('personal_info.title')}</h3>
                     <p onClick={onclose} className='text-lg font-semibold cursor-pointer hover:scale-95'>X</p>
                 </div>
 
                 <div className="form-fields overflow-auto flex flex-col gap-4 mt-5 pr-4">
                     {/* First Name */}
                     <div className="flex flex-col w-full gap-3">
-                        <label className='text-[15px] text-gray-500'>First Name  <span className="text-red-500">*</span> </label>
+                        <label className='text-[15px] text-gray-500'>{t('personal_info.first_name')} <span className="text-red-500">*</span> </label>
                         <input
                             type="text"
                             value={formData.first_name}
@@ -138,7 +140,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
 
                     {/* Second Name */}
                     <div className="flex flex-col w-full gap-3">
-                        <label className='text-[15px] text-gray-500'>Second Name</label>
+                        <label className='text-[15px] text-gray-500'>{t('personal_info.second_name')}</label>
                         <input
                             type="text"
                             value={formData.second_name}
@@ -150,7 +152,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
 
                     {/* Email */}
                     <div className="flex flex-col w-full gap-3">
-                        <label className='text-[15px] text-gray-500'>Email  <span className="text-red-500">*</span></label>
+                        <label className='text-[15px] text-gray-500'>{t('personal_info.email')}  <span className="text-red-500">*</span></label>
                         <input
                             type="email"
                             value={formData.email}
@@ -162,7 +164,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
 
                     {/* Phone */}
                     <div className="flex flex-col w-full gap-3">
-                        <label className='text-[15px] text-gray-500'>Phone  <span className="text-red-500">*</span></label>
+                        <label className='text-[15px] text-gray-500'>{t('personal_info.phone')}  <span className="text-red-500">*</span></label>
                         <input
                             type="tel"
                             value={formData.phone}
@@ -173,7 +175,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
 
                     {/* Country */}
                     <div className="flex flex-col w-full gap-3">
-                        <label className='text-[15px] text-gray-500'>Country <span className="text-red-500">*</span></label>
+                        <label className='text-[15px] text-gray-500'>{t('personal_info.country')} <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={formData.country}
@@ -185,7 +187,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
 
                     {/* State */}
                     <div className="flex flex-col w-full gap-3">
-                        <label className='text-[15px] text-gray-500'>State <span className="text-red-500">*</span></label>
+                        <label className='text-[15px] text-gray-500'>{t('personal_info.state')} <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={formData.state}
@@ -196,7 +198,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
 
                     {/* City */}
                     <div className="flex flex-col w-full gap-3">
-                        <label className='text-[15px] text-gray-500'>City <span className="text-red-500">*</span></label>
+                        <label className='text-[15px] text-gray-500'>{t('personal_info.city')} <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             value={formData.city}
@@ -207,7 +209,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
 
                     {/* LinkedIn */}
                     <div className="flex flex-col w-full gap-3">
-                        <label className='text-[15px] text-gray-500'>Linkedin Profile</label>
+                        <label className='text-[15px] text-gray-500'>{t('personal_info.linkedin')}</label>
                         <input
                             type="text"
                             value={formData.linkedin_profile}
@@ -218,7 +220,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
 
                     {/* Website */}
                     <div className="flex flex-col w-full gap-3">
-                        <label className='text-[15px] text-gray-500'>Website</label>
+                        <label className='text-[15px] text-gray-500'>{t('personal_info.website')}</label>
                         <input
                             type="text"
                             value={formData.external_links[0]?.url || ""}
@@ -233,7 +235,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
 
                     {/* Github */}
                     <div className="flex flex-col w-full gap-3">
-                        <label className='text-[15px] text-gray-500'>Github</label>
+                        <label className='text-[15px] text-gray-500'>{t('personal_info.github')}</label>
                         <input
                             type="text"
                             value={formData.external_links[1]?.url || ""}
@@ -248,7 +250,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
 
                     {/* Blog */}
                     <div className="flex flex-col w-full gap-3">
-                        <label className='text-[15px] text-gray-500'>Blog</label>
+                        <label className='text-[15px] text-gray-500'>{t('personal_info.blog')}</label>
                         <input
                             type="text"
                             value={formData.external_links[2]?.url || ""}
@@ -263,7 +265,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
 
                     {/* Social Media */}
                     <div className="flex flex-col w-full gap-3">
-                        <label className='text-[15px] text-gray-500'>Social Media</label>
+                        <label className='text-[15px] text-gray-500'>{t('personal_info.social_media')}</label>
                         <input
                             type="text"
                             value={formData.external_links[3]?.url || ""}
@@ -297,7 +299,7 @@ const PersonalnfoUpdateForm = ({ onclose }) => {
                             {loading ? (
                                 <div className="w-5 h-5 border-[3px] border-white border-t-transparent rounded-full animate-spin" />
                             ) : (
-                                "Save Changes"
+                                t("personal_info.save_changes")
                             )}
                         </button>
                     </div>

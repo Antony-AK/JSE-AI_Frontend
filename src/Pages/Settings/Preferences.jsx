@@ -4,6 +4,8 @@ import { BASE_URL } from "../../utils/api";
 import { motion, AnimatePresence } from "framer-motion";
 import arrow_down from "../../assets/arrow-down-drop.png"; // 👈 your dropdown arrow
 import { setLanguage } from "../../utils/i18n"
+import { t } from "../../utils/i18n";
+
 
 
 const Preferences = () => {
@@ -123,9 +125,9 @@ const Preferences = () => {
       {/* Language */}
       <div className="flex justify-between items-center">
         <div className="flex flex-col gap-1">
-          <h2 className="font-semibold">Language</h2>
+          <h2 className="font-semibold">{t("preferences.language_label")}</h2>
           <p className="text-[#000000b0] text-sm">
-            Change the language used in the user interface.
+            {t("preferences.language_description")}
           </p>
         </div>
 
@@ -180,8 +182,8 @@ const Preferences = () => {
       {/* Timezone */}
       <div className="flex justify-between items-center">
         <div className="flex flex-col gap-1">
-          <h2 className="font-semibold">Timezone</h2>
-          <p className="text-[#000000b0] text-sm">Custom timezone setting.</p>
+          <h2 className="font-semibold">{t("preferences.timezone_label")}</h2>
+          <p className="text-[#000000b0] text-sm">{t("preferences.timezone_description")}</p>
         </div>
 
         <div className="relative timezone-dropdown w-[200px]">
@@ -241,17 +243,16 @@ const Preferences = () => {
 
       {/* Privacy */}
       <div className="">
-        <h2 className="text-lg font-bold">Privacy</h2>
+        <h2 className="text-lg font-bold">{t("preferences.privacy.title")}</h2>
         <div className="border border-b-gray-200 h-px my-3"></div>
 
         <div className="flex flex-col gap-5 py-3">
           {/* Cookie Policy */}
           <div className="flex justify-between items-center">
             <div className="flex flex-col gap-1">
-              <h2 className="font-semibold">Cookie Policy</h2>
+              <h2 className="font-semibold">{t("preferences.cookie_policy_label")}</h2>
               <p className="text-[#000000b0] text-sm">
-                We use cookies to improve your experience. By continuing, you
-                agree to our Cookie Policy.
+                {t("preferences.cookie_policy_description")}
               </p>
             </div>
             <label className="relative inline-block w-10 h-6">
@@ -274,10 +275,9 @@ const Preferences = () => {
             className="flex justify-between items-center"
           >
             <div className="flex flex-col gap-1">
-              <h2 className="font-semibold">Terms & Conditions</h2>
+              <h2 className="font-semibold">{t("preferences.terms_label")}</h2>
               <p className="text-[#000000b0] text-sm">
-                By using this platform, you agree to abide by our Terms &
-                Conditions.
+                {t("preferences.terms_description")}
               </p>
             </div>
             <img width="8px" src={right_arrow} className="mr-5" alt="arrow" />
@@ -291,9 +291,9 @@ const Preferences = () => {
             className="flex justify-between items-center"
           >
             <div className="flex flex-col gap-1">
-              <h2 className="font-semibold">Privacy Policy</h2>
+              <h2 className="font-semibold">{t("preferences.privacy_policy_label")}</h2>
               <p className="text-[#000000b0] text-sm">
-                Your data is safe with us. Learn more in our Privacy Policy.
+                {t("preferences.privacy_policy_description")}
               </p>
             </div>
             <img width="8px" src={right_arrow} className="mr-5" alt="arrow" />
@@ -307,10 +307,9 @@ const Preferences = () => {
             className="flex justify-between items-center"
           >
             <div className="flex flex-col gap-1">
-              <h2 className="font-semibold">Data Policy</h2>
+              <h2 className="font-semibold">{t("preferences.data_policy_label")}</h2>
               <p className="text-[#000000b0] text-sm">
-                We handle your personal information in accordance with our Data
-                Policy.
+                {t("preferences.data_policy_description")}
               </p>
             </div>
             <img width="8px" src={right_arrow} className="mr-5" alt="arrow" />
@@ -319,14 +318,9 @@ const Preferences = () => {
           {/* Data Policy */}
           <div className="flex justify-between items-center">
             <div className="flex flex-col gap-1">
-              <h2 className="font-semibold">Partner University</h2>
+              <h2 className="font-semibold">{t("preferences.partner_uni_label")}</h2>
               <p className="text-[#000000b0] text-sm w-[90%]">
-                I agree to allow <span className="text-[#2c6472] font-semibold">Arshan UG</span> to share my personal information
-                (e.g., name, email) and user-generated content (e.g., CVs and
-                cover letters) with <span className="text-[#2c6472] font-semibold">Partnered University</span> to support my career
-                goals if I am currently studying or have graduated within the
-                last 6 months from that university. I understand I can withdraw
-                this consent at any time by contacting{" "}
+                {t("preferences.partner_uni_description")}
                 <a href="mailto:info@arshan.de" className="text-[#2c6472] font-semibold underline">
                     info@arshan.de
                 </a>.
@@ -338,7 +332,7 @@ const Preferences = () => {
 
       {/* Optional: Show updating loader */}
       {updating && (
-        <p className="text-xs text-blue-500 italic">Updating preferences...</p>
+        <p className="text-xs text-blue-500 italic">{t("preferences.updating")}</p>
       )}
     </div>
   );

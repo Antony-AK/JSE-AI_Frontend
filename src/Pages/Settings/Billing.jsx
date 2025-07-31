@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BASE_URL } from '../../utils/api';
+import { t } from '../../utils/i18n'; // Make sure this points to your t() utility
+
 
 const Billing = () => {
     const [billingData, setBillingData] = useState(null);
@@ -34,29 +36,29 @@ const Billing = () => {
             {/* Plan */}
             <div className="flex justify-between items-center">
                 <div className="flex flex-col gap-1">
-                    <h2 className="font-semibold">Plan</h2>
+                    <h2 className="font-semibold">{t("billing.plan")}</h2>
                     <p className="text-[#000000b0] text-sm">{billingData?.subscription_tier || '-'}</p>
                 </div>
                 <button className="text-[#2c6472] text-sm font-semibold border border-[#00000047] rounded-lg py-1 px-2">
-                    Change Plan
+                    {t("billing.changePlan")}
                 </button>
             </div>
 
             {/* Billing Period */}
             <div className="flex justify-between items-center">
                 <div className="flex flex-col gap-1">
-                    <h2 className="font-semibold">Billing Period</h2>
+                    <h2 className="font-semibold">{t("billing.billingPeriod")}</h2>
                     <p className="text-[#000000b0] text-sm">{billingData?.subscription_period || '-'}</p>
                 </div>
                 <button className="text-[#2c6472] text-sm font-semibold border border-[#00000047] rounded-lg py-1 px-2">
-                    Edit Period
+                    {t("billing.editPeriod")}
                 </button>
             </div>
 
             {/* Subscription Dates */}
             <div className="flex justify-between items-center">
                 <div className="flex flex-col gap-1">
-                    <h2 className="font-semibold">Subscription Period</h2>
+                    <h2 className="font-semibold">{t("billing.subscriptionDates")}</h2>
                     <p className="text-[#000000b0] text-sm">
                         {billingData?.subscription_interval_start
                             ? `${new Date(billingData.subscription_interval_start).toLocaleDateString()} → ${new Date(
@@ -69,40 +71,40 @@ const Billing = () => {
 
             {/* Payment Details */}
             <div>
-                <h2 className="text-lg font-bold">Payment Details</h2>
+                <h2 className="text-lg font-bold">{t("billing.paymentDetails")}</h2>
                 <div className="border border-b-gray-200 h-px my-3"></div>
 
                 <div className="flex flex-col gap-5 py-3">
                     {/* Payment Method */}
                     <div className="flex justify-between items-center">
                         <div className="flex flex-col gap-1">
-                            <h2 className="font-semibold">Payment Method</h2>
+                            <h2 className="font-semibold">{t("billing.paymentMethod")}</h2>
                             <p className="text-[#000000b0] text-sm">{billingData?.payment_method || '-'}</p>
                         </div>
                         <button className="text-[#2c6472] text-sm font-semibold border border-[#00000047] rounded-lg py-1 px-2">
-                            Edit Method
+                             {t("billing.editMethod")}
                         </button>
                     </div>
 
                     {/* Billed To */}
                     <div className="flex justify-between items-center">
                         <div className="flex flex-col gap-1">
-                            <h2 className="font-semibold">Billed To</h2>
+                            <h2 className="font-semibold">{t("billing.billedTo")}</h2>
                             <p className="text-[#000000b0] text-sm">{billingData?.billed_to || '-'}</p>
                         </div>
                         <button className="text-[#2c6472] text-sm font-semibold border border-[#00000047] rounded-lg py-1 px-2">
-                            Edit Information
+                            {t("billing.editInfo")}
                         </button>
                     </div>
 
                     {/* Billing Email */}
                     <div className="flex justify-between items-center">
                         <div className="flex flex-col gap-1">
-                            <h2 className="font-semibold">Billing Email</h2>
+                            <h2 className="font-semibold">{t("billing.billingEmail")}</h2>
                             <p className="text-[#000000b0] text-sm">{billingData?.billing_email || '-'}</p>
                         </div>
                         <button className="text-[#2c6472] text-sm font-semibold border border-[#00000047] rounded-lg py-1 px-2">
-                            Edit Email
+                            {t("billing.editEmail")}
                         </button>
                     </div>
                 </div>
@@ -110,7 +112,7 @@ const Billing = () => {
 
             {/* Invoices */}
             <div>
-                <h2 className="text-lg font-bold">Invoices</h2>
+                <h2 className="text-lg font-bold">{t("billing.invoices")}</h2>
                 <div className="border border-b-gray-200 h-px my-3"></div>
 
                 <div className="flex flex-col gap-5 py-3">
@@ -125,10 +127,10 @@ const Billing = () => {
                                                 month: 'short',
                                                 day: 'numeric',
                                             })
-                                            : `Invoice #${index + 1}`}
+                                            : `${t("billing.invoice")} #${index + 1}`}
                                     </h2>
                                     <p className="text-[#000000b0] text-sm">
-                                        Paid • € {invoice.amount_paid || '€-'}
+                                        {t("billing.paid")} • € {invoice.amount_paid || '€-'}
                                     </p>
                                 </div>
                                 <a
@@ -137,12 +139,12 @@ const Billing = () => {
                                     rel="noopener noreferrer"
                                     className="text-[#2c6472] text-sm font-semibold border border-[#00000047] rounded-lg py-1 px-2"
                                 >
-                                    View Invoice
+                                    {t("billing.viewInvoice")}
                                 </a>
                             </div>
                         ))
                     ) : (
-                        <p className="text-sm text-gray-500">No invoices available.</p>
+                        <p className="text-sm text-gray-500">{t("billing.noInvoices")}</p>
                     )}
                 </div>
             </div>

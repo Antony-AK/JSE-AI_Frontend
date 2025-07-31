@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../../utils/api";
+import { t } from "../../utils/i18n";
 
 const Notification = () => {
   const [notifications, setNotifications] = useState(null);
@@ -68,32 +69,32 @@ const Notification = () => {
         <>
           {/* Subscription Notification */}
           <SettingToggle
-            title="Subscription Notification"
-            desc="Get alerts about your plan status, renewals, and package updates."
+            title={t("notification.subscription.title")}
+            desc={t("notification.subscription.desc")}
             value={notifications.subscription}
             onToggle={() => handleToggle("subscription")}
           />
 
           {/* Recommended Jobs */}
           <SettingToggle
-            title="Recommended Jobs"
-            desc="Receive job suggestions based on your profile and preferences."
+            title={t("notification.recommended_jobs.title")}
+            desc={t("notification.recommended_jobs.desc")}
             value={notifications.recommended_jobs}
             onToggle={() => handleToggle("recommended_jobs")}
           />
 
           {/* German Test */}
           <SettingToggle
-            title="German Test"
-            desc="Stay updated on your German proficiency test schedules and results."
+            title={t("notification.german_test.title")}
+            desc={t("notification.german_test.desc")}
             value={notifications.german_test}
             onToggle={() => handleToggle("german_test")}
           />
 
           {/* Announcements */}
           <SettingToggle
-            title="Announcement & Update Settings"
-            desc="Get notified about important announcements, feature updates, and policy changes."
+            title={t("notification.announcements.title")}
+            desc={t("notification.announcements.desc")}
             value={notifications.announcements}
             onToggle={() => handleToggle("announcements")}
           />
