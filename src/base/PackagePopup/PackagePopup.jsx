@@ -1,4 +1,5 @@
 import React from 'react';
+import { t } from '../../utils/i18n';
 import { Dialog } from '@headlessui/react';
 import { X } from 'lucide-react';
 import { format } from 'date-fns';
@@ -25,17 +26,17 @@ const PackagePopup = ({ isOpen, onClose, infoBlock }) => {
 
   const progressItems = [
     {
-      title: 'Internal',
+      title: t('packagePopup.internal'),
       remaining: `${internalApps}/${tier === 'free' ? 5 : 150}`,
       percentage: calcPercent(internalApps, tier === 'free' ? 5 : 150),
     },
     {
-      title: 'External',
+      title: t('packagePopup.external'),
       remaining: `${externalApps}/${tier === 'free' ? 2 : 20}`,
       percentage: calcPercent(externalApps, tier === 'free' ? 2 : 20),
     },
     {
-      title: 'Proficiency Test',
+      title: t('packagePopup.proficiencyTest'),
       remaining: `${proficiencyTests}`,
       percentage: calcPercent(proficiencyTests, 5),
     }
@@ -56,11 +57,11 @@ const PackagePopup = ({ isOpen, onClose, infoBlock }) => {
           </button>
 
           <div className="text-center mb-3">
-            <h2 className="text-lg font-bold">Package</h2>
+            <h2 className="text-lg font-bold">{t('packagePopup.title')}</h2>
             <p className="text-sm mt-1">
               {formatDate(subscriptionStart)} - {formatDate(subscriptionEnd)}
             </p>
-            <p className="text-xs text-gray-500 mt-1 capitalize">Plan: {tier}</p>
+            <p className="text-xs text-gray-500 mt-1 capitalize">{t('packagePopup.plan')}: {tier}</p>
           </div>
 
           <div className="mt-6 divide-y">
@@ -68,7 +69,7 @@ const PackagePopup = ({ isOpen, onClose, infoBlock }) => {
               <div key={idx} className="py-4 flex justify-between items-center">
                 <div>
                   <p className="font-semibold">{item.title}</p>
-                  <p className="text-sm text-gray-500">Remaining: {item.remaining}</p>
+                  <p className="text-sm text-gray-500">{t('packagePopup.remaining')}: {item.remaining}</p>
                 </div>
 
                 <div className="flex items-center gap-4">
@@ -102,7 +103,7 @@ const PackagePopup = ({ isOpen, onClose, infoBlock }) => {
                   </div>
 
                   <button onClick={handleUpgradeClick} className="border border-gray-300 rounded-full px-4 py-1 text-sm hover:bg-gray-100 transition">
-                    Upgrade
+                    {t('packagePopup.upgrade')}
                   </button>
                 </div>
               </div>
@@ -110,9 +111,9 @@ const PackagePopup = ({ isOpen, onClose, infoBlock }) => {
           </div>
 
           <div className="mt-6 bg-[#24525f] text-white text-sm rounded-lg flex flex-col md:flex-row gap-5 md:gap-0 items-center justify-between px-4 py-3">
-            <p className="font-medium">Unlock premium benefits — upgrade to the Gold Package now.</p>
+            <p className="font-medium">{t('packagePopup.unlockMessage')}</p>
             <button onClick={handleUpgradeClick} className="bg-white text-[#24525f] rounded-full px-4 py-1 font-medium text-sm">
-              Upgrade
+              {t('packagePopup.upgrade')}
             </button>
           </div>
         </Dialog.Panel>

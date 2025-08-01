@@ -151,6 +151,35 @@
       "comingSoon": "Coming Soon"
     }
   },
+  "packagePopup": {
+    "title": "Package",
+    "plan": "Plan",
+    "internal": "Internal",
+    "external": "External",
+    "proficiencyTest": "Proficiency Test",
+    "remaining": "Remaining",
+    "upgrade": "Upgrade",
+    "unlockMessage": "Unlock premium benefits — upgrade to the Gold Package now."
+  },
+  "limitReachedModal": {
+    "title": "Upgrade Plan",
+    "message": "You’ve reached your limit for",
+    "onCurrentPlan": "on the current plan.",
+    "types": {
+      "internal": "internal applications",
+      "external": "external applications",
+      "proficiency": "proficiency tests",
+      "default": "usage"
+    },
+    "upgradeNow": "Upgrade Now"
+  },
+  "languageModal": {
+    "title": "Select a language",
+    "description": "The selected language will be used to generate your CV and Cover Letter. You can only choose once per document, so make sure to pick the language that best fits your job application.",
+    "english": "English",
+    "german": "German",
+    "cancel": "Cancel"
+  },
   "announcements": {
     "announcement1": {
       "date": "27 Jul 2025",
