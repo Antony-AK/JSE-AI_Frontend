@@ -140,7 +140,16 @@
     "viewAll": "View All",
     "noNewJobs": "No new jobs found matching your profile.",
     "profileMatch": "Profile Match",
-    "announcements": "Announcements"
+    "announcements": "Announcements",
+    "proficiencyTest": {
+      "title": "Proficiency Test Details",
+      "remainingAttempts": "Remaining Attempts:",
+      "language": "Language:",
+      "grade": "Grade:",
+      "proficiencyLevel": "Proficiency Level:",
+      "attemptsLeft": "Attempts Left:",
+      "comingSoon": "Coming Soon"
+    }
   },
   "announcements": {
     "announcement1": {

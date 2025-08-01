@@ -631,8 +631,8 @@ const MyApplication = () => {
 
 
   return (
-    <div className="flex items-center flex-col h-[90vh] bg-gray-50   w-[calc(99vw-264px)] px-6  ">
-      <div className="flex items-center w-[82%] ms-10 h-20 gap-5 z-10 bg-gray-50 py-4 fixed">
+    <div className="flex items-center flex-col bg-gray-50 w-[calc(99vw-264px)] px-6  ">
+      <div className="flex items-center w-[100%] ms-10 h-20 gap-5 z-0 bg-gray-50 py-4 relative">
         <div className="w-[40%] relative">
           <input
             type="text"
@@ -761,7 +761,7 @@ const MyApplication = () => {
       </div>
 
 
-      <div className="flex flex-col w-full mt-20 bg-gray-40">
+      <div className="flex flex-col w-full bg-gray-40">
         <br />
         {jobLoading ? (
           <div className="flex justify-center items-center  w-full">
@@ -783,16 +783,16 @@ const MyApplication = () => {
                 setSelected('All');           // ✅ clear dropdown/tab selection
                 fetchSelectedJobs();
               }}
-              className="text-sm text-red-600 underline  mt-6 hover:text-blue-800 transition"
+              className="text-sm text-red-600 underline mt-6 hover:text-blue-800 transition"
             >
              {t("jobs.clearFilter")}
             </button>
           </div>
         ) : (
-          <div className="flex flex-1 border-t border-gray-300 -mt-5  gap-5">
+          <div className="flex flex-1 border-t border-gray-300 -mt-5 gap-5">
             <div className="flex flex-col w-[54%]">
 
-              <div className=" p-5 flex justify-between pt-4">
+              <div className="p-5 flex justify-between pt-4">
                 <div>
                   {filteredJobs.length > 0 ? (
                     <div className="flex items-center gap-4">
@@ -869,7 +869,7 @@ const MyApplication = () => {
 
               </div>
 
-              <div className="w-full mb-5  -space-y-6 rounded-xl bg-white border border-gray-400/20 "><br />
+              <div className="w-full mb-[14px] -space-y-6 rounded-xl bg-white border border-gray-400/20 "><br />
 
                 {isFetching ? (
                   <SkeletonJobApplicationTracker />
@@ -1067,185 +1067,189 @@ const MyApplication = () => {
               </div>
             </div>
 
-            <div className="flex mb-5 fixed py-3 w-[36%] right-5 mt-5 h-[570px] pb-5 bg-white border border-gray-400/20 rounded-xl"><br />
-              {isFetching ? (
-                <InternalRightDesignLoader />
-              ) : (
-                <div className="   flex flex-col items-center p-6 space-y-4 overflow-y-auto  scrollbar-custom rounded-xl bg-white">
-                  {selectedJob && (
-                    <>
-                      <div className="flex justify-between  items-start"><br />
-                        <div className="flex gap-4  ">
-                          <div>
-                            <p className="text-gray-600 font-semibold text-xl">{selectedJob.companyName}</p>
-                            <h2 className="text-xl 2xl:text-2xl font-semibold text-[#2C6472]">{selectedJob.jobTitle}</h2>
-                            <p className="text-sm text-gray-500">{selectedJob.location}</p>
-                          </div>
-                        </div>
-                        <div className="flex  flex-col justify-start -mt-6 items-center"><br />
-                          <div className="relative w-16 h-16">
-                            <svg
-                              viewBox="0 0 100 100"
-                              className="absolute top-0 left-0 w-full h-full"
-                            >
-                              {/* Background circle */}
-                              <circle
-                                cx="50"
-                                cy="50"
-                                r="45"
-                                stroke="#E5E7EB"  // Light Gray Background
-                                strokeWidth="7"
-                                fill="none"
-                              />
-                              {/* Foreground circle (Progress) */}
-                              <circle
-                                cx="50"
-                                cy="50"
-                                r="45"
-                                stroke="#2C6472"  // Your nice teal color
-                                strokeWidth="7"
-                                fill="none"
-                                strokeDasharray="282"  // Circumference of the circle (2πr)
-                                strokeDashoffset={282 - (282 * selectedJob.matchValue) / 100}
-                                strokeLinecap="round"
-                                transform="rotate(-90 50 50)"  // Rotate to start from top
-                              />
-                            </svg>
-
-                            {/* Center text */}
-                            <div className="absolute inset-0 flex items-center text-[13px] justify-center font-semibold text-gray-800">
-                              {selectedJob.matchValue}%
-                            </div>
-                          </div>
-
-                          <span className="text-sm w-[100px]  text-black mt-3 "> Profile Match</span>
-                        </div><br />
-                      </div><br />
-
-
-                      <div className="flex flex-col  gap-2 mt-2  pr-2">
-                        {selectedJob?.skillData?.slice(0, 2).map((item, index) => {
-                          const skills = Array.isArray(item.value) ? item.value : [];
-                          const isExpanded = expandedSections[item.label];
-                          const displaySkills = isExpanded ? skills : skills.slice(0, 2);
-
-                          return (
-                            <div
-                              key={index}
-                              className="grid grid-cols-[120px_1fr] mb-3 gap-2 text-sm"
-                            >
-                              <span className="font-semibold text-black">{item.label}</span>
-
-                              <div className="text-gray-500 w-full  leading-snug break-words">
-                                <span>
-                                  {displaySkills.join(", ")}
-                                </span>
-
-                                {skills.length > 2 && (
-                                  <button
-                                    onClick={() => toggleExpand(item.label)}
-                                    className="ml-2 text-[#2C6472] underline font-medium text-xs hover:text-teal-800"
-                                  >
-                                    {isExpanded ? "Less..." : "More..."}
-                                  </button>
-                                )}
+            <div className="w-[46%]">
+              <div className="sticky top-[75px]">
+                <div className="flex sticky right-5 mt-5 h-[calc(100vh-90px)] bg-white border border-gray-400/20 rounded-xl">
+                  {isFetching ? (
+                    <InternalRightDesignLoader />
+                  ) : (
+                    <div className="  flex flex-col items-center p-6 space-y-4 overflow-y-auto  scrollbar-custom rounded-xl bg-white">
+                      {selectedJob && (
+                        <>
+                          <div className="flex justify-between  items-start"><br />
+                            <div className="flex gap-4  ">
+                              <div>
+                                <p className="text-gray-600 font-semibold text-xl">{selectedJob.companyName}</p>
+                                <h2 className="text-xl 2xl:text-2xl font-semibold text-[#2C6472]">{selectedJob.jobTitle}</h2>
+                                <p className="text-sm text-gray-500">{selectedJob.location}</p>
                               </div>
                             </div>
-                          );
-                        })}
-                      </div>
+                            <div className="flex  flex-col justify-start -mt-6 items-center"><br />
+                              <div className="relative w-16 h-16">
+                                <svg
+                                  viewBox="0 0 100 100"
+                                  className="absolute top-0 left-0 w-full h-full"
+                                >
+                                  {/* Background circle */}
+                                  <circle
+                                    cx="50"
+                                    cy="50"
+                                    r="45"
+                                    stroke="#E5E7EB"  // Light Gray Background
+                                    strokeWidth="7"
+                                    fill="none"
+                                  />
+                                  {/* Foreground circle (Progress) */}
+                                  <circle
+                                    cx="50"
+                                    cy="50"
+                                    r="45"
+                                    stroke="#2C6472"  // Your nice teal color
+                                    strokeWidth="7"
+                                    fill="none"
+                                    strokeDasharray="282"  // Circumference of the circle (2πr)
+                                    strokeDashoffset={282 - (282 * selectedJob.matchValue) / 100}
+                                    strokeLinecap="round"
+                                    transform="rotate(-90 50 50)"  // Rotate to start from top
+                                  />
+                                </svg>
 
-                      <div className="flex w-full gap-5 mt-4">
-                        {["cv", "cl"].map((type) => {
-                          const isGenerated =
-                            type === "cv"
-                              ? selectedJob?.cvGenerated
-                              : selectedJob?.coverLetterGenerated;
+                                {/* Center text */}
+                                <div className="absolute inset-0 flex items-center text-[13px] justify-center font-semibold text-gray-800">
+                                  {selectedJob.matchValue}%
+                                </div>
+                              </div>
 
-                          const label = isGenerated ? `${type.toUpperCase()} Generated` : type.toUpperCase();
-
-                          return (
-                            <button
-                              key={type}
-                              onClick={() => handleGenerateClick(type)}
-                              className={`px-7 py-2 text-sm font-medium rounded-3xl transition-transform duration-200 ease-linear w-[240px] h-[47px] flex items-center justify-center ${isGenerated
-                                ? "bg-[#2C6472]/50 text-white border  "
-                                : "bg-[#2C6472] text-white border border-[#2C6472] hover:bg-white hover:text-[#2C6472] hover:scale-105"
-                                }`}
-                            >
-                              {label}
-                            </button>
-                          );
-                        })}
-                      </div>
-
-                      <br />
-
-                      <div className="flex w-[100%] mx-auto items-center  gap-5  ">
-
-                        <button
-                          className="flex gap-2 mx-auto justify-center  items-center font-semibold text-[#2C6472] rounded-3xl text-sm bg-[#F4F4F4F4] underline border w-full h-[47px] hover:border-[#2C6472] px-4  transition  hover:bg-white hover:text-[#2C6472] hover:scale-105"
-                          onClick={() => handleGetJobURL(selectedJob.id)}
-                        >
-                          {t("trackers.goToJobLink")}
-                          <img src={link_icon} alt="" />
-                        </button>
-
-                        <LanguageSelectModel
-                          isOpen={showLangModal}
-                          onClose={() => setShowLangModal(false)}
-                          onSelect={handleLanguageSelect}
-                        />
-
-                      </div>
-
-                      <br />
+                              <span className="text-sm w-[100px]  text-black mt-3 "> Profile Match</span>
+                            </div><br />
+                          </div><br />
 
 
-                      <div className="">
-                        <div>
-                          <h4 className="text-lg font-semibold text-gray-800">{t("trackers.about")}</h4><br />
-                          <p className="text-sm text-justify text-gray-700">{selectedJob.description}</p>
-                        </div><br />
+                          <div className="flex flex-col  gap-2 mt-2  pr-2">
+                            {selectedJob?.skillData?.slice(0, 2).map((item, index) => {
+                              const skills = Array.isArray(item.value) ? item.value : [];
+                              const isExpanded = expandedSections[item.label];
+                              const displaySkills = isExpanded ? skills : skills.slice(0, 2);
 
-                        <div>
-                          <h4 className="text-lg font-semibold text-gray-800">{t("trackers.description")}</h4><br />
-                          <p className="text-sm text-gray-700">{selectedJob.Description}</p>
-                        </div>
+                              return (
+                                <div
+                                  key={index}
+                                  className="grid grid-cols-[120px_1fr] mb-3 gap-2 text-sm"
+                                >
+                                  <span className="font-semibold text-black">{item.label}</span>
 
-                        <div><br />
-                          <div className="flex flex-col gap-2 mt-2">
-                            {selectedJob?.skillData && (
-                              <div className="space-y-6">
-                                {/* Loop through skillData */}
-                                {selectedJob.skillData.map((item, index) => (
-                                  <div key={index}>
-                                    <h4 className="text-lg font-semibold text-gray-800">{item.label}</h4>
-                                    <div className="flex flex-col gap-2 mt-2">
-                                      {/* Check if it's an array (for skills) or just a string (for salary) */}
-                                      {Array.isArray(item.value) ? (
-                                        <ul className="list-disc pl-5">
-                                          {item.value.map((val, i) => (
-                                            <li key={i} className="text-gray-700">{val}</li>
-                                          ))}
-                                        </ul>
-                                      ) : (
-                                        <p className="text-gray-700">{item.value}</p>
-                                      )}
-                                    </div>
+                                  <div className="text-gray-500 w-full  leading-snug break-words">
+                                    <span>
+                                      {displaySkills.join(", ")}
+                                    </span>
+
+                                    {skills.length > 2 && (
+                                      <button
+                                        onClick={() => toggleExpand(item.label)}
+                                        className="ml-2 text-[#2C6472] underline font-medium text-xs hover:text-teal-800"
+                                      >
+                                        {isExpanded ? "Less..." : "More..."}
+                                      </button>
+                                    )}
                                   </div>
-                                ))}
-                              </div>
-                            )}
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          <div className="flex justify-center items-center w-full gap-5 mt-4">
+                            {["cv", "cl"].map((type) => {
+                              const isGenerated =
+                                type === "cv"
+                                  ? selectedJob?.cvGenerated
+                                  : selectedJob?.coverLetterGenerated;
+
+                              const label = isGenerated ? `${type.toUpperCase()} Generated` : type.toUpperCase();
+
+                              return (
+                                <button
+                                  key={type}
+                                  onClick={() => handleGenerateClick(type)}
+                                  className={`px-7 py-2 text-sm font-medium rounded-3xl transition-transform duration-200 ease-linear w-[240px] h-[47px] flex items-center justify-center ${isGenerated
+                                    ? "bg-[#2C6472]/50 text-white border  "
+                                    : "bg-[#2C6472] text-white border border-[#2C6472] hover:bg-white hover:text-[#2C6472] hover:scale-105"
+                                    }`}
+                                >
+                                  {label}
+                                </button>
+                              );
+                            })}
+                          </div>
+
+                          <br />
+
+                          <div className="flex w-[100%] mx-auto items-center  gap-5  ">
+
+                            <button
+                              className="flex gap-2 mx-auto justify-center  items-center font-semibold text-[#2C6472] rounded-3xl text-sm bg-[#F4F4F4F4] underline border w-full h-[47px] hover:border-[#2C6472] px-4  transition  hover:bg-white hover:text-[#2C6472] hover:scale-105"
+                              onClick={() => handleGetJobURL(selectedJob.id)}
+                            >
+                              {t("trackers.goToJobLink")}
+                              <img src={link_icon} alt="" />
+                            </button>
+
+                            <LanguageSelectModel
+                              isOpen={showLangModal}
+                              onClose={() => setShowLangModal(false)}
+                              onSelect={handleLanguageSelect}
+                            />
 
                           </div>
-                        </div><br />
 
-                      </div>
-                    </>
-                  )}
-                </div>)}
+                          <br />
 
+
+                          <div className="">
+                            <div>
+                              <h4 className="text-lg font-semibold text-gray-800">{t("trackers.about")}</h4><br />
+                              <p className="text-sm text-justify text-gray-700">{selectedJob.description}</p>
+                            </div><br />
+
+                            <div>
+                              <h4 className="text-lg font-semibold text-gray-800">{t("trackers.description")}</h4><br />
+                              <p className="text-sm text-gray-700">{selectedJob.Description}</p>
+                            </div>
+
+                            <div><br />
+                              <div className="flex flex-col gap-2 mt-2">
+                                {selectedJob?.skillData && (
+                                  <div className="space-y-6">
+                                    {/* Loop through skillData */}
+                                    {selectedJob.skillData.map((item, index) => (
+                                      <div key={index}>
+                                        <h4 className="text-lg font-semibold text-gray-800">{item.label}</h4>
+                                        <div className="flex flex-col gap-2 mt-2">
+                                          {/* Check if it's an array (for skills) or just a string (for salary) */}
+                                          {Array.isArray(item.value) ? (
+                                            <ul className="list-disc pl-5">
+                                              {item.value.map((val, i) => (
+                                                <li key={i} className="text-gray-700">{val}</li>
+                                              ))}
+                                            </ul>
+                                          ) : (
+                                            <p className="text-gray-700">{item.value}</p>
+                                          )}
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+
+                              </div>
+                            </div><br />
+
+                          </div>
+                        </>
+                      )}
+                    </div>)}
+
+                </div>
+              </div>
             </div>
           </div>
 
