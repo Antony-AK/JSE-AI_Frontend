@@ -128,6 +128,37 @@
     "jobProfile": "Jobprofil",
     "upgrade": "Upgrade"
   },
+  "dashboards": {
+    "totalApplied": "Gesamt Bewerbungen",
+    "weeklyApplied": "Wöchentliche Bewerbungen",
+    "recommendedJobs": "Empfohlene Jobs",
+    "package": "Paket",
+    "profileComplete": "Profil abgeschlossen",
+    "jobSearchTitles": "Job-Such-Titel:",
+    "toDoList": "To-Do-Liste:",
+    "newJobs": "Neue Jobs",
+    "viewAll": "Alle anzeigen",
+    "noNewJobs": "Keine neuen Jobs passend zu Ihrem Profil gefunden.",
+    "profileMatch": "Profil Übereinstimmung",
+    "announcements": "Ankündigungen"
+  },
+  "announcements": {
+    "title": "Ankündigungen",
+    "announcement1": {
+      "date": "27. Juli 2025",
+      "line1": "- Wir freuen uns, Ihnen mitteilen zu können, dass",
+      "highlight1": "JSE AI",
+      "line2": "jetzt",
+      "highlight2": "zu 95 % optimiert",
+      "line3": " für maximale Leistung ist. Seiten laden nun nahezu sofort, wodurch Wartezeiten nahezu eliminiert werden. Diese Verbesserungen sorgen für ein nahtloses und ultraschnelles Erlebnis, damit Sie sich mehr auf Ihre Ziele und weniger auf das Laden konzentrieren können."
+    },
+    "announcement2": {
+      "date": "17. Juli 2025",
+      "line1": "- Die neue Version von",
+      "highlight1": "JSE AI",
+      "line2": "bringt große Verbesserungen auf der gesamten Plattform. Mit fortschrittlicher KI-Abstimmung, optimierter Leistung und einer überarbeiteten Benutzeroberfläche ist die App jetzt intelligenter und schneller als je zuvor. Diese Upgrades sollen Ihre Jobsuche reibungsloser und effektiver machen."
+    }
+  },
   "personalInfo": {
     "stepIndicator": "SCHRITT 1 VON 8",
     "title": "Beginnen wir mit Ihren persönlichen Informationen.",
@@ -685,343 +716,5 @@
     "jobs": {
     "saveJob": "Job speichern",
     "clearFilter": "Filter löschen"
-  },
-    "signup": {
-    "title": "Erstelle dein Konto",
-    "email": "E-Mail-Adresse",
-    "phone": "Telefonnummer",
-    "password": "Passwort erstellen",
-    "confirm_password": "Passwort bestätigen",
-    "signup": "Registrieren",
-    "login": "Anmelden",
-    "already_have_account": "Hast du bereits ein Konto?",
-    "note_label": "Hinweis:",
-    "note_message": "Wir verwenden deine Daten nur, um dein Job-Sucherlebnis zu verbessern.",
-    "errors": {
-      "password_hint": "Das Passwort muss mindestens 8 Zeichen lang sein, eine Zahl und ein Sonderzeichen enthalten.",
-      "password_mismatch": "Die Passwörter stimmen nicht überein.",
-      "accept_terms": "Du musst die Allgemeinen Geschäftsbedingungen akzeptieren, um fortzufahren.",
-      "invalid_password": "Bitte gib ein gültiges Passwort ein.",
-      "signup_failed": "Registrierung fehlgeschlagen. Bitte versuche es erneut."
-    },
-    "right_panel": {
-      "welcome": "Willkommen bei",
-      "subtitle_line1": "Entsperre deine nächste Gelegenheit",
-      "subtitle_line2": "Dein Traumjob ist nur einen Klick entfernt"
-    },
-    "verification": {
-      "title": "Überprüfe deine E-Mail 📬",
-      "message": "Wir haben dir einen Bestätigungslink gesendet. Bitte verifiziere dich, bevor du dich einloggst!"
-    }
-  },
-  "login": {
-    "title": "Jetzt einloggen",
-    "email": "E-Mail",
-    "password": "Passwort",
-    "forgot_password": "Passwort vergessen?",
-    "login": "Anmelden",
-    "no_account": "Noch kein Konto?",
-    "signup": "Registrieren",
-    "right_panel": {
-      "welcome": "Willkommen zurück!",
-      "subtitle_line1": "Entsperre deine nächste Gelegenheit",
-      "subtitle_line2": "Dein Traumjob ist nur einen Klick entfernt"
-    },
-    "errors": {
-      "invalid_credentials": "Ungültige E-Mail oder Passwort.",
-      "network_error": "Netzwerkfehler: Bitte versuche es erneut.",
-      "login_failed": "Anmeldung fehlgeschlagen. Bitte versuche es erneut."
-    }
-  },
-  "dataOnboarding": {
-    "sidebar": {
-      "title": "Nur wenige Schritte bis zu deinem Traumjob",
-      "subtitle": "Beginne mit dem Aufbau deines Profils und entdecke neue Karrieremöglichkeiten."
-    },
-    "main": {
-      "title": "Erstelle dein Jobprofil in nur wenigen Schritten.",
-      "subtitle": "Wähle die Option, die am besten zu dir passt."
-    },
-    "options": {
-      "createProfile": "Profil von Grund auf erstellen",
-      "uploadResume": "Lebenslauf hochladen",
-      "importLinkedin": "Von LinkedIn importieren"
-    }
-  },
-  "resume": {
-    "sidebar": {
-      "title": "Nur wenige Schritte bis zu deinem Traumjob",
-      "subtitle": "Beginne mit dem Aufbau deines Profils und entdecke neue Karrierechancen."
-    },
-    "main": {
-      "uploadTitle": "Lade deinen Lebenslauf hoch",
-      "uploadText": "Klicke zum Hochladen oder ziehe die Datei hierher",
-      "fileInfo": "PDF, TXT – Maximale Dateigröße 4 MB",
-      "extracting": "Daten werden extrahiert, bitte warten...",
-      "cancel": "Abbrechen",
-      "allow": "Erlauben"
-    },
-    "errors": {
-      "unsupported_file": "Nicht unterstützter Dateityp. Bitte lade eine PDF- oder TXT-Datei hoch.",
-      "file_too_large": "Datei zu groß. Die maximal zulässige Größe beträgt 4 MB.",
-      "no_file": "Bitte lade eine gültige Lebenslaufdatei hoch.",
-      "not_logged_in": "Du bist nicht eingeloggt. Bitte melde dich an.",
-      "no_data_extracted": "Lebenslauf hochgeladen, aber keine Daten extrahiert. Versuche eine andere Datei.",
-      "upload_failed": "Fehler beim Hochladen oder Extrahieren der Daten."
-    },
-    "success": {
-      "uploaded": "Lebenslauf erfolgreich hochgeladen und Daten extrahiert!"
-    }
-  },
-  "data_entry_sidebar": {
-    "personalInformation": "Persönliche Informationen",
-    "workExperience": "Berufserfahrung",
-    "education": "Ausbildung",
-    "projects": "Projekte",
-    "languages": "Sprachen",
-    "certificates": "Zertifikate / Auszeichnungen",
-    "designation": "Bezeichnung",
-    "skills": "Fähigkeiten"
-  },
-  "calendar": {
-    "placeholder": "Datum auswählen"
-  },
-  "forgetPassword": {
-    "welcomeBack": "Willkommen zurück!",
-    "tagline": "Entsperre deine nächste Chance\nDein Traumjob ist nur einen Klick entfernt",
-    "title": "Passwort vergessen",
-    "subtitle": "Wir senden einen Bestätigungscode an diese E‑Mail, wenn sie zu einem bestehenden JSE AI Konto gehört",
-    "emailPlaceholder": "Gib deine registrierte E-Mail ein",
-    "backButton": "Zurück",
-    "verifyButton": "Überprüfen",
-    "sending": "Senden..."
-  },
-  "navbar": {
-    "settings": "Einstellungen",
-    "logout": "Abmelden",
-    "logoutSuccess": "Erfolgreich abgemeldet",
-    "logoutMessage": "Danke für deinen Besuch – bis bald!"
-  },
-  "sidebar": {
-    "dashboard": "Übersicht",
-    "myJobs": "Meine Jobs",
-    "internal": "Intern",
-    "external": "Extern",
-    "applicationTracker": "Bewerbungstracker",
-    "savedJobs": "Gespeicherte Jobs",
-    "proficiencyTest": "Eignungstest",
-    "selfDevelopment": "Selbstentwicklung",
-    "personalTracker": "Persönlicher Tracker",
-    "jobProfile": "Jobprofil",
-    "upgrade": "Upgrade"
-  },
-  "personalInfo": {
-    "stepIndicator": "SCHRITT 1 VON 8",
-    "title": "Beginnen wir mit Ihren persönlichen Informationen.",
-    "firstName": "Vorname",
-    "lastName": "Nachname",
-    "email": "E-Mail-Adresse",
-    "phone": "Telefonnummer",
-    "linkedin": "LinkedIn-Profil",
-    "country": "Land",
-    "state": "Bundesland",
-    "city": "Stadt",
-    "noteLabel": "Bitte beachten:",
-    "note": " Name, E-Mail & Telefonnummer können nicht geändert werden.",
-    "saveNext": "Speichern & Weiter",
-    "saveSuccess": "Persönliche Informationen erfolgreich gespeichert!",
-    "aiWarning": "KI ist nicht perfekt. Stellen Sie sicher, dass Ihre Daten korrekt sind, bevor Sie speichern.",
-    "errors": {
-      "firstName": "Vorname ist erforderlich",
-      "lastName": "Nachname ist erforderlich",
-      "emailRequired": "E-Mail ist erforderlich",
-      "emailInvalid": "Ungültiges E-Mail-Format",
-      "phone": "Telefonnummer ist erforderlich",
-      "linkedin": "LinkedIn ist erforderlich"
-    },
-    "toast": {
-      "noUser": "Kein Benutzer gefunden. Bitte melden Sie sich erneut an.",
-      "submitFailed": "Senden fehlgeschlagen. Bitte versuchen Sie es erneut."
-    }
-  },
-  "workExperience": {
-    "stepIndicator": "SCHRITT 2 VON 8",
-    "title": "Heben Sie Ihre Berufserfahrung hervor.",
-    "role": "Rolle",
-    "company": "Unternehmen",
-    "location": "Standort",
-    "startDate": "Startdatum",
-    "endDate": "Enddatum",
-    "currentlyWorking": "Ich arbeite derzeit hier",
-    "currentlyWorkingPlaceholder": "Derzeit tätig",
-    "description": "Arbeitsbeschreibung",
-    "optional": "(Optional)",
-    "noteLabel": "Bitte beachten:",
-    "note": "Geben Sie Ihre Daten sorgfältig ein, Sie können sie später nur noch bearbeiten.",
-    "addAnother": "Weitere hinzufügen",
-    "saveNext": "Speichern & Weiter",
-    "footerWarning": "Je mehr Erfahrung Sie angeben, desto besser ist das Ergebnis der JSE-KI",
-    "errors": {
-      "role": "Rolle ist erforderlich",
-      "company": "Unternehmen ist erforderlich",
-      "location": "Standort ist erforderlich",
-      "startDate": "Startdatum ist erforderlich",
-      "endDateRequired": "Enddatum ist erforderlich.",
-      "endDateBeforeStart": "Enddatum darf nicht vor dem Startdatum liegen.",
-      "startDateInFuture": "Startdatum darf nicht in der Zukunft liegen."
-    },
-    "toast": {
-      "noUser": "Benutzer nicht gefunden. Bitte melden Sie sich an.",
-      "submitFailed": "Übermittlung fehlgeschlagen. Bitte versuchen Sie es erneut."
-    }
-  },
-  "education": {
-    "step": "SCHRITT 3 VON 8",
-    "title": "Fügen Sie Ihre akademische Laufbahn hinzu.",
-    "institution": "Schule, Universität oder Institution",
-    "city": "Stadt / Land",
-    "degree": "Abschluss, Qualifikation oder Hauptfach",
-    "field": "Studienfach",
-    "startDate": "Startdatum",
-    "endDate": "Enddatum",
-    "currentlyStudying": "Derzeit im Studium",
-    "description": "Zusätzliche Beschreibung",
-    "editLaterNote": "Geben Sie Ihre Daten sorgfältig ein, Sie können sie später nur bearbeiten.",
-    "footerNote": "KI ist nicht perfekt. Stellen Sie sicher, dass Ihre Daten vor dem Speichern korrekt sind.",
-    "currentlyStudyingPlaceholder": "Derzeit im Studium",
-    "errors": {
-      "institution": "Bildungseinrichtung ist erforderlich",
-      "city": "Stadt / Land ist erforderlich",
-      "degree": "Abschluss ist erforderlich",
-      "field_of_study": "Studienfach ist erforderlich",
-      "start_date_required": "Startdatum ist erforderlich",
-      "start_date_future": "Startdatum darf nicht in der Zukunft liegen",
-      "end_date_required": "Enddatum ist erforderlich",
-      "end_date_invalid": "Enddatum darf nicht vor dem Startdatum liegen"
-    },
-    "toast": {
-      "noUser": "Bitte melden Sie sich zuerst an.",
-      "submitFailed": "Etwas ist schiefgelaufen! Bitte versuchen Sie es erneut."
-    }
-  },
-  "projects": {
-    "step": "SCHRITT 4 VON 8",
-    "title": "Teilen Sie Ihre bisherigen Projekterfahrungen.",
-    "project_name": "Projektname",
-    "institution": "Universität / Firmenname",
-    "startDate": "Startdatum",
-    "endDate": "Enddatum",
-    "currentlyDoing": "Ich arbeite derzeit daran",
-    "description": "Projektbeschreibung",
-    "editLaterNote": "Geben Sie Ihre Daten sorgfältig ein, Sie können diese später nur noch bearbeiten.",
-    "footerNote": "Je mehr Projekte Sie angeben, desto besser werden die Ergebnisse der JSE KI.",
-    "currentlyDoingPlaceholder": "Derzeit in Arbeit",
-    "errors": {
-      "project_name": "Projektname ist erforderlich",
-      "start_date_required": "Startdatum ist erforderlich",
-      "start_date_future": "Startdatum darf nicht nach dem heutigen Datum liegen",
-      "end_date_required": "Enddatum ist erforderlich",
-      "end_date_invalid": "Enddatum darf nicht vor dem Startdatum liegen"
-    },
-    "toast": {
-      "noUser": "Benutzer nicht gefunden. Bitte melden Sie sich an.",
-      "submitFailed": "Übermittlung fehlgeschlagen. Bitte versuchen Sie es erneut."
-    }
-  },
-  "languages": {
-    "step": "SCHRITT 5 VON 8",
-    "title": "Fügen Sie die Sprachen hinzu, die Sie beherrschen.",
-    "language": "Sprache",
-    "language_placeholder": "Sprachname eingeben",
-    "proficiency": "Sprachkenntnisse",
-    "levels": {
-      "beginner": "Anfänger (A1, A2)",
-      "intermediate": "Mittelstufe (B1, B2)",
-      "fluent": "Fließend / Muttersprache (C1, C2)"
-    },
-    "editLaterNote": "Geben Sie Ihre Daten sorgfältig ein, Sie können sie später nur noch bearbeiten.",
-    "footerNote": "KI ist nicht perfekt. Stellen Sie sicher, dass Ihre Daten vor dem Speichern korrekt sind.",
-    "errors": {
-      "language_required": "Der Sprachname ist erforderlich",
-      "proficiency_required": "Das Sprachniveau ist erforderlich",
-      "proficiency_required_toast": "Bitte wählen Sie ein Sprachniveau aus",
-      "upload_failed": "Das Hochladen der Sprache ist fehlgeschlagen."
-    },
-    "toast": {
-      "noUser": "Benutzer nicht gefunden. Bitte melden Sie sich an.",
-      "uploadFailed": "Sprache konnte nicht hochgeladen werden."
-    }
-  },
-  "certificates": {
-    "step": "SCHRITT 6 VON 8",
-    "title": "Listen Sie Ihre Zertifikate / Auszeichnungen auf.",
-    "certificate_name": "Zertifikatsname",
-    "certificate_type": "Zertifikatstyp",
-    "provider": "Unternehmen",
-    "completion_date": "Abschlussdatum",
-    "types": {
-      "select": "Typ auswählen",
-      "certification": "Zertifizierung",
-      "participation": "Teilnahme",
-      "completion": "Abschluss"
-    },
-    "editLaterNote": "Geben Sie Ihre Daten sorgfältig ein, Sie können sie später nur noch bearbeiten.",
-    "footerNote": "KI ist nicht perfekt. Stellen Sie sicher, dass Ihre Daten vor dem Speichern korrekt sind.",
-    "errors": {
-      "certificate_name": "Zertifikatsname ist erforderlich",
-      "certificate_type": "Zertifikatstyp ist erforderlich",
-      "completion_date": "Abschlussdatum ist erforderlich",
-      "upload_failed": "Das Hochladen des Zertifikats ist fehlgeschlagen."
-    },
-    "toast": {
-      "noUser": "Benutzer nicht gefunden. Bitte melden Sie sich an.",
-      "uploadFailed": "Das Hochladen des Zertifikats ist fehlgeschlagen.",
-      "saved": "Zertifikat erfolgreich gespeichert!"
-    }
-  },
-  "jobtitles": {
-    "step": "SCHRITT 7 VON 8",
-    "title": "Ihre Bezeichnung definiert Ihre Position.",
-    "label": "Job-Suchpositionen",
-    "subtitle": "Jobtitel, an denen Sie interessiert sind. Wählen Sie bis zu 3 Titel aus.",
-    "checkbox": "Bitte geben Sie Ihren Jobtitel genau an. Dies kann nach dem Speichern nicht mehr geändert werden.",
-    "footerNote": "KI ist nicht perfekt. Stellen Sie sicher, dass Ihre Daten vor dem Speichern korrekt sind.",
-    "placeholder": "Suchen oder Jobtitel auswählen...",
-    "no_matching": "Keine passenden Titel",
-    "select_three": "Bitte wählen Sie 3 Jobtitel aus.",
-    "must_select_three": "Sie müssen mindestens 3 Berufsbezeichnungen auswählen.",
-    "errors": {
-      "invalid_jobtitle": "Bitte wählen Sie einen gültigen Jobtitel.",
-      "duplicate_jobtitle": "Dieser Jobtitel wurde bereits hinzugefügt!",
-      "max_titles": "Sie können nur bis zu 3 Jobtitel hinzufügen.",
-      "accept_condition": "Bitte akzeptieren Sie die Bedingung.",
-      "upload_failed": "Das Hochladen der Jobtitel ist fehlgeschlagen."
-    }
-  },
-  "skills": {
-    "step": "SCHRITT 8 VON 8",
-    "title": "Fügen Sie Ihre wichtigsten Fähigkeiten hinzu.",
-    "general_label": "Allgemeine Fähigkeiten",
-    "job_label": "Berufsspezifische Fähigkeiten",
-    "checkbox": "Bitte geben Sie nur relevante Fähigkeiten an. Das Hinzufügen irrelevanter Fähigkeiten kann die Qualität Ihres Profils beeinträchtigen.",
-    "editLaterNote": "Geben Sie Ihre Daten sorgfältig ein, Sie können sie später nur noch bearbeiten.",
-    "go_dashboard": "Zum Dashboard",
-    "footerNote": "KI ist nicht perfekt. Stellen Sie sicher, dass Ihre Daten vor dem Speichern korrekt sind.",
-    "errors": {
-      "general_required": "Bitte fügen Sie mindestens eine allgemeine Fähigkeit hinzu.",
-      "job_required": "Bitte fügen Sie mindestens eine berufsspezifische Fähigkeit hinzu.",
-      "skill_exists": "Diese Fähigkeit wurde bereits hinzugefügt.",
-      "accept_condition": "Bitte akzeptieren Sie die Bedingung."
-    }
-  },
-  "common": {
-    "skip": "Überspringen",
-    "addAnother": "Weitere hinzufügen",
-    "saveNext": "Speichern & Weiter",
-    "optional": "(Optional)",
-    "pleaseNote": "Bitte beachten:"
   }
-
-
-
 }
