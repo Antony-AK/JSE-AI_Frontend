@@ -417,7 +417,7 @@ const ApplicationCard = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2, ease: "easeInOut" }}
-              className="absolute top-6 right-0 bg-white border border-gray-200 rounded-md shadow-lg w-32 z-50"
+              className="absolute top-6 right-0 bg-white border border-gray-200 rounded-md shadow-lg w-32"
             >
               <button
                 className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-500 hover:text-white transition rounded-md"

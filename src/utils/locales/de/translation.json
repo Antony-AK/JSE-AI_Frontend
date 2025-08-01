@@ -151,6 +151,35 @@
       "comingSoon": "Demnächst verfügbar"
     }
   },
+  "packagePopup": {
+    "title": "Paket",
+    "plan": "Plan",
+    "internal": "Intern",
+    "external": "Extern",
+    "proficiencyTest": "Fähigkeitstest",
+    "remaining": "Verbleibend",
+    "upgrade": "Upgrade",
+    "unlockMessage": "Schalten Sie Premium-Vorteile frei — jetzt auf das Gold-Paket upgraden."
+  },
+  "limitReachedModal": {
+    "title": "Plan upgraden",
+    "message": "Sie haben Ihr Limit erreicht für",
+    "onCurrentPlan": "im aktuellen Plan.",
+    "types": {
+      "internal": "interne Bewerbungen",
+      "external": "externe Bewerbungen",
+      "proficiency": "Fähigkeitstests",
+      "default": "Nutzung"
+    },
+    "upgradeNow": "Jetzt upgraden"
+  },
+  "languageModal": {
+    "title": "Wählen Sie eine Sprache",
+    "description": "Die ausgewählte Sprache wird für die Erstellung Ihres Lebenslaufs und Anschreibens verwendet. Sie können nur einmal pro Dokument wählen, also stellen Sie sicher, dass Sie die Sprache auswählen, die am besten zu Ihrer Bewerbung passt.",
+    "english": "Englisch",
+    "german": "Deutsch",
+    "cancel": "Abbrechen"
+  },
   "announcements": {
     "title": "Ankündigungen",
     "announcement1": {

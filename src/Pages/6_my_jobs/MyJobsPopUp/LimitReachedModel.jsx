@@ -1,4 +1,5 @@
 import React from 'react';
+import { t } from '../../../utils/i18n';
 import { useNavigate } from 'react-router-dom';
 import { Dialog } from '@headlessui/react';
 import { X } from 'lucide-react';
@@ -17,7 +18,7 @@ const LimitReachedModal = ({ isOpen, onClose, type }) => {
     proficiency: "proficiency tests"
   };
 
-  const typeText = messageMap[type] || "usage";
+  const typeText = t(`limitReachedModal.types.${type}`) || t('limitReachedModal.types.default');
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
@@ -34,9 +35,9 @@ const LimitReachedModal = ({ isOpen, onClose, type }) => {
 
           {/* Title & Message */}
           <div className="text-center">
-            <h3 className="text-2xl font-bold text-[#24525f] mb-5">Upgrade Plan</h3>
+            <h3 className="text-2xl font-bold text-[#24525f] mb-5">{t('limitReachedModal.title')}</h3>
             <p className="mt-2 text-gray-700">
-              You’ve reached your limit for <strong>{typeText}</strong> on the current plan.
+              {t('limitReachedModal.message')} <strong>{typeText}</strong> {t('limitReachedModal.onCurrentPlan')}
             </p>
           </div>
 
@@ -49,7 +50,7 @@ const LimitReachedModal = ({ isOpen, onClose, type }) => {
               }}
               className="px-4 py-2 text-sm text-white bg-[#24525f] rounded hover:bg-[#1d424c] transition w-40"
             >
-              Upgrade Now
+              {t('limitReachedModal.upgradeNow')}
             </button>
           </div>
         </Dialog.Panel>
