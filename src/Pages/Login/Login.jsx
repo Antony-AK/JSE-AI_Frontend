@@ -54,18 +54,15 @@ const Login = () => {
         key_skills: '/user/onboarding/skills',
       };
 
-      const isFirstLogin = localStorage.getItem('firstLogin') === 'true';
-
-      if (progress_completed) {
-        navigate('/user/dashboard');
-      } else if (isFirstLogin) {
-        localStorage.removeItem('firstLogin');
-        navigate('/user/dataonboarding');
-      } else if (next_step && stepToPath[next_step]) {
-        navigate(stepToPath[next_step]);
-      } else {
-        navigate('/user/dataonboarding'); // Fallback
-      }
+    if (progress_completed) {
+    navigate('/user/dashboard');
+  } else if (next_step === "personal_info") {
+    navigate('/user/dataonboarding');
+  } else if (next_step && stepToPath[next_step]) {
+    navigate(stepToPath[next_step]);
+  } else {
+    navigate('/user/dataonboarding'); // fallback
+  }
 
       } else {
         toast.error(data.issue || t("login.errors.login_failed"));
