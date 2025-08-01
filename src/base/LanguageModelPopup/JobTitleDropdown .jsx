@@ -4,6 +4,7 @@ import { FaChevronDown } from "react-icons/fa";
 import axios from "axios";
 import arrow_down from '../../assets/arrow-down-drop.png'
 import { BASE_URL } from "../../utils/api";
+import { t } from "../../utils/i18n";
 
 const JobSearchTitleDropdown = ({ onJobsFetched, setIsFetching }) => {
 
@@ -11,7 +12,7 @@ const JobSearchTitleDropdown = ({ onJobsFetched, setIsFetching }) => {
 
     const [titles, setTitles] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
-    const [selectedTitle, setSelectedTitle] = useState("Job Search Titles");
+    const [selectedTitle, setSelectedTitle] = useState(t("jobsearch.dropdownLabel"));
 
     const toggleDropdown = () => setShowDropdown((prev) => !prev);
 
@@ -127,7 +128,7 @@ const JobSearchTitleDropdown = ({ onJobsFetched, setIsFetching }) => {
                 onClick={toggleDropdown}
                 className="px-6 py-1.5 font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black flex items-center gap-2"
             >
-                {selectedTitle}
+                {selectedTitle === "Job Search Titles" ? t("jobsearch.dropdownLabel") : selectedTitle}
                 <motion.img
                     src={arrow_down}
                     alt=""

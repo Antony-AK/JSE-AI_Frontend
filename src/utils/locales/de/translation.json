@@ -720,10 +720,23 @@
     "languageLabel": "Sprachen",
     "languageEnglish": "Englisch",
     "languageGerman": "Deutsch",
-    "recommendedJobs": "Empfohlene Jobs"
+    "recommendedJobs": "Empfohlene Jobs",
+      "placeholder": "Jobs, Unternehmen suchen"
+
   },
     "jobs": {
     "saveJob": "Job speichern",
     "clearFilter": "Filter löschen"
-  }
+  },
+  "jobsearch": {
+  "dropdownLabel": "Jobtitel durchsuchen"
+},
+"jobdetails": {
+  "requiredSkills": "Erforderliche Fähigkeiten",
+  "yourSkills": "Deine Fähigkeiten",
+  "jobType": "Art der Stelle",
+  "notSpecified": "Nicht angegeben"
+}
+
+
 }

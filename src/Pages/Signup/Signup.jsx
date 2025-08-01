@@ -65,13 +65,13 @@ const Signup = () => {
     }
   };
 
-const togglePasswordVisibility = (field) => {
-  setShowPassword((prev) => ({
-    ...prev,
-    [field]: !prev[field],
-  }));
-  
-};
+  const togglePasswordVisibility = (field) => {
+    setShowPassword((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+
+  };
 
 
 
@@ -119,8 +119,13 @@ const togglePasswordVisibility = (field) => {
       if (response.status >= 200 && response.status < 300) {
         console.log("Signup successful:", response.data);
 
+
         // 👉 Set first login flag so we know it was a new signup
         localStorage.setItem("firstLogin", "true");
+
+        if (window.fbq) {
+          window.fbq('track', 'CompleteRegistration');
+        }
 
         setShowVerificationPopup(true); // Show popup first!
 
@@ -302,7 +307,7 @@ const togglePasswordVisibility = (field) => {
                   <div className="absolute inset-y-0 right-3 flex items-center">
                     <button
                       type="button"
-                    onClick={() => togglePasswordVisibility("password")}
+                      onClick={() => togglePasswordVisibility("password")}
                       className="bg-transparent p-1"
                     >
                       {showPassword.password ? (
@@ -337,7 +342,7 @@ const togglePasswordVisibility = (field) => {
                   <div className="absolute inset-y-0 right-3 flex items-center z-10">
                     <button
                       type="button"
-                    onClick={() => togglePasswordVisibility("confirmPassword")}
+                      onClick={() => togglePasswordVisibility("confirmPassword")}
                       className="bg-transparent p-1"
                     >
                       {showPassword.confirmPassword ? (

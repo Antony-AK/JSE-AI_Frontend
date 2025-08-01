@@ -479,15 +479,6 @@ const MyApplication = () => {
       return;
     }
 
-    if (type === "cv" || type === "cl") {
-      setSelectedJob((prev) => ({
-        ...prev,
-        ...(type === "cv"
-          ? { cvGenerated: true }
-          : { coverLetterGenerated: true }),
-      }));
-    }
-
 
     if (savedLang) {
       handleLanguageSelect(savedLang, type);
@@ -595,6 +586,13 @@ const MyApplication = () => {
         },
       });
 
+      setSelectedJob((prev) => ({
+        ...prev,
+        ...(type === "cv"
+          ? { cvGenerated: true }
+          : { coverLetterGenerated: true }),
+      }));
+
       console.log("✅ Generated", response.data);
 
       sessionStorage.setItem(sessionKey, JSON.stringify({ job_id: jobId }));
@@ -631,8 +629,8 @@ const MyApplication = () => {
 
 
   return (
-    <div className="flex items-center flex-col bg-gray-50 w-[calc(99vw-264px)] px-6  ">
-      <div className="flex items-center w-[100%] ms-10 h-20 gap-5 z-0 bg-gray-50 py-4 relative">
+    <div className="flex items-center flex-col h-[90vh] bg-gray-50 w-[calc(99vw-264px)] px-6  ">
+      <div className="flex items-center w-[100%] ms-10 h-20 gap-5 z-auto bg-gray-50 py-4 ">
         <div className="w-[40%] relative">
           <input
             type="text"
@@ -644,7 +642,7 @@ const MyApplication = () => {
               }
             }}
             className="px-4 py-2 w-full border border-gray-300 rounded-md outline-none pr-10"
-            placeholder="Search jobs, company"
+            placeholder={t("internal.placeholder")}
           />
           <FiSearch
             onClick={() => handleSearchJobs(searchQuery)}
@@ -672,7 +670,7 @@ const MyApplication = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.3 }}
-          className="px-6 py-1.5 flex flex-col items-start font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black relative"
+          className="px-6 py-1.5  flex flex-col items-start font-medium text-[13px] rounded bg-white shadow-sm border border-gray-300 text-black relative"
         >
           {/* Dropdown Trigger */}
           <button
@@ -785,7 +783,7 @@ const MyApplication = () => {
               }}
               className="text-sm text-red-600 underline mt-6 hover:text-blue-800 transition"
             >
-             {t("jobs.clearFilter")}
+              {t("jobs.clearFilter")}
             </button>
           </div>
         ) : (
@@ -1193,12 +1191,6 @@ const MyApplication = () => {
                               <img src={link_icon} alt="" />
                             </button>
 
-                            <LanguageSelectModel
-                              isOpen={showLangModal}
-                              onClose={() => setShowLangModal(false)}
-                              onSelect={handleLanguageSelect}
-                            />
-
                           </div>
 
                           <br />
@@ -1268,6 +1260,12 @@ const MyApplication = () => {
           </div>
         </div>
       )}
+
+      <LanguageSelectModel
+        isOpen={showLangModal}
+        onClose={() => setShowLangModal(false)}
+        onSelect={handleLanguageSelect}
+      />
 
 
       <LimitReachedModal

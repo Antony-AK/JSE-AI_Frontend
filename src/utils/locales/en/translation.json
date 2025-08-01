@@ -721,11 +721,23 @@
     "languageLabel": "Languages",
     "languageEnglish": "English",
     "languageGerman": "German",
-    "recommendedJobs": "Recommended Jobs"
+    "recommendedJobs": "Recommended Jobs",
+      "placeholder": "Search jobs, company"
+
   },
     "jobs": {
     "saveJob": "Save Job",
     "clearFilter": "Clear Filter"
-  }
+  },
+  "jobsearch": {
+  "dropdownLabel": "Job Search Titles"
+},
+"jobdetails": {
+  "requiredSkills": "Required Skills",
+  "yourSkills": "Your Skills",
+  "jobType": "Job Type",
+  "notSpecified": "Not specified"
+}
+
   
 }

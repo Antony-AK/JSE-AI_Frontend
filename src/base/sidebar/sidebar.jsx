@@ -110,7 +110,7 @@ const [openJobs, setOpenJobs] = useState(pathname.startsWith("/user/my-jobs"));
 
     <aside
       className={`
-        fixed top-16 w-[264px] h-[calc(100vh-64px)] pt-8 bg-white border-r flex-col overflow-y-auto hide-scrollbar z-50
+        fixed top-16 w-[264px] h-[calc(100vh-64px)] pt-8 bg-white border-r flex-col overflow-y-auto hide-scrollbar z-50 md:z-0
         transform transition-transform duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
         md:translate-x-0 md:flex

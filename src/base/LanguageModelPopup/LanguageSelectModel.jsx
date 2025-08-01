@@ -2,7 +2,7 @@ const LanguageSelectModal = ({ isOpen, onClose, onSelect }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
+    <div className="fixed inset-0 z-[1000] bg-black bg-opacity-40 flex items-center justify-center">
       <div className="bg-white rounded-md shadow-lg flex flex-col gap-2 p-6 w-[570px] border-b-8 border-[#2c6472] h-[320px] text-center">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Select a language</h2>
         <p className="text-sm text-gray-600 mb-6 border p-4 border-emerald-900">

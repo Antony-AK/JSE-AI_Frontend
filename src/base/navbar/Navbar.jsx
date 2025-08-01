@@ -109,7 +109,7 @@ const Navbar = ({ onMenuToggle }) => {
 
   return (
     <>
-      <header className="fixed top-0 w-full z-10 flex justify-between items-center bg-white h-16 border-t border-b px-6 border-gray-200">
+      <header className="fixed top-0 w-full z-20 flex justify-between items-center bg-white h-16 border-t border-b px-6 border-gray-200">
         <div className="flex justify-center items-center">
 
           {isDashboard && (
