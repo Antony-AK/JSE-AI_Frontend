@@ -140,7 +140,16 @@
     "viewAll": "Alle anzeigen",
     "noNewJobs": "Keine neuen Jobs passend zu Ihrem Profil gefunden.",
     "profileMatch": "Profil Übereinstimmung",
-    "announcements": "Ankündigungen"
+    "announcements": "Ankündigungen",
+    "proficiencyTest": {
+      "title": "Sprachtestdetails",
+      "remainingAttempts": "Verbleibende Versuche:",
+      "language": "Sprache:",
+      "grade": "Note:",
+      "proficiencyLevel": "Kompetenzstufe:",
+      "attemptsLeft": "Versuche übrig:",
+      "comingSoon": "Demnächst verfügbar"
+    }
   },
   "announcements": {
     "title": "Ankündigungen",

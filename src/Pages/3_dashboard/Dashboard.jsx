@@ -578,17 +578,17 @@ const Dashboard = () => {
           ) : (
             <div className="relative">
               {/* Coming Soon Overlay */}
-              <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-fit font-semibold text-center text-[#2c6472] flex items-center z-[2] bg-gray-300/90 px-6 py-3 rounded-lg overflow-hidden shadow-md shine-effect hover:scale-105 transition-all duration-200">
-                Coming Soon
+              <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap w-fit font-semibold text-center text-[#2c6472] flex items-center z-[2] bg-gray-300/90 px-6 py-3 rounded-lg overflow-hidden shadow-md shine-effect hover:scale-105 transition-all duration-200">
+                {t("dashboards.proficiencyTest.comingSoon")}
               </p>
 
               {/* Box - 2 */}
               <div className="border relative rounded-xl p-5 bg-white opacity-40 pointer-events-none space-y-3">
                 <h2 className="font-bold text-[15px]">
-                  Proficiency Test Details
+                  {t("dashboards.proficiencyTest.title")}
                 </h2>
                 <div className="flex items-center gap-4">
-                  <p className="text-sm">Remaining Attempts:</p>
+                  <p className="text-sm">{t("dashboards.proficiencyTest.remainingAttempts")}</p>
                   <span className="font-bold">2 / 5</span>
                   <div className="flex gap-2">
                     <div className="w-4 h-4 rounded-full bg-[#2c6472]"></div>
@@ -601,7 +601,7 @@ const Dashboard = () => {
 
                 <div className="flex flex-col gap-2">
                   <div className="flex text-sm items-center">
-                    <p className="font-semibold w-40">Language:</p>
+                    <p className="font-semibold w-40">{t("dashboards.proficiencyTest.language")}</p>
                     <select
                       className="px-2 py-1 bg-[#0000000F] rounded-md text-sm font-semibold outline-none"
                       value={selectedLanguageIndex}
@@ -619,21 +619,21 @@ const Dashboard = () => {
                   </div>
 
                   <div className="flex text-sm">
-                    <p className="font-semibold w-40">Grade:</p>
+                    <p className="font-semibold w-40">{t("dashboards.proficiencyTest.grade")}</p>
                     <p className="font-semibold">
                       {languages[selectedLanguageIndex]?.grade}
                     </p>
                   </div>
 
                   <div className="flex text-sm">
-                    <p className="font-semibold w-40">Proficiency Level:</p>
+                    <p className="font-semibold w-40">{t("dashboards.proficiencyTest.proficiencyLevel")}</p>
                     <p className="font-semibold">
                       {languages[selectedLanguageIndex]?.proficiency}
                     </p>
                   </div>
 
                   <div className="flex text-sm">
-                    <p className="font-semibold w-40">Attempts Left:</p>
+                    <p className="font-semibold w-40">{t("dashboards.proficiencyTest.attemptsLeft")}</p>
                     <p className="font-semibold">
                       {languages[selectedLanguageIndex]?.attemptsLeft}
                     </p>
