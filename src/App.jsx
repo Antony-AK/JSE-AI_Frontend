@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { ToastContainer, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -46,9 +46,17 @@ import Landing from './Landing/Main/Landing.jsx';
 import ScreenSizeBlocker from './base/ScreenBlocker/ScreenSizeBlocker.jsx';
 import ProtectedRoute from './routes/ProtectedRoute.jsx';
 import ExplorePlans from './Pages/Settings/ExplorePlans.jsx';
+import { setLanguage } from "./utils/i18n";
+
 
 const AppRoutesContent = () => {
     const location = useLocation();
+
+    useEffect(() => {
+        const lang = sessionStorage.getItem("lang") || "en";
+        setLanguage(lang);  // ← now works perfectly
+        console.log("✅ App mounted. Language set to:", lang);
+    }, []);
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -83,7 +91,7 @@ const AppRoutesContent = () => {
                     <div className='flex flex-row h-full'>
                         {!hideLayout && <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />}
                         <div
-                        className={`h-full bg-[#f5f5f5] mt-16 
+                            className={`h-full bg-[#f5f5f5] mt-16 
                             ${!hideLayout ? 'md:ms-64' : ''} 
                             w-full`}  // Always 100% width; margin only applied on md+   
                         >
@@ -135,26 +143,26 @@ const AppRoutesContent = () => {
 };
 
 const AppRoutes = () => {
-  const location = useLocation();
-  const path = location.pathname;
+    const location = useLocation();
+    const path = location.pathname;
 
-  const isUnblockedPage = [
-    '/', 
-    '/user/login', 
-    '/user/signup', 
-    '/user/forgot-password', 
-    '/user/dataonboarding', 
-    '/user/linkedin', 
-    '/user/resume',
-    '/payment/success',
-    '/payment/cancel',
-    '/landingpage',
-    '/user/dashboard'
-  ].includes(path) || path.startsWith('/user/onboarding');   
+    const isUnblockedPage = [
+        '/',
+        '/user/login',
+        '/user/signup',
+        '/user/forgot-password',
+        '/user/dataonboarding',
+        '/user/linkedin',
+        '/user/resume',
+        '/payment/success',
+        '/payment/cancel',
+        '/landingpage',
+        '/user/dashboard'
+    ].includes(path) || path.startsWith('/user/onboarding');
 
-  return isUnblockedPage
-    ? <AppRoutesContent />
-    : <ScreenSizeBlocker><AppRoutesContent /></ScreenSizeBlocker>;
+    return isUnblockedPage
+        ? <AppRoutesContent />
+        : <ScreenSizeBlocker><AppRoutesContent /></ScreenSizeBlocker>;
 };
 
 function App() {

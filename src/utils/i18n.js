@@ -14,12 +14,14 @@ const langMap = {
 let currentLang = sessionStorage.getItem("lang") || "en";
 
 export const setLanguage = (lang) => {
-  const mappedLang = langMap[lang] || "en";
+  // Accept both 'en' or 'english', safely
+  const mappedLang = langMap[lang?.toLowerCase()] || lang || "en";
   currentLang = mappedLang;
   sessionStorage.setItem("lang", mappedLang);
 };
 
-export const getLanguage = () => currentLang;
+
+export const getLanguage = () => sessionStorage.getItem("lang") || "en";
 
 export const t = (key, replacements = {}) => {
   const currentLang = getLanguage();

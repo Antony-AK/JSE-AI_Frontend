@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { t } from "../../utils/i18n";
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import { Player } from '@lottiefiles/react-lottie-player';
@@ -11,6 +10,8 @@ import frame from "./../../assets/Frame.png";
 import logo from "../../assets/jsenewlogo.png"
 import { BASE_URL } from '../../utils/api';
 import { useProfileImage } from '../../base/ProfileEditor/ProfileImageContext';
+import { t, setLanguage } from "../../utils/i18n";
+
 
 
 const Login = () => {
@@ -19,6 +20,11 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const { fetchProfileImage } = useProfileImage();
+
+  const langMap = {
+    english: "en",
+    german: "de",
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,28 +47,45 @@ const Login = () => {
         sessionStorage.setItem('authToken', data.token);
         fetchProfileImage(data.token); // ✅ Pass the token explicitly
 
-         const { next_step, progress_completed } = data.user;
+        const prefsResponse = await fetch(`${BASE_URL}/settings/getpreferences`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${data.token}`,
+          },
+        });
 
-      const stepToPath = {
-        personal_info: '/user/onboarding/personal-information',
-        work_experiences: '/user/onboarding/work-experience',
-        academics: '/user/onboarding/education',
-        projects: '/user/onboarding/projects',
-        languages: '/user/onboarding/languages',
-        certificates: '/user/onboarding/certificates',
-        preferred_job_titles: '/user/onboarding/jobtitles',
-        key_skills: '/user/onboarding/skills',
-      };
+        const prefsData = await prefsResponse.json(); // ✅ Add this line
 
-    if (progress_completed) {
-    navigate('/user/dashboard');
-  } else if (next_step === "personal_info") {
-    navigate('/user/dataonboarding');
-  } else if (next_step && stepToPath[next_step]) {
-    navigate(stepToPath[next_step]);
-  } else {
-    navigate('/user/dataonboarding'); // fallback
-  }
+
+        if (prefsData?.language) {
+          const langCode = langMap[prefsData.language] || "en";
+          console.log("Language set to:", langCode);
+          setLanguage(langCode);
+        }
+
+        const { next_step, progress_completed } = data.user;
+
+        const stepToPath = {
+          personal_info: '/user/onboarding/personal-information',
+          work_experiences: '/user/onboarding/work-experience',
+          academics: '/user/onboarding/education',
+          projects: '/user/onboarding/projects',
+          languages: '/user/onboarding/languages',
+          certificates: '/user/onboarding/certificates',
+          preferred_job_titles: '/user/onboarding/jobtitles',
+          key_skills: '/user/onboarding/skills',
+        };
+
+        if (progress_completed) {
+          navigate('/user/dashboard');
+        } else if (next_step === "personal_info") {
+          navigate('/user/dataonboarding');
+        } else if (next_step && stepToPath[next_step]) {
+          navigate(stepToPath[next_step]);
+        } else {
+          navigate('/user/dataonboarding'); // fallback
+        }
 
       } else {
         toast.error(data.issue || t("login.errors.login_failed"));
@@ -185,7 +208,7 @@ const Login = () => {
           <div> <p className="hidden md:block  text-center items-center text-sm  mt-4">
             {t("login.right_panel.subtitle_line1")}<br />
             {t("login.right_panel.subtitle_line2")}
-        </p>
+          </p>
           </div>
         </div>
 
