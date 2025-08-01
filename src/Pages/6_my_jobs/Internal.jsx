@@ -631,8 +631,8 @@ const MyApplication = () => {
 
 
   return (
-    <div className="flex items-center flex-col h-[90vh] bg-gray-50  overflow-y-auto hide-scrollbar w-[calc(99vw-264px)] px-6  ">
-      <div className="flex items-center w-[81%] ms-10 h-20 gap-5 z-50 bg-gray-50 py-4 fixed">
+    <div className="flex items-center flex-col h-[90vh] bg-gray-50   w-[calc(99vw-264px)] px-6  ">
+      <div className="flex items-center w-[82%] ms-10 h-20 gap-5 z-10 bg-gray-50 py-4 fixed">
         <div className="w-[40%] relative">
           <input
             type="text"
@@ -761,7 +761,7 @@ const MyApplication = () => {
       </div>
 
 
-      <div className="flex flex-col w-full relative mt-20  bg-gray-40">
+      <div className="flex flex-col w-full mt-20 bg-gray-40">
         <br />
         {jobLoading ? (
           <div className="flex justify-center items-center  w-full">
@@ -869,7 +869,7 @@ const MyApplication = () => {
 
               </div>
 
-              <div className="w-full mb-5 -space-y-6 rounded-xl bg-white border border-gray-400/20 "><br />
+              <div className="w-full mb-5  -space-y-6 rounded-xl bg-white border border-gray-400/20 "><br />
 
                 {isFetching ? (
                   <SkeletonJobApplicationTracker />

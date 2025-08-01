@@ -161,7 +161,7 @@ const Navbar = ({ onMenuToggle }) => {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -10 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
-                className="absolute top-12 -right-2 bg-white border flex flex-col items-center justify-center rounded shadow-md p-1 z-20"
+                className="absolute top-12 -right-2 bg-white border flex flex-col items-center justify-center rounded shadow-md p-1 z-50"
               >
                 <Link
                   to="/user/settings"
