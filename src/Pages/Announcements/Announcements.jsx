@@ -1,4 +1,5 @@
 import React from "react";
+import { t } from "../../utils/i18n";
 import announcements from "../../assets/announcements-icon.svg";
 
 const Announcements = () => {
@@ -7,7 +8,7 @@ const Announcements = () => {
       <div className="border rounded-xl p-5 bg-white space-y-3">
         <div className="flex justify-between">
           <div className="flex gap-4">
-            <h2 className="font-bold text-[15px] mb-3">Announcements</h2>
+            <h2 className="font-bold text-[15px] mb-3">{t("announcements.title")}</h2>
             <img src={announcements} alt="" />
           </div>
         </div>
@@ -16,25 +17,19 @@ const Announcements = () => {
 <div className="flex flex-col space-y-6">
         <p className="text-[#000000A1] font-medium text-sm ">
           <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
-            27 Jul 2025
+            {t("announcements.announcement1.date")}
           </span>
-          - We're excited to share that{" "}
-          <span className="text-[#2c6472] font-semibold">JSE AI</span>{" "}
-          is now <span className="font-semibold text-[#2c6472]">95% optimized</span> for peak performance. Pages now load almost instantly,
-          reducing waiting times to nearly zero. These enhancements ensure a seamless
-          and ultra-fast experience, helping you focus more on your goals and less on
-          the load.
+          {t("announcements.announcement1.line1")}{" "}
+          <span className="text-[#2c6472] font-semibold">{t("announcements.announcement1.highlight1")}</span>{" "}
+          {t("announcements.announcement1.line2")}{" "}<span className="font-semibold text-[#2c6472]">{t("announcements.announcement1.highlight2")}</span> {t("announcements.announcement1.line3")}
         </p>
         <p className="text-[#000000A1] font-medium text-sm">
           <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
-            17 Jul 2025
+            {t("announcements.announcement2.date")}
           </span>
-          - The new version of{" "}
-          <span className="text-[#2c6472] font-semibold">JSE AI</span>{" "}
-          brings major improvements across the platform. With advanced AI
-          matching, optimized performance, and a refreshed UI, the app is
-          now smarter and faster than ever before. These upgrades aim to
-          make your job search smoother and more effective.
+          {t("announcements.announcement2.line1")}{" "}
+          <span className="text-[#2c6472] font-semibold">{t("announcements.announcement2.highlight1")}</span>{" "}
+          {t("announcements.announcement2.line2")}
         </p>
         </div>
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { t } from "../../utils/i18n";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import profile1 from "../../assets/profile1.png";
@@ -279,7 +280,7 @@ const Dashboard = () => {
             {/* ✅ Total Applications */}
             <div className="relative flex bg-gradient-to-br from-[#FFC2B0] to-[#FF9AA2] h-[120px] w-full text-black p-4 rounded-xl">
               <div className="flex flex-col justify-start items-start gap-5">
-                <p className="text-sm md:text-base font-bold">Total Applied</p>
+                <p className="text-sm md:text-base font-bold">{t("dashboards.totalApplied")}</p>
                 <h3 className="font-bold text-lg">
                   {infoBlock.totalApplications ?? 0}
                 </h3>
@@ -298,7 +299,7 @@ const Dashboard = () => {
             {/* ✅ Weekly Applied */}
             <div className="relative flex bg-gradient-to-br from-[#FDA67B] to-[#FF9D6B] h-[120px] w-full text-black p-4 rounded-xl">
               <div className="flex flex-col justify-start items-start gap-5">
-                <p className="text-sm md:text-base font-bold">Weekly Applied</p>
+                <p className="text-sm md:text-base font-bold">{t("dashboards.weeklyApplied")}</p>
                 <h3 className="font-bold text-lg">
                   {infoBlock.weeklyApplications ?? 0}
                 </h3>
@@ -317,7 +318,7 @@ const Dashboard = () => {
             {/* ✅ Recommended Jobs */}
             <div className="relative flex bg-gradient-to-br from-[#BDE4FB] to-[#A3C7FD] h-[120px] w-full text-black p-4 rounded-xl">
               <div className="flex flex-col justify-start items-start gap-5">
-                <p className="text-sm md:text-base font-bold">Recommended Jobs</p>
+                <p className="text-sm md:text-base font-bold">{t("dashboards.recommendedJobs")}</p>
                 <h3 className="font-bold text-lg">{infoBlock.topJobs ?? 0}</h3>
               </div>
               <div className="absolute bottom-3 right-3 flex rounded-full p-1.5 bg-gray-200/30 backdrop-blur-sm">
@@ -337,7 +338,7 @@ const Dashboard = () => {
               className="relative flex bg-gradient-to-br from-[#6FE297] to-[#48D77A] h-[120px] w-full text-black p-4 rounded-xl cursor-pointer"
             >
               <div className="flex flex-col justify-start items-start gap-1">
-                <p className="text-sm md:text-base font-bold">Package</p>
+                <p className="text-sm md:text-base font-bold">{t("dashboards.package")}</p>
                 <div className="flex gap-1">
                   <p className="text-sm font-semibold">
                     {infoBlock.internalApps}
@@ -472,7 +473,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <span className="text-xs font-medium text-gray-600 whitespace-nowrap">
-                    Profile Complete
+                    {t("dashboards.profileComplete")}
                   </span>
                 </div>
               </div>
@@ -482,7 +483,7 @@ const Dashboard = () => {
 
               {/* Designation */}
               <div className="flex flex-col h-[100px] overflow-y-auto scrollbar-custom gap-2">
-                <h2 className="font-bold  text-[15px]">Job Search Titles:</h2>
+                <h2 className="font-bold  text-[15px]">{t("dashboards.jobSearchTitles")}</h2>
 
                 <div className="flex flex-wrap gap-2">
                   {jobTitles.map((title, index) => (
@@ -498,7 +499,7 @@ const Dashboard = () => {
 
               {/* Status */}
               <div className="flex flex-col gap-2">
-                <h2 className="font-bold text-[15px]">To do List:</h2>
+                <h2 className="font-bold text-[15px]">{t("dashboards.toDoList")}</h2>
 
                 <div className="flex flex-col gap-2 px-3 py-3 h-[98px] rounded-lg bg-[#F8F8F8] overflow-y-auto scrollbar-custom">
                   {statusList.map((item, index) => (
@@ -679,10 +680,10 @@ const Dashboard = () => {
           ) : (
             <div className="flex flex-col gap-2.5 border rounded-xl p-5 bg-white space-y-3">
               <div className="flex justify-between">
-                <h2 className="font-bold text-[15px]">New Jobs </h2>
+                <h2 className="font-bold text-[15px]">{t("dashboards.newJobs")}</h2>
                 <Link to="/user/my-jobs/internal">
                   {" "}
-                  <p className="text-[#2c6472] font-medium">View All</p>
+                  <p className="text-[#2c6472] font-medium">{t("dashboards.viewAll")}</p>
                 </Link>
               </div>
 
@@ -732,7 +733,7 @@ const Dashboard = () => {
                           </div>
                         </div>
                         <span className="text-xs md:text-xs font-medium text-gray-600 mt-1 whitespace-nowrap">
-                          Profile Match
+                          {t("dashboards.profileMatch")}
                         </span>
                       </div>
                     </div>
@@ -744,7 +745,7 @@ const Dashboard = () => {
                 ))
               ) : (
                 <div className="text-gray-500 text-sm text-center py-4">
-                  No new jobs found matching your profile.
+                  {t("dashboards.noNewJobs")}
                 </div>
               )}
             </div>
@@ -780,36 +781,30 @@ const Dashboard = () => {
             <div className="border md:h-[220px] overflow-y-auto hide-scrollbar  rounded-xl p-5 bg-white space-y-3">
               <div className="flex justify-between">
                 <div className="flex gap-4">
-                  <h2 className="font-bold text-[15px]">Announcements</h2>
+                  <h2 className="font-bold text-[15px]">{t("dashboards.announcements")}</h2>
                   <img src={announcements} alt="" />
                 </div>
                 <div className="">
                   <Link to="/user/announcements">
-                    <p className="text-[#2c6472] font-medium">View All</p>
+                    <p className="text-[#2c6472] font-medium">{t("dashboards.viewAll")}</p>
                   </Link>
                 </div>
               </div>
               <p className="text-[#000000A1] font-medium text-sm">
                 <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
-                  27 Jul 2025
+                  {t("announcements.announcement1.date")}
                 </span>
-                - We're excited to share that{" "}
-                <span className="text-[#2c6472] font-semibold">JSE AI</span>{" "}
-                is now <span className="font-semibold text-[#2c6472]">95% optimized</span> for peak performance. Pages now load almost instantly,
-                reducing waiting times to nearly zero. These enhancements ensure a seamless
-                and ultra-fast experience, helping you focus more on your goals and less on
-                the load.
+                {t("announcements.announcement1.line1")}{" "}
+                <span className="text-[#2c6472] font-semibold">{t("announcements.announcement1.highlight1")}</span>{" "}
+                {t("announcements.announcement1.line2")}{" "}<span className="font-semibold text-[#2c6472]">{t("announcements.announcement1.highlight2")}</span>{t("announcements.announcement1.line3")}
               </p>
               <p className="text-[#000000A1] font-medium text-sm">
                 <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
-                  17 Jul 2025
+                  {t("announcements.announcement2.date")}
                 </span>
-                - The new version of{" "}
-                <span className="text-[#2c6472] font-semibold">JSE AI</span>{" "}
-                brings major improvements across the platform. With advanced AI
-                matching, optimized performance, and a refreshed UI, the app is
-                now smarter and faster than ever before. These upgrades aim to
-                make your job search smoother and more effective.
+                {t("announcements.announcement2.line1")}{" "}
+                <span className="text-[#2c6472] font-semibold">{t("announcements.announcement2.highlight1")}</span>{" "}
+                {t("announcements.announcement2.line2")}
               </p>
 
             </div>
