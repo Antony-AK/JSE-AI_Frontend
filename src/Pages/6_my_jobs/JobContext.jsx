@@ -33,9 +33,8 @@ export const JobProvider = ({ children }) => {
       usedCache = true;
     }
 
-    if (!usedCache) {
-      setJobLoading(true);
-    }
+     setJobLoading(true);
+
 
     try {
       const token = sessionStorage.getItem("authToken");
@@ -121,6 +120,7 @@ export const JobProvider = ({ children }) => {
     } catch (error) {
       const errMsg = error.response?.data?.message || "⚠ Failed to fetch jobs.";
       setError(errMsg);
+       setSelectedJobs([]);
     } finally {
       setJobLoading(false);
     }

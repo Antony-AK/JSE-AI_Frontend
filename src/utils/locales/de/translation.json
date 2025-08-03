@@ -182,6 +182,14 @@
   },
   "announcements": {
     "title": "Ankündigungen",
+    "announcement3": {
+      "date": "1. Aug. 2025",
+      "line1": "- Wir freuen uns, bekannt zu geben, dass",
+      "highlight1": "Spracheinstellungen",
+      "line2": "nun vollständig unterstützt werden. Du kannst jetzt die gesamte Website auf",
+      "highlight2": "Deutsch",
+      "line3": "umstellen, indem du deine bevorzugte Sprache in den Einstellungen/Präferenzen auswählst. Dieses Update verbessert die Barrierefreiheit und bietet ein personalisierteres Erlebnis für alle Nutzer."
+    },
     "announcement1": {
       "date": "27. Juli 2025",
       "line1": "- Wir freuen uns, Ihnen mitteilen zu können, dass",
@@ -558,42 +566,42 @@
     "noLanguages": "Keine Sprachen hinzugefügt"
   },
   "inProgress": {
-  "title": "Wir arbeiten daran",
-  "description": "Diese Funktion befindet sich derzeit in der Entwicklung. Bitte schaue bald wieder vorbei!"
-},
+    "title": "Wir arbeiten daran",
+    "description": "Diese Funktion befindet sich derzeit in der Entwicklung. Bitte schaue bald wieder vorbei!"
+  },
   "settings": {
     "general": "Allgemein",
     "preferences": "Einstellungen",
-      "general_heading": "Kontosicherheit",
+    "general_heading": "Kontosicherheit",
     "notification": "Benachrichtigungen",
     "request_feedback": "Anfrage & Feedback",
     "billing": "Abrechnung",
     "explore_plans": "Pläne Entdecken"
   },
   "security": {
-  "email": "E-Mail",
-  "sendRequest": "Anfrage senden",
-  "password": "Passwort",
-  "passwordInfo": "Legen Sie ein dauerhaftes Passwort fest, um sich in Ihr Konto einzuloggen.",
-  "addPassword": "Passwort hinzufügen",
-  "twoStep": "2-Schritt-Verifizierung",
-  "twoStepInfo": "Fügen Sie Ihrem Konto beim Login eine zusätzliche Sicherheitsebene hinzu.",
-  "addVerification": "Verifizierungsmethode hinzufügen",
-  "support": "Support",
-  "changeJob": "Berufsbezeichnung ändern",
-  "jobInfo": "Ihre Anfrage wird per E-Mail an unser Support-Team gesendet.",
-  "deleteAccount": "Mein Konto löschen",
-  "deleteInfo": "Nach dem Löschen Ihres Kontos kann dieselbe E-Mail-Adresse für die nächsten 5 Monate nicht erneut verwendet werden, um sich anzumelden oder zu registrieren."
-},
-"popup": {
-  "emailTitle": "Anfrage zum Ändern der E-Mail gesendet",
-  "emailMessage": "Unser Team wird die Anfrage prüfen und bald aktualisieren.",
-  "sendRequest": "Anfrage senden",
-  "jobTitle": "Anfrage zum Ändern der Berufsbezeichnung gesendet",
-  "jobMessage": "Unser Team wird die Anfrage prüfen und bald aktualisieren.",
-  "passwordTitle": "Anfrage zum Ändern des Passworts",
-  "passwordMessage": "Wir senden einen Link zum Zurücksetzen des Passworts an Ihre registrierte E-Mail-Adresse."
-},
+    "email": "E-Mail",
+    "sendRequest": "Anfrage senden",
+    "password": "Passwort",
+    "passwordInfo": "Legen Sie ein dauerhaftes Passwort fest, um sich in Ihr Konto einzuloggen.",
+    "addPassword": "Passwort hinzufügen",
+    "twoStep": "2-Schritt-Verifizierung",
+    "twoStepInfo": "Fügen Sie Ihrem Konto beim Login eine zusätzliche Sicherheitsebene hinzu.",
+    "addVerification": "Verifizierungsmethode hinzufügen",
+    "support": "Support",
+    "changeJob": "Berufsbezeichnung ändern",
+    "jobInfo": "Ihre Anfrage wird per E-Mail an unser Support-Team gesendet.",
+    "deleteAccount": "Mein Konto löschen",
+    "deleteInfo": "Nach dem Löschen Ihres Kontos kann dieselbe E-Mail-Adresse für die nächsten 5 Monate nicht erneut verwendet werden, um sich anzumelden oder zu registrieren."
+  },
+  "popup": {
+    "emailTitle": "Anfrage zum Ändern der E-Mail gesendet",
+    "emailMessage": "Unser Team wird die Anfrage prüfen und bald aktualisieren.",
+    "sendRequest": "Anfrage senden",
+    "jobTitle": "Anfrage zum Ändern der Berufsbezeichnung gesendet",
+    "jobMessage": "Unser Team wird die Anfrage prüfen und bald aktualisieren.",
+    "passwordTitle": "Anfrage zum Ändern des Passworts",
+    "passwordMessage": "Wir senden einen Link zum Zurücksetzen des Passworts an Ihre registrierte E-Mail-Adresse."
+  },
   "billing": {
     "plan": "Plan",
     "changePlan": "Plan ändern",
@@ -667,7 +675,7 @@
     "partner_uni_description": "Ich bin damit einverstanden, dass Arshan UG meine persönlichen Informationen (z. B. Name, E-Mail) und von mir erstellte Inhalte (z. B. Lebensläufe und Anschreiben) mit der Partneruniversität teilt, um meine beruflichen Ziele zu unterstützen, wenn ich derzeit studiere oder innerhalb der letzten 6 Monate meinen Abschluss gemacht habe. Ich kann diese Einwilligung jederzeit widerrufen, indem ich kontaktiere ",
     "updating": "Einstellungen werden aktualisiert..."
   },
-   "tracker": {
+  "tracker": {
     "searchPlaceholder": "Suche nach Jobs oder Unternehmen...",
     "filter": "Filter",
     "clear": "Löschen",
@@ -702,14 +710,13 @@
     "okay": "Okay",
     "remove": "Entfernen",
     "status": {
-  "applied": "Beworben",
-  "interview": "Vorstellungsgespräch",
-  "selected": "Ausgewählt",
-  "rejected": "Abgelehnt"
-}
-
+      "applied": "Beworben",
+      "interview": "Vorstellungsgespräch",
+      "selected": "Ausgewählt",
+      "rejected": "Abgelehnt"
+    }
   },
-    "trackers": {
+  "trackers": {
     "noJobsFound": "Keine Jobs gefunden",
     "checkBackLater": "Bitte später erneut prüfen.",
     "showingJobs": "{{count}} Jobs angezeigt",
@@ -740,7 +747,7 @@
     "generate": "Generieren",
     "generating": "Wird generiert, bitte warten..."
   },
-    "internal": {
+  "internal": {
     "searchPlaceholder": "Jobs, Unternehmen suchen",
     "fetchingJobs": "Jobs werden geladen, bitte warten...",
     "noJobsFound": "Keine {{title}} Jobs gefunden",
@@ -750,22 +757,19 @@
     "languageEnglish": "Englisch",
     "languageGerman": "Deutsch",
     "recommendedJobs": "Empfohlene Jobs",
-      "placeholder": "Jobs, Unternehmen suchen"
-
+    "placeholder": "Jobs, Unternehmen suchen"
   },
-    "jobs": {
+  "jobs": {
     "saveJob": "Job speichern",
     "clearFilter": "Filter löschen"
   },
   "jobsearch": {
-  "dropdownLabel": "Jobtitel durchsuchen"
-},
-"jobdetails": {
-  "requiredSkills": "Erforderliche Fähigkeiten",
-  "yourSkills": "Deine Fähigkeiten",
-  "jobType": "Art der Stelle",
-  "notSpecified": "Nicht angegeben"
-}
-
-
+    "dropdownLabel": "Jobtitel durchsuchen"
+  },
+  "jobdetails": {
+    "requiredSkills": "Erforderliche Fähigkeiten",
+    "yourSkills": "Deine Fähigkeiten",
+    "jobType": "Art der Stelle",
+    "notSpecified": "Nicht angegeben"
+  }
 }

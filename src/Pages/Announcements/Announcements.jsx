@@ -14,23 +14,38 @@ const Announcements = () => {
         </div>
 
 
-<div className="flex flex-col space-y-6">
-        <p className="text-[#000000A1] font-medium text-sm ">
-          <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
-            {t("announcements.announcement1.date")}
-          </span>
-          {t("announcements.announcement1.line1")}{" "}
-          <span className="text-[#2c6472] font-semibold">{t("announcements.announcement1.highlight1")}</span>{" "}
-          {t("announcements.announcement1.line2")}{" "}<span className="font-semibold text-[#2c6472]">{t("announcements.announcement1.highlight2")}</span> {t("announcements.announcement1.line3")}
-        </p>
-        <p className="text-[#000000A1] font-medium text-sm">
-          <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
-            {t("announcements.announcement2.date")}
-          </span>
-          {t("announcements.announcement2.line1")}{" "}
-          <span className="text-[#2c6472] font-semibold">{t("announcements.announcement2.highlight1")}</span>{" "}
-          {t("announcements.announcement2.line2")}
-        </p>
+        <div className="flex flex-col space-y-6">
+          <p className="text-[#000000A1] font-medium text-sm">
+            <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
+              {t("announcements.announcement3.date")}
+            </span>
+            {t("announcements.announcement3.line1")}{" "}
+            <span className="text-[#2c6472] font-semibold">
+              {t("announcements.announcement3.highlight1")}
+            </span>{" "}
+            {t("announcements.announcement3.line2")}{" "}
+            <span className="text-[#2c6472] font-semibold">
+              {t("announcements.announcement3.highlight2")}
+            </span>{" "}
+            {t("announcements.announcement3.line3")}
+          </p>
+
+          <p className="text-[#000000A1] font-medium text-sm ">
+            <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
+              {t("announcements.announcement1.date")}
+            </span>
+            {t("announcements.announcement1.line1")}{" "}
+            <span className="text-[#2c6472] font-semibold">{t("announcements.announcement1.highlight1")}</span>{" "}
+            {t("announcements.announcement1.line2")}{" "}<span className="font-semibold text-[#2c6472]">{t("announcements.announcement1.highlight2")}</span> {t("announcements.announcement1.line3")}
+          </p>
+          <p className="text-[#000000A1] font-medium text-sm">
+            <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
+              {t("announcements.announcement2.date")}
+            </span>
+            {t("announcements.announcement2.line1")}{" "}
+            <span className="text-[#2c6472] font-semibold">{t("announcements.announcement2.highlight1")}</span>{" "}
+            {t("announcements.announcement2.line2")}
+          </p>
         </div>
 
 

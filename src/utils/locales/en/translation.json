@@ -181,6 +181,14 @@
     "cancel": "Cancel"
   },
   "announcements": {
+    "announcement3": {
+  "date": "1 Aug 2025",
+  "line1": "- We're excited to announce that",
+  "highlight1": "language preferences",
+  "line2": "are now fully supported. You can now experience the entire website in",
+  "highlight2": "German",
+  "line3": "by switching your preferred language in the Settings/Preferences page. This update brings better accessibility and a more personalized experience for all users."
+},
     "announcement1": {
       "date": "27 Jul 2025",
       "line1": "- We're excited to share that",
@@ -565,37 +573,37 @@
   "settings": {
     "general": "General",
     "preferences": "Preferences",
-      "general_heading": "Account Security",
+    "general_heading": "Account Security",
     "notification": "Notification",
     "request_feedback": "Request & Feedback",
     "billing": "Billing",
     "explore_plans": "Explore Plans"
   },
   "security": {
-  "email": "Email",
-  "sendRequest": "Send Request",
-  "password": "Password",
-  "passwordInfo": "Set a permanent password to login to your account.",
-  "addPassword": "Add Password",
-  "twoStep": "2-step Verification",
-  "twoStepInfo": "Add an additional layer of security to your account during login.",
-  "addVerification": "Add Verification Method",
-  "support": "Support",
-  "changeJob": "Change Job Title",
-  "jobInfo": "Your request will be sent to our support team via email.",
-  "deleteAccount": "Delete my Account",
-  "deleteInfo": "After deleting your account, the same email cannot be used to log in or register again for the next 5 months."
-},
-"popup": {
-  "emailTitle": "Sent request to change email",
-  "emailMessage": "Our team will review and update it soon.",
-  "sendRequest": "Send Request",
-  "jobTitle": "Sent request to change job title",
-  "jobMessage": "Our team will review and update it soon.",
-  "passwordTitle": "Request to Change Password",
-  "passwordMessage": "We'll send a password reset link to your registered email."
-},
-"billing": {
+    "email": "Email",
+    "sendRequest": "Send Request",
+    "password": "Password",
+    "passwordInfo": "Set a permanent password to login to your account.",
+    "addPassword": "Add Password",
+    "twoStep": "2-step Verification",
+    "twoStepInfo": "Add an additional layer of security to your account during login.",
+    "addVerification": "Add Verification Method",
+    "support": "Support",
+    "changeJob": "Change Job Title",
+    "jobInfo": "Your request will be sent to our support team via email.",
+    "deleteAccount": "Delete my Account",
+    "deleteInfo": "After deleting your account, the same email cannot be used to log in or register again for the next 5 months."
+  },
+  "popup": {
+    "emailTitle": "Sent request to change email",
+    "emailMessage": "Our team will review and update it soon.",
+    "sendRequest": "Send Request",
+    "jobTitle": "Sent request to change job title",
+    "jobMessage": "Our team will review and update it soon.",
+    "passwordTitle": "Request to Change Password",
+    "passwordMessage": "We'll send a password reset link to your registered email."
+  },
+  "billing": {
     "plan": "Plan",
     "changePlan": "Change Plan",
     "billingPeriod": "Billing Period",
@@ -614,7 +622,7 @@
     "viewInvoice": "View Invoice",
     "noInvoices": "No invoices available."
   },
-   "feedback": {
+  "feedback": {
     "type": {
       "bug": "Bug",
       "request": "Request",
@@ -668,7 +676,7 @@
     "partner_uni_description": "I agree to allow Arshan UG to share my personal information (e.g., name, email) and user-generated content (e.g., CVs and cover letters) with Partnered University to support my career goals if I am currently studying or have graduated within the last 6 months from that university. I understand I can withdraw this consent at any time by contacting",
     "updating": "Updating preferences..."
   },
-    "tracker": {
+  "tracker": {
     "searchPlaceholder": "Search jobs or companies...",
     "filter": "Filter",
     "clear": "Clear",
@@ -686,8 +694,7 @@
       "rejected": "Rejected"
     }
   },
-  
- "applicationCard": {
+  "applicationCard": {
     "showMore": "Show more..",
     "showLess": "Show less",
     "yourSkills": "Your Skills",
@@ -703,12 +710,12 @@
     "cancel": "Cancel",
     "okay": "Okay",
     "remove": "Remove",
-     "status": {
-    "applied": "Applied",
-    "interview": "Interview",
-    "selected": "Selected",
-    "rejected": "Rejected"
-  }
+    "status": {
+      "applied": "Applied",
+      "interview": "Interview",
+      "selected": "Selected",
+      "rejected": "Rejected"
+    }
   },
   "trackers": {
     "noJobsFound": "No jobs found",
@@ -729,7 +736,7 @@
     "description": "Description",
     "generating": "Generating, please wait..."
   },
-    "external": {
+  "external": {
     "companyName": "Company Name",
     "companyNamePlaceholder": "eg: Google",
     "jobTitle": "Job Title",
@@ -741,7 +748,7 @@
     "generate": "Generate",
     "generating": "Generating, please wait..."
   },
-    "internal": {
+  "internal": {
     "searchPlaceholder": "Search jobs, company",
     "fetchingJobs": "Fetching jobs, please wait...",
     "noJobsFound": "No {{title}} jobs found",
@@ -751,22 +758,19 @@
     "languageEnglish": "English",
     "languageGerman": "German",
     "recommendedJobs": "Recommended Jobs",
-      "placeholder": "Search jobs, company"
-
+    "placeholder": "Search jobs, company"
   },
-    "jobs": {
+  "jobs": {
     "saveJob": "Save Job",
     "clearFilter": "Clear Filter"
   },
   "jobsearch": {
-  "dropdownLabel": "Job Search Titles"
-},
-"jobdetails": {
-  "requiredSkills": "Required Skills",
-  "yourSkills": "Your Skills",
-  "jobType": "Job Type",
-  "notSpecified": "Not specified"
-}
-
-  
+    "dropdownLabel": "Job Search Titles"
+  },
+  "jobdetails": {
+    "requiredSkills": "Required Skills",
+    "yourSkills": "Your Skills",
+    "jobType": "Job Type",
+    "notSpecified": "Not specified"
+  }
 }

@@ -168,7 +168,7 @@ const Dashboard = () => {
   ];
 
   const jobs = useMemo(() => {
-    return newJobs.length > 0
+    return Array.isArray(newJobs)
       ? newJobs.map((job) => ({
         title: job.title ?? "Unknown Title",
         company: job.company ?? "Unknown Company",
@@ -177,6 +177,7 @@ const Dashboard = () => {
       }))
       : [];
   }, [newJobs]);
+
 
   const [animatedValue, setAnimatedValue] = useState(0); // for the profile completion progress bar
 
@@ -678,7 +679,7 @@ const Dashboard = () => {
               ))}
             </div>
           ) : (
-            <div className="flex flex-col gap-2.5 border rounded-xl p-5 bg-white space-y-3">
+            <div className="flex flex-col h-[400px] gap-2.5 border rounded-xl p-5 bg-white space-y-3">
               <div className="flex justify-between">
                 <h2 className="font-bold text-[15px]">{t("dashboards.newJobs")}</h2>
                 <Link to="/user/my-jobs/internal">
@@ -744,7 +745,7 @@ const Dashboard = () => {
                   </React.Fragment>
                 ))
               ) : (
-                <div className="text-gray-500 text-sm text-center py-4">
+                <div className="text-gray-500 text-sm h-full flex justify-center items-center text-center py-4">
                   {t("dashboards.noNewJobs")}
                 </div>
               )}
@@ -778,7 +779,7 @@ const Dashboard = () => {
               </div>
             </div>
           ) : (
-            <div className="border md:h-[220px] overflow-y-auto hide-scrollbar  rounded-xl p-5 bg-white space-y-3">
+            <div className="border md:h-[220px]  rounded-xl p-5 bg-white space-y-3">
               <div className="flex justify-between">
                 <div className="flex gap-4">
                   <h2 className="font-bold text-[15px]">{t("dashboards.announcements")}</h2>
@@ -790,22 +791,41 @@ const Dashboard = () => {
                   </Link>
                 </div>
               </div>
-              <p className="text-[#000000A1] font-medium text-sm">
-                <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
-                  {t("announcements.announcement1.date")}
-                </span>
-                {t("announcements.announcement1.line1")}{" "}
-                <span className="text-[#2c6472] font-semibold">{t("announcements.announcement1.highlight1")}</span>{" "}
-                {t("announcements.announcement1.line2")}{" "}<span className="font-semibold text-[#2c6472]">{t("announcements.announcement1.highlight2")}</span>{t("announcements.announcement1.line3")}
-              </p>
-              <p className="text-[#000000A1] font-medium text-sm">
-                <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
-                  {t("announcements.announcement2.date")}
-                </span>
-                {t("announcements.announcement2.line1")}{" "}
-                <span className="text-[#2c6472] font-semibold">{t("announcements.announcement2.highlight1")}</span>{" "}
-                {t("announcements.announcement2.line2")}
-              </p>
+              <div className="overflow-y-auto hide-scrollbar max-h-[140px] pr-1 space-y-2">
+                <p className="text-[#000000A1] font-medium text-sm">
+                  <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
+                    {t("announcements.announcement3.date")}
+                  </span>
+                  {t("announcements.announcement3.line1")}{" "}
+                  <span className="text-[#2c6472] font-semibold">
+                    {t("announcements.announcement3.highlight1")}
+                  </span>{" "}
+                  {t("announcements.announcement3.line2")}{" "}
+                  <span className="text-[#2c6472] font-semibold">
+                    {t("announcements.announcement3.highlight2")}
+                  </span>{" "}
+                  {t("announcements.announcement3.line3")}
+                </p>
+
+                <p className="text-[#000000A1] font-medium text-sm">
+                  <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
+                    {t("announcements.announcement1.date")}
+                  </span>
+                  {t("announcements.announcement1.line1")}{" "}
+                  <span className="text-[#2c6472] font-semibold">{t("announcements.announcement1.highlight1")}</span>{" "}
+                  {t("announcements.announcement1.line2")}{" "}<span className="font-semibold text-[#2c6472]">{t("announcements.announcement1.highlight2")}</span>{t("announcements.announcement1.line3")}
+                </p>
+                <p className="text-[#000000A1] font-medium text-sm">
+                  <span className="text-[#2c6472] text-sm md:text-base font-semibold mr-2">
+                    {t("announcements.announcement2.date")}
+                  </span>
+                  {t("announcements.announcement2.line1")}{" "}
+                  <span className="text-[#2c6472] font-semibold">{t("announcements.announcement2.highlight1")}</span>{" "}
+                  {t("announcements.announcement2.line2")}
+                </p>
+
+
+              </div>
 
             </div>
           )}

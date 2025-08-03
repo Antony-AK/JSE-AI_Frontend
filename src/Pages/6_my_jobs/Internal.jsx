@@ -614,18 +614,17 @@ const MyApplication = () => {
     return parseInt(params.get("offset")) || 0;
   };
 
-  const jobsToRender = isFilterActive ? filteredJobs : selectedJobs;
+const jobsToRender = isFilterActive
+  ? filteredJobs  // even if empty, we respect the filter
+  : selectedJobs;
 
 
-  const isColdLoading = (loading || jobLoading) && selectedJobs.length === 0;
 
-  if (isColdLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader />
-      </div>
-    );
-  }
+  console.log({ loading, jobLoading, selectedJobs, filteredJobs, jobsToRender });
+
+
+
+
 
 
   return (
@@ -762,12 +761,11 @@ const MyApplication = () => {
       <div className="flex flex-col w-full bg-gray-40">
         <br />
         {jobLoading ? (
-          <div className="flex justify-center items-center  w-full">
-            <div className="flex flex-col items-center">
-              <p className="text-gray-600 text-base font-medium"> {t("internal.fetchingJobs")}</p>
-            </div>
+          <div className="flex justify-center gap-10 items-center">
+            <SkeletonJobApplicationTracker />
+            <InternalRightDesignLoader />
           </div>
-        ) : jobsToRender.length === 0 ? (
+        ) : Array.isArray(jobsToRender) && jobsToRender.length === 0 ? (
           <div className="absolute top-1/2 left-[calc(264px+40%)] transform -translate-x-1/2 -translate-y-1/2 text-center">
             <h2 className="text-2xl font-bold text-gray-700 mb-2">
               {t("internal.noJobsFound", { title: selectedTitle?.charAt(0).toUpperCase() + selectedTitle?.slice(1) })}
